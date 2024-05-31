@@ -1,11 +1,12 @@
 import { createRoot } from 'react-dom/client';
 import './styles.css'
-import Button from './button';  // Assuming index.tsx exports Button
+// import Button from './components/Button';
+
 
 const Demo = () => (
   <div>
     <h1>Testing UI Components</h1>
-    <Button />
+   {/* <Button>  helo </Button> */}
   </div>
 );
 
