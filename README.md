@@ -1,90 +1,3 @@
-# Project Name: Your Project Name
-
-Welcome to the **Your Project Name** repository. This README provides guidelines on our coding conventions, project structure, and development practices to ensure consistency and maintainability of the codebase.
-
-## Code Conventions
-
-We aim to maintain a clean and uniform codebase. Please adhere to the following conventions when contributing to this project.
-
-### Directory Structure
-
-Our project is organized into several key directories:
-
-```bash
-/project-root
-|-- /apps
-| |-- /backend # Backend Service
-| |-- /frontend-client # NextJS application for the client
-| |-- /frontend-dashboard # ReactJS Dashboard application
-|-- /packages
-| |-- /ui-components # Reusable UI components
-| |-- /libs
-| |-- /utils # Utility functions
-| |-- /types # TypeScript type definitions
-```
-
-### Naming Conventions
-
-#### Files and Folders
-
-- **Files**: Use kebab-case for file names. Example: `user-profile.ts`, `login-form.tsx`.
-- **Folders**: Use kebab-case for folder names. Example: `ui-components`, `order-processing`.
-
-#### Code
-
-- **Variables and Functions**: Use camelCase for identifiers.
-  ```typescript
-  let recordCount = 10;
-  function fetchUserData() { ... }
-
-- **Classes and Interface**: Use PascalCase for classes and interfaces
-  ```typescript
-  class UserProcessor { ... }
-  interface UserData { ... }
-
-#### Functions
-- Keep functions concise and focused on a single task.
-- Clearly name functions to reflect their purpose.
-
-#### Variables
-- Use descriptive names, avoiding vague or generic terms.
-- Avoid single-letter names except in short, localized loops.
-
-#### React/NextJS Components
-- Name React/NextJS components using PascalCase and match the file name with the component name.
-- Place each component in its own folder with its associated styles and tests.
-
-#### Commit Messages
-- Use clear, concise commit messages in the imperative mood.
-Example: "Add payment processing module", "Fix boundary error in cart calculation".
-
-#### Pull Requests
-- Describe changes thoroughly.
-- Ensure code passes all tests and adheres to the coding standards set forth in this document.
-
-
-#### Setup and Development
-## Getting Started
-To set up the project locally, follow these steps:
-
-1. Clone the repository
-```bash
-git clone [repository-url]
-```
-2. Install dependencies
-```bash
-yarn install
-```
-3. Start All Server
-```bash
-yarn start
-```
-
-#### Contributing
-Please read our contributing guidelines carefully before making a pull request. Contributions should be made in a separate branch and submitted via pull requests to the main branch for review.
-
-
-
  <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
 <!--
@@ -100,7 +13,7 @@ Please read our contributing guidelines carefully before making a pull request. 
 <br />
 <div align="center">
   <a href="https://neakhatka.com/">
-    <img src="https://scontent.fpnh12-1.fna.fbcdn.net/v/t39.30808-6/442411090_1706865856519524_6047954477474765512_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=55M-fqEF9fwQ7kNvgHMt_Ac&_nc_ht=scontent.fpnh12-1.fna&oh=00_AYAR_Pr-pVcoTA11g5bqjcK58XCoiaC_ktptt5IiXIH9qQ&oe=66649281" alt="Logo" width="80" height="80">
+    <img src="https://scontent.fpnh12-1.fna.fbcdn.net/v/t39.30808-6/442411090_1706865856519524_6047954477474765512_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=55M-fqEF9fwQ7kNvgHMt_Ac&_nc_ht=scontent.fpnh12-1.fna&oh=00_AYAR_Pr-pVcoTA11g5bqjcK58XCoiaC_ktptt5IiXIH9qQ&oe=66649281" alt="Logo" width="85" height="80">
   </a>
   <h3 align="center">Lomnov</h3>
 </div>
@@ -109,7 +22,7 @@ Please read our contributing guidelines carefully before making a pull request. 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Neakhatka is dedicated to connecting students and recent graduates with valuable internship experiences across Cambodia. Our user-friendly website offers a comprehensive database of internship opportunities in various industries, helping you kickstart your career and gain practical experience. Start your journey towards a successful career today with <a href="https://www.canva.com/design/DAGE7Fg9Oqg/anzWbiic07MlDBmKUWN5wA/edit?utm_content=DAGE7Fg9Oqg&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton" target="_blank">Neakhatka</a>!
+Lomnov(Real Estate) is a modern platform designed to streamline the processes of buying,Rent, selling, and managing real estate properties. There are shops, houses, condos, rooms, buildings, land and warehouses.Provides comprehensive and accurate information about real estate.Available as location, size and exact price And real estate status. And facilitate the relationship between buyers and sellers to process buying and selling effectively.<a href="https://www.canva.com/design/DAGE7Fg9Oqg/anzWbiic07MlDBmKUWN5wA/edit?utm_content=DAGE7Fg9Oqg&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton" target="_blank">Lomnov</a>!
 
 
 
@@ -290,4 +203,128 @@ Team members - svatmanith76@gmail.com - sanvisal2302@gmail.com - rathna.chh@gmai
 Project Link: [https://github.com/neakhatka/neakhatka](https://github.com/neakhatka/neakhatka)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
+[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
+[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
+[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
+[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
+[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
+[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
+[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/othneildrew
+[product-screenshot]: images/screenshot.png
+[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[Next-url]: https://nextjs.org/
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
+[Vue-url]: https://vuejs.org/
+[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
+[Angular-url]: https://angular.io/
+[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
+[Svelte-url]: https://svelte.dev/
+[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
+[Laravel-url]: https://laravel.com
+[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
+[Bootstrap-url]: https://getbootstrap.com
+[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
+[JQuery-url]: https://jquery.com 
+
+
+
+
+
+# Project Name: Your Project Name
+
+Welcome to the **Your Project Name** repository. This README provides guidelines on our coding conventions, project structure, and development practices to ensure consistency and maintainability of the codebase.
+
+## Code Conventions
+
+We aim to maintain a clean and uniform codebase. Please adhere to the following conventions when contributing to this project.
+
+### Directory Structure
+
+Our project is organized into several key directories:
+
+```bash
+/project-root
+|-- /apps
+| |-- /backend # Backend Service
+| |-- /frontend-client # NextJS application for the client
+| |-- /frontend-dashboard # ReactJS Dashboard application
+|-- /packages
+| |-- /ui-components # Reusable UI components
+| |-- /libs
+| |-- /utils # Utility functions
+| |-- /types # TypeScript type definitions
+```
+
+### Naming Conventions
+
+#### Files and Folders
+
+- **Files**: Use kebab-case for file names. Example: `user-profile.ts`, `login-form.tsx`.
+- **Folders**: Use kebab-case for folder names. Example: `ui-components`, `order-processing`.
+
+#### Code
+
+- **Variables and Functions**: Use camelCase for identifiers.
+  ```typescript
+  let recordCount = 10;
+  function fetchUserData() { ... }
+
+- **Classes and Interface**: Use PascalCase for classes and interfaces
+  ```typescript
+  class UserProcessor { ... }
+  interface UserData { ... }
+
+#### Functions
+- Keep functions concise and focused on a single task.
+- Clearly name functions to reflect their purpose.
+
+#### Variables
+- Use descriptive names, avoiding vague or generic terms.
+- Avoid single-letter names except in short, localized loops.
+
+#### React/NextJS Components
+- Name React/NextJS components using PascalCase and match the file name with the component name.
+- Place each component in its own folder with its associated styles and tests.
+
+#### Commit Messages
+- Use clear, concise commit messages in the imperative mood.
+Example: "Add payment processing module", "Fix boundary error in cart calculation".
+
+#### Pull Requests
+- Describe changes thoroughly.
+- Ensure code passes all tests and adheres to the coding standards set forth in this document.
+
+
+#### Setup and Development
+## Getting Started
+To set up the project locally, follow these steps:
+
+1. Clone the repository
+```bash
+git clone [repository-url]
+```
+2. Install dependencies
+```bash
+yarn install
+```
+3. Start All Server
+```bash
+yarn start
+```
+
+#### Contributing
+Please read our contributing guidelines carefully before making a pull request. Contributions should be made in a separate branch and submitted via pull requests to the main branch for review.
+
+
+
 
