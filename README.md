@@ -28,7 +28,7 @@ Lomnov(Real Estate) is a modern platform designed to streamline the processes of
 
 
 ## Our vision
-Change the way companies and internship seekers connect, make it easier and more effective.
+Our vision is to empower individuals and families by providing seamless, transparent, and innovative real estate solutions that help them find their dream homes and invest wisely.
 <a href="https://www.canva.com/design/DAGHKHFaUWU/cqMOcz4wzs5Cq6CgHNiArw/edit" target="_blank">Product vision board</a>
 
 ## Our mission
