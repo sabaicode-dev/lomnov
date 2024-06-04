@@ -100,7 +100,7 @@ Please read our contributing guidelines carefully before making a pull request. 
 <br />
 <div align="center">
   <a href="https://neakhatka.com/">
-    <img src="./apps/frontend-client/logo-main.png" alt="Logo" width="80" height="80">
+    <img src="https://scontent.fpnh12-1.fna.fbcdn.net/v/t39.30808-6/442411090_1706865856519524_6047954477474765512_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=55M-fqEF9fwQ7kNvgHMt_Ac&_nc_ht=scontent.fpnh12-1.fna&oh=00_AYAR_Pr-pVcoTA11g5bqjcK58XCoiaC_ktptt5IiXIH9qQ&oe=66649281" alt="Logo" width="80" height="80">
   </a>
   <h3 align="center">Lomnov</h3>
 </div>
