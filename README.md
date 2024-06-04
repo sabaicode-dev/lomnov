@@ -32,7 +32,7 @@ Our vision is to empower individuals and families by providing seamless, transpa
 <a href="https://www.canva.com/design/DAGHKHFaUWU/cqMOcz4wzs5Cq6CgHNiArw/edit" target="_blank">Product vision board</a>
 
 ## Our mission
-Built a simplify platform that help both companies and seekers that matching requirement and seeker’s skill
+ Real estate mission statement is a formal articulation of your business’s purpose. It describes how you aim to be distinctly different from competitors.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
