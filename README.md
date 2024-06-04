@@ -100,7 +100,7 @@ Please read our contributing guidelines carefully before making a pull request. 
 <br />
 <div align="center">
   <a href="https://neakhatka.com/">
-    <img src="./apps/frontend-client/public/logo-main.png" alt="Logo" width="80" height="80">
+    <img src="./apps/frontend-client/logo-main.png" alt="Logo" width="80" height="80">
   </a>
   <h3 align="center">Lomnov</h3>
 </div>
