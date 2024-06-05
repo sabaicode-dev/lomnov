@@ -28,7 +28,13 @@ Lomnov(Real Estate) is a modern platform designed to streamline the processes of
 
 
 ## Our vision
-Our vision is to empower individuals and families by providing seamless, transparent, and innovative real estate solutions that help them find their dream homes and invest wisely.
+our mission is to revolutionize the real estate experience by providing exceptional service, promoting sustainable development, and building vibrant communities. We strive to:
+
+- Deliver outstanding customer service tailored to individual needs.
+- Incorporate eco-friendly practices in all our projects.
+- Foster inclusive and thriving communities.
+- Embrace innovation and technology.
+- Uphold integrity and transparency in all our dealings.<br/>
 <a href="https://www.canva.com/design/DAGHKI7wOz8/RcQOSuOxkVkL5T5Qqyry2w/edit" target="_blank">Product vision board</a>
 
 ## Our mission
@@ -228,7 +234,7 @@ Use the following command to start frontend-dashboard application:
 <!-- CONTACT -->
 ## Contact
 
-Neakhatka - @gmail.com <br/>
+Lomnov - @gmail.com <br/>
 Team members - seyhaoeurn920@gmail.com - virakson444@gmail.com - pisethsann50@gmail.com
 
 Project Link: [https://github.com/sabaicode-dev/lomnov](https://github.com/sabaicode-dev/lomnov)
@@ -270,6 +276,23 @@ Project Link: [https://github.com/sabaicode-dev/lomnov](https://github.com/sabai
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 
 # Project Name: Your Project Name
 
