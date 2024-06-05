@@ -29,7 +29,7 @@ Lomnov(Real Estate) is a modern platform designed to streamline the processes of
 
 ## Our vision
 Our vision is to empower individuals and families by providing seamless, transparent, and innovative real estate solutions that help them find their dream homes and invest wisely.
-<a href="https://www.canva.com/design/DAGHKHFaUWU/cqMOcz4wzs5Cq6CgHNiArw/edit" target="_blank">Product vision board</a>
+<a href="https://www.canva.com/design/DAGHKI7wOz8/RcQOSuOxkVkL5T5Qqyry2w/edit" target="_blank">Product vision board</a>
 
 ## Our mission
  Real estate mission statement is a formal articulation of your business’s purpose. It describes how you aim to be distinctly different from competitors.
