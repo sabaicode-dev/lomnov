@@ -47,7 +47,7 @@ Our vision is to empower individuals and families by providing seamless, transpa
 ### Built With
 
 This section we lists all library and framework that make this project
-
+* [![React][React.js]][React-url]
 * [![Next][Next.js]][Next-url]
 * [![Static Badge](https://img.shields.io/badge/Docker%20Desktop-1D63ED?style=for-the-badge&logo=docker&logoColor=fff)](https://www.docker.com/products/docker-desktop/)
 * [![Static Badge](https://img.shields.io/badge/Node.js-499442?style=for-the-badge&logo=node.js&logoColor=fff&color=499442)](https://nodejs.org/en)
