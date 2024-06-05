@@ -54,7 +54,7 @@ This section we lists all library and framework that make this project
 * [![Static Badge](https://img.shields.io/badge/Tyscript-3178C6?style=for-the-badge&logo=typescript&logoColor=fff&color=3178C6)](https://www.typescriptlang.org/)
 * [![Static Badge](https://img.shields.io/badge/Express.js-000?style=for-the-badge&logo=express&logoColor=fff&color=000)](https://expressjs.com/)
 * [![Static Badge](https://img.shields.io/badge/Mongodb-%23023430?style=for-the-badge&logo=mongodb&logoColor=fff&color=%23023430)](https://www.mongodb.com/)
-
+* [![Static Badge](https://mark.trademarkia.com/logo-images/transport-solutions-of-america/tsoa-87244734.jpg)](https://tsoa-community.github.io/docs/)
 
   
 
