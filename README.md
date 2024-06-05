@@ -30,11 +30,11 @@ Lomnov(Real Estate) is a modern platform designed to streamline the processes of
 ## Our vision
 our vision is to transform the real estate industry by:
 
-Promoting Sustainable Living: Setting new standards for eco-friendly and sustainable developments.
-Driving Innovation: Utilizing cutting-edge technology to enhance transparency and efficiency.
-Creating Thriving Communities: Building vibrant, inclusive neighborhoods where people flourish.
-Ensuring Excellence and Integrity: Earning trust through unwavering commitment to quality and transparency.
-Inspiring Global Change: Setting benchmarks for positive impact in the global real estate market.<br/>
+1. Promoting Sustainable Living: Setting new standards for eco-friendly and sustainable developments.
+2. Driving Innovation: Utilizing cutting-edge technology to enhance transparency and efficiency.
+3. Creating Thriving Communities: Building vibrant, inclusive neighborhoods where people flourish.
+4. Ensuring Excellence and Integrity: Earning trust through unwavering commitment to quality and transparency.
+5. Inspiring Global Change: Setting benchmarks for positive impact in the global real estate market.<br/>
 <a href="https://www.canva.com/design/DAGHKI7wOz8/RcQOSuOxkVkL5T5Qqyry2w/edit" target="_blank">Product vision board</a>
 
 ## Our mission
