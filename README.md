@@ -22,7 +22,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Lomnov(Real Estate) is a modern platform designed to streamline the processes of buying,Rent, selling, and managing real estate properties. There are shops, houses, condos, rooms, buildings, land and warehouses.Provides comprehensive and accurate information about real estate.Available as location, size and exact price And real estate status. And facilitate the relationship between buyers and sellers to process buying and selling effectively.<a href="https://www.canva.com/design/DAGE7Fg9Oqg/anzWbiic07MlDBmKUWN5wA/edit?utm_content=DAGE7Fg9Oqg&amp;utm_campaign=designshare&amp;utm_medium=link2&amp;utm_source=sharebutton" target="_blank">Lomnov</a>!
+Lomnov(Real Estate) is a modern platform designed to streamline the processes of buying,Rent, selling, and managing real estate properties. There are shops, houses, condos, rooms, buildings, land and warehouses.Provides comprehensive and accurate information about real estate.Available as location, size and exact price And real estate status. And facilitate the relationship between buyers and sellers to process buying and selling effectively.<a href="https://www.canva.com/design/DAGHKHFaUWU/cqMOcz4wzs5Cq6CgHNiArw/edit" target="_blank">Lomnov</a>!
 
 
 
