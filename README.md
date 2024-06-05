@@ -38,7 +38,7 @@ Our vision is to empower individuals and families by providing seamless, transpa
 
 ## UI design
 
-* [![Static Badge](https://img.shields.io/badge/Figma-2C2D34?style=for-the-badge&logo=figma&logoColor=fff&color=%232C2D34)](https://www.figma.com/design/Cvvmjfhl1K2c8EkXBRK3OF/Neakhatka?node-id=22-18&t=3YcYKBcPRNFPZCh9-1)
+* [![Static Badge](https://img.shields.io/badge/Figma-2C2D34?style=for-the-badge&logo=figma&logoColor=fff&color=%232C2D34)](https://www.figma.com/design/sCWB1VnuGGrwtrGkyURvk1/Real-Estate-Platform?node-id=125-1395&t=aYvtQZ36Kadb2gPC-0)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
