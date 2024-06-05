@@ -54,7 +54,7 @@ This section we lists all library and framework that make this project
 * [![Static Badge](https://img.shields.io/badge/Tyscript-3178C6?style=for-the-badge&logo=typescript&logoColor=fff&color=3178C6)](https://www.typescriptlang.org/)
 * [![Static Badge](https://img.shields.io/badge/Express.js-000?style=for-the-badge&logo=express&logoColor=fff&color=000)](https://expressjs.com/)
 * [![Static Badge](https://img.shields.io/badge/Mongodb-%23023430?style=for-the-badge&logo=mongodb&logoColor=fff&color=%23023430)](https://www.mongodb.com/)
-* [![Static Badge](https://mark.trademarkia.com/logo-images/transport-solutions-of-america/tsoa-87244734.jpg)](https://tsoa-community.github.io/docs/)
+
 
   
 
@@ -63,46 +63,104 @@ This section we lists all library and framework that make this project
 <p>The project follows a microservices architecture within a monorepo setup. Below is an overview of the directory structure and the purpose of each component:</p>
 
 ```
-NEAKHATKA
-├── .github
-│   └── workflows
-│       ├── main.yml
-│       └── semantic-release.yml
+LOMNOV
+├── .next
+├── .yarn
 ├── app
-│   ├── .next
-│   ├── .storybook
-│   ├── .vscode
-│   ├── node_modules
-│   ├── public
-│   └── src
-│       ├── .eslintrc.json
-│       ├── .gitignore
-│       ├── cdk.context.json
-│       ├── components.json
-│       ├── next-env.d.ts
-│       ├── next.config.mjs
-│       ├── package-lock.json
-│       ├── package.json
-│       ├── postcss.config.js
-│       ├── README.md
-│       ├── sst-env.d.ts
-│       ├── sst.config.ts
-│       ├── tailwind.config.ts
-│       ├── tsconfig.json
-│       └── yarn.lock
+│   ├── frontend-client
+│   │   ├── .next
+│   │   ├── .storybook
+│   │   │   ├── main.ts
+│   │   │   ├── preview.ts
+│   │   ├── node_modules
+│   │   ├── public
+│   │   ├── src
+│   │   │   ├── app
+│   │   │   │   ├── (pages)
+│   │   │   │   ├── favicon.icon
+│   │   │   │   ├── globals.css
+│   │   │   │   ├── layout.tsx
+│   │   │   │   ├── page.tsx
+│   │   │   ├── components
+│   │   │   │   ├── atoms
+│   │   │   │   ├── molecules
+│   │   │   │   ├── organisms
+│   │   │   │   ├── templates
+│   │   │   ├── icons
+│   │   │   ├── eslintrc.json
+│   │   │   ├── .gitignore
+│   │   │   ├── next-env.d.ts
+│   │   │   ├── next.config.mjs
+│   │   │   ├── package.json
+│   │   │   ├── postcss.config.mjs
+│   │   │   ├── README.md
+│   │   │   ├── tailwind.config.ts
+│   │   │   ├── tsconfig.json
+│   ├── frontend-dashboard
+│   │   │   ├── .storybook
+│   │   │   │   ├── main.ts
+│   │   │   │   ├── preview.ts
+│   │   │   ├── node_modules
+│   │   │   ├── public
+│   │   │   ├── src
+│   │   │   │   ├── App.css
+│   │   │   │   ├── App.test.tsx
+│   │   │   │   ├── App.tsx
+│   │   │   │   │ 
+│   │   │   │   ├── components
+│   │   │   │   │   ├── atoms
+│   │   │   │   │   ├── molecules
+│   │   │   │   │   ├── organisms
+│   │   │   │   │   ├── templates              
+│   │   │   │   ├── index.css
+│   │   │   │   ├── index.tsx
+│   │   │   │   ├── react-app-env.d.ts
+│   │   │   │   ├── reportWebVitals.ts
+│   │   │   │   ├── setUpTest.ts
+│   │   │   ├── .gitignore
+│   │   │   ├── package.json
+│   │   │   ├── postcss.config.js
+│   │   │   ├── README.md
+│   │   │   ├── tailwind.config.js
+│   │   │   ├── tsconfig.json
 ├── node_modules
 ├── packages
-│   ├── api-gateway
-│   ├── auth-service
-│   ├── company-service
-│   ├── notification
-│   ├── profile-service
-│   └── volumes
+│   ├── libs
+│   │   ├── tpes
+│   │   ├── utils    
+│   │   ├── package.json
+│   ├── ui-components
+│   │   ├── .storybook
+│   │   │   ├── main.ts 
+│   │   │   ├── preview.ts
+│   │   ├── dist
+│   │   │   ├── .storybook
+│   │   │   │   ├── preview.ts
+│   │   │   ├── components
+│   │   │   ├── src
+│   │   │   │   ├── components
+│   │   │   ├── inex.html  
+│   │   │   ├── ui-components.bundle.js
+│   │   │   ├── ui-components.bundle.js.map
+│   │   ├── node_modules
+│   │   ├── src
+│   │   │   ├── components
+│   │   │   ├── demo.tsx
+│   │   │   ├── index.html
+│   │   │   ├── style.css
+│   │   ├── .babelrc
+│   │   ├── .gitinore
+│   │   ├── package.json
+│   │   ├── postcass.config.js
+│   │   ├── tailwind.config.js
+│   │   ├── webpack.config.js
+│   │   ├── webpack.config.ui.js
+├── .editorconfig
 ├── .gitignore
-├── docker-compose.yaml
+├── .yarn.yml
 ├── package.json
-├── README.md
-└── yarn.lock
+├── README.md  
+
 
 ```
 
