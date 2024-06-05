@@ -188,77 +188,50 @@ Then, follow these steps:
 Open your terminal and run the following command to clone the project repository:
 
 ```sh
-git clone https://github.com/neakhatka/neakhatka.git
+git clone https://github.com/sabaicode-dev/lomnov.git
 
 ```
-2. Navigate to the Project Directory:
+2. Install dependencies
 
 ```sh
-cd neakhatka/app
+yarn install
 ```
-3. Install Dependencies:
 
-Navigate to the root directory of the project and run:
-
-  ```sh
-  yarn install
-  ```
-4. Start the Project:
+3. Start All Server:
 
 Use the following command to start all application:
 
   ```sh
-  yarn dev
+  yarn start
   ```
-5. Click link in your terminal:
 
-Use the following command to start all application:
+4. Start frontend-client Server:
 
-<a href="http://localhost:3000/">localhost:3000</a>
+Use the following command to start frontend-client application:
+
+  ```sh
+  yarn workspace frontend-client dev
+  ```
+
+5. Start frontend-client Server:
+
+Use the following command to start frontend-dashboard application:
+
+  ```sh
+  yarn workspace frontend-dashboard dev
+  ```
+
 
 <h3>Backend</h3>
-
-1. Clone the Repository:
-
-Open your terminal and run the following command to clone the project repository:
-
-```sh
-git clone https://github.com/neakhatka/neakhatka.git
-
-```
-
-2. Navigate to the Project Directory:
-
-```sh
-cd neakhatka
-```
-
-3. Install Dependencies:
-
-Navigate to the root directory of the project and run:
-
-  ```sh
-  yarn install
-  ```
-
-4. Start the Project using Docker:
-
-Use the following command to start all services defined in the docker-compose.yaml file:
-
-  ```sh
-  yarn start:docker
-  ```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+ Not yet
 
 <!-- CONTACT -->
 ## Contact
 
-Neakhatka - neakhatka@gmail.com <br/>
-Team members - svatmanith76@gmail.com - sanvisal2302@gmail.com - rathna.chh@gmail.com
+Neakhatka - @gmail.com <br/>
+Team members - seyhaoeurn920@gmail.com - virakson444@gmail.com - pisethsann50@gmail.com
 
-Project Link: [https://github.com/neakhatka/neakhatka](https://github.com/neakhatka/neakhatka)
+Project Link: [https://github.com/sabaicode-dev/lomnov](https://github.com/sabaicode-dev/lomnov)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
