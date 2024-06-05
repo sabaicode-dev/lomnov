@@ -28,17 +28,23 @@ Lomnov(Real Estate) is a modern platform designed to streamline the processes of
 
 
 ## Our vision
-our mission is to revolutionize the real estate experience by providing exceptional service, promoting sustainable development, and building vibrant communities. We strive to:
+our vision is to transform the real estate industry by:
 
-- Deliver outstanding customer service tailored to individual needs.
-- Incorporate eco-friendly practices in all our projects.
-- Foster inclusive and thriving communities.
-- Embrace innovation and technology.
-- Uphold integrity and transparency in all our dealings.<br/>
+Promoting Sustainable Living: Setting new standards for eco-friendly and sustainable developments.
+Driving Innovation: Utilizing cutting-edge technology to enhance transparency and efficiency.
+Creating Thriving Communities: Building vibrant, inclusive neighborhoods where people flourish.
+Ensuring Excellence and Integrity: Earning trust through unwavering commitment to quality and transparency.
+Inspiring Global Change: Setting benchmarks for positive impact in the global real estate market.<br/>
 <a href="https://www.canva.com/design/DAGHKI7wOz8/RcQOSuOxkVkL5T5Qqyry2w/edit" target="_blank">Product vision board</a>
 
 ## Our mission
- Real estate mission statement is a formal articulation of your business’s purpose. It describes how you aim to be distinctly different from competitors.
+our mission is to revolutionize the real estate experience by providing exceptional service, promoting sustainable development, and building vibrant communities. We strive to:
+
+1. Deliver outstanding customer service tailored to individual needs.
+2. Incorporate eco-friendly practices in all our projects.
+3. Foster inclusive and thriving communities.
+4. Embrace innovation and technology.
+5. Uphold integrity and transparency in all our dealings
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
