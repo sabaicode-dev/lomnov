@@ -195,7 +195,7 @@ To run the project, ensure you have the following installed on your system:
 
 Then, follow these steps:
 
-<h3>Frondent</h3>
+<h3>Frondend</h3>
 
 Open your terminal and run the following command to clone the project repository:
 
