@@ -26,7 +26,7 @@ interface ButtonProps {
 function Button({
   primary = false,
   size = "medium",
-  label,
+  label = "Button",
   backgroundColor,
   ...props
 }: ButtonProps) {
