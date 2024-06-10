@@ -1,12 +1,13 @@
 import React from "react";
 import Image from "next/image";
 import { Facebook, Google, TwitterX } from "@/icons";
+import Link from "next/link";
 
 function page() {
   return (
     <>
       <div className=" container m-auto py-20 flex flex-row gap-32">
-        <Image src={image} alt="" width="500" height="400" />
+        {/* <Image src={image} alt="" width="500" height="400" /> */}
         <div className="flex flex-col gap-5">
           <div className="w-full flex gap-5 justify-center items-center">
             <Google props="text-blue-500 text-[30px]" />
