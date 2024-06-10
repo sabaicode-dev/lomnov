@@ -12,8 +12,12 @@ interface IMenus {
   lang: string
 }
 
+interface MenuProp {
+  menu: IMenus[]
+}
 
-function ContainerHeader( {menu} : IMenus[]) {
+
+function ContainerHeader({ menu }: MenuProp) {
   const [isMenu, setIsMenu] = useState<boolean>(false);
   console.log(isMenu);
   const handleClickMenu = () => {
@@ -53,8 +57,8 @@ function ContainerHeader( {menu} : IMenus[]) {
         {/* autenticate */}
         <div className=" w-[50%] md:w-[30%] xl:w-[20%] flex  gap-3 items-center justify-end">
           <div className=" font-[500] flex gap-2 text-[14px] lg:text-[16px]">
-            <Link href={"/pages/signin"}> SING IN </Link> |
-            <Link href={"signup"}> SIGN UP</Link>
+            <Link className=" font-[600]" href={"/pages/signin"}> SIGN IN </Link> |
+            <Link className=" font-[600]" href={"signup"}> SIGN UP</Link>
           </div>
         </div>
       </div>
