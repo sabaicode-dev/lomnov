@@ -3,42 +3,17 @@ import React from 'react'
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { IconSearch, IconLocation } from '@/icons';
+import { RealEstateItem } from '@/libs/types/api-properties/property-response';
+// =================================================
 
-// ================================
-interface RealEstateDetail {
-  land_size: string;
-  total_land_size: string;
-  building_size: string;
-  total_building_size: string;
-  road_size: string;
-  bed_room: number;
-  bath_room: number;
-  living_room: number;
-  kitchen: number;
-  parking: number;
-  garden: string;
-  swimming_pool: string;
+
+
+interface HeroSectionSearchProps {
+  properties: RealEstateItem[];
 }
 
-interface RealEstateItem {
-  id: number;
-  user: string;
-  transaction: string;
-  category: string;
-  title: string;
-  description: string;
-  thumbnail: string;
-  images: string[];
-  detail: RealEstateDetail;
-  address: string;
-  mapurl: string;
-  favorite: boolean;
-  status: boolean;
-  lang: string;
-}
+function HeroSectionSearch({ properties }: HeroSectionSearchProps) {
 
-function HeroSectionSearch ( {properties}: RealEstateItem[]) {
-console.log(properties)
   const [search, setSearch] = useState<string>("");
   const [showResults, setShowResults] = useState<boolean>(false);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -58,7 +33,6 @@ console.log(properties)
   };
 
   const searchLocation = searchAddress();
-
   const handleClickOutside = (event: MouseEvent) => {
     if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
       setShowResults(false);
@@ -90,19 +64,17 @@ console.log(properties)
           <div className="border-[0.8px] border-solid  border-black h-[20px] "></div>
           <IconLocation props="text-blue-500 text-[18px]" />
         </div>
-
-
         {
-          showResults &&
+          showResults && searchLocation.length !==0 ?
           <div ref={searchRef} className=" w-[80%] md:w-[60%] xl:w-[40%] h-fit bg-[#fffffff2] absolute top-[110%] border-[0.8px] border-gray-100 rounded-md p-5 shadow-slate-100 shadow-md max-h-[300px] overflow-auto">
             <ul className=" flex flex-col gap-3  md:gap-5 ">
               {
                 searchLocation.map((item, key) => (
-                  <Link href={""} className=" flex flex-row gap-5"> <span className="w-[90%] text-[14px] md:text-[16px]"> {item.address}</span> <IconSearch props=" text-[20px] text-[gray]" /> </Link>
+                  <Link key={key} href={""} className=" flex flex-row gap-5"> <span className="w-[90%] text-[14px] md:text-[16px]"> {item.address}</span> <IconSearch props=" text-[20px] text-[gray]" /> </Link>
                 ))
               }
             </ul>
-          </div>
+          </div> : ""
         }
       </div>
     </>
