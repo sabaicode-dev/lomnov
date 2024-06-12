@@ -57,7 +57,7 @@ function ContainerHeader({ menu }: MenuProp) {
         {/* autenticate */}
         <div className=" w-[50%] md:w-[30%] xl:w-[20%] flex  gap-3 items-center justify-end">
           <div className=" font-[500] flex gap-2 text-[14px] lg:text-[16px]">
-            <Link className=" font-[600]" href={"/pages/signin"}> SIGN IN </Link> |
+            <Link className=" font-[600]" href={"signin"}> SIGN IN </Link> |
             <Link className=" font-[600]" href={"signup"}> SIGN UP</Link>
           </div>
         </div>

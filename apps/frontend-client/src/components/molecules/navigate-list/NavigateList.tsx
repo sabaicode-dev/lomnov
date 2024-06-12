@@ -21,7 +21,7 @@ function NavigateList({ menu }: MenuProp) {
       <ul className=" flex md:flex-row flex-col gap-5 md:gap-10 text-[18px] mb-2 md:mb-0 p-5 ">
 
         {menu.map((item, id) => (
-          <Link href={`${item.slug} `} key={id} className=" capitalize ">
+          <Link href={`${item.slug} `} key={id} className=" capitalize hover:text-[blue] hover:font-[600] " >
             {item.name}
           </Link>
         ))}
