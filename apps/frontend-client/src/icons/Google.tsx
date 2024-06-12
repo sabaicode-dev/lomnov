@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 
 // const imgGoogle = "/app/frontend-client/src/images/google icon.png";
-import  imgGoogle  from "@/images/google icon.png"
+import  imgGoogle  from "@/images/google_icon.png"
 
 type prop = {
   props: string;
