@@ -1,5 +1,8 @@
 import React from "react";
-import { FaFacebookSquare } from "react-icons/fa";
+// import { FaFacebookSquare } from "react-icons/fa";
+import Image from "next/image";
+
+import facebookLogo from "@/images/Facebook_Logo_Primary.png";
 
 type prop = {
   props: string;
@@ -7,7 +10,14 @@ type prop = {
 function Facebook({ props }: prop) {
   return (
     <>
-      <FaFacebookSquare className={props} />
+      <Image
+        className={props}
+        src={facebookLogo}
+        alt="facebook logo"
+        width={35}
+        height={35}
+      />
+      {/* <FaFacebookSquare className={props} /> */}
     </>
   );
 }
