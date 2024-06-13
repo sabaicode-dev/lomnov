@@ -16,14 +16,15 @@ const LoginForm: React.FC = () => {
     password: "",
   });
 
-  const [formErrors, setFormErrors] = useState<FormErrors>({}); 
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
-  }
-
+    setFormErrors((prevErrors) => {
+      return { ...prevErrors, [name]: "" };
+    });
+  };
 };
 
 export default LoginForm;
