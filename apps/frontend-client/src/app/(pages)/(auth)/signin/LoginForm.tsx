@@ -46,6 +46,12 @@ const LoginForm: React.FC = () => {
     const errors = validate();
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
+    } else {
+      // Handle successful form submission
+      console.log("Form data:", formData);
+      // Clear form after submission
+      setFormData({ email: "", password: "" });
+      setFormErrors({});
     }
   };
 };
