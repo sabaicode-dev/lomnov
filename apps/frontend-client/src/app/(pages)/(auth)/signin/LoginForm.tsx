@@ -40,6 +40,10 @@ const LoginForm: React.FC = () => {
     }
     return errors;
   };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+  };
 };
 
 export default LoginForm;
