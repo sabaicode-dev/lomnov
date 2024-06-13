@@ -9,3 +9,7 @@ type FormErrors = {
   email?: string;
   password?: string;
 };
+
+const LoginForm: React.FC = () => {
+    
+}
