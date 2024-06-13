@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, FormEvent } from "react";
 
 type FormData = {
@@ -54,6 +56,46 @@ const LoginForm: React.FC = () => {
       setFormErrors({});
     }
   };
+  return (
+    <>
+      <form className="space-y-7" onSubmit={handleSubmit}>
+        <div className="relative">
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 rounded-md border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:border-blue-500 bg-transparent text-base"
+          />
+          {formErrors.email && (
+            <span className="text-red-500 text-sm absolute -left-[0%] top-11">
+              {formErrors.email}
+            </span>
+          )}
+        </div>
+
+        <div className="relative">
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 rounded-md border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:border-blue-500 bg-transparent text-base"
+          />
+          {formErrors.password && (
+            <span className="text-red-500 text-sm absolute -left-[0%] top-11">
+              {formErrors.password}
+            </span>
+          )}
+        </div>
+        <button className="bg-blue-500 text-white px-4 py-2 w-full rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
+          Login
+        </button>
+      </form>
+    </>
+  );
 };
 
 export default LoginForm;
