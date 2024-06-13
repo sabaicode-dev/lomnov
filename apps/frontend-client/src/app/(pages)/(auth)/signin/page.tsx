@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import image from "@/images/Login logo.png";
 
-const Page: React.FC = () => {
+const Page = () => {
   return (
     <div
       className="container mx-auto p-4 md:py-20"
@@ -35,7 +35,7 @@ const Page: React.FC = () => {
 
           <div className="text-center">
             <span className="text-gray-400">Not yet have an account? </span>
-            <Link href="/pages/signup" className="text-blue-500 font-semibold">
+            <Link href="/register" className="text-blue-500 font-semibold">
               Register
             </Link>
           </div>
