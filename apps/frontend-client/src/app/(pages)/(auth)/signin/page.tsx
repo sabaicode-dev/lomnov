@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import image from "@/images/Login logo.png";
 
-const Page = () => {
+const SignInPage = () => {
   return (
     <div
       className="container mx-auto p-4 md:py-20"
@@ -45,4 +45,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default SignInPage;
