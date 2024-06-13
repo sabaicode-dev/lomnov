@@ -44,6 +44,9 @@ const LoginForm: React.FC = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const errors = validate();
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+    }
   };
 };
 
