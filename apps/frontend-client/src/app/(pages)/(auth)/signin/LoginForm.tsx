@@ -20,6 +20,7 @@ const LoginForm: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
     const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
 
   }
 
