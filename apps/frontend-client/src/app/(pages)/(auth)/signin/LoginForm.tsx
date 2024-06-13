@@ -16,5 +16,8 @@ const LoginForm: React.FC = () => {
     password: "",
   });
 
-  
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
+
 };
+
+export default LoginForm;
