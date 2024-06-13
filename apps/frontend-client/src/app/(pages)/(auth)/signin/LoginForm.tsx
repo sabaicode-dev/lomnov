@@ -11,5 +11,10 @@ type FormErrors = {
 };
 
 const LoginForm: React.FC = () => {
-    
-}
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    password: "",
+  });
+
+  
+};
