@@ -15,5 +15,10 @@
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
-  "packageManager": "yarn@4.2.2"
+  "packageManager": "yarn@4.2.2",
+  "dependencies": {
+    "@hookform/resolvers": "^3.6.0",
+    "react-hook-form": "^7.51.5",
+    "yup": "^1.4.0"
+  }
 }
