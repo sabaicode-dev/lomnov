@@ -35,7 +35,7 @@ const SignInPage = () => {
 
           <div className="text-center">
             <span className="text-gray-400">Not yet have an account? </span>
-            <Link href="/register" className="text-blue-500 font-semibold">
+            <Link href="/signup" className="text-blue-500 font-semibold">
               Register
             </Link>
           </div>
