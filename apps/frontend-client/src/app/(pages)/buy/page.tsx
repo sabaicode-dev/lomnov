@@ -1,10 +1,12 @@
+import Header from "@/components/organisms/header/Header"
 
 
 function page() {
   return (
-    <div>
-        page
-    </div>
+   <main>
+    <Header/>
+
+   </main>
   )
 }
 
