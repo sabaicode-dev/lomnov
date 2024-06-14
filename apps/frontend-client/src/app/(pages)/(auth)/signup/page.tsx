@@ -2,7 +2,7 @@
 
 import React, { useState, FormEvent } from "react";
 import Image from "next/image";
-import { Facebook, Google, TwitterX } from "@/icons";
+import { Facebook, Google } from "@/icons";
 import Link from "next/link";
 import image from "@/images/register-logo.png";
 
@@ -56,6 +56,12 @@ const Page: React.FC = () => {
       errors.password = "Password is required";
     } else if (formData.password.length < 8) {
       errors.password = "Password must be at least 8 characters long";
+    } else if (!/[A-Z]/.test(formData.password)) {
+      errors.password = "Password must contain at least one uppercase letter";
+    } else if (!/[a-z]/.test(formData.password)) {
+      errors.password = "Password must contain at least one lowercase letter";
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
+      errors.password = "Password must contain at least one special character";
     }
     return errors;
   };
@@ -94,7 +100,6 @@ const Page: React.FC = () => {
           <div className="w-full flex gap-5 justify-center items-center">
             <Google props="text-blue-500 text-2xl md:text-3xl" />
             <Facebook props="text-blue-500 text-2xl md:text-3xl" />
-            <TwitterX props="text-blue-500 text-2xl md:text-3xl" />
           </div>
           <div className="flex flex-row gap-5 justify-center items-center">
             <div className="w-2/4 md:w-[50%] border border-gray-300"></div>
