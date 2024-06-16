@@ -1,41 +1,87 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { UserSchema, User } from "../../schemas/userSchema";
-import InputField from "../inputfield/InputField";
+"use client";
+
+import React, { useState, FormEvent } from "react";
 import Link from "next/link";
+import InputField from "../inputfield/InputField";
+
+type FormData = {
+  email: string;
+  password: string;
+};
+
+type FormErrors = {
+  email?: string;
+  password?: string;
+};
 
 const LoginForm: React.FC = () => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<User>({
-    resolver: zodResolver(UserSchema),
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    password: "",
   });
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
 
-  const onSubmit = (data: User) => {
-    console.log(data);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setFormErrors((prevErrors) => {
+      return { ...prevErrors, [name]: "" };
+    });
+  };
+
+  const validate = (): FormErrors => {
+    const errors: FormErrors = {};
+    if (!formData.email) {
+      errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = "Email is invalid";
+    }
+    if (!formData.password) {
+      errors.password = "Password is required";
+    } else if (formData.password.length < 8) {
+      errors.password = "Password must be at least 8 characters long";
+    } else if (!/[A-Z]/.test(formData.password)) {
+      errors.password = "Password must contain at least one uppercase letter";
+    } else if (!/[a-z]/.test(formData.password)) {
+      errors.password = "Password must contain at least one lowercase letter";
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
+      errors.password = "Password must contain at least one special character";
+    }
+    return errors;
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const errors = validate();
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+    } else {
+      console.log("Form data:", formData);
+      // Clear form after submission
+      setFormData({ email: "", password: "" });
+      setFormErrors({});
+    }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-7 w-full sm:w-1/2 md:w-2/5 lg:w-2/5"
-    >
-      <InputField<User>
+    <form onSubmit={handleSubmit} className="space-y-7">
+      <InputField
         name="email"
-        control={control}
-        label="Email"
         type="email"
+        value={formData.email}
+        onChange={handleInputChange}
         placeholder="Email"
+        error={formErrors.email}
+        className="custom-email-class"
       />
-      <InputField<User>
+      <InputField
         name="password"
-        control={control}
-        label="Password"
         type="password"
+        value={formData.password}
+        onChange={handleInputChange}
         placeholder="Password"
+        error={formErrors.password}
+        className="custom-password-class"
       />
       <button className="bg-blue-500 text-white px-4 py-2 w-full rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
         Login
