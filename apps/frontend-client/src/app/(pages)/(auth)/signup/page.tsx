@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Facebook, Google } from "@/icons";
 import Link from "next/link";
 import image from "@/images/register-logo.png";
-
+import Footer from "@/components/organisms/footer/Footer";
 type FormData = {
   username: string;
   fullname: string;
@@ -86,25 +86,28 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto p-4 md:py-20" style={{ maxWidth: "1300px" }}>
-      <div className="flex flex-col sm:flex-row gap-8 md:gap-32 justify-between items-center">
+    <div
+      className="container mx-auto p-4 md:py-20"
+      style={{ maxWidth: "1300px" }}
+    >
+      <div className="flex flex-col sm:flex-row gap-8 md:gap-32 justify-center items-center mb-10">
         <Image
           src={image}
           alt="Register Logo"
           width={500}
           height={500}
           priority
-          className="w-[30%] sm:w-1/3 h-auto"
+          className="w-2/4 sm:w-2/5 md:w-1/3 lg:w-1/4 h-auto"
         />
-        <div className="flex flex-col gap-5 w-full md:w-2/4">
+        <div className="flex flex-col gap-5 w-full sm:w-1/2 md:w-2/5 lg:w-2/5">
           <div className="w-full flex gap-5 justify-center items-center">
             <Google props="text-blue-500 text-2xl md:text-3xl" />
             <Facebook props="text-blue-500 text-2xl md:text-3xl" />
           </div>
-          <div className="flex flex-row gap-5 justify-center items-center">
-            <div className="w-2/4 md:w-[50%] border border-gray-300"></div>
+          <div className="flex items-center gap-5 justify-center">
+            <div className="flex-1 border-t border-gray-300"></div>
             <span className="text-gray-400 font-semibold">Or</span>
-            <div className="w-2/4 md:w-[50%] border border-gray-300"></div>
+            <div className="flex-1 border-t border-gray-300"></div>
           </div>
           <form className="space-y-7" onSubmit={handleSubmit}>
             <div className="relative">
@@ -170,15 +173,17 @@ const Page: React.FC = () => {
             <button className="bg-blue-500 text-white px-4 py-2 w-full rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
               Register
             </button>
+
+            <div className="text-center">
+              <span className="text-gray-400">Already have an account? </span>
+              <Link href="/signin" className="text-blue-500 font-semibold">
+                Login
+              </Link>
+            </div>
           </form>
-          <div className="text-center">
-            <span className="text-gray-400">Already have an account? </span>
-            <Link href="/signin" className="text-blue-500 font-semibold">
-              Login
-            </Link>
-          </div>
         </div>
       </div>
+      <div className="hidden sm:block">{/* <Footer /> */}</div>
     </div>
   );
 };
