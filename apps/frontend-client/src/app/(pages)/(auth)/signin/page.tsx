@@ -1,8 +1,7 @@
 import React from "react";
-import LoginForm from "./LoginForm";
+import LoginForm from "../../../../../../../packages/ui-components/src/components/form/LoginForm";
 import { Facebook, Google } from "@/icons";
 import Image from "next/image";
-import Link from "next/link";
 import image from "@/images/Login logo.png";
 import Footer from "@/components/organisms/footer/Footer";
 
@@ -31,17 +30,11 @@ const SignInPage = () => {
             <span className="text-gray-400 font-semibold">Or</span>
             <div className="flex-1 border-t border-gray-300"></div>
           </div>
-
           <LoginForm />
-
-          <div className="text-center">
-            <span className="text-gray-400">Not yet have an account? </span>
-            <Link href="/signup" className="text-blue-500 font-semibold">
-              Register
-            </Link>
-          </div>
         </div>
       </div>
+
+      {/* footer */}
       <div className=" hidden sm:block">
         <Footer />
       </div>
