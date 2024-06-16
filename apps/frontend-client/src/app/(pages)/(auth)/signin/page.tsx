@@ -2,7 +2,7 @@ import React from "react";
 import LoginForm from "../../../../../../../packages/ui-components/src/components/form/LoginForm";
 import { Facebook, Google } from "@/icons";
 import Image from "next/image";
-import image from "@/images/Login logo.png";
+import image from "@/images/Login_logo.png";
 import Footer from "@/components/organisms/footer/Footer";
 
 const SignInPage = () => {
