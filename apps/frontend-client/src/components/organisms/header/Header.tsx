@@ -22,7 +22,6 @@ async function fetchMenus(): Promise<IMenus[]> {
 }
 
 
-
 async function Header() {
   const menus = await fetchMenus();
   return (

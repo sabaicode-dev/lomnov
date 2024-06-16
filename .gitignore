@@ -2,6 +2,7 @@
 /node_modules/
 /npm-debug.log
 /yarn-error.log
+/.yarn
 /.pnp
 .pnp.js
 
@@ -88,5 +89,3 @@ development
 # dotenv environment variables file
 .env
 yarn.lock
-
-/.yarn
