@@ -5,16 +5,10 @@ import Menu from "@/icons/Menu";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/images/logo-main.png"
+import {IMenus} from "@/libs/types/api-menus/menu-response"
 // ===================
 
-interface IMenus {
-  id?: number;
-  name?: string;
-  slug?: string;
-  lang: string
-}
-
-interface MenuProp {
+export interface MenuProp {
   menu: IMenus[]
 }
 
