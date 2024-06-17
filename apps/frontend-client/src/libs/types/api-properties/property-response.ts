@@ -25,6 +25,7 @@ export interface RealEstateItem {
   images: string[];
   detail: RealEstateDetail;
   address: string;
+  // price: number;
   mapurl: string;
   favorite: boolean;
   status: boolean;
