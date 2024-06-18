@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Meta, StoryFn } from "@storybook/react";
-import InputField from "../../../../packages/ui-components/src/components/inputfield/InputField";
+import InputField from "ms-ui-components/src/components/inputfield/InputField";
 
 export default {
   title: "Components/InputField",

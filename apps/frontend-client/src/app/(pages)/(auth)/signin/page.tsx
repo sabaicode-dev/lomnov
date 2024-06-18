@@ -1,5 +1,5 @@
 import React from "react";
-import LoginForm from "../../../../../../../packages/ui-components/src/components/form/LoginForm";
+import LoginForm from "../../../../components/organisms/auth/form-login/LoginForm";
 import { Facebook, Google } from "@/icons";
 import Image from "next/image";
 import image from "@/images/Login_logo.png";
