@@ -4,11 +4,11 @@ interface prop {
   props?: string
 }
 
-function Cross({props}: prop) {
+function Cross({ props }: prop) {
   return (
-   <>
+    <>
       <RxCross2 className={props} />
-   </>
+    </>
   )
 }
 

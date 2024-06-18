@@ -7,7 +7,7 @@ import HeroSectionSearchList from './HeroSectionSearchList';
 
 export interface HeroSectionSearchProps {
   properties: RealEstateItem[];
-  title: string,
+  title?: string,
   placeholder?: string;
   inputClassName?: string;
 }

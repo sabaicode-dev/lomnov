@@ -28,7 +28,7 @@ function ContainerHeader({ menu, showLogo = true, showAuthLinks = true }: MenuPr
 
   return (
     <>
-      <div className=" xl:w-[1300px] w-full m-auto h-full flex flex-row items-center justify-between py-3 px-5 xl:px-0  z-20 bg-white">
+      <div className=" xl:w-[1300px] w-full m-auto h-full flex flex-row items-center justify-between py-3 px-3 xl:px-0  z-20 bg-white">
         <div onClick={() => handleClickMenu()} className=" md:hidden ">
           <Menu props=" mr-2 text-[25px]" />
         </div>
@@ -41,8 +41,8 @@ function ContainerHeader({ menu, showLogo = true, showAuthLinks = true }: MenuPr
               <Image src={logo} alt="" width="500" height="500" />
             </div>
           )}
-          <span className=" md:text-[20px] lg:text-[30px] text-[16px] font-[600] italic ">
-            {/* Lomnov */}
+          <span className=" md:text-[20px] lg:text-[30px] text-[16px] font-[600]  ">
+            Real Estate
           </span>
         </Link>
 
@@ -57,7 +57,7 @@ function ContainerHeader({ menu, showLogo = true, showAuthLinks = true }: MenuPr
             <div className=" w-[50px] h-[50px] bg-white rounded-full">
               <Image src={logo} alt="" width="500" height="500" />
             </div>
-            <p className=" text-white font-bold italic text-[18px]">Lomnov</p>
+            <p className=" text-white font-bold text-[18px]">Real Estate</p>
           </div>
           <NavigateList menu={menu} />
         </div>

@@ -5,6 +5,7 @@ export interface RealEstateDetail {
   building_size: string;
   total_building_size: string;
   road_size: string;
+  area: string;
   bed_room: number;
   bath_room: number;
   living_room: number;
@@ -25,7 +26,7 @@ export interface RealEstateItem {
   images: string[];
   detail: RealEstateDetail;
   address: string;
-  // price: number;
+  price: number;
   mapurl: string;
   favorite: boolean;
   status: boolean;

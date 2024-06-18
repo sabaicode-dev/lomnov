@@ -109,6 +109,7 @@ const Page: React.FC = () => {
             <span className="text-gray-400 font-semibold">Or</span>
             <div className="flex-1 border-t border-gray-300"></div>
           </div>
+
           <form className="space-y-7" onSubmit={handleSubmit}>
             <div className="relative">
               <input
