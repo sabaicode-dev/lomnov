@@ -5,10 +5,9 @@ import Footer from "@/components/organisms/footer/Footer";
 import Header from "@/components/organisms/header/Header";
 import HeroSection from "@/components/organisms/hero-section/HeroSection";
 import Link from "next/link";
-
-
-
 // ====================
+
+
 export default function Home() {
   return (
     <main className="">
@@ -16,14 +15,39 @@ export default function Home() {
       <HeroSection />
       <div className="py-5 px-3 lg:px-0 lg:w-[1300px] m-auto mt-5">
         {/* feed on sell */}
-        <ItemCardList/>
+        <div className="flex flex-col gap-5 mb-10">
+          <div className="flex flex-row justify-between items-center">
+            <h1 className=" text-[18px] lg:text-[26px] font-[600] ">
+              Feed on sale
+            </h1>
+            <Link
+              href={"/buy"}
+              className="text-blue-500  lg:text-[18px] font-[500]"
+            >
+              View All
+            </Link>
+          </div>
+          <ItemCardList />
+        </div>
         {/* Popular location */}
-        <ItemCardPopularLocationList/>
-         {/* feed on rent */}
-         <ItemCardList/>
-         {/* our service */}
-
-         <ServiceCardList/>
+        <ItemCardPopularLocationList />
+        {/* feed on rent */}
+        <div className="flex flex-col gap-5 mb-10">
+          <div className="flex flex-row justify-between items-center">
+            <h1 className=" text-[18px] lg:text-[26px] font-[600] ">
+              Feed on Rent
+            </h1>
+            <Link
+              href={"/buy"}
+              className="text-blue-500  lg:text-[18px] font-[500]"
+            >
+              View All
+            </Link>
+          </div>
+          <ItemCardList />
+        </div>
+        {/* our service */}
+        <ServiceCardList />
       </div>
       <Footer />
     </main>

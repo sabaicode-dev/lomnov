@@ -8,7 +8,7 @@ import { useState } from "react";
 import { IconBedRoom, Star, StarFill } from "@/icons";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import BathRoom from "@/icons/BathRoom";
-interface ItemCardProps {
+export interface ItemCardProps {
   item: RealEstateItem;
 }
 export const ItemCard = ({ item }: ItemCardProps) => {
@@ -31,6 +31,7 @@ export const ItemCard = ({ item }: ItemCardProps) => {
 
         {/* <div className="left-0 top-0 absolute z-10 w-full h-full  flex flex-col justify-between"> */}
         {/* <div className="flex flex-row justify-between px-5 py-3"> */}
+
         <div className="px-3 py-1 bg-blue-500 text-white font-[500] text-[12px] rounded-md h-fit absolute top-5 left-5 z-30">
           Just Now
         </div>
@@ -70,8 +71,7 @@ export const ItemCard = ({ item }: ItemCardProps) => {
           </span>{" "}
           |
           <span className="flex items-center ">
-            <span className="text-[14px]">200</span>{" "}
-            m<sup>2</sup>
+            <span className="text-[14px]">200</span> m<sup>2</sup>
           </span>{" "}
         </div>
         <div className="flex flex-row gap-5 items-center  ">

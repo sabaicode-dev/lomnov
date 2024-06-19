@@ -22,19 +22,22 @@ const sampleSearchLocation: RealEstateItem[] = [
       building_size: "16m x 45m",
       total_building_size: "720m²",
       road_size: "12m",
+      area: "",
       bed_room: 4,
       bath_room: 5,
       living_room: 1,
       kitchen: 1,
       parking: 1,
       garden: "garden",
-      swimming_pool: "swimming pool"
+      swimming_pool: "swimming pool",
     },
     address: "123 Main St, Anytown, USA",
     mapurl: "",
     favorite: true,
     status: true,
-    lang: "eng"
+    lang: "eng",
+    price: 13000
+
   },
   {
     id: 2,
@@ -53,6 +56,7 @@ const sampleSearchLocation: RealEstateItem[] = [
       building_size: "16m x 45m",
       total_building_size: "720m²",
       road_size: "12m",
+      area: "",
       bed_room: 4,
       bath_room: 5,
       living_room: 1,
@@ -65,17 +69,17 @@ const sampleSearchLocation: RealEstateItem[] = [
     mapurl: "",
     favorite: true,
     status: true,
-    lang: "eng"
+    lang: "eng",
+    price: 13000
   }
 ];
+
 export default {
   title: 'Components/HeroSectionSearchList',
   component: HeroSectionSearchList,
   argTypes: {
     searchLocation: { control: 'object', defaultValue: sampleSearchLocation },
-    // Add control for background color
     backgroundColor: { control: 'color' },
-    // Add control for text color
     textColor: { control: 'color' },
   },
 } as Meta;
@@ -86,7 +90,7 @@ const Template: StoryFn<HeroSectionSearchListProps & { backgroundColor: string; 
   const { backgroundColor, textColor, ...rest } = args;
 
   return (
-    <div style={{ backgroundColor: backgroundColor }}>
+    <div style={{ backgroundColor: backgroundColor, color: textColor }}>
       <HeroSectionSearchList {...rest} searchRef={searchRef} />
     </div>
   );
@@ -95,6 +99,6 @@ const Template: StoryFn<HeroSectionSearchListProps & { backgroundColor: string; 
 export const Default = Template.bind({});
 Default.args = {
   searchLocation: sampleSearchLocation,
-  backgroundColor: '#ffffff', // Default background color
-  textColor: '#000000', // Default text color
+  backgroundColor: '#ffffff',
+  textColor: '#000000',
 };

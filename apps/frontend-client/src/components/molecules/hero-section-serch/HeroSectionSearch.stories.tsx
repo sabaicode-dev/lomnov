@@ -28,13 +28,15 @@ const sampleProperties: RealEstateItem[] = [
       kitchen: 1,
       parking: 1,
       garden: "garden",
-      swimming_pool: "swimming pool"
+      swimming_pool: "swimming pool",
+      area: "200m²" // Add this line
     },
     address: "123 Main St, Anytown, USA",
     mapurl: "",
     favorite: true,
     status: true,
-    lang: "eng"
+    lang: "eng",
+    price: 2000
   },
   {
     id: 2,
@@ -59,13 +61,15 @@ const sampleProperties: RealEstateItem[] = [
       kitchen: 1,
       parking: 1,
       garden: "garden",
-      swimming_pool: "swimming pool"
+      swimming_pool: "swimming pool",
+      area: "150m²" // Add this line
     },
     address: "456 Market St, Metropolis, USA",
     mapurl: "",
     favorite: true,
     status: true,
-    lang: "eng"
+    lang: "eng",
+    price: 1500
   }
 ];
 
@@ -85,7 +89,7 @@ const Template: StoryFn<HeroSectionSearchProps> = (args) => <HeroSectionSearch {
 export const Default = Template.bind({});
 Default.args = {
   properties: sampleProperties,
-  title: "Real Estate Plateform",
+  title: "Real Estate Platform",
   placeholder: "Enter an address...",
   inputClassName: "",
 };
