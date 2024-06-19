@@ -26,7 +26,7 @@ function ContainerHeader({ menu }: MenuProp) {
   };
   return (
     <>
-      <div className=" xl:w-[1300px] w-full m-auto h-full flex flex-row items-center justify-between py-3 px-5 lg:px-0  z-20 ">
+      <div className=" xl:w-[1300px] w-full m-auto h-full flex flex-row items-center justify-between py-3 px-5 xl:px-0  z-20 ">
         <div onClick={() => handleClickMenu()} className=" md:hidden ">
           <Menu props=" mr-2 text-[25px]" />
         </div>

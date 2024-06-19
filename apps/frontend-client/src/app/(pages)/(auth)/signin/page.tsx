@@ -1,9 +1,9 @@
 import React from "react";
-import LoginForm from "./LoginForm";
+import LoginForm from "../../../../components/organisms/auth/form-login/LoginForm";
 import { Facebook, Google } from "@/icons";
 import Image from "next/image";
-import Link from "next/link";
-import image from "@/images/Login logo.png";
+import image from "@/images/Login_logo.png";
+import Footer from "@/components/organisms/footer/Footer";
 
 const SignInPage = () => {
   return (
@@ -11,7 +11,7 @@ const SignInPage = () => {
       className="container mx-auto p-4 md:py-20"
       style={{ maxWidth: "1300px" }}
     >
-      <div className="flex flex-col sm:flex-row gap-8 md:gap-32 justify-center items-center">
+      <div className="flex flex-col sm:flex-row gap-8 md:gap-32 justify-center items-center mb-10">
         <Image
           src={image}
           alt="Login logo"
@@ -30,16 +30,13 @@ const SignInPage = () => {
             <span className="text-gray-400 font-semibold">Or</span>
             <div className="flex-1 border-t border-gray-300"></div>
           </div>
-
           <LoginForm />
-
-          <div className="text-center">
-            <span className="text-gray-400">Not yet have an account? </span>
-            <Link href="/signup" className="text-blue-500 font-semibold">
-              Register
-            </Link>
-          </div>
         </div>
+      </div>
+
+      {/* footer */}
+      <div className=" hidden sm:block">
+        <Footer />
       </div>
     </div>
   );
