@@ -18,7 +18,7 @@ type FormErrors = {
   fullname?: string;
   email?: string;
   password?: string;
-};
+}; //Imports and Type Definitions
 
 const Page: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
@@ -183,7 +183,7 @@ const Page: React.FC = () => {
           </form>
         </div>
       </div>
-      <div className="hidden sm:block">{/* <Footer /> */}</div>
+      <div className="hidden sm:block">{<Footer />}</div>
     </div>
   );
 };
