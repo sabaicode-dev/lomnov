@@ -2,7 +2,7 @@
 
 import React, { useState, FormEvent } from "react";
 import Link from "next/link";
-import InputField from "../inputfield/InputField";
+import InputField from "../../../../../../../packages/ui-components/src/components/inputfield/InputField";
 
 type FormData = {
   email: string;
@@ -14,19 +14,22 @@ type FormErrors = {
   password?: string;
 };
 
-const LoginForm: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    email: "",
-    password: "",
-  });
+interface LoginFormProps {
+  initialData?: FormData;
+  onSubmit?: (data: FormData) => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({
+  initialData = { email: "", password: "" },
+  onSubmit,
+}) => {
+  const [formData, setFormData] = useState<FormData>(initialData);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    setFormErrors((prevErrors) => {
-      return { ...prevErrors, [name]: "" };
-    });
+    setFormErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
   const validate = (): FormErrors => {
@@ -56,6 +59,9 @@ const LoginForm: React.FC = () => {
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
     } else {
+      if (onSubmit) {
+        onSubmit(formData);
+      }
       console.log("Form data:", formData);
       // Clear form after submission
       setFormData({ email: "", password: "" });
@@ -72,7 +78,7 @@ const LoginForm: React.FC = () => {
         onChange={handleInputChange}
         placeholder="Email"
         error={formErrors.email}
-        className="custom-email-class"
+        className="w-full px-4 py-2 rounded-md border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:border-blue-500 bg-transparent text-base"
       />
       <InputField
         name="password"
@@ -81,7 +87,7 @@ const LoginForm: React.FC = () => {
         onChange={handleInputChange}
         placeholder="Password"
         error={formErrors.password}
-        className="custom-password-class"
+        className="w-full px-4 py-2 rounded-md border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:border-blue-500 bg-transparent text-base"
       />
       <button className="bg-blue-500 text-white px-4 py-2 w-full rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
         Login
