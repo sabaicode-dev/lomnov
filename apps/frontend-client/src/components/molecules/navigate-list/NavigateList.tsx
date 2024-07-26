@@ -2,23 +2,23 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-interface IMenus {
+export interface IMenus {
   id?: number;
   name?: string;
   slug?: string;
   lang: string;
 }
 
-interface MenuProp {
+export interface MenuProp {
   menu: IMenus[];
 }
 
 function NavigateList({ menu }: MenuProp) {
 
   const [currentPath, setCurrentPath] = useState<string>("");
-  useEffect(()=>{
+  useEffect(() => {
     setCurrentPath(window.location.pathname)
-  },[currentPath])
+  }, [currentPath])
 
 
   return (

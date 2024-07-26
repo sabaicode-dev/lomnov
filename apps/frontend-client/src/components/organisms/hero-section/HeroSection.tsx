@@ -14,7 +14,7 @@ async function HeroSection() {
 
   return (
     <>
-      <div className="w-full h-[250px] md:h-[300px]  lg:h-[350px] bg-blue-500 relative ">
+      <div className="w-full h-[230px] md:h-[300px]  lg:h-[350px] bg-blue-500 relative ">
         <Image
           src={"https://wallpapercave.com/wp/wp4110653.jpg"}
           alt=""

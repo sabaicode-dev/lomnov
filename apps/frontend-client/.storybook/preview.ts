@@ -1,6 +1,8 @@
 import type { Preview } from "@storybook/react";
-import "../src/app/globals.css";
-import "./storybook-styles.css";
+import "../src/app/globals.css"
+
+
+
 
 const preview: Preview = {
   parameters: {
@@ -9,6 +11,9 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
+    },
+    docs: {
+      // theme: MyTheme,
     },
   },
 };
