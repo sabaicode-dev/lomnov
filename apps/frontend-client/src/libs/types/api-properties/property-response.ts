@@ -1,4 +1,3 @@
-
 export interface RealEstateDetail {
   land_size: string;
   total_land_size: string;
@@ -31,4 +30,18 @@ export interface RealEstateItem {
   favorite: boolean;
   status: boolean;
   lang: string;
+  label: string;
+  location: string;
+  baths: string;
+  beds: string;
+}
+
+export interface PropertyCardProps {
+  imageUrl: string;
+  price: string;
+  title: string;
+  location: string;
+  baths: number;
+  beds: number;
+  label: string;
 }

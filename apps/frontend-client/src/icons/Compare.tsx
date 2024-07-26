@@ -1,21 +1,21 @@
 import React from "react";
-import bathsicon from "@/images/baths-icon.svg";
+import compareicon from "@/images/iconamoon_compare.svg"
 import Image from "next/image";
 interface prop {
   props?: string;
 }
-function BathRoom({ props }: prop) {
+function Compare({ props }: prop) {
   return (
     <>
       <Image
-        src={bathsicon}
+        src={compareicon}
         alt="vector bath"
-        width={19}
-        height={20}
+        width={18}
+        height={23}
         className={props}
       />
     </>
   );
 }
 
-export default BathRoom;
+export default Compare;

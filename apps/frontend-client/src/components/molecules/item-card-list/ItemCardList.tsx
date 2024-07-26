@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { ItemCard } from "../item-card/ItemCard";
+import ItemCard from "../item-card/ItemCard"
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 
 async function fetchProperties(): Promise<RealEstateItem[]> {
