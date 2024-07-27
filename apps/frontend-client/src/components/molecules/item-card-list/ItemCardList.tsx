@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import ItemCard from "../item-card/ItemCard"
+import ItemCard from "../item-card/ItemCard";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 
 async function fetchProperties(): Promise<RealEstateItem[]> {
@@ -14,10 +14,14 @@ async function ItemCardList() {
   const items = await fetchProperties();
   return (
     <>
-      <div className="grid  sm:grid-cols-2 lg:grid-cols-3 gap-10">
-        {items.map((item) => (
-          <ItemCard key={item.id} item={item} />
-        ))}
+      <div className="w-full bg-neutral">
+        <div className=" bg-beige overflow-hidden mx-[36px] sm:mx-[36px] md:mx-[36px] lg:mx-[90px] xl:mx-[120px] 2xl:mx-[120px]">
+          <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5 2xl:gap-5">
+            {items.map((item) => (
+              <ItemCard key={item.id} item={item} />
+            ))}
+          </div>
+        </div>
       </div>
     </>
   );

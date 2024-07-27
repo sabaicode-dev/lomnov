@@ -106,9 +106,9 @@ const ItemCard = ({ item }: ItemCardProps) => {
   const [isLike, setIsLike] = useState(false);
   const toggleIsLike = () => setIsLike(!isLike);
   return (
-    <div className="bg-white max-w-[405px] mx-auto sm:w-[90%] md:w-[405px] h-auto rounded-[30px] overflow-hidden border border-neutral">
-      <div className="relative w-[363px] h-[414px] m-5">
-        <div className="relative overflow-hidden rounded-[25px] w-full h-[300px]">
+    <div className="bg-white w-[405px] h-[460px] sm:w-[280px] sm:h-[333px] md:w-[338px] md:h-[393px] lg:w-[405px] lg:h-[460px] xl:w-[405px] xl:h-[460px] 2xl:w-[405px] 2xl:h-[460px] rounded-[30px] overflow-hidden border border-neutral">
+      <div className="relative w-[363px] h-[414px] m-5 sm:w-[260px] sm:h-[313px] sm:m-[10px] md:w-[293px] md:h-[370px] md:m-[20px] xl:w-[363pxpx] xl:h-[414px]  2xl:w-[363px] 2xl:h-[414px]">
+        <div className="relative overflow-hidden rounded-[25px] w-full h-[300px] sm:h-[200px] md:h-[240px] 2xl:w-full 2xl:h-[300px]">
           {/* Image Cover */}
           <Link href={`pages/detail/${item.id}`}>
             <div className="block w-full h-full">
@@ -125,7 +125,7 @@ const ItemCard = ({ item }: ItemCardProps) => {
           </Link>
 
           {/* Item Type */}
-          <div className="absolute py-1 px-4 top-[10px] left-[17px] bg-olive-green text-white rounded-[13px] font-helvetica text-helvetica-text font-bold ">
+          <div className="absolute py-1 px-4 top-[10px] left-[17px] sm:left-[10px] bg-olive-green text-white rounded-[13px] font-helvetica text-helvetica-text font-bold ">
             <div className="flex justify-center items-center text-center">
               {item.category}
             </div>
@@ -133,7 +133,7 @@ const ItemCard = ({ item }: ItemCardProps) => {
 
           {/* Favorite Icon */}
           <div
-            className="absolute top-[10px] right-[17px] cursor-pointer"
+            className="absolute top-[10px] right-[17px] sm:right-[10px] cursor-pointer"
             onClick={toggleIsLike}
           >
             {isLike ? (
@@ -144,7 +144,7 @@ const ItemCard = ({ item }: ItemCardProps) => {
           </div>
 
           {/* Price */}
-          <div className="absolute bottom-[10px] left-[17px] text-white font-helvetica text-helvetica-h4 font-bold ">
+          <div className="absolute bottom-[10px] left-[17px] sm:left-[10px] text-white font-helvetica text-helvetica-h4 font-bold ">
             ${item.price}10,00
           </div>
         </div>
@@ -155,14 +155,14 @@ const ItemCard = ({ item }: ItemCardProps) => {
         </div>
 
         {/* Location */}
-        <div className="absolute bottom-[35px] left-0 text-charcoal font-helvetica text-helvetica-paragraph2">
+        <div className="absolute bottom-[35px] sm:bottom-[40px] left-0 text-charcoal font-helvetica text-helvetica-paragraph2">
           {item.location}Phnom, Corner Street 302 and,...
         </div>
 
         {/* Bathrooms, Bedrooms and Compare */}
-        <div className="absolute bottom-0 w-full">
+        <div className="absolute bottom-0 sm:bottom-[10px] w-full">
           <div className="flex justify-between items-center">
-            <div className="w-[50%] flex justify-between items-center">
+            <div className="w-[50%] sm:w-[65%] flex justify-between items-center">
               <div className="flex justify-between items-center font-helvetica text-helvetica-paragraph font-bold">
                 <BathRoom props="w-[19px] h-[20px]" />
                 {item.baths}3 Baths
@@ -172,7 +172,7 @@ const ItemCard = ({ item }: ItemCardProps) => {
                 {item.beds}3 Beds
               </div>
             </div>
-            <div className="w-[50%] flex justify-end items-center">
+            <div className="w-[50%] sm:w-[35%] flex justify-end items-center">
               <Compare props="cursor-pointer" />
             </div>
           </div>

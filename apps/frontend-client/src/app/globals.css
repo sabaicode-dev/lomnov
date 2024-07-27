@@ -51,7 +51,7 @@ body {
 
 @font-face {
   font-family: "Helvetica";
-  src: url("/fonts/helvetica/Helvetica Rounded Bold.otf") format("opentype");
+  src: url("/fonts/helvetica/Helvetica-Bold.ttf") format("opentype");
   font-weight: bold;
   font-style: normal;
 }
