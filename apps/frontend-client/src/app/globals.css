@@ -17,7 +17,7 @@
 }
 
 body {
-  background-color: whitesmoke;
+background-color: #E0E0DC;
   margin: 0;
   padding: 0;
 }
@@ -26,4 +26,32 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+@font-face {
+  font-family: "Coolvetica";
+  src: url("/fonts/coolvetica/coolvetica rg.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helvetica/Helvetica.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helvetica/Helvetica Black Condensed.otf") format("opentype");
+  font-weight: 900; /* You can also use 'font-weight: black;' */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/helvetica/Helvetica-Bold.ttf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
 }

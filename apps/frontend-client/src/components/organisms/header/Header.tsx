@@ -1,5 +1,4 @@
 // import NavigateList from "@/components/molecules/navigate-list/NavigateList";
-
 // import Menu from "@/icons/Menu";
 // import Link from "next/link";
 // import { useState } from "react";
@@ -34,24 +33,81 @@
 
 // export default Header;
 
+// // new
+// // import dynamic from 'next/dynamic';
+// // Dynamically import ClientHeader to ensure it only runs on the client-side
+// // const ClientHeader = dynamic(() => import('./ClientHeader'), { ssr: false });
+// import { fetchMenus } from '@/libs/fetch-data/api';
+// import { IMenus } from '@/libs/types/api-menus/menu-response';
+// import ClientHeader from './ClientHeader';
 
+// const Header = async () => {
+//   const menus: IMenus[] = await fetchMenus();
 
+//   return (
+//     <ClientHeader menus={menus} />
+//   );
+// };
 
+// export default Header;
 
-import dynamic from 'next/dynamic';
-import { fetchMenus } from '@/libs/fetch-data/api';
-import { IMenus } from '@/libs/types/api-menus/menu-response';
+"use client";
 
-// Dynamically import ClientHeader to ensure it only runs on the client-side
-const ClientHeader = dynamic(() => import('./ClientHeader'), { ssr: false });
+import { useEffect, useState } from "react";
+import ContainerHeader from "./ContainerHeader";
+// import { IMenus } from "@/libs/types/api-menus/menu-response";
 
-const Header = async () => {
-  const menus: IMenus[] = await fetchMenus();
+// interface ClientHeaderProps {
+//   menus: IMenus[];
+// }
+
+export const menus = [
+  {
+    id: 1,
+    name: "home",
+    slug: "/",
+    lang: "eng",
+  },
+  {
+    id: 3,
+    name: "buy",
+    slug: "/buy",
+    lang: "eng",
+  },
+  {
+    id: 5,
+    name: "rent",
+    slug: "/rent",
+    lang: "eng",
+  },
+];
+
+const Header: React.FC = () => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <ClientHeader menus={menus} />
+    <header
+      className={`w-full h-[90px] fixed top-0 z-30 transition-colors duration-300 ${scrolled ? " bg-olive-drab" : "bg-transparent"}`}
+    >
+      <ContainerHeader menu={menus} />
+    </header>
   );
 };
 
 export default Header;
-
