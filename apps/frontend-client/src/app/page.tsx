@@ -7,7 +7,6 @@ import HeroSection from "@/components/organisms/hero-section/HeroSection";
 import Link from "next/link";
 // ====================
 
-
 export default function Home() {
   return (
     <main className="">

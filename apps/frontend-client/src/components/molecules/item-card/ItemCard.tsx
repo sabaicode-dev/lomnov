@@ -4,20 +4,31 @@ import { BsMap } from "react-icons/bs";
 import { CiSquarePlus } from "react-icons/ci";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IconBedRoom, Star, StarFill } from "@/icons";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import BathRoom from "@/icons/BathRoom";
+import AOS from 'aos'
+import "aos/dist/aos.css";
+
 export interface ItemCardProps {
   item: RealEstateItem;
 }
+
+
 export const ItemCard = ({ item }: ItemCardProps) => {
   const [isLike, setIsLike] = useState(false);
   const toggleIsLike = () => {
     setIsLike((isLike) => !isLike);
   };
+
+  useEffect(() => {
+    AOS.init();
+    AOS.refresh();
+    window.scrollTo(0, 0);
+  }, []);
   return (
-    <div className="w-full h-[380px] rounded-lg overflow-hidden shadow-md">
+    <div data-aos="fade-up" className="w-full h-[380px] rounded-lg overflow-hidden shadow-md animate-fadeUp">
       <div className="w-full h-[65%] relative overflow-hidden z-10">
         <Link href={"pages/detail/1"}>
           <Image

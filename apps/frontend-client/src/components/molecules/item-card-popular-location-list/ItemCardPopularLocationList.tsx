@@ -1,9 +1,9 @@
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { ItemCard } from "../item-card/ItemCard";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import ItemCardPopularLocation from "../item-card-popular-location/ItemCardPopularLocation";
-
+// import AOS from 'aos'
 // async function fetchProperties(): Promise<RealEstateItem[]> {
 //   const res = await fetch("https://lomnov.onrender.com/api/v1/properties");
 //   if (!res.ok) {
@@ -34,6 +34,13 @@ export const provinces = [
       sell: 29400
   }
 ]
+
+// useEffect(()=>{
+// AOS.init({
+//   duration: 1000,
+//   once:false
+// })
+// },[])
 
 
 async function ItemCardPopularLocationList() {

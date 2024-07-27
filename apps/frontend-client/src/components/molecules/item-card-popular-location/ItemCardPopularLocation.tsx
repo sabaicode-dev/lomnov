@@ -14,7 +14,7 @@ interface ItemCardProps {
 }
 function ItemCardPopularLocation({item}: ItemCardProps) {
   return (
-    <div className="w-full h-[250px] bg-blue-300 overflow-hidden rounded-lg relative">
+    <div className="w-full h-[250px] bg-blue-300 overflow-hidden rounded-lg relative animate-fadeUp">
       <Image
         src={item.thumbnail}
         alt=""
