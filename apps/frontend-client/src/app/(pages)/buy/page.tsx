@@ -1,14 +1,19 @@
 import ItemCardList from "@/components/molecules/item-card-list/ItemCardList";
-import { Map } from "@/icons";
-import Location from "@/icons/Location";
+
 
 import Image from "next/image";
 import banner from "@/images/banner.png";
-
+import SelectProperties from "@/components/molecules/select-properties/SelectProperties";
+const options = [
+  { label: "English", imgSrc: "/path/to/image1.jpg" },
+  { label: "Khmer", imgSrc: "/path/to/image2.jpg" },
+  // Add more options as needed
+];
+const defaultOption = { label: "Properties", imgSrc: "" };
 function page() {
   return (
     //* New */
-    <div className="w-full ">
+    <main className="w-full ">
       {/* Banner */}
       <header className="relative w-full h-[400px]">
         <Image
@@ -35,12 +40,23 @@ function page() {
         <div className="absolute left-[10%] sm:left-[73px] md:left-[155px] lg:left-[210px] xl:left-[210px] 2xl:left-[374px] bottom-[85px] font-helvetica text-sm md:text-base lg:text-helvetica-paragraph text-white">
           <p>Customize your search below.</p>
         </div>
+        <div className=" absolute w-full lg:bottom-[-40px] bottom-[-60px] px-2 lg:px-0">
+          <div className="  z-10  m-auto lg:w-fit  bg-white rounded-[18px]  lg:flex   grid grid-cols-2 lg:grid-cols-4 items-center gap-5 p-5 ">
+
+            <SelectProperties options={options} defaultOption={defaultOption} />
+            <SelectProperties options={options} defaultOption={defaultOption} />
+            <SelectProperties options={options} defaultOption={defaultOption} />
+            <button className=" bg-neutral text-white font-[600] px-5 py-2 rounded-md lg:w-[120px]">
+              Search
+            </button>
+          </div>
+        </div>
       </header>
 
-      <div className="w-full lg:w-[1300px] m-auto  mt-40 px-2 lg:px-0">
+      <div className="w-full lg:w-[1300px] m-auto  mt-32 px-2 lg:px-0">
         <ItemCardList />
       </div>
-    </div>
+    </main>
   );
 }
 
