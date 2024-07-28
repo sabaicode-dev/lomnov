@@ -68,7 +68,7 @@ function page() {
     //</>
 
     //* New */
-    <div className="max-w-[1920px] mx-auto overflow-hidden">
+    <div className="w-full mx-auto">
       {/* Banner */}
       <header className="relative w-full h-[400px]">
         <Image

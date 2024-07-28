@@ -30,8 +30,8 @@ body {
 
 @font-face {
   font-family: "Coolvetica";
-  src: url("/fonts/coolvetica/coolvetica rg.ttf") format("truetype");
-  font-weight: normal;
+  src: url("/fonts/coolvetica/coolvetica rg.ttf") format("opentype");
+  font-weight: bold;
   font-style: normal;
 }
 
