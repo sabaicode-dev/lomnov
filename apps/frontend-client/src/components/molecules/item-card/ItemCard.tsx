@@ -148,7 +148,7 @@ const ItemCard = ({ item }: ItemCardProps) => {
           ${item.price}10,00
         </div>
       </div>
-      <div className="flex flex-col gap-2 h-[35%] bg- py-5 ">
+      <div className="flex flex-col gap-2 h-[35%] py-5 ">
         <p className=" capitalize font-[600] text-olive-drab ">{item.title}</p>
         <p>{item.address}</p>
         <div className=" bottom-0 sm:bottom-[10px] w-full">
