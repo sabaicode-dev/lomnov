@@ -46,7 +46,7 @@ const SignInPage = () => {
     // </main>
 
     <div className="w-full">
-      <div className="w-full relative">
+      <div className="w-full relative mb-[800px]">
         {/* Banner */}
         <header className="relative w-full h-[400px]">
           <Image

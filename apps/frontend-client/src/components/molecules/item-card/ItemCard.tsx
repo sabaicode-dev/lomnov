@@ -109,12 +109,12 @@ const ItemCard = ({ item }: ItemCardProps) => {
   };
   return (
     <div className="w-full h-[380px] rounded-[20px] overflow-hidden shadow-md flew flex-col gap-5 bg-white border-[1px] border-neutral p-4">
-      <div className="w-full h-[65%] relative overflow-hidden z-10 bg-olive-green rounded-[15px] hover:transition-all hover:duration-1000 ease-out ">
+      <div className="w-full h-[65%] relative overflow-hidden z-10 bg-olive-green rounded-[15px]">
         <Link
           href={"pages/detail/1"}
-          className=" absolute w-full h-full rounded-[15px] overflow-hidden hover:scale-110"
+          className=" absolute w-full h-full rounded-[15px] overflow-hidden transition-transform duration-300 transform hover:scale-110"
         >
-          <div className=" group absolute left-0 top-0 w-full h-full hover:bg-[#00000033] z-2 transition-all duration-150 ease-out">
+          <div className=" group absolute left-0 top-0 w-full h-full hover:bg-[#00000033] z-2 transition duration-300">
             {/* dfdfd */}
           </div>
           <Image
@@ -156,12 +156,15 @@ const ItemCard = ({ item }: ItemCardProps) => {
             <div className="w-[50%] sm:w-[65%] flex gap-7 items-center">
               <div className="flex justify-between gap-2  font-helvetica text-helvetica-paragraph ">
                 <BathRoom props="w-[19px] h-[20px]" />
-                <span className="font-[600] text-[12px]">{item.detail.bath_room} Bath</span>
+                <span className="font-[600] text-[12px]">
+                  {item.detail.bath_room} Bath
+                </span>
               </div>
               <div className="flex justify-between gap-2  font-helvetica text-helvetica-paragraph font-bold">
                 <BedRoom props="w-[20px] h-[20px]" />
-                <span className="font-[600] text-[12px]">{item.detail.bed_room} Bed</span>
-
+                <span className="font-[600] text-[12px]">
+                  {item.detail.bed_room} Bed
+                </span>
               </div>
             </div>
             <div className="w-[50%] sm:w-[35%] flex justify-end items-center">
