@@ -112,7 +112,10 @@ import { useForm } from "react-hook-form";
 import InputField from "../../../../../../../packages/ui-components/src/components/inputfield/InputField";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Google, Facebook } from "@/icons";
+import  Google  from "../../../../icons/Google";
+import  Facebook  from "../../../../icons/Facebook";
+
+// import { Facebook } from "@/icons";
 
 // Define the Zod schema
 const loginSchema = z.object({
@@ -225,13 +228,10 @@ const LoginForm: React.FC = () => {
       </form>
 
       {/* Signup Link */}
-      <div className="text-center mt-4">
-        <p className="text-gray-600">
+      <div className="text-center font-helvetica text-helvetica-text mt-4">
+        <p className="text-charcoal">
           Do not have an account?
-          <a
-            href="#"
-            className="ml-[10px] font-helvetica text-helvetica-text text-olive-green"
-          >
+          <a href="#" className="ml-[10px] text-olive-green">
             Create an account
           </a>
         </p>

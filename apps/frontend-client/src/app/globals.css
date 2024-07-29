@@ -17,7 +17,7 @@
 }
 
 body {
-  @apply bg-grayish-white;
+  background-color: #e0e0dc;
   margin: 0;
   padding: 0;
 }

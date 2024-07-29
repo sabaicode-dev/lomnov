@@ -104,72 +104,64 @@ export interface ItemCardProps {
 
 const ItemCard = ({ item }: ItemCardProps) => {
   const [isLike, setIsLike] = useState(false);
-  const toggleIsLike = () => setIsLike(!isLike);
+  const toggleIsLike = () => {
+    setIsLike((isLike) => !isLike);
+  };
   return (
-    <div className="bg-white w-[405px] h-[460px] sm:w-[280px] sm:h-[333px] md:w-[338px] md:h-[393px] lg:w-[405px] lg:h-[460px] xl:w-[405px] xl:h-[460px] 2xl:w-[405px] 2xl:h-[460px] rounded-[30px] overflow-hidden border border-neutral">
-      <div className="relative w-[363px] h-[414px] m-5 sm:w-[260px] sm:h-[313px] sm:m-[10px] md:w-[293px] md:h-[370px] md:m-[20px] xl:w-[363pxpx] xl:h-[414px]  2xl:w-[363px] 2xl:h-[414px]">
-        <div className="relative overflow-hidden rounded-[25px] w-full h-[300px] sm:h-[200px] md:h-[240px] 2xl:w-full 2xl:h-[300px]">
-          {/* Image Cover */}
-          <Link href={`pages/detail/${item.id}`}>
-            <div className="block w-full h-full">
-              <div className="relative w-full h-full transition-transform transform duration-300 hover:scale-110">
-                <Image
-                  src={item.thumbnail}
-                  alt={item.title}
-                  width={363}
-                  height={300}
-                  className="w-full h-full object-cover rounded-[25px] duration-300 hover:brightness-75"
-                />
-              </div>
-            </div>
-          </Link>
-
-          {/* Item Type */}
-          <div className="absolute py-1 px-4 top-[10px] left-[17px] sm:left-[10px] bg-olive-green text-white rounded-[13px] font-helvetica text-helvetica-text font-bold ">
-            <div className="flex justify-center items-center text-center">
-              {item.category}
-            </div>
+    <div className="w-full h-[380px] rounded-[20px] overflow-hidden shadow-md flew flex-col gap-5 bg-white border-[1px] border-neutral p-4">
+      <div className="w-full h-[65%] relative overflow-hidden z-10 bg-olive-green rounded-[15px] hover:transition-all hover:duration-1000 ease-out ">
+        <Link
+          href={"pages/detail/1"}
+          className=" absolute w-full h-full rounded-[15px] overflow-hidden hover:scale-110"
+        >
+          <div className=" group absolute left-0 top-0 w-full h-full hover:bg-[#00000033] z-2 transition-all duration-150 ease-out">
+            {/* dfdfd */}
           </div>
+          <Image
+            src={item.thumbnail}
+            alt={item.title}
+            width={500}
+            height={500}
+            className="w-full h-full object-cover "
+          />
+        </Link>
 
-          {/* Favorite Icon */}
-          <div
-            className="absolute top-[10px] right-[17px] sm:right-[10px] cursor-pointer"
-            onClick={toggleIsLike}
-          >
-            {isLike ? (
-              <HeartInline props={"text-white text-[25px]"} />
-            ) : (
-              <HeartOutline props={"text-white text-[25px]"} />
-            )}
-          </div>
-
-          {/* Price */}
-          <div className="absolute bottom-[10px] left-[17px] sm:left-[10px] text-white font-helvetica text-helvetica-h4 font-bold ">
-            ${item.price}10,00
-          </div>
+        {/* Item Type */}
+        <div className="absolute py-[3px] px-4 top-[10px] left-[17px] sm:left-[10px] bg-olive-green text-white text-[10px] rounded-[13px]  text-helvetica-text font-[600] ">
+          {item.category}
         </div>
 
-        {/* Title */}
-        <div className="absolute bottom-[70px] left-0 text-olive-drab font-helvetica text-helvetica-h4 font-bold ">
-          {item.title}
+        {/* Favorite Icon */}
+        <div
+          className="absolute top-[10px] right-[17px] sm:right-[10px] cursor-pointer"
+          onClick={toggleIsLike}
+        >
+          {isLike ? (
+            <HeartInline props={"text-white text-[25px]"} />
+          ) : (
+            <HeartOutline props={"text-white text-[25px]"} />
+          )}
         </div>
 
-        {/* Location */}
-        <div className="absolute bottom-[35px] sm:bottom-[40px] left-0 text-charcoal font-helvetica text-helvetica-paragraph2">
-          {item.location}Phnom, Corner Street 302 and,...
+        {/* Price */}
+        <div className="absolute bottom-[10px] left-[17px] sm:left-[10px] text-white font-helvetica text-helvetica-h4 font-bold ">
+          ${item.price}10,00
         </div>
-
-        {/* Bathrooms, Bedrooms and Compare */}
-        <div className="absolute bottom-0 sm:bottom-[10px] w-full">
-          <div className="flex justify-between items-center">
-            <div className="w-[50%] sm:w-[65%] flex justify-between items-center">
-              <div className="flex justify-between items-center font-helvetica text-helvetica-paragraph font-bold">
+      </div>
+      <div className="flex flex-col gap-2 h-[35%] bg-yellow-500 py-5 ">
+        <p className=" capitalize font-[600] text-olive-drab ">{item.title}</p>
+        <p>{item.address}</p>
+        <div className=" bottom-0 sm:bottom-[10px] w-full">
+          <div className="flex  items-center">
+            <div className="w-[50%] sm:w-[65%] flex gap-7 items-center">
+              <div className="flex justify-between gap-2  font-helvetica text-helvetica-paragraph ">
                 <BathRoom props="w-[19px] h-[20px]" />
-                {item.baths}3 Baths
+                <span className="font-[600] text-[12px]">{item.detail.bath_room} Bath</span>
               </div>
-              <div className="flex justify-between items-center font-helvetica text-helvetica-paragraph font-bold">
+              <div className="flex justify-between gap-2  font-helvetica text-helvetica-paragraph font-bold">
                 <BedRoom props="w-[20px] h-[20px]" />
-                {item.beds}3 Beds
+                <span className="font-[600] text-[12px]">{item.detail.bed_room} Bed</span>
+
               </div>
             </div>
             <div className="w-[50%] sm:w-[35%] flex justify-end items-center">
