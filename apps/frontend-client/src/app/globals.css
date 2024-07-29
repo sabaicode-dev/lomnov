@@ -17,7 +17,7 @@
 }
 
 body {
-background-color: #E0E0DC;
+  background-color: #e0e0dc;
   margin: 0;
   padding: 0;
 }
@@ -30,8 +30,8 @@ background-color: #E0E0DC;
 
 @font-face {
   font-family: "Coolvetica";
-  src: url("/fonts/coolvetica/coolvetica rg.ttf") format("truetype");
-  font-weight: normal;
+  src: url("/fonts/coolvetica/coolvetica rg.ttf") format("opentype");
+  font-weight: bold;
   font-style: normal;
 }
 

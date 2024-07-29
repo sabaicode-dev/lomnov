@@ -16,7 +16,7 @@
   },
   "include": [
     "src/**/*",
-    "../../apps/frontend-client/src/components/organisms/auth/form-login/LoginForm.tsx",
-    "../../apps/frontend-client/src/components/organisms/auth/form-login/InputField.stories.tsx"
+    // "../../apps/frontend-client/src/components/organisms/auth/form-login/LoginForm.tsx",
+    // "../../apps/frontend-client/src/components/organisms/auth/form-login/InputField.stories.tsx"
   ]
 }
