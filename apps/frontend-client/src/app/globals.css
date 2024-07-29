@@ -55,3 +55,36 @@ body {
   font-weight: bold;
   font-style: normal;
 }
+/* components/ExclusiveHomesSlider.css */
+/* components/ExclusiveHomesSlider.css */
+.swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background: #d1d1d1;
+  opacity: 1;
+  border-radius: 50%;
+  margin: 0 20px;
+}
+
+.swiper-pagination-bullet-active {
+  background: #ffffff;
+  box-shadow: 0 0 0 2px #d1d1d1;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: #6b6b6b;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 20px;
+}
+
+.swiper-button-prev {
+  left: -10px;
+}
+
+.swiper-button-next {
+  right: -10px;
+}

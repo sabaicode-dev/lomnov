@@ -17,7 +17,7 @@ const options = [
   { label: "Khmer", imgSrc: "/path/to/image2.jpg" },
   // Add more options as needed
 ];
-const defaultOption = { label: "English", imgSrc: "" };
+const defaultOption = { label: "Properties", imgSrc: "" };
 
 function HeroSection() {
   // const data = await fetchProperties();
@@ -34,7 +34,7 @@ function HeroSection() {
           priority
         />
         <div className=" absolute left-0 top-0 w-full h-full bg-[#0000005a] ">
-          <div className="flex flex-col gap-3 relative top-[65%] -translate-y-[65%] left-0 px-2 w-full lg:w-[1300px] lg:m-auto">
+          <div className="flex flex-col gap-3 relative top-[65%] -translate-y-[65%] left-0 px-2 xl:px-0 w-full xl:w-[1300px] lg:m-auto">
             <h1 className=" uppercase text-white text-[25px]  sm:text-[30px] md:text-[40px] font-[700]">
               DISCOVER YOUR DREAM HOME
             </h1>

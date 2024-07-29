@@ -1,3 +1,4 @@
+"use client"
 import Home from "@/icons/Home";
 import { useState } from "react";
 
