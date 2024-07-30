@@ -55,9 +55,6 @@ const config: Config = {
         bold: "700",
         black: "900",
       },
-      letterSpacing: {
-        "coolvetica-tight": "-0.5px",
-      },
       fontSize: {
         "coolvetica-h1": ["48px", { lineHeight: "56px" }],
         "coolvetica-h2": ["36px", { lineHeight: "44px" }],
@@ -68,12 +65,10 @@ const config: Config = {
         "coolvetica-text": ["16px", { lineHeight: "20px" }],
         "coolvetica-caption": ["12px", { lineHeight: "16px" }],
         "coolvetica-form-label": ["14px", { lineHeight: "18px" }],
-
         "helvetica-h1": ["48px", { lineHeight: "56px" }],
         "helvetica-h2": ["36px", { lineHeight: "44px" }],
         "helvetica-h3": ["30px", { lineHeight: "36px" }],
         "helvetica-h4": ["24px", { lineHeight: "28px" }],
-        "helvetica-h5": ["20px", { lineHeight: "28px" }],
         "helvetica-paragraph": ["16px", { lineHeight: "24px" }],
         "helvetica-paragraph2": ["16px", { lineHeight: "22px" }],
         "helvetica-small": ["14px", { lineHeight: "20px" }],

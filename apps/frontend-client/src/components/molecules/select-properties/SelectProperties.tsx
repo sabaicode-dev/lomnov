@@ -31,7 +31,7 @@ const SelectProperties: React.FC<CustomDropdownProps> = ({
   return (
     <div className="relative inline-block bg-grayish-white rounded-lg">
       <button
-        className="flex items-center justify-between w-full px-4 py-2 bg-gray-800 "
+        className="flex items-center justify-between w-full px-4 py-2  "
         onClick={toggleDropdown}
       >
         {selectedOption ? (

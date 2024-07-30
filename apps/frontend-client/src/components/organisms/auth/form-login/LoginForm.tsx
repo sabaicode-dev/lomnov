@@ -102,11 +102,11 @@
 //     </form>
 //   );
 // };
-
 // export default LoginForm;
 
-//** New */
 
+
+//** New */
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import InputField from "../../../../../../../packages/ui-components/src/components/inputfield/InputField";
@@ -149,7 +149,7 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="max-w-[600px] mx-auto bg-white rounded-[30px] border border-neutral py-10">
+    <div className="w-full  lg:w-[600px] mx-auto bg-white rounded-[30px] border border-neutral py-10">
       {/* Title */}
       <div className="text-center">
         <h2 className="font-coolvetica text-helvetica-h2 text-charcoal tracking-coolvetica-tight mb-4">

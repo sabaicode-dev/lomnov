@@ -29,6 +29,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/components/organisms/auth/form-login/InputField.stories.tsx"
-  ],
+, "src/components/molecules/inputfield/InputField.storiess.tsxx"  ],
   "exclude": ["node_modules"]
 }

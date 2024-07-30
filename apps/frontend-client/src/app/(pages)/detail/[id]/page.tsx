@@ -3,7 +3,6 @@ import Image from "next/image";
 import BathRoom from "@/icons/BathRoom";
 import BedRoom from "@/icons/BedRoom";
 
-
 // Fetch property data
 async function fetchProperty(id: string): Promise<RealEstateItem> {
   const res = await fetch(
@@ -21,22 +20,28 @@ const PropertyDetailPage = async ({ params }: { params: { id: string } }) => {
   const property = await fetchProperty(params.id);
 
   return (
-    <div className="w-full mx-auto mb-[200px]">
-      <div className="w-full h-[750px] relative">
-        <Image
-          src={property.thumbnail}
-          alt={property.title}
-          layout="fill"
-          objectFit="cover"
-          className=""
-        />
-      </div>
-      <div className="my-4 absolute">
-        <div className="flex items-center mt-4">
-          <PropertyTypeInfo property={property} />
+    <>
+      <div className="w-full mx-auto mb-[200px]">
+        <div className="w-full h-[750px] relative">
+          <Image
+            src={property.thumbnail}
+            alt={property.title}
+            layout="fill"
+            objectFit="cover"
+            className=""
+          />
+        </div>
+        <div className="w-full">
+          <div className="absolute mx-auto w-full md:w-[700px] lg:w-[1300px] left-1/2 transform -translate-x-1/2 bottom-[75px] h-[200px] bg-opacity-50 bg-blue-500 rounded-[20px]">
+            <div className="flex items-center mt-4">
+              <PropertyTypeInfo property={property} />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.3106028724646!2d104.92949692909889!3d11.601190765986432!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310953748c04da11%3A0x1c9465fc371b79e0!2z4Z6W4Z-B4Z6R4Z-S4Z6Z4Z6X4Z-S4Z6T4Z-C4Z6A4Z6C4Z-A4Z6T4Z6D4Z-S4Z6b4Z624Z-G4Z6E!5e0!3m2!1skm!2skh!4v1722324677056!5m2!1skm!2skh"></iframe>
+    </>
   );
 };
 

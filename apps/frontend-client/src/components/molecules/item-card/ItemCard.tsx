@@ -103,13 +103,14 @@ export interface ItemCardProps {
 }
 
 const ItemCard = ({ item }: ItemCardProps) => {
+  const flexRow = false;
   const [isLike, setIsLike] = useState(false);
   const toggleIsLike = () => {
     setIsLike((isLike) => !isLike);
   };
   return (
-    <div className="w-full h-[380px] rounded-[20px] overflow-hidden shadow-md flew flex-col gap-5 bg-white border-[1px] border-neutral p-4">
-      <div className="w-full h-[65%] relative overflow-hidden z-10 bg-olive-green rounded-[15px]">
+    <div className={ flexRow ? " flex h-[150px] gap-3 rounded-[20px] overflow-hidden shadow-md   bg-white border-[1px] border-neutral p-4"  :"w-full h-[380px] rounded-[20px] overflow-hidden shadow-md flew flex-col gap-5 bg-white border-[1px] border-neutral p-4"}>
+      <div className={ flexRow ? "bg-olive-green w-[50%] relative overflow-hidden z-10 b rounded-[15px] hover:transition-all hover:duration-1000 ease-out ": "w-full h-[65%] relative overflow-hidden z-10 bg-olive-green rounded-[15px] hover:transition-all hover:duration-1000 ease-out  "}>
         <Link
           href={`/detail/${item.id}`}
           className=" absolute w-full h-full rounded-[15px] overflow-hidden transition-transform duration-300 transform hover:scale-110"
@@ -148,26 +149,23 @@ const ItemCard = ({ item }: ItemCardProps) => {
           ${item.price}10,00
         </div>
       </div>
-      <div className="flex flex-col gap-2 h-[35%] py-5 ">
-        <p className=" capitalize font-[600] text-olive-drab ">{item.title}</p>
-        <p>{item.address}</p>
+      <div className={flexRow ? " flex flex-col text-[14px] gap-2 w-[50%]"  : "flex flex-col gap-2 h-[35%]  py-5 "}>
+        <p className={" capitalize font-[600] text-olive-drab "}>{item.title}</p>
+        <p className={flexRow ? "mb-5": ""}>{item.address}</p>
         <div className=" bottom-0 sm:bottom-[10px] w-full">
           <div className="flex  items-center">
-            <div className="w-[50%] sm:w-[65%] flex gap-7 items-center">
-              <div className="flex justify-between gap-2  font-helvetica text-helvetica-paragraph ">
-                <BathRoom props="w-[19px] h-[20px]" />
-                <span className="font-[600] text-[12px]">
-                  {item.detail.bath_room} Bath
-                </span>
+            <div className= { flexRow ? "w-[60%] sm:w-[65%] flex gap-3 items-center" :  "w-[50%] sm:w-[65%] gap-7 flex items-center"}>
+              <div className="flex  justify-between  font-helvetica text-helvetica-paragraph  ">
+                <BathRoom props= { flexRow ? "text-[20px] text-olive-drab"  : " text-[20px] text-olive-drab "}   />
+                <span className={ flexRow ? "font-[600] text-[10px]"  : "font-[600] text-[12px]"}>{item.detail.bath_room} Bath</span>
               </div>
-              <div className="flex justify-between gap-2  font-helvetica text-helvetica-paragraph font-bold">
-                <BedRoom props="w-[20px] h-[20px]" />
-                <span className="font-[600] text-[12px]">
-                  {item.detail.bed_room} Bed
-                </span>
+              <div className="flex  justify-between   font-helvetica text-helvetica-paragraph font-bold">
+                <BedRoom props={ flexRow ? "text-olive-drab text-[20px]"  : " text-olive-drab  text-[20px]"} />
+                <span className={ flexRow ? "font-[600] text-[10px]"  : "font-[600] text-[12px]"}>{item.detail.bed_room} Bed</span>
+
               </div>
             </div>
-            <div className="w-[50%] sm:w-[35%] flex justify-end items-center">
+            <div className="w-[40%] sm:w-[35%] flex justify-end items-center">
               <Compare props="cursor-pointer" />
             </div>
           </div>
