@@ -65,7 +65,6 @@ const config: Config = {
         "coolvetica-text": ["16px", { lineHeight: "20px" }],
         "coolvetica-caption": ["12px", { lineHeight: "16px" }],
         "coolvetica-form-label": ["14px", { lineHeight: "18px" }],
-
         "helvetica-h1": ["48px", { lineHeight: "56px" }],
         "helvetica-h2": ["36px", { lineHeight: "44px" }],
         "helvetica-h3": ["30px", { lineHeight: "36px" }],
