@@ -5,9 +5,9 @@ console.log({ rest, http }); // To verify which is defined
 
 export const handlers = [
   (rest || http).post("/api/login", (req, res, ctx) => {
-    const { email, password } = req.body;
+    const { email, password, firstname, lastname } = req.body;
 
-    if (email === "user@example.com" && password === "password13") {
+    if (email === "user@example.com" && password === "password13" && firstname === "john" && lastname === "doe") {
       return res(
         ctx.json({
           message: "Login successful",

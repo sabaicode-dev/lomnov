@@ -1,4 +1,5 @@
-import Link from "next/link";
+"use client"
+
 import React from "react";
 import ItemCard from "../item-card/ItemCard";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
@@ -10,8 +11,16 @@ async function fetchProperties(): Promise<RealEstateItem[]> {
   }
   return res.json();
 }
-async function ItemCardList() {
-  const items = await fetchProperties();
+const ItemCardList: React.FC = () => {
+  const [items, setItems] = React.useState<RealEstateItem[]>([]);
+
+  React.useEffect(() => {
+    fetchProperties()
+      .then(setItems)
+      .catch((error) => {
+        console.error("Error fetching properties:", error);
+      });
+  }, []);
   return (
     <>
       <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5 2xl:gap-5">
@@ -21,6 +30,6 @@ async function ItemCardList() {
       </div>
     </>
   );
-}
+};
 
 export default ItemCardList;
