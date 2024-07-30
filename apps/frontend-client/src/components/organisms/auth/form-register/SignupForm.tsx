@@ -1,43 +1,40 @@
 "use client";
-
-//** New */
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import InputField from "../../../../../../../packages/ui-components/src/components/inputfield/InputField";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Google from "../../../../icons/Google";
-import Facebook from "../../../../icons/Facebook";
+import InputField from "../../../../../../../packages/ui-components/src/components/inputfield/InputField";
 
-// import { Facebook } from "@/icons";
+import Image from "next/image";
+import banner from "@/images/banner.png";
 
 // Define the Zod schema
-const loginSchema = z.object({
+const signupSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  username: z.string().min(1, "Username is required"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });
 
 // Type definition for form data
-type LoginData = z.infer<typeof loginSchema>;
+type SignupData = z.infer<typeof signupSchema>;
 
-const LoginForm: React.FC = () => {
+const SignupForm: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [emailFocused, setEmailFocused] = useState(false);
-  const [passwordFocused, setPasswordFocused] = useState(false);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
-  // UseForm with Zod schema for validation
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginData>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<SignupData>({
+    resolver: zodResolver(signupSchema),
   });
 
-  // Handle form submission
-  const onSubmit = (data: LoginData) => {
+  const onSubmit = (data: SignupData) => {
     console.log("Form data:", data);
     // Implement your form submission logic here
   };
@@ -47,86 +44,83 @@ const LoginForm: React.FC = () => {
       {/* Title */}
       <div className="text-center">
         <h2 className="font-coolvetica text-helvetica-h2 text-charcoal tracking-coolvetica-tight mb-4">
-          Login to your account
+          Register Form
         </h2>
         <p className="mb-6 text-charcoal font-helvetica text-helvetica-text">
-          Please enter your credentials to continue.
+          Please fill in the details to create an account.
         </p>
-      </div>
-
-      {/* Social Login Buttons */}
-      <div className="flex justify-center mb-8 space-x-4 mx-[45px] font-helvetica text-helvetica-h4">
-        <button className="flex items-center justify-center w-1/2 h-[50px] border border-charcoal hover:border-olive-green rounded-[15px]">
-          <Google props="w-5 h-5 mr-2" />
-          Google
-        </button>
-        <button className="flex items-center justify-center w-1/2 h-[50px] border border-charcoal hover:border-olive-green rounded-[15px]">
-          <Facebook props="w-5 h-5 mr-2" />
-          Facebook
-        </button>
       </div>
 
       <div className="flex items-center mb-8 mx-[45px]">
         <div className="flex-grow h-px bg-charcoal"></div>
         <span className="px-2 text-charcoal font-helvetica text-helvetica-text">
-          or continue with email
+          Welcome
         </span>
         <div className="flex-grow h-px bg-charcoal"></div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <fieldset>
-          {/* Email Input */}
+          <InputField
+            label="First Name"
+            type="text"
+            register={register("firstName")}
+            error={errors.firstName?.message}
+            isFocused={focusedField === "firstName"}
+            setIsFocused={() => setFocusedField("firstName")}
+          />
+          <InputField
+            label="Last Name"
+            type="text"
+            register={register("lastName")}
+            error={errors.lastName?.message}
+            isFocused={focusedField === "lastName"}
+            setIsFocused={() => setFocusedField("lastName")}
+          />
+          <InputField
+            label="Username"
+            type="text"
+            register={register("username")}
+            error={errors.username?.message}
+            isFocused={focusedField === "username"}
+            setIsFocused={() => setFocusedField("username")}
+          />
           <InputField
             label="Email"
             type="email"
             register={register("email")}
             error={errors.email?.message}
-            isFocused={emailFocused}
-            setIsFocused={setEmailFocused}
+            isFocused={focusedField === "email"}
+            setIsFocused={() => setFocusedField("email")}
           />
-
-          {/* Password Input */}
           <InputField
             label="Password"
             type={passwordVisible ? "text" : "password"}
             register={register("password")}
             error={errors.password?.message}
-            isFocused={passwordFocused}
-            setIsFocused={setPasswordFocused}
+            isFocused={focusedField === "password"}
+            setIsFocused={() => setFocusedField("password")}
             hasToggleIcon={true}
             toggleVisibility={togglePasswordVisibility}
             visible={passwordVisible}
           />
         </fieldset>
 
-        {/* Remember Me and Forgot Password */}
-        <div className="flex justify-between items-center mb-8 mx-[45px]">
-          <label className="flex items-center text-charcoal">
-            <input type="checkbox" className="mr-2" /> Remember Me
-          </label>
-          <a href="#" className="text-olive-green">
-            Forgot Password?
-          </a>
-        </div>
-
-        {/* Sign In Button */}
         <div className="mx-[45px] mb-4">
           <button
             type="submit"
             className="w-full h-[50px] font-helvetica text-helvetica-h5 font-bold bg-neutral hover:bg-olive-green text-white rounded-[15px]"
           >
-            Sign In
+            Register
           </button>
         </div>
       </form>
 
-      {/* Signup Link */}
       <div className="text-center font-helvetica text-helvetica-text mt-4">
         <p className="text-charcoal">
-          Do not have an account?
-          <a href="/signup" className="ml-[10px] text-olive-green">
-            Create an account
+          Already have an account?
+          <a href="/signin" className="ml-[10px] text-olive-green">
+            Login
           </a>
         </p>
       </div>
@@ -134,4 +128,4 @@ const LoginForm: React.FC = () => {
   );
 };
 
-export default LoginForm;
+export default SignupForm;
