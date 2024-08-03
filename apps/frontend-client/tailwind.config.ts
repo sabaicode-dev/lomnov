@@ -46,6 +46,7 @@ const config: Config = {
         charcoal: "#252728",
         white: "#FFFFFF",
       },
+      spacing: {},
       fontFamily: {
         coolvetica: ["Coolvetica", "sans-serif"],
         helvetica: ["Helvetica", "Arial", "sans-serif"],
@@ -76,6 +77,11 @@ const config: Config = {
         "helvetica-caption": ["12px", { lineHeight: "16px" }],
         "helvetica-form-label": ["14px", { lineHeight: "18px" }],
       },
+      borderRadius: {
+        "11xl": "30px",
+        xl: "20px",
+        "8xs": "5px",
+      },
       screens: {
         sm: "640px",
         md: "768px",
@@ -85,6 +91,7 @@ const config: Config = {
       },
     },
   },
+  
   plugins: [require("@tailwindcss/typography"), require("@tailwindcss/forms")],
 };
 export default config;

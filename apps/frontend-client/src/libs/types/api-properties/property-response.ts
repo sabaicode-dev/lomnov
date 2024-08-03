@@ -34,14 +34,7 @@ export interface RealEstateItem {
   location: string;
   baths: string;
   beds: string;
-}
-
-export interface PropertyCardProps {
-  imageUrl: string;
-  price: string;
-  title: string;
-  location: string;
-  baths: number;
-  beds: number;
-  label: string;
+  kitchens: string;
+  area: string;
+  parking: string;
 }
