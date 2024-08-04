@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <main className="w-full">
       <HeroSection />
-      <section className="w-full xl:w-[1300px] m-auto py-10 px-2 lg:px-0">
+      <section className="w-full xl:w-[1300px] m-auto py-10 px-2 xl:px-0">
         <ItemCardPopularLocationList />
       </section>
       <section className="w-full  bg-gray-500 h-[1200px] lg:h-[720px] relative ">
@@ -27,8 +27,8 @@ export default function Home() {
           className=" absolute left-0 top-0 w-full h-full object-cover"
         />
         <div className=" bg-[#0000002e] absolute left-0 top-0 w-full h-full ">
-          <div className="w-full h-full xl:w-[1300px]  m-auto px-2 lg:px-0 flex flex-col lg:flex-row gap-10 ">
-            <div className="w-full lg:w-[70%] h-full py-5  ">
+          <div className="w-full h-full xl:w-[1300px]  m-auto px-2 xl:px-0 flex flex-col lg:flex-row gap-10 ">
+            <div className="w-full lg:w-[30%] h-full py-32 ">
               <ItemCardNearlyLocationList />
             </div>
             <div className=" lg:w-[30%] h-full  py-10 flex flex-col items-center">
@@ -54,10 +54,10 @@ export default function Home() {
       </section>
 
       {/* <ExclusiveHomesSlider /> */}
-      <section className=" lg:w-[1300px] m-auto h-[500px] b px-2 lg:px-0">
+      <section className=" xl:w-[1300px] m-auto h-[500px] b px-2 xl:px-0">
         <Slider />
       </section>
-      <div className=" flex flex-col lg:flex-row justify-between gap-20 lg:w-[1300px] m-auto py-20 lg:py-40 px-2 lg:px-20">
+      <div className=" flex flex-col lg:flex-row justify-between gap-20 xl:w-[1300px] m-auto py-20 lg:py-40 px-2 lg:px-20">
         <div>
           <h2 className=" text-[28px] font-[600] text-olive-drab">
             Unleash Your Creativity at Home

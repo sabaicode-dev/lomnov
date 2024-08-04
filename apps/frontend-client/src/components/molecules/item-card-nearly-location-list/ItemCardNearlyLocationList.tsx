@@ -3,7 +3,7 @@ import ItemCard from "../item-card/ItemCard";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 
 async function fetchProperties(): Promise<RealEstateItem[]> {
-  const res = await fetch("https://lomnov.onrender.com/api/v1/properties?_limit=4");
+  const res = await fetch("https://lomnov.onrender.com/api/v1/properties?_limit=3");
   if (!res.ok) {
     throw new Error("Failed to fetch");
   }
