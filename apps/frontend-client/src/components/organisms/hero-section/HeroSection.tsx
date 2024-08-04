@@ -22,7 +22,7 @@ function HeroSection() {
 
   return (
     <>
-      <div className="w-full    h-screen bg-blue-500 relative ">
+      <div className="w-full    h-screen relative ">
         <Image
           src={"https://wallpapercave.com/wp/wp4110653.jpg"}
           alt=""

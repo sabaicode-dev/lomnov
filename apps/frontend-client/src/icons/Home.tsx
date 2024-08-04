@@ -1,14 +1,14 @@
-import React from 'react'
-import {BiHomeAlt} from "react-icons/bi"
+import React from "react";
+import { BiHomeAlt } from "react-icons/bi";
 type prop = {
-  props?: string;
+  className?: string;
 };
-function Home({props}:prop) {
+function Home({ className }: prop) {
   return (
     <>
-<BiHomeAlt className={props} />
+      <BiHomeAlt className={`${className}`} />
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;

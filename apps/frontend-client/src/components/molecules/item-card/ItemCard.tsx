@@ -125,10 +125,10 @@ const ItemCard = ({ item, flexRow }: ItemCardProps) => {
         }
       >
         <Link
-          href={"pages/detail/1"}
-          className=" absolute w-full h-full rounded-[15px] overflow-hidden hover:scale-110"
+          href={`/detail/${item.id}`}
+          className=" absolute w-full h-full rounded-[15px] overflow-hidden transition-transform duration-300 transform hover:scale-110"
         >
-          <div className=" group absolute left-0 top-0 w-full h-full hover:bg-[#00000033] z-2 transition-all duration-150 ease-out">
+          <div className=" group absolute left-0 top-0 w-full h-full hover:bg-[#00000033] z-2 transition duration-300">
             {/* dfdfd */}
           </div>
           <Image

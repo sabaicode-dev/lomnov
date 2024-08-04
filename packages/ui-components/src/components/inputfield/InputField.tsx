@@ -114,6 +114,7 @@ const InputField: React.FC<InputFieldProps> = ({
         onBlur={(e) => setIsFocused(e.target.value !== "")}
         className={`w-full px-3 h-[50px]  border rounded-[15px] bg-transparent focus:outline-none focus:border-olive-green  placeholder-transparent ${error ? "border-red-500" : "border-charcoal"}`}
         placeholder=" "
+        aria-label={label}
       />
       <label
         className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-in-out 

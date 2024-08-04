@@ -12,20 +12,20 @@ const config: Config = {
       animation: {
         fade: "fadeIn 1s ease-in-out",
         bounce: "bounce 1s infinite",
-        fadeUp: 'fadeUp 1s ease-in-out',
+        fadeUp: "fadeUp 1s ease-in-out",
       },
       keyframes: {
         fadeIn: {
-          "0%": { opacity: '0' },
-          "100%": { opacity: '1' },
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
         },
         bounce: {
           "0%, 100%": { transform: "translateY(-25%)" },
           "50%": { transform: "translateY(0)" },
         },
         fadeUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
       },
       backgroundImage: {
@@ -46,6 +46,7 @@ const config: Config = {
         charcoal: "#252728",
         white: "#FFFFFF",
       },
+      spacing: {},
       fontFamily: {
         coolvetica: ["Coolvetica", "sans-serif"],
         helvetica: ["Helvetica", "Arial", "sans-serif"],
@@ -76,6 +77,11 @@ const config: Config = {
         "helvetica-caption": ["12px", { lineHeight: "16px" }],
         "helvetica-form-label": ["14px", { lineHeight: "18px" }],
       },
+      borderRadius: {
+        "11xl": "30px",
+        xl: "20px",
+        "8xs": "5px",
+      },
       screens: {
         sm: "640px",
         md: "768px",
@@ -85,6 +91,7 @@ const config: Config = {
       },
     },
   },
+  
   plugins: [require("@tailwindcss/typography"), require("@tailwindcss/forms")],
 };
 export default config;
