@@ -1,9 +1,9 @@
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import Image from "next/image";
-import PropertyTypeInfo from "./PropertyTypeInfo";
-import PropertyDescription from "./PropertyDescription";
-import ContactForm from "./ContactForm";
-import Map from "./Map";
+import PropertyTypeInfo from "../../../../components/organisms/property-type-info/PropertyTypeInfo";
+import PropertyDescription from "../../../../components/organisms/property-description/PropertyDescription";
+import ContactForm from "../../../../components/organisms/contact-form/ContactForm";
+import Map from "../../../../components/molecules/map/Map";
 
 // Fetch property data
 async function fetchProperty(id: string): Promise<RealEstateItem> {
