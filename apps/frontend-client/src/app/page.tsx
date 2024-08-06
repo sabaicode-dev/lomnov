@@ -52,7 +52,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* <ExclusiveHomesSlider /> */}
       <section className=" xl:w-[1300px] m-auto h-[500px] b px-2 xl:px-0">
         <Slider />
