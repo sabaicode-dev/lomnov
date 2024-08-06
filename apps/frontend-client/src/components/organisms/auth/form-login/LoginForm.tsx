@@ -102,7 +102,7 @@ const LoginForm: React.FC = () => {
 
         {/* Remember Me and Forgot Password */}
         <div className="flex justify-between items-center mb-8 mx-[45px]">
-          <label className="flex items-center text-charcoal">
+          <label className="flex items-center">
             <input type="checkbox" className="mr-2" /> Remember Me
           </label>
           <a href="#" className="text-olive-green">

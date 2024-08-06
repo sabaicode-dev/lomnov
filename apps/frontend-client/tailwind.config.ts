@@ -12,20 +12,20 @@ const config: Config = {
       animation: {
         fade: "fadeIn 1s ease-in-out",
         bounce: "bounce 1s infinite",
-        fadeUp: 'fadeUp 1s ease-in-out',
+        fadeUp: "fadeUp 1s ease-in-out",
       },
       keyframes: {
         fadeIn: {
-          "0%": { opacity: '0' },
-          "100%": { opacity: '1' },
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
         },
         bounce: {
           "0%, 100%": { transform: "translateY(-25%)" },
           "50%": { transform: "translateY(0)" },
         },
         fadeUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
       },
       backgroundImage: {

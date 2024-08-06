@@ -19,6 +19,8 @@
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
     "@storybook/testing-library": "^0.2.2",
+    "msw": "^2.3.4",
+    "msw-storybook-addon": "^2.0.3",
     "react-hook-form": "^7.51.5",
     "swiper": "^11.1.8",
     "yup": "^1.4.0"

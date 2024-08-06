@@ -111,7 +111,7 @@ const ItemCard = ({ item }: ItemCardProps) => {
     <div className="w-full h-[380px] rounded-[20px] overflow-hidden shadow-md flew flex-col gap-5 bg-white border-[1px] border-neutral p-4">
       <div className="w-full h-[65%] relative overflow-hidden z-10 bg-olive-green rounded-[15px]">
         <Link
-          href={"pages/detail/1"}
+          href={`detail/${item.id}`}
           className=" absolute w-full h-full rounded-[15px] overflow-hidden transition-transform duration-300 transform hover:scale-110"
         >
           <div className=" group absolute left-0 top-0 w-full h-full hover:bg-[#00000033] z-2 transition duration-300">

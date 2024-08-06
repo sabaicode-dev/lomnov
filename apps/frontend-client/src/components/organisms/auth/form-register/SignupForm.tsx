@@ -22,6 +22,11 @@ type SignupData = z.infer<typeof signupSchema>;
 
 const SignupForm: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [FirstNameFocused, setFirstNameFocused] = useState(false);
+  const [lastNameFocused, setlastNameFocused] = useState(false);
+  const [userNameFocused, setuserNameFocused] = useState(false);
+  const [emailFocused, setEmailFocused] = useState(false);
+
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
@@ -66,32 +71,32 @@ const SignupForm: React.FC = () => {
             type="text"
             register={register("firstName")}
             error={errors.firstName?.message}
-            isFocused={focusedField === "firstName"}
-            setIsFocused={() => setFocusedField("firstName")}
+            isFocused={FirstNameFocused}
+            setIsFocused={setFirstNameFocused}
           />
           <InputField
             label="Last Name"
             type="text"
             register={register("lastName")}
             error={errors.lastName?.message}
-            isFocused={focusedField === "lastName"}
-            setIsFocused={() => setFocusedField("lastName")}
+            isFocused={lastNameFocused}
+            setIsFocused={setlastNameFocused}
           />
           <InputField
             label="Username"
             type="text"
             register={register("username")}
             error={errors.username?.message}
-            isFocused={focusedField === "username"}
-            setIsFocused={() => setFocusedField("username")}
+            isFocused={userNameFocused}
+            setIsFocused={setuserNameFocused}
           />
           <InputField
             label="Email"
             type="email"
             register={register("email")}
             error={errors.email?.message}
-            isFocused={focusedField === "email"}
-            setIsFocused={() => setFocusedField("email")}
+            isFocused={emailFocused}
+            setIsFocused={setEmailFocused}
           />
           <InputField
             label="Password"
