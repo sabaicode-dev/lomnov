@@ -12,6 +12,7 @@ interface CustomDropdownProps {
   defaultOption: Option;
 }
 
+
 const SelectProperties: React.FC<CustomDropdownProps> = ({
   options,
   defaultOption,

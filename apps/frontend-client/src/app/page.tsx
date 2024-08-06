@@ -45,8 +45,7 @@ export default function Home() {
                 href={""}
                 className=" px-10 py-2  border-[1px] text-white text-[26px] font-[500]"
               >
-                {" "}
-                View ALL{" "}
+                View ALL
               </Link>
             </div>
           </div>

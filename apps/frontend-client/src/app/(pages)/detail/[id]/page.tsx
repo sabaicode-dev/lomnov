@@ -1,6 +1,9 @@
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import Image from "next/image";
-import PropertyTypeInfo from "./PropertyTypeInfo";
+import PropertyTypeInfo from "../../../../components/organisms/property-type-info/PropertyTypeInfo";
+import PropertyDescription from "../../../../components/organisms/property-description/PropertyDescription";
+import ContactForm from "../../../../components/organisms/contact-form/ContactForm";
+import Map from "../../../../components/molecules/map/Map";
 
 // Fetch property data
 async function fetchProperty(id: string): Promise<RealEstateItem> {
@@ -15,7 +18,7 @@ async function fetchProperty(id: string): Promise<RealEstateItem> {
 }
 
 // Server component to fetch property data
-const PropertyDetailPage = async ({ params }: { params: { id: string } }) => {
+const page = async ({ params }: { params: { id: string } }) => {
   const property = await fetchProperty(params.id);
 
   return (
@@ -31,7 +34,7 @@ const PropertyDetailPage = async ({ params }: { params: { id: string } }) => {
           />
         </div>
 
-        <div className="absolute top-[290px] sm:top-[390px] md:top-[440px] lg:top-[575px] xl:top-[778px]  w-full flex justify-center items-center">
+        <div className="absolute top-[290px] sm:top-[385px] md:top-[435px] lg:top-[575px] xl:top-[778px]  w-full flex justify-center items-center">
           <div className="relative w-full xl:w-[1300px]">
             <Image
               className="absolute hidden xl:block -left-5 bottom-[75px] transform translate-y-1/2 w-5 h-5"
@@ -40,8 +43,8 @@ const PropertyDetailPage = async ({ params }: { params: { id: string } }) => {
               width={5}
               height={5}
             />
-            <div className="rounded-[10px] lg:rounded-11xl bg-grayish-white overflow-hidden flex flex-col items-start justify-start py-[10px] px-[10px] box-border">
-              <div className="self-stretch rounded-[10px] lg:rounded-[25px] bg-neutral overflow-hidden flex flex-col items-center justify-center py-[10px] px-[10px]">
+            <div className="rounded-[10px] sm:rounded-[15px] md:rounded-xl  lg:rounded-11xl bg-grayish-white overflow-hidden flex flex-col items-start justify-start py-[10px] px-[10px] box-border">
+              <div className="self-stretch rounded-[10px] sm:rounded-[15px] md:rounded-xl lg:rounded-[25px] bg-neutral overflow-hidden flex flex-col items-center justify-center py-[10px] px-[10px]">
                 <div className="flex justify-evenly w-full mx-auto">
                   {/* Properties Listing */}
                   <div className="grid grid-cols-3 lg:grid-cols-6 w-full items-center justify-center mx-auto gap-[10px] lg:gap-[20px] mr-[10px] lg:mr-[20px]">
@@ -64,20 +67,16 @@ const PropertyDetailPage = async ({ params }: { params: { id: string } }) => {
                         </div>
 
                         <div className="w-full text-center pb-[5px] sm:pb-0">
-                          <div className="font-helvetica text-helvetica-caption md:text-helvetica-small lg:text-helvetica-paragraph">
+                          <div className="font-helvetica text-helvetica-caption md:text-helvetica-small lg:text-helvetica-paragraph text-charcoal">
                             Listed by
                           </div>
-                          <div className="font-helvetica text-helvetica-caption md:text-helvetica-small lg:text-helvetica-paragraph font-bold">
+                          <div className="font-helvetica uppercase text-helvetica-caption md:text-helvetica-small lg:text-helvetica-paragraph font-bold text-charcoal">
                             {property.user}
                           </div>
                         </div>
                       </div>
                       <div className="mt-[10px] lg:mt-[5px]">
-                        <button className="border-olive-green border hover:border-grayish-white py-[5px] w-full rounded-[5px]">
-                          <span className="font-helvetica text-helvetica-caption md:text-helvetica-small lg:text-helvetica-paragraph font-bold">
-                            Contact {property.user}
-                          </span>
-                        </button>
+                        <ContactForm propertyUser={property.user} />
                       </div>
                     </div>
                   </div>
@@ -93,6 +92,11 @@ const PropertyDetailPage = async ({ params }: { params: { id: string } }) => {
             />
           </div>
         </div>
+
+        <div className="w-full mt-[200px] sm:mt-[190px] md:mt-[220px] lg:mt-[170px] xl:mt-[100px]">
+          <PropertyDescription property={property} />
+          <Map />
+        </div>
       </div>
     </>
   );
@@ -100,4 +104,4 @@ const PropertyDetailPage = async ({ params }: { params: { id: string } }) => {
 
 // Component to render property type information
 
-export default PropertyDetailPage;
+export default page;
