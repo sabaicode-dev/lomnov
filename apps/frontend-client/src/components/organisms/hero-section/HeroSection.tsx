@@ -1,16 +1,12 @@
 "use client";
-
 // import HeroSectionSearch from "@/components/molecules/hero-section-serch/HeroSectionSearch";
 import Image from "next/image";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import SelectProperties from "@/components/molecules/select-properties/SelectProperties";
-async function fetchProperties(): Promise<RealEstateItem[]> {
-  const res = await fetch("https://lomnov.onrender.com/api/v1/properties");
-  if (!res.ok) {
-    throw new Error("Failed to fetch");
-  }
-  return res.json();
-}
+import SelectLocations from "@/components/molecules/select-locations/SelectLocations";
+import SelectPrice from "@/components/molecules/select-price/SelectPrice";
+
+// =======================================================
 
 const options = [
   { label: "English", imgSrc: "/path/to/image1.jpg" },
@@ -18,6 +14,8 @@ const options = [
   // Add more options as needed
 ];
 const defaultOption = { label: "Properties", imgSrc: "" };
+const defaultLocation = { label: "Locations", imgSrc: "" };
+const defaultPrice = { label: "Price", imgSrc: "" };
 
 function HeroSection() {
   // const data = await fetchProperties();
@@ -53,14 +51,11 @@ function HeroSection() {
                   options={options}
                   defaultOption={defaultOption}
                 />
-                <SelectProperties
+                <SelectLocations
                   options={options}
-                  defaultOption={defaultOption}
+                  defaultOption={defaultLocation}
                 />
-                <SelectProperties
-                  options={options}
-                  defaultOption={defaultOption}
-                />
+                <SelectPrice options={options} defaultOption={defaultPrice} />
                 <button className=" bg-neutral text-white font-[600] px-5 py-2 rounded-md lg:w-[120px]">
                   Search
                 </button>

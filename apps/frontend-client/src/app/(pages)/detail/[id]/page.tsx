@@ -95,7 +95,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
         <div className="w-full mt-[200px] sm:mt-[190px] md:mt-[220px] lg:mt-[170px] xl:mt-[100px]">
           <PropertyDescription property={property} />
-          <Map />
+          <Map property={property.mapurl}/>
         </div>
       </div>
     </>

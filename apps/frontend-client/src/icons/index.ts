@@ -17,3 +17,4 @@ export { default as Area } from "./Area";
 export { default as Home2 } from "./Home2";
 export { default as Kitchen } from "./Kitchen";
 export { default as Parking } from "./Parking";
+export {default as IconDollar} from "./Dollar"

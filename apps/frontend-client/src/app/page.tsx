@@ -9,16 +9,17 @@ import logSkyBar from "@/images/banner-sky-bar.jpg";
 import Slider from "@/components/molecules/slider/Slider";
 import NearLocation from "@/images/near-location.png";
 import Link from "next/link";
+import ItemCardNearlyLocationList from "@/components/molecules/item-card-nearly-location-list/ItemCardNearlyLocationList";
 // import Link from "next/link";
 // ======================================
 export default function Home() {
   return (
     <main className="w-full">
       <HeroSection />
-      <section className="w-full xl:w-[1300px] m-auto py-10 px-2 lg:px-0">
+      <section className="w-full xl:w-[1300px] m-auto py-10 px-2 xl:px-0">
         <ItemCardPopularLocationList />
       </section>
-      <section className="w-full h-[720px] relative ">
+      <section className="w-full  bg-gray-500 h-[1200px] lg:h-[720px] relative ">
         <Image
           src={NearLocation}
           alt=""
@@ -26,30 +27,36 @@ export default function Home() {
           className=" absolute left-0 top-0 w-full h-full object-cover"
         />
         <div className=" bg-[#0000002e] absolute left-0 top-0 w-full h-full ">
-          <div className="w-full xl:w-[1300px]  m-auto px-2 lg:px-0 flex ">
-            <div className="w-[30%] h-full bg-olive-green mr-[130px]">left</div>
-            <div className="w-[30%] h-full  py-10 flex flex-col items-center">
+          <div className="w-full h-full xl:w-[1300px]  m-auto px-2 xl:px-0 flex flex-col lg:flex-row gap-10 ">
+            <div className="w-full lg:w-[30%] h-full py-32 ">
+              <ItemCardNearlyLocationList />
+            </div>
+            <div className=" lg:w-[30%] h-full  py-10 flex flex-col items-center">
               <div className=" flex flex-col items-center justify-center mb-40">
                 <h1 className=" text-white font-[600]  text-[30px]">
-                  {" "}
-                  Nearly Location{" "}
+                  Nearly Location
                 </h1>
                 <p className=" text-white">
                   Discover the best properties near you. Find your dream home
                   from our exclusive listings
                 </p>
               </div>
-              <Link href={""} className=" px-10 py-2  border-[1px] text-white text-[26px] font-[500]"> View ALL </Link>
+              <Link
+                href={""}
+                className=" px-10 py-2  border-[1px] text-white text-[26px] font-[500]"
+              >
+                {" "}
+                View ALL{" "}
+              </Link>
             </div>
           </div>
         </div>
       </section>
-
       {/* <ExclusiveHomesSlider /> */}
-      <section className=" lg:w-[1300px] m-auto h-[500px] b px-2 lg:px-0">
+      <section className=" xl:w-[1300px] m-auto h-[500px] b px-2 xl:px-0">
         <Slider />
       </section>
-      <div className=" flex justify-between gap-20 lg:w-[1300px] m-auto py-40 px-20">
+      <div className=" flex flex-col lg:flex-row justify-between gap-20 xl:w-[1300px] m-auto py-20 lg:py-40 px-2 lg:px-20">
         <div>
           <h2 className=" text-[28px] font-[600] text-olive-drab">
             Unleash Your Creativity at Home
