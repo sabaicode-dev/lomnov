@@ -1,12 +1,12 @@
 import React from "react";
 import { BiHomeAlt } from "react-icons/bi";
 type prop = {
-  className?: string;
+  props?: string;
 };
-function Home({ className }: prop) {
+function Home({ props }: prop) {
   return (
     <>
-      <BiHomeAlt className={`${className}`} />
+      <BiHomeAlt className={`${props}`} />
     </>
   );
 }
