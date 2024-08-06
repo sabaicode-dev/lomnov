@@ -1,13 +1,17 @@
-// Attempt to import 'rest' or 'http'
 import { rest, http } from "msw";
 
 console.log({ rest, http }); // To verify which is defined
 
 export const handlers = [
   (rest || http).post("/api/login", (req, res, ctx) => {
-    const { email, password, firstname, lastname } = req.body;
-
-    if (email === "user@example.com" && password === "password13" && firstname === "john" && lastname === "doe") {
+    const { email, password, firstName, lastName, username } = req.body;
+    if (
+      email === "user@example.com" &&
+      password === "password123" &&
+      firstName === "John" &&
+      lastName === "Doe" &&
+      username === "johndoe"
+    ) {
       return res(
         ctx.json({
           message: "Login successful",
