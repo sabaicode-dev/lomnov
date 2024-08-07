@@ -56,6 +56,8 @@ const SelectLocations: React.FC<SelectPropertiesProps> = ({onChange}) => {
   const handleOptionClick = (option: Option) => {
     setSelectedOption(option);
     setIsOpen(false);
+    onChange(option);
+
   };
 
   return (
