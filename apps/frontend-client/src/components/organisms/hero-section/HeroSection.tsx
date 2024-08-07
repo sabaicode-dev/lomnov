@@ -66,38 +66,21 @@
 
 // export default HeroSection;
 
-
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import Image from "next/image";
 import SelectProperties from "@/components/molecules/select-properties/SelectProperties";
 import SelectLocations from "@/components/molecules/select-locations/SelectLocations";
-import SelectPrice from "@/components/molecules/select-price/SelectPrice";
 import { Option } from "@/components/molecules/select-properties/SelectProperties";
 const defaultPrice = { label: "Price", imgSrc: "" };
 
 function HeroSection() {
-  // const [isMounted, setIsMounted] = useState(false);
-  const [category, setCategory] = useState("buy");
+  const [category, setCategory] = useState("");
   const [property, setProperty] = useState<Option | null>(null);
   const [location, setLocation] = useState<Option | null>(null);
-  const router = useRouter(); // Initialize useRouter here
   const [isMounted, setIsMounted] = useState(false);
-  
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (isMounted) {
-      // Test if the router is accessible
-      console.log("Router initialized:", router);
-    }
-  }, [isMounted, router]);
-  useEffect(() => {
-    // This will only run on the client side
     setIsMounted(true);
   }, []);
 
@@ -105,16 +88,24 @@ function HeroSection() {
     setCategory(selectedCategory);
   };
 
+  const handlePropertyChange = (selectedProperty: Option | null) => {
+    setProperty(selectedProperty);
+  };
+
+  const handleLocationChange = (selectedLocation: Option | null) => {
+    setLocation(selectedLocation);
+  };
+
   const handleSearch = () => {
-    if (!isMounted) return; // Ensure this runs only on the client side
+    if (!isMounted) return;
 
-    const query = new URLSearchParams({
-      category,
-      property: property?.name || "",
-      location: location?.name || "",
-    }).toString();
+    const params = new URLSearchParams();
 
-    router.push(`/search?${query}`);
+    if (category) params.append("category", category);
+    if (property?.name) params.append("property", property.name);
+    if (location?.name) params.append("location", location.name);
+
+    window.location.href = `/search?${params.toString()}`;
   };
 
   return (
@@ -151,9 +142,8 @@ function HeroSection() {
               </button>
             </div>
             <div className="w-full lg:w-fit bg-white rounded-r-[18px] rounded-bl-[20px] lg:flex grid grid-cols-2 lg:grid-cols-4 items-center gap-5 p-5">
-              <SelectProperties onChange={setProperty} />
-              <SelectLocations onChange={setLocation} />
-              {/* <SelectPrice options={defaultPrice} /> */}
+              <SelectProperties onChange={handlePropertyChange} />
+              <SelectLocations onChange={handleLocationChange} />
               <button
                 className="bg-neutral text-white font-[600] px-5 py-2 rounded-md lg:w-[120px]"
                 onClick={handleSearch}
