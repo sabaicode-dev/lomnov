@@ -32,7 +32,7 @@ function ContainerHeader({
 
   return (
     <>
-      <div className=" 2xl:w-[1300px] w-full lg:m-auto h-full flex flex-row items-center justify-between py-3 px-3 xl:px-0  z-20 ">
+      <div className=" xl:w-[1300px] w-full lg:m-auto h-full flex flex-row items-center justify-between py-3 px-3 xl:px-0 z-20 ">
         <div onClick={() => handleClickMenu()} className=" md:hidden mt-4">
           <Menu props=" mr-2 text-[25px] text-white" />
         </div>
