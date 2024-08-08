@@ -72,12 +72,14 @@ import Image from "next/image";
 import SelectProperties from "@/components/molecules/select-properties/SelectProperties";
 import SelectLocations from "@/components/molecules/select-locations/SelectLocations";
 import { Option } from "@/components/molecules/select-properties/SelectProperties";
+import SelectPrice from "@/components/molecules/select-price/SelectPrice";
 const defaultPrice = { label: "Price", imgSrc: "" };
 
 function HeroSection() {
   const [category, setCategory] = useState("");
   const [property, setProperty] = useState<Option | null>(null);
   const [location, setLocation] = useState<Option | null>(null);
+  const [price, setPrice] = useState<Option | null>(null)
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -95,6 +97,10 @@ function HeroSection() {
   const handleLocationChange = (selectedLocation: Option | null) => {
     setLocation(selectedLocation);
   };
+
+  const handlePriceChange = ( selectedPrice: Option | null ) => {
+    setPrice(selectedPrice)
+  }
 
   const handleSearch = () => {
     if (!isMounted) return;
@@ -144,6 +150,7 @@ function HeroSection() {
             <div className="w-full lg:w-fit bg-white rounded-r-[18px] rounded-bl-[20px] lg:flex grid grid-cols-2 lg:grid-cols-4 items-center gap-5 p-5">
               <SelectProperties onChange={handlePropertyChange} />
               <SelectLocations onChange={handleLocationChange} />
+              <SelectPrice onChange={handlePriceChange} />
               <button
                 className="bg-neutral text-white font-[600] px-5 py-2 rounded-md lg:w-[120px]"
                 onClick={handleSearch}

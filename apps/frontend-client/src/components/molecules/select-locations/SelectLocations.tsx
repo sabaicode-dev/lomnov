@@ -45,7 +45,7 @@ const locations = [
 
 const defaultLocation = { name: "Locations" };
 
-const SelectLocations: React.FC<SelectPropertiesProps> = ({onChange}) => {
+const SelectLocations: React.FC<SelectPropertiesProps> = ({ onChange }) => {
   const [selectedOption, setSelectedOption] = useState<Option | null>(
     defaultLocation,
   );
@@ -57,7 +57,6 @@ const SelectLocations: React.FC<SelectPropertiesProps> = ({onChange}) => {
     setSelectedOption(option);
     setIsOpen(false);
     onChange(option);
-
   };
 
   return (
@@ -93,12 +92,12 @@ const SelectLocations: React.FC<SelectPropertiesProps> = ({onChange}) => {
       </button>
       {isOpen && (
         <div
-          className={` rounded-md absolute left-0 right-0 z-10 mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-[190px] overflow-auto opacity-100" : "max-h-0 opacity-0"}`}
+          className={` rounded-md absolute left-0 right-0 z-10 mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-[190px] overflow-auto opacity-100 p-2" : "max-h-0 opacity-0"}`}
         >
           {locations.map((option, index) => (
             <div
               key={index}
-              className="flex items-center px-4 py-2 cursor-pointer hover:bg-olive-green   overflow-auto "
+              className="flex items-center px-4 py-2 cursor-pointer hover:bg-olive-green overflow-auto rounded-md "
               onClick={() => handleOptionClick(option)}
             >
               <span className="text-black text-[14px] capitalize w-full hover:text-white">

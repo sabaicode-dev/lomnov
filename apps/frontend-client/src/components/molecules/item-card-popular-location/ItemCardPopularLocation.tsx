@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 interface Item {
   id: string;
   name: string;
@@ -13,7 +14,7 @@ interface ItemCardProps {
 }
 function ItemCardPopularLocation({ item }: ItemCardProps) {
   return (
-    <main className="w-full bg-white border border-neutral p-3 rounded-[15px] flex flex-col gap-3 h-[400px]  overflow-hidden animate-fadeUp hover:shadow-lg">
+    <Link href={`/popularlocation?${item.id}`} className="w-full bg-white border border-neutral p-3 rounded-[15px] flex flex-col gap-3 h-[400px]  overflow-hidden animate-fadeUp hover:shadow-lg">
       <div className=" w-full h-[80%] rounded-[15px] overflow-hidden">
         <Image
           src={item.thumbnail}
@@ -41,7 +42,7 @@ function ItemCardPopularLocation({ item }: ItemCardProps) {
           </div>
         </section>
       </div>
-    </main>
+    </Link>
   );
 }
 

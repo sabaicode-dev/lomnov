@@ -20,13 +20,6 @@ export interface MenuProp {
   showAuthLinks?: boolean;
 }
 
-const options = [
-  { label: "English", imgSrc: "/path/to/image1.jpg" },
-  { label: "Khmer", imgSrc: "/path/to/image2.jpg" },
-  // Add more options as needed
-];
-const defaultOption = { label: "English", imgSrc: "/path/to/english.jpg" };
-
 function ContainerHeader({
   menu,
   showLogo = true,
@@ -79,7 +72,7 @@ function ContainerHeader({
 
           <NavigateList menu={menu} />
           <div className="md:hidden w-[100px] bg-white">
-            <SelectLang options={options} defaultOption={defaultOption} />
+            <SelectLang />
           </div>
         </div>
         {showAuthLinks && (
@@ -100,12 +93,12 @@ function ContainerHeader({
             </select> */}
 
             <div className="hidden md:flex w-[150px]">
-              <SelectLang options={options} defaultOption={defaultOption} />
+              <SelectLang />
             </div>
 
             <Link
               href={"/signin"}
-              className=" md:py-[5px] md:px-5 py-[5px] px-4 border-[1px] md:border-[2px] border-[#E5D2B0] rounded-[8px] md:text-[18px] text-white md:font-[600] font-[500]"
+              className=" md:py-[5px] md:px-5 py-[5px] px-4 border-[1px] md:border-[2px] border-[#E5D2B0] rounded-[8px] md:text-[18px] text-white md:font-[600] font-[500] hover:border-white"
             >
               Login
             </Link>

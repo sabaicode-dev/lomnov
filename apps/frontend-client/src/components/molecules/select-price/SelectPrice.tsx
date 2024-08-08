@@ -1,11 +1,10 @@
 "use client";
 
-import { IconDollar } from "@/icons";
+import { IconLocation } from "@/icons";
 import { useState } from "react";
 
 interface Option {
-  label: string;
-  imgSrc: string;
+  name: string;
 }
 
 interface CustomDropdownProps {
@@ -13,12 +12,42 @@ interface CustomDropdownProps {
   defaultOption: Option;
 }
 
-const SelectPrice: React.FC<CustomDropdownProps> = ({
-  options,
-  defaultOption,
-}) => {
+interface SelectPropertiesProps {
+  onChange: (option: Option) => void;
+}
+
+const locations = [
+  { name: "banteay meanchey" },
+  { name: "battambang" },
+  { name: "kampong cham" },
+  { name: "kampong chhang" },
+  { name: "kampong speu" },
+  { name: "kampong thom" },
+  { name: "kampot" },
+  { name: "kandal" },
+  { name: "kep" },
+  { name: "koh kong" },
+  { name: "kratié" },
+  { name: "mondulkiri" },
+  { name: "Oddar Meanchey" },
+  { name: "pailin" },
+  { name: "phnom penh" },
+  { name: "preah Sihanouk" },
+  { name: "preah Vihear" },
+  { name: "prey Veng" },
+  { name: "pursat" },
+  { name: "siem reap" },
+  { name: "stung treng" },
+  { name: "svay rieng" },
+  { name: "takéo" },
+  { name: "tboung khmum" },
+];
+
+const defaultLocation = { name: "Price" };
+
+const SelectPrice: React.FC<SelectPropertiesProps> = ({onChange}) => {
   const [selectedOption, setSelectedOption] = useState<Option | null>(
-    defaultOption,
+    defaultLocation,
   );
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,6 +56,8 @@ const SelectPrice: React.FC<CustomDropdownProps> = ({
   const handleOptionClick = (option: Option) => {
     setSelectedOption(option);
     setIsOpen(false);
+    onChange(option);
+
   };
 
   return (
@@ -37,9 +68,9 @@ const SelectPrice: React.FC<CustomDropdownProps> = ({
       >
         {selectedOption ? (
           <div className="flex items-center">
-            <IconDollar props="mr-3 text-olive-green" />
+            <IconLocation props="mr-3 text-olive-green" />
             <span className="text-black text-[14px] lg:mr-20">
-              {selectedOption.label}
+              {selectedOption.name}
             </span>
           </div>
         ) : (
@@ -62,15 +93,17 @@ const SelectPrice: React.FC<CustomDropdownProps> = ({
       </button>
       {isOpen && (
         <div
-          className={` rounded-md absolute left-0 right-0 z-10 mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"}`}
+          className={` rounded-md absolute left-0 right-0 z-10 mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-[190px] overflow-auto opacity-100" : "max-h-0 opacity-0"}`}
         >
-          {options.map((option, index) => (
+          {locations.map((option, index) => (
             <div
               key={index}
-              className="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-700  "
+              className="flex items-center px-4 py-2 cursor-pointer hover:bg-olive-green   overflow-auto "
               onClick={() => handleOptionClick(option)}
             >
-              <span className="text-black text-[14px]">{option.label}</span>
+              <span className="text-black text-[14px] capitalize w-full hover:text-white">
+                {option.name}
+              </span>
             </div>
           ))}
         </div>

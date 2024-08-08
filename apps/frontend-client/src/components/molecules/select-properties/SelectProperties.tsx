@@ -93,7 +93,6 @@
 
 // export default SelectProperties;
 
-
 // SelectProperties Component
 "use client";
 import { useState } from "react";
@@ -112,7 +111,6 @@ const properties = [
   { name: "shop" },
   { name: "land" },
 ];
-
 const defaultOption = { name: "Properties" };
 
 const SelectProperties: React.FC<SelectPropertiesProps> = ({ onChange }) => {
@@ -120,7 +118,6 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ onChange }) => {
     defaultOption,
   );
   const [isOpen, setIsOpen] = useState(false);
-
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const handleOptionClick = (option: Option) => {
@@ -144,18 +141,34 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ onChange }) => {
         ) : (
           "Select an option"
         )}
+        <svg
+          className={`w-5 h-5 ml-2 transition-transform transform text-olive-green ${isOpen ? "rotate-180" : ""}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M19 9l-7 7-7-7"
+          ></path>
+        </svg>
       </button>
       {isOpen && (
         <div
-          className={`rounded-md absolute left-0 right-0 z-10 mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"}`}
+          className={` rounded-md absolute left-0 right-0 z-10 mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-screen opacity-100 overflow-hidden p-2" : "max-h-0 opacity-0"}`}
         >
           {properties.map((option, index) => (
             <div
               key={index}
-              className="flex items-center px-4 py-2 cursor-pointer hover:bg-olive-green"
+              className="flex items-center px-4 py-2 cursor-pointer hover:bg-olive-green rounded-md"
               onClick={() => handleOptionClick(option)}
             >
-              <span className="text-black text-[14px] hover:text-white w-full capitalize">{option.name}</span>
+              <span className="text-black text-[14px] hover:text-white w-full capitalize">
+                {option.name}
+              </span>
             </div>
           ))}
         </div>
@@ -165,4 +178,3 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ onChange }) => {
 };
 
 export default SelectProperties;
-

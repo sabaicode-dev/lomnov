@@ -1,5 +1,7 @@
 import { useState } from 'react';
-
+import Image from 'next/image';
+import camboFlag from "@/images/combo.jpg"
+import englishFlage from "@/images/english.jpg"
 interface Option {
   label: string;
   imgSrc: string;
@@ -10,7 +12,14 @@ interface CustomDropdownProps {
   defaultOption: Option;
 }
 
-const SelectLang : React.FC<CustomDropdownProps> = ({ options, defaultOption }) => {
+const options = [
+  { label: "English", imgSrc: englishFlage },
+  { label: "Khmer", imgSrc: camboFlag },
+  // Add more options as needed
+];
+const defaultOption = { label: "English", imgSrc: englishFlage };
+
+const SelectLang : React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<Option | null>(defaultOption);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,7 +38,7 @@ const SelectLang : React.FC<CustomDropdownProps> = ({ options, defaultOption }) 
       >
         {selectedOption ? (
           <div className="flex items-center">
-            <img src={selectedOption.imgSrc} alt={selectedOption.label} className="w-5 h-5 mr-2" />
+            <Image src={selectedOption.imgSrc} alt={selectedOption.label} className="w-6 h-4 mr-2 object-cover" />
             <span className='text-white'>{selectedOption.label}</span>
           </div>
         ) : (
@@ -46,15 +55,15 @@ const SelectLang : React.FC<CustomDropdownProps> = ({ options, defaultOption }) 
         </svg>
       </button>
       {isOpen && (
-        <div className="absolute left-0 right-0 z-10 mt-2  rounded-md shadow-lg">
+        <div className="absolute left-0 right-0 z-10 mt-2  rounded-md overflow-hidden shadow-lg p-2 bg-[#E0E0DC] ">
           {options.map((option, index) => (
             <div
               key={index}
-              className="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-100"
+              className="flex items-center px-4 py-2 cursor-pointer rounded-md   hover:bg-olive-green hover:text-white"
               onClick={() => handleOptionClick(option)}
             >
-              <img src={option.imgSrc} alt={option.label} className="w-5 h-5 mr-2" />
-              <span className='text-white'>{option.label}</span>
+              <Image src={option.imgSrc} alt={option.label}  className="w-6 h-4 mr-2 object-cover" />
+              <span className='text-black hover:text-white'>{option.label}</span>
             </div>
           ))}
         </div>
