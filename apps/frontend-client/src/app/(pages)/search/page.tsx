@@ -3,6 +3,7 @@ import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import ItemCard from "@/components/molecules/item-card/ItemCard";
 import banner from "@/images/banner.png";
 import Image from "next/image";
+// import { useParams } from "next/navigation";
 // ===============================================
 
 async function fetchProperties(): Promise<RealEstateItem[]> {
@@ -13,7 +14,13 @@ async function fetchProperties(): Promise<RealEstateItem[]> {
   return res.json();
 }
 
-async function page() {
+async function page({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+
+  console.log(searchParams.category)
+  console.log(searchParams.property)
+  console.log(searchParams.location)
+  
+  // console.log(searchParams.)
   const datas = await fetchProperties();
   return (
     <>

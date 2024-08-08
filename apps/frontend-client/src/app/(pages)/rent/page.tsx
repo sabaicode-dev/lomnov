@@ -20,9 +20,7 @@ function page() {
           objectFit="cover"
           className="brightness-75  left-0"
         />
-
         <div className=" absolute left-0 top-0 w-full h-full bg-[#0000004e]">
-          {" "}
         </div>
 
         {/* Title */}
@@ -57,6 +55,8 @@ function page() {
 }
 
 export default page;
+
+
 
 // <div className="flex flex-row gap-5 w-full mb-20">
 //   <div className="w-[50%]  rounded-md overflow-hidden flex flex-row items-center gap-5 border-[1px] border-black  ">
