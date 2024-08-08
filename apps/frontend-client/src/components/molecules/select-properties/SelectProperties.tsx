@@ -95,6 +95,7 @@
 
 // SelectProperties Component
 "use client";
+import { Home } from "@/icons";
 import { useState } from "react";
 
 export interface Option {
@@ -134,6 +135,7 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ onChange }) => {
       >
         {selectedOption ? (
           <div className="flex items-center">
+            <Home props="mr-3 text-olive-green" />
             <span className="text-black text-[14px] lg:mr-20">
               {selectedOption.name}
             </span>
