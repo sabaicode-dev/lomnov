@@ -160,7 +160,7 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ onChange }) => {
       </button>
       {isOpen && (
         <div
-          className={` rounded-md absolute left-0 right-0 z-10 mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-screen opacity-100 overflow-hidden p-2" : "max-h-0 opacity-0"}`}
+          className={` rounded-md absolute left-0 right-0 z-20 mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-screen opacity-100 overflow-hidden p-2" : "max-h-0 opacity-0"}`}
         >
           {properties.map((option, index) => (
             <div
