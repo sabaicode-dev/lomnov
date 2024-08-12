@@ -20,8 +20,7 @@ function page() {
           objectFit="cover"
           className="brightness-75  left-0"
         />
-        <div className=" absolute left-0 top-0 w-full h-full bg-[#0000004e]">
-        </div>
+        <div className=" absolute left-0 top-0 w-full h-full bg-[#0000004e]"></div>
 
         {/* Title */}
         <div className="absolute left-[10%] sm:left-[73px] md:left-[155px] lg:left-[210px] xl:left-[210px] 2xl:left-[374px] bottom-[150px] font-helvetica text-helvetica-h3 md:text-helvetica-h3 lg:text-helvetica-h3 xl:text-helvetica-h2 2xl:text-helvetica-h2 font-bold text-white">
@@ -37,9 +36,9 @@ function page() {
         </div>
         <div className=" absolute w-full lg:bottom-[-40px] bottom-[-60px] px-2 lg:px-0">
           <div className="  z-10  m-auto lg:w-fit  bg-white rounded-[18px]  lg:flex   grid grid-cols-2 lg:grid-cols-4 items-center gap-5 p-5 ">
-            <SelectProperties onChange={()=>{}} />
-            {/* <SelectProperties  /> */}
-            {/* <SelectProperties  /> */}
+            <SelectProperties />
+            <SelectProperties />
+            <SelectProperties />
             <button className=" bg-neutral text-white font-[600] px-5 py-2 rounded-md lg:w-[120px]">
               Search
             </button>
@@ -55,8 +54,6 @@ function page() {
 }
 
 export default page;
-
-
 
 // <div className="flex flex-row gap-5 w-full mb-20">
 //   <div className="w-[50%]  rounded-md overflow-hidden flex flex-row items-center gap-5 border-[1px] border-black  ">

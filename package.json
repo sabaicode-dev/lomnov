@@ -5,6 +5,7 @@
   "license": "MIT",
   "workspaces": [
     "apps/*",
+    "apps/backend/*",
     "packages/*"
   ],
   "scripts": {

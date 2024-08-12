@@ -40,7 +40,7 @@ function HeroSection() {
     const params = new URLSearchParams();
 
     if (category) params.append("category", category);
-    if (property?.name) params.append("property", property.name);
+    if (property?.name) params.append("category", property.name);
     if (location?.name) params.append("location", location.name);
 
     // Parse the selected price range and add price_gte and price_lte

@@ -6,8 +6,9 @@ import Image from "next/image";
 // import { useParams } from "next/navigation";
 // ===============================================
 
-async function fetchProperties(): Promise<RealEstateItem[]> {
-  const res = await fetch("https://lomnov.onrender.com/api/v1/properties");
+async function fetchProperties(searchParams: { [key: string]: string | string[] | undefined }): Promise<RealEstateItem[]> {
+  const queryString = new URLSearchParams(searchParams as Record<string, string>).toString();
+  const res = await fetch(`https://lomnov.onrender.com/api/v1/properties?${queryString}`);
   if (!res.ok) {
     throw new Error("Failed to fetch");
   }
@@ -19,9 +20,8 @@ async function page({ searchParams }: { searchParams: { [key: string]: string | 
   console.log(searchParams.category)
   console.log(searchParams.property)
   console.log(searchParams.location)
-  
-  // console.log(searchParams.)
-  const datas = await fetchProperties();
+  const datas = await fetchProperties(searchParams);
+  console.log(searchParams)
   return (
     <>
       <main className="">
@@ -36,7 +36,7 @@ async function page({ searchParams }: { searchParams: { [key: string]: string | 
           />
 
           <div className=" absolute left-0 top-0 w-full h-full bg-[#0000004e]">
-            {" "}
+
           </div>
 
           {/* Title */}

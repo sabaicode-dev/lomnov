@@ -230,6 +230,7 @@ const ItemCard = ({ item, flexRow }: ItemCardProps) => {
                   }
                 >
                   {item.detail.bed_room} Bed
+                  {item.category}
                 </span>
               </div>
             </div>
