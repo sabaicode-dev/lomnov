@@ -43,7 +43,7 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full  lg:w-[600px] mx-auto bg-white rounded-[30px] border border-neutral py-10">
+    <div className="w-full sm:w-[500px]  lg:w-[550px] mx-auto bg-white rounded-[30px] border border-neutral py-10">
       {/* Title */}
       <div className="text-center">
         <h2 className="font-coolvetica text-helvetica-h2 text-charcoal tracking-coolvetica-tight mb-4">
