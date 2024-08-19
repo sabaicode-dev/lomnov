@@ -22,7 +22,7 @@ const PropertySchema = new Schema<Property>(
     thumbnail: { type: String, required: true },
     images: { type: [String], required: true },
     urlmap: { type: String },
-    address: { type: String },
+    address: [LocalizedContentSchema],
     price: { type: Number },
     detail: { type: Schema.Types.Mixed }, // Flexible key-value pairs
     status: { type: Boolean, default: true },

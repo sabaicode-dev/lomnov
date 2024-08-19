@@ -15,18 +15,7 @@ import {
 import { PropertyService } from "@/src/services/property.service";
 import { Property, CreatePropertyDTO } from "@/src/utils/types/indext";
 
-
 // ====================================================================
-
-export interface UpdatePropertyDTO {
-  title?: { content: string; language: string }[];
-  description?: { content: string; language: string }[];
-  urlmap?: string;
-  address?: string;
-  price?: number;
-  detail?: Record<string, any>;
-  status?: boolean;
-}
 
 @Tags("Property Service")
 @Route("api/v1")
@@ -56,7 +45,7 @@ export class PropertyController extends Controller {
         thumbnail: "",
         images: [],
         urlmap,
-        address,
+        address: address ? JSON.parse(address) :[],
         price,
         detail: detail ? JSON.parse(detail) : {},
       };
@@ -75,9 +64,17 @@ export class PropertyController extends Controller {
     @Query() title?: string,
     @Query() price?: number,
     @Query() language?: string,
+    @Query() price_gte?: number,
+    @Query() price_lte?: number,
   ): Promise<Property> {
     try {
-      return await this.propertyService.getProperty(title, price, language);
+      return await this.propertyService.getProperty(
+        title,
+        price,
+        language,
+        price_gte,
+        price_lte,
+      );
     } catch (error) {
       console.error("Error fetching properties:", error);
       this.setStatus(500);
@@ -105,13 +102,14 @@ export class PropertyController extends Controller {
         ? JSON.parse(description)
         : undefined;
       const parsedDetail = detail ? JSON.parse(detail) : undefined;
+      const parsedAddress = address ? JSON.parse(address) : undefined;
 
       // Construct property data object
       const propertyData: Partial<Property> = {
         title: parsedTitle,
         description: parsedDescription,
         urlmap,
-        address,
+        address: parsedAddress,
         price,
         detail: parsedDetail,
         status,

@@ -11,7 +11,7 @@ export interface Property {
   thumbnail: string;
   images: string[];
   urlmap?: string;
-  address?: string;
+  address?: LocalizedContent[];
   price?: number;
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;

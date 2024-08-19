@@ -6,6 +6,7 @@ import SelectProperties from "@/components/molecules/select-properties/SelectPro
 import SelectLocations from "@/components/molecules/select-locations/SelectLocations";
 import SelectPrice from "@/components/molecules/select-price/SelectPrice";
 import { Option } from "@/components/molecules/select-properties/SelectProperties";
+// ========================================================================
 
 function HeroSection() {
   const [category, setCategory] = useState("");

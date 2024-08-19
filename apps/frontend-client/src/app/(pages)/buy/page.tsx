@@ -36,9 +36,10 @@ function page() {
         </div>
         <div className=" absolute w-full lg:bottom-[-40px] bottom-[-60px] px-2 lg:px-0">
           <div className="  z-10  m-auto lg:w-fit  bg-white rounded-[18px]  lg:flex   grid grid-cols-2 lg:grid-cols-4 items-center gap-5 p-5 ">
-            <SelectProperties onChange={()=>{}} />
-            <SelectLocations onChange={()=>{}} />
-            <SelectPrice onChange={()=>{}} />
+
+            {/* <SelectProperties onChange={(e)=>{}} />
+            <SelectLocations onChange={(e)=>{}} />
+            <SelectPrice onChange={(e)=>{}} /> */}
 
             <button className=" bg-neutral text-white font-[600] px-5 py-2 rounded-md lg:w-[120px]">
               Search

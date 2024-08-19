@@ -2,6 +2,7 @@ import { PropertyModel } from "@/src/database/models/property.model";
 import uploadFileToS3Service from "@/src/services/uploadFileToS3.service";
 import deleteFileFromS3Service from "@/src/services/uploadFileToS3.service";
 import { Property, CreatePropertyDTO } from "@/src/utils/types/indext";
+// =========================================================================
 
 export class PropertyRepository {
   public async create(
@@ -38,6 +39,8 @@ export class PropertyRepository {
     title?: string,
     price?: number,
     language?: string,
+    price_gte?: number,
+    price_lte?: number,
   ): Promise<any> {
     try {
       const query: any = {};
@@ -48,6 +51,13 @@ export class PropertyRepository {
 
       if (price) {
         query["price"] = price;
+      } else {
+        if (price_gte !== undefined) {
+          query["price"] = { ...query["price"], $gte: price_gte };
+        }
+        if (price_lte !== undefined) {
+          query["price"] = { ...query["price"], $lte: price_lte };
+        }
       }
 
       if (language) {
@@ -67,6 +77,7 @@ export class PropertyRepository {
               property.description?.filter(
                 (d: any) => d.language === language,
               ) || [],
+            
           };
         });
       }

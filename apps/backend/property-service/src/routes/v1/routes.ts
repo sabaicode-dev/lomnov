@@ -108,6 +108,8 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                     title: {"in":"query","name":"title","dataType":"string"},
                     price: {"in":"query","name":"price","dataType":"double"},
                     language: {"in":"query","name":"language","dataType":"string"},
+                    price_gte: {"in":"query","name":"price_gte","dataType":"double"},
+                    price_lte: {"in":"query","name":"price_lte","dataType":"double"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

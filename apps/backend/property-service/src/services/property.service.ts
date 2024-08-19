@@ -1,5 +1,6 @@
 import { Property, CreatePropertyDTO } from "@/src/utils/types/indext";
 import { PropertyRepository } from "../database/repositories/property.repository";
+// ====================================================================
 
 export class PropertyService {
   private propertyRepository: PropertyRepository;
@@ -25,9 +26,17 @@ export class PropertyService {
     title?: string,
     price?: number,
     language?: string,
+    price_gte?: number,
+    price_lte?: number,
   ): Promise<Property> {
     try {
-      return await this.propertyRepository.get(title, price, language);
+      return await this.propertyRepository.get(
+        title,
+        price,
+        language,
+        price_gte,
+        price_lte,
+      );
     } catch (error) {
       throw error;
     }
