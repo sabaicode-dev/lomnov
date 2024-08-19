@@ -80,7 +80,7 @@ const SelectPrice: React.FC<SelectPropertiesProps> = ({ onChange }) => {
       </button>
       {isOpen && (
         <div
-          className={` rounded-md absolute left-0 right-0 z-10 mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-[190px] overflow-auto opacity-100 p-2" : "max-h-0 opacity-0"}`}
+          className={`rounded-md absolute left-0 right-0 z-20 mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-[190px] overflow-auto opacity-100 p-2" : "max-h-0 opacity-0"}`}
         >
           {price.map((option, index) => (
             <div
