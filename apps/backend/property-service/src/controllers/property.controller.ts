@@ -14,7 +14,7 @@ import {
 } from "tsoa";
 import { PropertyService } from "@/src/services/property.service";
 import { Property, CreatePropertyDTO } from "@/src/utils/types/indext";
-import { PropertyModel } from "@/src/database/models/property.model";
+
 
 // ====================================================================
 
@@ -75,40 +75,9 @@ export class PropertyController extends Controller {
     @Query() title?: string,
     @Query() price?: number,
     @Query() language?: string,
-  ): Promise<any> {
+  ): Promise<Property> {
     try {
-      const query: any = {};
-
-      if (title) {
-        query["title.content"] = { $regex: title, $options: "i" };
-      }
-
-      if (price) {
-        query["price"] = price;
-      }
-
-      if (language) {
-        query["title.language"] = language;
-        query["description.language"] = language;
-      }
-
-      let properties = await PropertyModel.find(query).lean(); // Use .lean() to get plain objects
-
-      if (language) {
-        properties = properties.map((property) => {
-          return {
-            ...property,
-            title:
-              property.title?.filter((t: any) => t.language === language) || [],
-            description:
-              property.description?.filter(
-                (d: any) => d.language === language,
-              ) || [],
-          };
-        });
-      }
-
-      return properties;
+      return await this.propertyService.getProperty(title, price, language);
     } catch (error) {
       console.error("Error fetching properties:", error);
       this.setStatus(500);
@@ -161,14 +130,16 @@ export class PropertyController extends Controller {
   }
 
   @Delete("/properties/{propertyId}")
-  public async deleteProperty(@Path() propertyId: string): Promise<{ message: string }> {
+  public async deleteProperty(
+    @Path() propertyId: string,
+  ): Promise<{ message: string }> {
     try {
       const result = await this.propertyService.deleteProperty(propertyId);
       return { message: result ? "Delete successfully" : "Property not found" };
     } catch (error) {
-      console.error('Error in deleteProperty:', error);
+      console.error("Error in deleteProperty:", error);
       this.setStatus(500);
-      throw new Error('Failed to delete property');
+      throw new Error("Failed to delete property");
     }
   }
 }

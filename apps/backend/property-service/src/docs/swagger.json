@@ -88,7 +88,7 @@
 		"contact": {}
 	},
 	"paths": {
-		"/properties": {
+		"/api/v1/properties": {
 			"post": {
 				"operationId": "CreateProperty",
 				"responses": {
@@ -103,6 +103,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Property Service"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
@@ -165,6 +168,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Property Service"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -195,7 +201,7 @@
 				]
 			}
 		},
-		"/properties/{propertyId}": {
+		"/api/v1/properties/{propertyId}": {
 			"put": {
 				"operationId": "UpdateProperty",
 				"responses": {
@@ -215,6 +221,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Property Service"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -293,6 +302,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Property Service"
+				],
 				"security": [],
 				"parameters": [
 					{

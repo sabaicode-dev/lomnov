@@ -59,11 +59,11 @@ function ContainerHeader({
         <div
           className={
             isMenu
-              ? `lg:w-[40%] xl:w-[50%] w-[65%] h-[100vh] md:h-fit bg-gradient-to-r bg-gray md:bg-transparent shadow-lg  md:shadow-none fixed md:static left-0 top-0 flex md:flex-row flex-col md:items-center md:justify-center transition-all ease-in-out duration-500  `
-              : "lg:w-[40%] xl:w-[60%] w-[65%] h-[100vh] md:h-auto bg-gradient-to-r  md:bg-transparent shadow-lg md:shadow-none fixed md:static left-[-100%] top-0 flex md:flex-row flex-col md:items-center  md:justify-center transition-all ease-in-out duration-500 bg-twitter "
+              ? `lg:w-[40%] xl:w-[50%] w-[65%] h-[100vh] md:h-fit bg-gradient-to-r bg-gray md:bg-transparent shadow-lg  md:shadow-none fixed md:static left-0 top-0 flex md:flex-row flex-col md:items-center md:justify-center transition-all ease-in-out duration-500 bg-olive-green `
+              : "lg:w-[40%] xl:w-[60%] w-[65%] h-[100vh] md:h-auto bg-gradient-to-r  md:bg-transparent shadow-lg md:shadow-none fixed md:static left-[-100%] top-0 flex md:flex-row flex-col md:items-center  md:justify-center transition-all ease-in-out duration-500  "
           }
         >
-          <div className=" w-full h-[80px] bg-[#000000e0] flex flex-row items-center px-5 gap-3 md:hidden ">
+          <div className=" w-full h-[80px] bg-black flex flex-row items-center px-5 gap-3 md:hidden ">
             {/* <div className=" w-[50px] h-[50px] bg-white rounded-full"> */}
             <Image src={logo} alt="" width="100" height="100" />
             {/* </div> */}
