@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path'
 
 import session from 'express-session';
+import { loggingMiddleware } from './utils/request-response-logger/logger';
 const { randomBytes } = require('crypto');
 // Dynamically load swagger.json
 const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, 'docs/swagger.json'), 'utf8'));
@@ -29,21 +30,16 @@ app.use(session({
 // Global Middleware
 // ========================
 app.use(express.json())  // Help to get the json from request body
-
+// ========================
 // Middleware to block unauthorized direct access
-// function blockDirectAccess(req:any, res:any, next: any ) {
-//     const allowedHeader = req.headers['x-api-gateway-header'];
-
-//     if (allowedHeader && allowedHeader === 'http://localhost:3000') {
-//       next(); // Allow the request if the header is present and valid
-//     } else {
-//       res.status(403).json({ message: 'Forbidden: Direct access not allowed' });
-//     }
-//   }
-
-//   // Apply the middleware to all routes in the service
+// ========================
 //   app.use(blockDirectAccess);
 
+// ========================
+// Request Response logger
+// ========================
+
+app.use(loggingMiddleware)
 // ========================
 // Global API V1
 // ========================

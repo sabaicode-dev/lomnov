@@ -63,6 +63,7 @@ export class PropertyRepository {
       if (language) {
         query["title.language"] = language;
         query["description.language"] = language;
+        query["address.language"] = language;
       }
 
       let properties = await PropertyModel.find(query).lean(); // Use .lean() to get plain objects
@@ -77,7 +78,9 @@ export class PropertyRepository {
               property.description?.filter(
                 (d: any) => d.language === language,
               ) || [],
-            
+            address:
+              property.address?.filter((a: any) => a.language === language) ||
+              [],
           };
         });
       }

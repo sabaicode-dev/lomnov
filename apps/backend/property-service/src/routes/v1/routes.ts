@@ -35,7 +35,7 @@ const models: TsoaRoute.Models = {
             "thumbnail": {"dataType":"string","required":true},
             "images": {"dataType":"array","array":{"dataType":"string"},"required":true},
             "urlmap": {"dataType":"string"},
-            "address": {"dataType":"string"},
+            "address": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"}},
             "price": {"dataType":"double"},
             "detail": {"ref":"Record_string.any_"},
             "status": {"dataType":"boolean"},

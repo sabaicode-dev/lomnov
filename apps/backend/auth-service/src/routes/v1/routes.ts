@@ -3,9 +3,7 @@
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { TsoaRoute, fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { GoogleController } from './../../controllers/google.controller';
-// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { FacebookController } from './../../controllers/facebook.controller';
+import { AuthController } from './../../controllers/google.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ProductController } from './../../controllers/auth.controller';
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
@@ -21,6 +19,7 @@ const models: TsoaRoute.Models = {
             "username": {"dataType":"string","required":true},
             "password": {"dataType":"string","required":true},
             "name": {"dataType":"string","required":true},
+            "roles": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -43,6 +42,24 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "InitiatePasswordResetRequest": {
+        "dataType": "refObject",
+        "properties": {
+            "username": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ConfirmPasswordResetRequest": {
+        "dataType": "refObject",
+        "properties": {
+            "username": {"dataType":"string","required":true},
+            "newPassword": {"dataType":"string","required":true},
+            "confirmationCode": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
 const templateService = new ExpressTemplateService(models, {"noImplicitAdditionalProperties":"throw-on-extras","bodyCoercion":true});
 
@@ -60,11 +77,11 @@ export function RegisterRoutes(app: Router) {
 
 
     
-        app.get('/api/v1/google/signin',
-            ...(fetchMiddlewares<RequestHandler>(GoogleController)),
-            ...(fetchMiddlewares<RequestHandler>(GoogleController.prototype.googleSignIn)),
+        app.get('/api/v1/auth/google-sign-in',
+            ...(fetchMiddlewares<RequestHandler>(AuthController)),
+            ...(fetchMiddlewares<RequestHandler>(AuthController.prototype.googleSignIn)),
 
-            async function GoogleController_googleSignIn(request: ExRequest, response: ExResponse, next: any) {
+            async function AuthController_googleSignIn(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     redirect: {"in":"res","name":"302","required":true,"dataType":"void"},
@@ -76,7 +93,7 @@ export function RegisterRoutes(app: Router) {
             try {
                 validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-                const controller = new GoogleController();
+                const controller = new AuthController();
 
               await templateService.apiHandler({
                 methodName: 'googleSignIn',
@@ -91,11 +108,42 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/callback',
-            ...(fetchMiddlewares<RequestHandler>(GoogleController)),
-            ...(fetchMiddlewares<RequestHandler>(GoogleController.prototype.callback)),
+        app.get('/api/v1/auth/facebook-sign-in',
+            ...(fetchMiddlewares<RequestHandler>(AuthController)),
+            ...(fetchMiddlewares<RequestHandler>(AuthController.prototype.facebookSignIn)),
 
-            async function GoogleController_callback(request: ExRequest, response: ExResponse, next: any) {
+            async function AuthController_facebookSignIn(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+                    redirect: {"in":"res","name":"302","required":true,"dataType":"void"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new AuthController();
+
+              await templateService.apiHandler({
+                methodName: 'facebookSignIn',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/api/v1/auth/callback',
+            ...(fetchMiddlewares<RequestHandler>(AuthController)),
+            ...(fetchMiddlewares<RequestHandler>(AuthController.prototype.callback)),
+
+            async function AuthController_callback(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     badRequest: {"in":"res","name":"400","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"error_description":{"dataType":"string","required":true},"error":{"dataType":"string","required":true}}},
@@ -108,41 +156,10 @@ export function RegisterRoutes(app: Router) {
             try {
                 validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-                const controller = new GoogleController();
+                const controller = new AuthController();
 
               await templateService.apiHandler({
                 methodName: 'callback',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/facebook/signin',
-            ...(fetchMiddlewares<RequestHandler>(FacebookController)),
-            ...(fetchMiddlewares<RequestHandler>(FacebookController.prototype.facebookSignIn)),
-
-            async function FacebookController_facebookSignIn(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
-                    redirect: {"in":"res","name":"302","required":true,"dataType":"void"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new FacebookController();
-
-              await templateService.apiHandler({
-                methodName: 'facebookSignIn',
                 controller,
                 response,
                 next,
@@ -221,6 +238,7 @@ export function RegisterRoutes(app: Router) {
             async function ProductController_signIn(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     body: {"in":"body","name":"body","required":true,"ref":"SignInBody"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -244,12 +262,13 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/auths',
+        app.post('/api/v1/auth/password-reset',
             ...(fetchMiddlewares<RequestHandler>(ProductController)),
-            ...(fetchMiddlewares<RequestHandler>(ProductController.prototype.testGet)),
+            ...(fetchMiddlewares<RequestHandler>(ProductController.prototype.initiatePasswordReset)),
 
-            async function ProductController_testGet(request: ExRequest, response: ExResponse, next: any) {
+            async function ProductController_initiatePasswordReset(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    body: {"in":"body","name":"body","required":true,"ref":"InitiatePasswordResetRequest"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -261,7 +280,37 @@ export function RegisterRoutes(app: Router) {
                 const controller = new ProductController();
 
               await templateService.apiHandler({
-                methodName: 'testGet',
+                methodName: 'initiatePasswordReset',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/api/v1/auth/confirm-password',
+            ...(fetchMiddlewares<RequestHandler>(ProductController)),
+            ...(fetchMiddlewares<RequestHandler>(ProductController.prototype.confirmPasswordReset)),
+
+            async function ProductController_confirmPasswordReset(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    body: {"in":"body","name":"body","required":true,"ref":"ConfirmPasswordResetRequest"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new ProductController();
+
+              await templateService.apiHandler({
+                methodName: 'confirmPasswordReset',
                 controller,
                 response,
                 next,

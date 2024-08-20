@@ -17,12 +17,16 @@
 					},
 					"name": {
 						"type": "string"
+					},
+					"roles": {
+						"type": "string"
 					}
 				},
 				"required": [
 					"username",
 					"password",
-					"name"
+					"name",
+					"roles"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -58,6 +62,38 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"InitiatePasswordResetRequest": {
+				"properties": {
+					"username": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"username"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ConfirmPasswordResetRequest": {
+				"properties": {
+					"username": {
+						"type": "string"
+					},
+					"newPassword": {
+						"type": "string"
+					},
+					"confirmationCode": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"username",
+					"newPassword",
+					"confirmationCode"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -71,7 +107,7 @@
 		"contact": {}
 	},
 	"paths": {
-		"/api/v1/google/signin": {
+		"/api/v1/auth/google-sign-in": {
 			"get": {
 				"operationId": "GoogleSignIn",
 				"responses": {
@@ -86,7 +122,22 @@
 				"parameters": []
 			}
 		},
-		"/api/v1/callback": {
+		"/api/v1/auth/facebook-sign-in": {
+			"get": {
+				"operationId": "FacebookSignIn",
+				"responses": {
+					"204": {
+						"description": "No content"
+					},
+					"302": {
+						"description": ""
+					}
+				},
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/api/v1/auth/callback": {
 			"get": {
 				"operationId": "Callback",
 				"responses": {
@@ -123,21 +174,6 @@
 				"parameters": []
 			}
 		},
-		"/api/v1/facebook/signin": {
-			"get": {
-				"operationId": "FacebookSignIn",
-				"responses": {
-					"204": {
-						"description": "No content"
-					},
-					"302": {
-						"description": ""
-					}
-				},
-				"security": [],
-				"parameters": []
-			}
-		},
 		"/api/v1/auth/signup": {
 			"post": {
 				"operationId": "Signup",
@@ -152,7 +188,7 @@
 					}
 				},
 				"tags": [
-					" Handle By hand"
+					"Handle By hand"
 				],
 				"security": [],
 				"parameters": [],
@@ -182,7 +218,7 @@
 					}
 				},
 				"tags": [
-					" Handle By hand"
+					"Handle By hand"
 				],
 				"security": [],
 				"parameters": [],
@@ -212,7 +248,7 @@
 					}
 				},
 				"tags": [
-					" Handle By hand"
+					"Handle By hand"
 				],
 				"security": [],
 				"parameters": [],
@@ -228,34 +264,64 @@
 				}
 			}
 		},
-		"/api/v1/auths": {
-			"get": {
-				"operationId": "TestGet",
+		"/api/v1/auth/password-reset": {
+			"post": {
+				"operationId": "InitiatePasswordReset",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {
-									"properties": {
-										"message": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"message"
-									],
-									"type": "object"
-								}
+								"schema": {}
 							}
 						}
 					}
 				},
 				"tags": [
-					" Handle By hand"
+					"Handle By hand"
 				],
 				"security": [],
-				"parameters": []
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/InitiatePasswordResetRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/auth/confirm-password": {
+			"post": {
+				"operationId": "ConfirmPasswordReset",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Handle By hand"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ConfirmPasswordResetRequest"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

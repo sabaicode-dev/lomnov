@@ -56,7 +56,10 @@
 						"type": "string"
 					},
 					"address": {
-						"type": "string"
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
 					},
 					"price": {
 						"type": "number",
