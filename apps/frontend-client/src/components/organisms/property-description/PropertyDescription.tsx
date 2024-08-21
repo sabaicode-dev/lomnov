@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { useInView } from "react-intersection-observer";
 import Image from "next/image";
-import { animated, useSpring } from "react-spring";
+import { useSpring, animated } from "@react-spring/web";
 import Modal from "react-modal";
 import Location from "@/icons/Location";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
@@ -26,8 +27,22 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
     transform: isOpen ? "scale(1)" : "scale(0.8)",
   });
 
+  const { ref, entry } = useInView({
+    triggerOnce: false,
+    threshold: 0.1,
+  });
+
+  const fadeIn = useSpring({
+    opacity: entry?.isIntersecting ? 1 : 0,
+    transform: entry?.isIntersecting ? "translateY(0)" : "translateY(50px)",
+  });
+
   return (
-    <div className="max-w-[1300px] mx-auto py-[10px] px-[10px]">
+    <animated.div
+      ref={ref}
+      style={fadeIn}
+      className="max-w-[1300px] mx-auto py-[10px] px-[10px]"
+    >
       <div className="w-full">
         <div className="py-[5px] text-grayish-white max-w-[340px] rounded-8xs bg-neutral flex items-center">
           <Location props="text-olive-green w-[20px] h-[20px]" />
@@ -72,19 +87,23 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
         ariaHideApp={false}
       >
         <div className="absolute inset-0" onClick={closeModal} />
-        <animated.div style={animationProps} className="max-w-full max-h-full">
+        <animated.div
+          style={animationProps}
+          className="max-w-[95%] max-h-[70%] flex items-center justify-center"
+        >
           {selectedImage && (
             <Image
               src={selectedImage}
               alt="Selected Property"
-              width={800}
-              height={800}
-              className="object-cover"
+              layout="responsive"
+              width={100}
+              height={60}
+              className="object-contain w-full h-full"
             />
           )}
         </animated.div>
       </Modal>
-    </div>
+    </animated.div>
   );
 };
 

@@ -4,6 +4,7 @@ import PropertyTypeInfo from "../../../../components/organisms/property-type-inf
 import PropertyDescription from "../../../../components/organisms/property-description/PropertyDescription";
 import ContactForm from "../../../../components/organisms/contact-form/ContactForm";
 import Map from "../../../../components/molecules/map/Map";
+import RecommendedProperties from "@/components/molecules/RecommendedProperties/RecommendedProperties";
 
 // Fetch property data
 async function fetchProperty(id: string): Promise<RealEstateItem> {
@@ -23,8 +24,8 @@ const page = async ({ params }: { params: { id: string } }) => {
 
   return (
     <>
-      <div className="w-full mb-[500px] lg:mb-[500px]  xl:mb-[300px] mx-auto relative">
-        <div className="w-full relative bg-grayish-white h-[300px] sm:h-[400px] md:h-[450px] lg:h-[600px] xl:h-[850px] overflow-hidden text-olive-green">
+      <div className="w-full mb-[50px]  mx-auto relative">
+        <div className="w-full relative bg-grayish-white h-[300px] sm:h-[400px] md:h-[450px] lg:h-[600px] xl:h-[700px] 2xl:h-[850px] overflow-hidden text-olive-green">
           <Image
             className="top-0 left-0 w-full h-full object-cover"
             src={property.thumbnail}
@@ -34,7 +35,7 @@ const page = async ({ params }: { params: { id: string } }) => {
           />
         </div>
 
-        <div className="absolute top-[290px] sm:top-[385px] md:top-[435px] lg:top-[575px] xl:top-[778px]  w-full flex justify-center items-center">
+        <div className="absolute top-[290px] sm:top-[385px] md:top-[435px] lg:top-[575px] xl:top-[628px] 2xl:top-[778px]  w-full flex justify-center items-center">
           <div className="relative w-full xl:w-[1300px]">
             <Image
               className="absolute hidden xl:block -left-5 bottom-[75px] transform translate-y-1/2 w-5 h-5"
@@ -95,13 +96,19 @@ const page = async ({ params }: { params: { id: string } }) => {
 
         <div className="w-full mt-[200px] sm:mt-[190px] md:mt-[220px] lg:mt-[170px] xl:mt-[100px]">
           <PropertyDescription property={property} />
-          <Map property={property.mapurl}/>
+          <Map property={property.mapurl} />
+        </div>
+
+        {/* Recommend Properties */}
+        <div className="w-full mt-[50px]">
+          <RecommendedProperties
+            category={property.category}
+            address={property.address}
+          />
         </div>
       </div>
     </>
   );
 };
-
-// Component to render property type information
 
 export default page;
