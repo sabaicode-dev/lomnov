@@ -32,7 +32,7 @@ class Database {
 
   public async connect(): Promise<void> {
     try {
-      await mongoose.connect(this.connectionString, { });
+      await mongoose.connect(this.connectionString);
       console.log("MongoDB Connected");
     } catch (error) {
       console.error("MongoDB Connection Error:", error);
