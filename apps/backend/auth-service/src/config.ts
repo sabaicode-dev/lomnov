@@ -3,7 +3,6 @@ import path from "path";
 import Joi from "joi";
 
 type Config = {
-  env: string;
   port: number;
   mongodbUrl: string;
   cognitoAppCientId: string;
@@ -23,7 +22,7 @@ function loadConfig(): Config {
 
   // Define a schema for the environment variables
   const envVarsSchema = Joi.object({
-    NODE_ENV: Joi.string().required(),
+
     PORT: Joi.number().default(3000),
     MONGODB_URL: Joi.string().required(),
     COGNITO_APP_CIENTID: Joi.string().required(),
@@ -43,7 +42,7 @@ function loadConfig(): Config {
   }
 
   return {
-    env: envVars.NODE_ENV,
+
     port: envVars.PORT,
     mongodbUrl: envVars.MONGODB_URL,
     cognitoAppCientId: envVars.COGNITO_APP_CIENTID,
