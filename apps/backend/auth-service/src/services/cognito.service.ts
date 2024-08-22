@@ -89,8 +89,8 @@ export class CognitoService {
           "Sign up successful. Please check your phone or email for verification.",
         userSub: response.UserSub,
       };
-    } catch (error: any) {
-      throw new Error(error.message);
+    } catch (error) {
+      throw error
     }
   }
 

@@ -1,5 +1,11 @@
 import { AuthRepository } from "@/src/database/repositories/auth.repository";
-import { ConfirmPasswordResetRequest, InitiatePasswordResetRequest, SignInBody, SignUpBody, VerifyBody } from "../utils/types/indext";
+import {
+  ConfirmPasswordResetRequest,
+  InitiatePasswordResetRequest,
+  SignInBody,
+  SignUpBody,
+  VerifyBody,
+} from "../utils/types/indext";
 import { Request as ExRequest } from "express";
 export class AuthService {
   private authRepository: AuthRepository;
@@ -31,18 +37,30 @@ export class AuthService {
     }
   }
 
-  public async authPasswordReset(body: InitiatePasswordResetRequest): Promise<any> {
+  public async authPasswordReset(
+    body: InitiatePasswordResetRequest,
+  ): Promise<any> {
     try {
-      return await this.authRepository.passwordReset(body)
+      return await this.authRepository.passwordReset(body);
     } catch (error) {
       throw error;
     }
   }
 
-  public async authConfirmPassword(body:ConfirmPasswordResetRequest): Promise<any> {
+  public async authConfirmPassword(
+    body: ConfirmPasswordResetRequest,
+  ): Promise<any> {
     try {
-      return await this.authRepository.confirmPassword(body)
+      return await this.authRepository.confirmPassword(body);
     } catch (error) {
+      throw error;
+    }
+  }
+
+  public async getAuth () {
+    try{
+      return await this.authRepository.get()
+    }catch(error){
       throw error;
     }
   }

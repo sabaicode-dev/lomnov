@@ -10,9 +10,9 @@ interface PropertyDocument {
 
 const AuthSchema = new Schema<Auth>(
   {
+    email: { type: String, unique: true,  required: true },
     cognitoSub: { type: String, unique: true },
-    email: { type: String, required: true, unique: true },
-    googleId: { type: String, unique: true },
+    googleId: { type: String },
     isVerified: { type: Boolean, default:false },
     role: { type: String },
   },

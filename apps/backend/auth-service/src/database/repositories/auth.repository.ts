@@ -1,6 +1,5 @@
-// =========================================================================
-
 import { CognitoService } from "@/src/services/cognito.service";
+
 import {
   ConfirmPasswordResetRequest,
   InitiatePasswordResetRequest,
@@ -11,16 +10,16 @@ import {
 import { Request as ExRequest } from "express";
 import { AuthModel } from "../models/auth.model";
 
+// ====================================================================
+
 export class AuthRepository {
   private cognitoService: CognitoService;
-
   constructor() {
     this.cognitoService = new CognitoService();
   }
   public async signUp(body: SignUpBody): Promise<any> {
-    const { username,  name, roles } = body;
+    const { username, name, password, roles } = body;
     const isPhoneNumber = username.startsWith("+");
-
     const attributes: {
       name: string;
       phoneNumber?: string;
@@ -38,30 +37,35 @@ export class AuthRepository {
     }
 
     try {
-      // const response = await this.cognitoService.signUpUser(
-      //   username,
-      //   password,
-      //   attributes,
-      // );
-      const auth = new AuthModel({
-        cognitoSub: "",
+      const response = await this.cognitoService.signUpUser(
+        username,
+        password,
+        attributes,
+      );
+
+      const auth = AuthModel.create({
+        cognitoSub: response.userSub,
         email: attributes.email,
-        googleId:"",
+        googleId: "",
         role: attributes["custom:roles"],
       });
-      (await auth).save()
 
-      // return response;
-    } catch (error) {
+      return { response, auth };
+    } catch (error: any) {
       throw error;
     }
   }
 
   public async verify(body: VerifyBody): Promise<any> {
     const { username, code } = body;
-
     try {
       const response = await this.cognitoService.verifyUser(username, code);
+      if (response) {
+        await AuthModel.updateOne(
+          { email: username }, // Filter by email
+          { $set: { isVerified: true } }, // Set isVerified to true
+        );
+      }
       return response;
     } catch (error) {
       throw error;
@@ -104,4 +108,14 @@ export class AuthRepository {
       throw error;
     }
   }
+
+  public async get():Promise<any>{
+    try{
+      const auths = await AuthModel.find();
+      return auths
+    }catch(error){
+      throw error
+    }
+  }
+
 }

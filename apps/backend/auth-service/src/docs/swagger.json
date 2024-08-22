@@ -323,6 +323,26 @@
 					}
 				}
 			}
+		},
+		"/api/v1/auth/informations": {
+			"get": {
+				"operationId": "GetAllAuth",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Handle By hand"
+				],
+				"security": [],
+				"parameters": []
+			}
 		}
 	},
 	"servers": [

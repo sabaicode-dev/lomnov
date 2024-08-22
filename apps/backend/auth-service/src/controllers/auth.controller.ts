@@ -1,4 +1,4 @@
-import { Controller, Route, Post, Body, Tags, Request } from "tsoa";
+import { Controller, Route, Post, Body, Tags, Request, Get } from "tsoa";
 import { Request as ExRequest } from "express";
 import {
   SignUpBody,
@@ -22,7 +22,6 @@ export class ProductController extends Controller {
   @Post("/auth/signup")
   public async signup(@Body() body: SignUpBody): Promise<any> {
     try {
-      
       return await this.authService.authSignUp(body);
     } catch (error) {
       throw error;
@@ -33,7 +32,7 @@ export class ProductController extends Controller {
   public async verify(@Body() body: VerifyBody): Promise<any> {
     try {
       return await this.authService.authVerify(body);
-    } catch (error: any) {
+    } catch (error) {
       throw error;
     }
   }
@@ -65,6 +64,15 @@ export class ProductController extends Controller {
   public async confirmPasswordReset(@Body() body: ConfirmPasswordResetRequest) {
     try {
       return await this.authService.authConfirmPassword(body);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get("/auth/informations")
+  public async getAllAuth() {
+    try {
+      return this.authService.getAuth();
     } catch (error) {
       throw error;
     }
