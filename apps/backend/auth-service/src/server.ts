@@ -8,7 +8,7 @@ const startServer = async () => {
   await db.connect();
   // Initialize and start your Express server here
   app.listen(configs.port, () => {
-    console.log(`Property service running on Port: ${configs.port}`)
+    console.log(`Auth service running on Port: ${configs.port}`)
   })
 };
 

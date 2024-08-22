@@ -11,7 +11,12 @@
   "scripts": {
     "start": "concurrently \"yarn workspace ms-ui-components watch\" \"yarn workspace frontend-client dev\" \"yarn workspace frontend-dashboard dev\"",
     "start:client": "concurrently \"yarn workspace ms-ui-components watch\" \"yarn workspace frontend-client dev\"",
-    "start:dashboard": "concurrently \"yarn workspace ms-ui-components watch\" \"yarn workspace frontend-dashboard dev\""
+    "start:dashboard": "concurrently \"yarn workspace ms-ui-components watch\" \"yarn workspace frontend-dashboard dev\"",
+    "start:auth-service": "concurrently \"yarn workspace auth-service run dev\"",
+    "start:user-service":"concurrently \"yarn workspace user-service run dev\"",
+    "start:property-service":" concurrently \"yarn workspace property-service run dev\"",
+    "start:notification-service": "concurrently \"yarn workspace notification-service run dev \"",
+    "start:api-getway": " concurrently \"yarn workspace api-getway run dev\""
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

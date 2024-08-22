@@ -9,6 +9,8 @@
 /apps/backend/user-service/node_modules/
 /apps/backend/auth-service/node_modules/
 /apps/backend/api-getway/node_modules/
+apps/backend/auth-service/src/configs/.env.production
+apps/backend/auth-service/src/configs/.env.development
 
 # Next.js
 /.next/
