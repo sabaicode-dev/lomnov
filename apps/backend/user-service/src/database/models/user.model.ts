@@ -1,31 +1,34 @@
-
 import { Schema, model } from "mongoose";
-// import { Property, LocalizedContent } from "";
+
 
 // ==================================================================
 
 // Define the PropertyDocument interface that includes timestamps
-interface PropertyDocument {
+interface UserDocument {
   createdAt: Date;
   updatedAt: Date;
 }
 
-
-
-const PropertySchema = new Schema(
+const UserSchema = new Schema(
   {
-    conitoSub: {type: String, required: true, unique: true},
-    email: {type: String, required: true, unique: true},
-    googeId: {type: String, required: true, unique: true},
-    isVerified: {type: Boolean},
-    role: {type:String}
-
+    conitoSub: { type: String, required: true, unique: true },
+    firstName: { type: String },
+    lastName: { type: String },
+    userName: {type:String, unique: true},
+    phnoe_number: { type: String },
+    address: { type: String },
+    age: { type: Number },
+    gender: { type: String },
+    date_of_birth: { type: String },
+    profile: { type: Array },
+    background: { type: Array },
+    favorite: { type: Array },
   },
   { timestamps: true },
 );
 
 // Add a pre-save middleware to adjust timestamps
-PropertySchema.pre<PropertyDocument>("save", function (next) {
+UserSchema.pre<UserDocument>("save", function (next) {
   const timezoneOffset = 7 * 60 * 60 * 1000; // 7 hours in milliseconds
   // Adjust createdAt and updatedAt fields
   this.createdAt = new Date(this.createdAt.getTime() + timezoneOffset);
@@ -33,4 +36,4 @@ PropertySchema.pre<PropertyDocument>("save", function (next) {
   next();
 });
 
-export const PropertyModel = model("Property", PropertySchema);
+export const UserModel = model("user", UserSchema);

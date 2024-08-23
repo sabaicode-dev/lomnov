@@ -26,7 +26,7 @@ export class AuthController extends Controller {
   @Get("/google-sign-in")
   public async googleSignIn(
     @Request() request: ExRequest,
-    @Res() redirect: TsoaResponse<302, void>
+    @Res() redirect: TsoaResponse<302, void>,
   ): Promise<void> {
     const state = randomBytes(16).toString("hex");
     request.session.state = state; // Store state in session
@@ -51,7 +51,7 @@ export class AuthController extends Controller {
   @Get("/facebook-sign-in")
   public async facebookSignIn(
     @Request() request: ExRequest,
-    @Res() redirect: TsoaResponse<302, void>
+    @Res() redirect: TsoaResponse<302, void>,
   ): Promise<void> {
     try {
       // Generate a random state value
@@ -272,7 +272,7 @@ export class AuthController extends Controller {
         console.log(`User ${username} added to group ${groupName}`);
       }
 
-      return redirect(302, undefined, { Location: "http://localhost:4000" });
+      return redirect(302, undefined, { Location: "http://localhost:4001" });
     } catch (error: any) {
       console.error("Callback error:", error);
       return badRequest(400, {
@@ -281,4 +281,7 @@ export class AuthController extends Controller {
       });
     }
   }
+
+
+
 }
