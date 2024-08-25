@@ -14,8 +14,8 @@ import {
   BadRequestError,
   InternalServerError,
   NotFoundError,
-} from "../utils/error/customErrors";
-
+  ValidationError,
+} from "@/src/utils/error/customErrors";
 // =====================================================
 
 export class CognitoService {
@@ -72,25 +72,47 @@ export class CognitoService {
       });
     }
 
-   
-
-    const command = new SignUpCommand({
-      ClientId: configs.cognitoAppCientId,
-      Username: username,
-      Password: password,
-      SecretHash: secretHash,
-      UserAttributes: userAttributes,
-    });
-
     try {
+      // Validate that configurations and parameters are correct
+      if (!configs.cognitoAppCientId) {
+        throw new ValidationError("ClientId is missing in configuration.");
+      }
+      if (userAttributes.length === 0) {
+        throw new ValidationError("User attributes must not be empty.");
+      }
+      const command = new SignUpCommand({
+        ClientId: configs.cognitoAppCientId,
+        Username: username,
+        Password: password,
+        SecretHash: secretHash,
+        UserAttributes: userAttributes,
+      });
+      if (!command) {
+        throw new InternalServerError("Failed to create the sign-up command.");
+      }
       const response = await this.cognitoClient.send(command);
+      // Validate response
+      if (!response || !response.UserSub) {
+        throw new InternalServerError("UserSub is missing from the response.");
+      }
       return {
         message:
           "Sign up successful. Please check your phone or email for verification.",
         userSub: response.UserSub,
       };
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      if (
+        error instanceof InternalServerError ||
+        error instanceof ValidationError
+      ) {
+        // Re-throw known (inspectable) errors
+        throw error;
+      } else {
+        // Handle uninspectable (unexpected) errors and include original error message and status
+        throw new InternalServerError(
+          `An unexpected error occurred: ${error.message}`,
+        );
+      }
     }
   }
 
@@ -144,7 +166,8 @@ export class CognitoService {
     } catch (error: any) {
       if (
         error instanceof InternalServerError ||
-        error instanceof NotFoundError
+        error instanceof NotFoundError ||
+        error instanceof BadRequestError
       ) {
         // Re-throw known (inspectable) errors
         throw error;
@@ -158,6 +181,10 @@ export class CognitoService {
   }
 
   public async signInUser(username: string, password: string): Promise<any> {
+    // Input validation
+    if (!username || !password) {
+      throw new ValidationError("Username, and password are required.");
+    }
     const secretHash = this.generateSecretHash(username);
     const command = new InitiateAuthCommand({
       ClientId: configs.cognitoAppCientId,
@@ -183,18 +210,21 @@ export class CognitoService {
         authResult,
       };
     } catch (error: any) {
-     if(error instanceof InternalServerError){
-      throw error;
-     }else{
-      throw new InternalServerError(
-        `An unexpected error occurred: ${error.message}`,
-      );
-     }
+      if (error instanceof InternalServerError) {
+        throw error;
+      } else {
+        throw new InternalServerError(
+          `An unexpected error occurred: ${error.message}`,
+        );
+      }
     }
   }
 
   public async initiatePasswordReset(username: string): Promise<any> {
+    // Input validation
+    if (!username) throw new ValidationError("Username is required.");
     const secretHash = this.generateSecretHash(username);
+
     const command = new ForgotPasswordCommand({
       ClientId: configs.cognitoAppCientId,
       Username: username,
@@ -203,12 +233,19 @@ export class CognitoService {
 
     try {
       await this.cognitoClient.send(command);
+
       return {
         message:
-          "Password reset initiated. Please check your email or phone for the code.",
+          `Password reset initiated. Please check your email or phone for the code. (${username})`,
       };
     } catch (error: any) {
-      throw new Error(`Failed to initiate password reset: ${error.message}`);
+      if (error instanceof ValidationError) {
+        throw error;
+      } else {
+        throw new InternalServerError(
+          ` ${error.message}`,
+        );
+      }
     }
   }
 
@@ -217,8 +254,13 @@ export class CognitoService {
     newPassword: string,
     confirmationCode: string,
   ): Promise<any> {
+    // Input validation
+    if (!username || !newPassword || !confirmationCode) {
+      throw new ValidationError(
+        "Username, new password, and confirmation code are required.",
+      );
+    }
     const secretHash = this.generateSecretHash(username);
-
     const command = new ConfirmForgotPasswordCommand({
       ClientId: configs.cognitoAppCientId,
       Username: username,
@@ -226,12 +268,26 @@ export class CognitoService {
       ConfirmationCode: confirmationCode,
       SecretHash: secretHash,
     });
+    if (!command) {
+      throw new InternalServerError(
+        "Failed to create the ConfirmForgotPassword command.",
+      );
+    }
 
     try {
       await this.cognitoClient.send(command);
       return { message: "Password reset successfully." };
     } catch (error: any) {
-      throw new Error(`Failed to reset password: ${error.message}`);
+      if (
+        error instanceof ValidationError ||
+        error instanceof InternalServerError
+      ) {
+        throw error;
+      } else {
+        throw new InternalServerError(
+          `An unexpected error occurred: ${error.message}`,
+        );
+      }
     }
   }
 }
