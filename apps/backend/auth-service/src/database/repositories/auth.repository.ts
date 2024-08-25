@@ -8,8 +8,6 @@ import {
   VerifyBody,
 } from "@/src/utils/types/indext";
 import { Request as ExRequest } from "express";
-import { AuthModel } from "../models/auth.model";
-
 // ====================================================================
 
 export class AuthRepository {
@@ -43,14 +41,9 @@ export class AuthRepository {
         attributes,
       );
 
-      const auth = AuthModel.create({
-        cognitoSub: response.userSub,
-        email: attributes.email,
-        googleId: "",
-        role: attributes["custom:roles"],
-      });
 
-      return { response, auth };
+
+      return response;
     } catch (error: any) {
       throw error;
     }
@@ -60,12 +53,6 @@ export class AuthRepository {
     const { username, code } = body;
     try {
       const response = await this.cognitoService.verifyUser(username, code);
-      if (response) {
-        await AuthModel.updateOne(
-          { email: username }, // Filter by email
-          { $set: { isVerified: true } }, // Set isVerified to true
-        );
-      }
       return response;
     } catch (error) {
       throw error;
@@ -80,8 +67,8 @@ export class AuthRepository {
       request.res?.cookie("refreshToken", response.authResult?.RefreshToken);
       request.res?.cookie("idToken", response.authResult?.IdToken);
       return { message: "Login successful" };
-    } catch (error: any) {
-      return { error: error.message };
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -109,13 +96,5 @@ export class AuthRepository {
     }
   }
 
-  public async get():Promise<any>{
-    try{
-      const auths = await AuthModel.find();
-      return auths
-    }catch(error){
-      throw error
-    }
-  }
 
 }

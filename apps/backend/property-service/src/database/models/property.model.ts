@@ -2,14 +2,11 @@ import { Schema, model } from "mongoose";
 import { Property, LocalizedContent } from "@/src/utils/types/indext";
 
 // ==================================================================
-
 // Define the PropertyDocument interface that includes timestamps
 interface PropertyDocument {
   createdAt: Date;
   updatedAt: Date;
 }
-
-
 const LocalizedContentSchema = new Schema<LocalizedContent>({
   content: { type: String },
   language: { type: String },
@@ -17,6 +14,7 @@ const LocalizedContentSchema = new Schema<LocalizedContent>({
 
 const PropertySchema = new Schema<Property>(
   {
+
     title: [LocalizedContentSchema],
     description: [LocalizedContentSchema],
     thumbnail: { type: String, required: true },
@@ -26,6 +24,7 @@ const PropertySchema = new Schema<Property>(
     price: { type: Number },
     detail: { type: Schema.Types.Mixed }, // Flexible key-value pairs
     status: { type: Boolean, default: true },
+    
   },
   { timestamps: true },
 );

@@ -1,4 +1,4 @@
-import { Controller, Route, Post, Body, Tags, Request, Get } from "tsoa";
+import { Controller, Route, Post, Body, Tags, Request } from "tsoa";
 import { Request as ExRequest } from "express";
 import {
   SignUpBody,
@@ -69,12 +69,5 @@ export class ProductController extends Controller {
     }
   }
 
-  @Get("/auth/informations")
-  public async getAllAuth() {
-    try {
-      return this.authService.getAuth();
-    } catch (error) {
-      throw error;
-    }
-  }
+
 }

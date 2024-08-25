@@ -10,10 +10,16 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import * as crypto from "crypto";
 import configs from "../config";
+import {
+  BadRequestError,
+  InternalServerError,
+  NotFoundError,
+} from "../utils/error/customErrors";
+
+// =====================================================
 
 export class CognitoService {
   private cognitoClient: CognitoIdentityProviderClient;
-
   constructor() {
     this.cognitoClient = new CognitoIdentityProviderClient({
       region: configs.awsRegion,
@@ -35,7 +41,6 @@ export class CognitoService {
       phoneNumber?: string;
       email?: string;
       "custom:roles"?: string;
-      "custom:group"?: string;
     },
   ): Promise<any> {
     const secretHash = this.generateSecretHash(username);
@@ -67,12 +72,7 @@ export class CognitoService {
       });
     }
 
-    if (attributes["custom:group"]) {
-      userAttributes.push({
-        Name: "custom:group",
-        Value: attributes["custom:group"],
-      });
-    }
+   
 
     const command = new SignUpCommand({
       ClientId: configs.cognitoAppCientId,
@@ -90,7 +90,7 @@ export class CognitoService {
         userSub: response.UserSub,
       };
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 
@@ -105,18 +105,26 @@ export class CognitoService {
 
     try {
       await this.cognitoClient.send(confirmCommand);
-
       const getUserCommand = new AdminGetUserCommand({
         UserPoolId: configs.userPoolId,
         Username: username,
       });
 
       const userResponse = await this.cognitoClient.send(getUserCommand);
+      if (!userResponse) {
+        throw new NotFoundError(`User with username ${username} not found.`);
+      }
       const userAttributes = userResponse.UserAttributes || [];
 
       const roleAttribute = userAttributes.find(
         (attr) => attr.Name === "custom:roles",
       );
+      if (!roleAttribute || !roleAttribute.Value) {
+        // If the "custom:roles" attribute is not found or has no value, throw an error
+        throw new BadRequestError(
+          `Role attribute "custom:roles" is missing or undefined for user ${username}.`,
+        );
+      }
       const role = roleAttribute ? roleAttribute.Value : "user";
 
       const groupName = role === "admin" ? "admin" : "user";
@@ -125,18 +133,32 @@ export class CognitoService {
         Username: username,
         GroupName: groupName,
       });
+      if (!addToGroupCommand) {
+        throw new InternalServerError(
+          `Failed to add user ${username} to group ${groupName}.`,
+        );
+      }
 
       await this.cognitoClient.send(addToGroupCommand);
-
       return { message: "User verified and added to group successfully." };
     } catch (error: any) {
-      throw new Error(`Failed to verify user and add to group: ${error.message}`);
+      if (
+        error instanceof InternalServerError ||
+        error instanceof NotFoundError
+      ) {
+        // Re-throw known (inspectable) errors
+        throw error;
+      } else {
+        // Handle uninspectable (unexpected) errors and include original error message and status
+        throw new InternalServerError(
+          `An unexpected error occurred: ${error.message}`,
+        );
+      }
     }
   }
 
   public async signInUser(username: string, password: string): Promise<any> {
     const secretHash = this.generateSecretHash(username);
-
     const command = new InitiateAuthCommand({
       ClientId: configs.cognitoAppCientId,
       AuthFlow: "USER_PASSWORD_AUTH",
@@ -149,22 +171,25 @@ export class CognitoService {
 
     try {
       const response = await this.cognitoClient.send(command);
+      // Check if the response and AuthenticationResult are valid
+      if (!response || !response.AuthenticationResult) {
+        throw new InternalServerError(
+          "Authentication result is missing from the response.",
+        );
+      }
       const authResult = response.AuthenticationResult;
-
       return {
         message: "Sign-in successful!",
         authResult,
       };
     } catch (error: any) {
-      if (error.name === "NotAuthorizedException") {
-        throw new Error("The username or password is incorrect.");
-      } else if (error.name === "UserNotConfirmedException") {
-        throw new Error("The user has not been confirmed.");
-      } else if (error.name === "PasswordResetRequiredException") {
-        throw new Error("A password reset is required.");
-      } else {
-        throw new Error(error.message);
-      }
+     if(error instanceof InternalServerError){
+      throw error;
+     }else{
+      throw new InternalServerError(
+        `An unexpected error occurred: ${error.message}`,
+      );
+     }
     }
   }
 
@@ -210,5 +235,3 @@ export class CognitoService {
     }
   }
 }
-
-

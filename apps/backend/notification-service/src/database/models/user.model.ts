@@ -19,12 +19,10 @@ const UserSchema = new Schema<User>(
     age: { type: Number },
     gender: { type: String },
     dateOfBirth: { type: String },
-    profile: { type: [String] },
-    background: { type: [String] },
-    favorite: { type: [String] },
-    role: { type: String, default: "user"}
+    profile: { type: Array },
+    background: { type: Array },
+    favorite: { type: Array },
   },
-
   { timestamps: true },
 );
 

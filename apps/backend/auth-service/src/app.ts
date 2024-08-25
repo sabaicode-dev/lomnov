@@ -34,7 +34,7 @@ app.use(express.json())  // Help to get the json from request body
 // ========================
 // Middleware to block unauthorized direct access
 // ========================
-//   app.use(blockDirectAccess);
+// app.use(blockDirectAccess);
 
 // ========================
 // Request Response logger

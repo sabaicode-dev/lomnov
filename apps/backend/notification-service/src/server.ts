@@ -8,7 +8,7 @@ const startServer = async () => {
   await db.connect();
   // Initialize and start your Express server here
   app.listen(configs.port, () => {
-    console.log(`User service running on Port: ${configs.port}`)
+    console.log(`Notification service running on Port: ${configs.port}`)
   })
 };
 

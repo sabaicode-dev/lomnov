@@ -57,11 +57,4 @@ export class AuthService {
     }
   }
 
-  public async getAuth () {
-    try{
-      return await this.authRepository.get()
-    }catch(error){
-      throw error;
-    }
-  }
 }
