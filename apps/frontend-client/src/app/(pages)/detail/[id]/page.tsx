@@ -4,8 +4,7 @@ import PropertyTypeInfo from "../../../../components/organisms/property-type-inf
 import PropertyDescription from "../../../../components/organisms/property-description/PropertyDescription";
 import Map from "../../../../components/molecules/map/Map";
 import RecommendedProperties from "@/components/molecules/RecommendedProperties/RecommendedProperties";
-import { FacebookF, Telegram, TellPhone, Share } from "@/icons";
-import Link from "next/link";
+import UserListed from "@/components/organisms/user-listed-property/UserListed";
 // Fetch property data
 async function fetchProperty(id: string): Promise<RealEstateItem> {
   const res = await fetch(
@@ -69,7 +68,7 @@ const page = async ({ params }: { params: { id: string } }) => {
             {/* Property description */}
             <PropertyDescription property={property} />
             {/* User Listed */}
-            <div className="w-[40%] h-[50%] mx-auto p-[10px]">
+            {/* <div className="w-[40%] h-[50%] mx-auto p-[10px]">
               <div className="w-full h-full border border-neutral p-0 lg:p-[10px] rounded-[10px] ">
                 <div className="flex flex-wrap-reverse p-[10px] lg:p-0  items-center justify-between">
                   <div className="flex mt-[6px] lg:mt-0  flex-col w-full lg:w-auto flex-grow font-helvetica text-helvetica-paragraph text-charcoal">
@@ -114,13 +113,24 @@ const page = async ({ params }: { params: { id: string } }) => {
                     <TellPhone props="w-[20px] h-[20px] mr-[5px] text-olive-green" />
                     Call Now
                   </button>
-                  <button className="flex items-center  font-helvetica text-helvetica-paragraph text-center text-charcoal">
+                  <button
+                    className="flex items-center font-helvetica text-helvetica-paragraph text-center text-charcoal"
+                    onClick={() =>
+                      window.open(
+                        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                          window.location.href,
+                        )}`,
+                        "_blank",
+                      )
+                    }
+                  >
                     <Share props="w-[20px] h-[20px] mr-[5px] text-olive-green" />
                     Share
                   </button>
                 </div>
               </div>
-            </div>
+            </div> */}
+            <UserListed property={property} />
           </div>
           <Map property={property.mapurl} />
         </div>
