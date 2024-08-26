@@ -1,3 +1,4 @@
+import * as crypto from "crypto";
 import {
   CognitoIdentityProviderClient,
   SignUpCommand,
@@ -8,8 +9,7 @@ import {
   AdminGetUserCommand,
   AdminAddUserToGroupCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
-import * as crypto from "crypto";
-import configs from "../config";
+import configs from "@/src/config";
 import {
   BadRequestError,
   InternalServerError,

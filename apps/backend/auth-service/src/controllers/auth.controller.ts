@@ -1,5 +1,6 @@
 import { Controller, Route, Post, Body, Tags, Request } from "tsoa";
 import { Request as ExRequest } from "express";
+import { AuthService } from "@/src/services/auth.service";
 import {
   SignUpRequest,
   SignInRequest,
@@ -12,7 +13,6 @@ import {
   InitiatePasswordResetResponse,
   ConfirmPasswordResetResponse,
 } from "@/src/utils/types/indext";
-import { AuthService } from "../services/auth.service";
 // =========================================================================
 
 @Tags("Handle By hand")

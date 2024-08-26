@@ -1,5 +1,5 @@
+import { Request as ExRequest } from "express";
 import { CognitoService } from "@/src/services/cognito.service";
-
 import {
   ConfirmPasswordResetRequest,
   ConfirmPasswordResetResponse,
@@ -12,7 +12,6 @@ import {
   VerifyRequest,
   VerifyUserResponse,
 } from "@/src/utils/types/indext";
-import { Request as ExRequest } from "express";
 // ====================================================================
 
 export class AuthRepository {

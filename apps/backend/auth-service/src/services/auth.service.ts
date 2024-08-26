@@ -1,3 +1,4 @@
+import { Request as ExRequest } from "express";
 import { AuthRepository } from "@/src/database/repositories/auth.repository";
 import {
   ConfirmPasswordResetRequest,
@@ -10,8 +11,7 @@ import {
   SignUpUserResponse,
   VerifyRequest,
   VerifyUserResponse,
-} from "../utils/types/indext";
-import { Request as ExRequest } from "express";
+} from "@/src/utils/types/indext";
 export class AuthService {
   private authRepository: AuthRepository;
   constructor() {

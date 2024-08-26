@@ -11,6 +11,7 @@ type Config = {
   redirect_uri: string;
   awsRegion: string;
   userPoolId: string;
+  redirectToFrontend: string
 };
 
 // Function to load and validate environment variables
@@ -31,6 +32,7 @@ function loadConfig(): Config {
     COGNITO_APP_DOMAIN: Joi.string().required(),
     AWSREGION: Joi.string().required(),
     USER_POOL_ID: Joi.string().required(),
+    REDIRECT_TO_FRONTEND: Joi.string().required()
   })
     .unknown()
     .required();
@@ -51,6 +53,7 @@ function loadConfig(): Config {
     redirect_uri: envVars.REDIRECT_URI,
     awsRegion: envVars.AWSREGION,
     userPoolId: envVars.USER_POOL_ID,
+    redirectToFrontend: envVars.REDIRECT_TO_FRONTEND
   };
 }
 
