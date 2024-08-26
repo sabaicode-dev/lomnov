@@ -7,19 +7,18 @@ import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import ItemCard from "../item-card/ItemCard";
 import { ArrowDown, ArrowUp } from "@/icons";
 
+// Optimized function to fetch filtered properties directly from the API
 async function fetchRelatedProperties(
   category: string,
   address: string,
 ): Promise<RealEstateItem[]> {
-  const res = await fetch("https://lomnov.onrender.com/api/v1/properties");
-  const allProperties = await res.json();
-
-  const relatedProperties = allProperties.filter(
-    (property: RealEstateItem) =>
-      property.category === category && property.address === address,
+  const res = await fetch(
+    `https://lomnov.onrender.com/api/v1/properties?category=${category}&address=${address}`,
   );
-
-  return relatedProperties;
+  if (!res.ok) {
+    throw new Error("Failed to fetch related properties");
+  }
+  return res.json();
 }
 
 const RecommendedProperties = ({
@@ -37,29 +36,21 @@ const RecommendedProperties = ({
 
   useEffect(() => {
     const loadProperties = async () => {
-      const properties = await fetchRelatedProperties(category, address);
-      setRelatedProperties(properties);
+      try {
+        const properties = await fetchRelatedProperties(category, address);
+        setRelatedProperties(properties);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     loadProperties();
   }, [category, address]);
 
-  const animationProps = useSpring({
-    opacity: 1,
-    transform: "translateY(0px)",
-    from: { opacity: 0, transform: "translateY(20px)" },
-    reset: true,
-  });
-
   const { ref, inView } = useInView({
     triggerOnce: false,
     threshold: 0.1,
   });
-
-  // const fadeIn = useSpring({
-  //   opacity: inView ? 1 : 0,
-  //   transform: inView ? "translateY(0)" : "translateY(50px)",
-  // });
 
   const transitions = useTransition(relatedProperties.slice(0, visibleItems), {
     keys: (item) => item.id,
@@ -67,6 +58,12 @@ const RecommendedProperties = ({
     enter: { opacity: 1, transform: "translateY(0px)" },
     leave: { opacity: 0, transform: "translateY(20px)" },
     config: { tension: 300, friction: 30 },
+  });
+
+  const containerSpring = useSpring({
+    opacity: inView ? 1 : 0,
+    transform: inView ? "translateY(0)" : "translateY(20px)",
+    transition: "opacity 0.3s, transform 0.3s",
   });
 
   const handleLoadMore = () => {
@@ -83,11 +80,7 @@ const RecommendedProperties = ({
     <animated.div
       ref={ref}
       className="mt-10 max-w-[1300px] mx-auto"
-      style={{
-        opacity: inView ? 1 : 0,
-        transform: inView ? "translateY(0)" : "translateY(20px)",
-        transition: "opacity 0.6s, transform 0.6s",
-      }}
+      style={containerSpring}
     >
       <h2 className="text-2xl mb-4 font-helvetica font-bold text-charcoal">
         Recommended Properties
