@@ -11,13 +11,22 @@ import type { Request as ExRequest, Response as ExResponse, RequestHandler, Rout
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-    "IItem": {
+    "User": {
         "dataType": "refObject",
         "properties": {
-            "id": {"dataType":"double","required":true},
-            "name": {"dataType":"string","required":true},
-            "email": {"dataType":"string","required":true},
-            "password": {"dataType":"string","required":true},
+            "cognitoSub": {"dataType":"string","required":true},
+            "firstName": {"dataType":"string","required":true},
+            "lastName": {"dataType":"string","required":true},
+            "userName": {"dataType":"string","required":true},
+            "phoneNumber": {"dataType":"string"},
+            "address": {"dataType":"string"},
+            "age": {"dataType":"double"},
+            "gender": {"dataType":"string"},
+            "dateOfBirth": {"dataType":"string"},
+            "profile": {"dataType":"array","array":{"dataType":"string"}},
+            "background": {"dataType":"array","array":{"dataType":"string"}},
+            "favorite": {"dataType":"array","array":{"dataType":"string"}},
+            "role": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -39,12 +48,13 @@ export function RegisterRoutes(app: Router) {
 
 
     
-        app.get('/api/v1/users',
+        app.post('/api/v1/users',
             ...(fetchMiddlewares<RequestHandler>(ProductController)),
-            ...(fetchMiddlewares<RequestHandler>(ProductController.prototype.getAllProducts)),
+            ...(fetchMiddlewares<RequestHandler>(ProductController.prototype.createUser)),
 
-            async function ProductController_getAllProducts(request: ExRequest, response: ExResponse, next: any) {
+            async function ProductController_createUser(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"User"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -56,65 +66,7 @@ export function RegisterRoutes(app: Router) {
                 const controller = new ProductController();
 
               await templateService.apiHandler({
-                methodName: 'getAllProducts',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/users/1',
-            ...(fetchMiddlewares<RequestHandler>(ProductController)),
-            ...(fetchMiddlewares<RequestHandler>(ProductController.prototype.getOne)),
-
-            async function ProductController_getOne(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new ProductController();
-
-              await templateService.apiHandler({
-                methodName: 'getOne',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/products',
-            ...(fetchMiddlewares<RequestHandler>(ProductController)),
-            ...(fetchMiddlewares<RequestHandler>(ProductController.prototype.getProduct)),
-
-            async function ProductController_getProduct(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new ProductController();
-
-              await templateService.apiHandler({
-                methodName: 'getProduct',
+                methodName: 'createUser',
                 controller,
                 response,
                 next,

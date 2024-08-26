@@ -2,9 +2,9 @@
 export interface User{
 
   cognitoSub: string;
-  firstName?: string;
-  lastName?: string;
-  userName?: string;
+  firstName: string;
+  lastName: string;
+  userName: string;
   phoneNumber?: string;
   address?: string;
   age?: number;

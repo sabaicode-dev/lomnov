@@ -1,7 +1,5 @@
 import app from "@/src/app"
 import configs from "@/src/config";
-
-
 import Database from "@/src/database";
 const startServer = async () => {
   const db = Database.getInstance();

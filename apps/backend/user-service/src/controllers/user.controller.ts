@@ -1,26 +1,18 @@
-import { Controller, Route, Get } from "tsoa";
-export interface IItem {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-}
+import { Controller, Route, Post, Body } from "tsoa";
+import { User } from "../utils/types/indext";
+import { UserModel } from "../database/models/user.model";
 
 @Route("api/v1")
 export class ProductController extends Controller {
-    @Get("/users")
-    public getAllProducts(): Promise<IItem[]> {
-        return Promise.resolve([{ id: 1, name: "Cherrie", email: "seyhaoeurn920@gmail.com", password: "Seyha*9999" }]);
+  @Post("/users")
+  public async createUser(@Body() requestBody: User): Promise<User> {
+    const { cognitoSub, firstName, lastName, userName } = requestBody;
+    const data = { cognitoSub, firstName, lastName, userName };
+    try {
+      const response = await UserModel.create(data);
+      return response;
+    } catch (error) {
+      throw error;
     }
-
-    @Get("/users/1")
-    public getOne(): Promise<IItem[]> {
-        return Promise.resolve([{ id: 1, name: "Cherrie", email: "seyhaoeurn@gmail.com", password: "Seyha*9999" }]);
-    }
-
-    @Get("/products")
-    public getProduct(): Promise<IItem[]> {
-        return Promise.resolve([{ id: 1, name: "Cherrie", email: "seyhaoeurn@gmail.com", password: "Seyha*9999" }]);
-    }
-    
+  }
 }

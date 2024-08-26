@@ -7,27 +7,64 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"IItem": {
+			"User": {
 				"properties": {
-					"id": {
+					"cognitoSub": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"userName": {
+						"type": "string"
+					},
+					"phoneNumber": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"age": {
 						"type": "number",
 						"format": "double"
 					},
-					"name": {
+					"gender": {
 						"type": "string"
 					},
-					"email": {
+					"dateOfBirth": {
 						"type": "string"
 					},
-					"password": {
+					"profile": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"background": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"favorite": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"role": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"id",
-					"name",
-					"email",
-					"password"
+					"cognitoSub",
+					"firstName",
+					"lastName",
+					"userName",
+					"role"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -45,69 +82,32 @@
 	},
 	"paths": {
 		"/api/v1/users": {
-			"get": {
-				"operationId": "GetAllProducts",
+			"post": {
+				"operationId": "CreateUser",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/IItem"
-									},
-									"type": "array"
+									"$ref": "#/components/schemas/User"
 								}
 							}
 						}
 					}
 				},
 				"security": [],
-				"parameters": []
-			}
-		},
-		"/api/v1/users/1": {
-			"get": {
-				"operationId": "GetOne",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/IItem"
-									},
-									"type": "array"
-								}
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/User"
 							}
 						}
 					}
-				},
-				"security": [],
-				"parameters": []
-			}
-		},
-		"/api/v1/products": {
-			"get": {
-				"operationId": "GetProduct",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/IItem"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": []
+				}
 			}
 		}
 	},
