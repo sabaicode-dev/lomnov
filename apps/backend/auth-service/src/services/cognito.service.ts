@@ -16,6 +16,19 @@ import {
   NotFoundError,
   ValidationError,
 } from "@/src/utils/error/customErrors";
+import {
+  ConfirmPasswordResetRequest,
+  ConfirmPasswordResetResponse,
+  InitiatePasswordResetRequest,
+  InitiatePasswordResetResponse,
+  SignInRequest,
+  SignInUserResponse,
+  // SignInUserResponse,
+  SignUpUserRequest,
+  SignUpUserResponse,
+  VerifyRequest,
+  VerifyUserResponse,
+} from "@/src/utils/types/indext";
 // =====================================================
 
 export class CognitoService {
@@ -34,41 +47,34 @@ export class CognitoService {
   }
 
   public async signUpUser(
-    username: string,
-    password: string,
-    attributes: {
-      name: string;
-      phoneNumber?: string;
-      email?: string;
-      "custom:roles"?: string;
-    },
-  ): Promise<any> {
-    const secretHash = this.generateSecretHash(username);
+    request: SignUpUserRequest,
+  ): Promise<SignUpUserResponse> {
+    const secretHash = this.generateSecretHash(request.username);
     const userAttributes = [
       {
         Name: "name",
-        Value: attributes.name,
+        Value: request.attributes.name,
       },
     ];
 
-    if (attributes.phoneNumber) {
+    if (request.attributes.phoneNumber) {
       userAttributes.push({
         Name: "phone_number",
-        Value: attributes.phoneNumber,
+        Value: request.attributes.phoneNumber,
       });
     }
 
-    if (attributes.email) {
+    if (request.attributes.email) {
       userAttributes.push({
         Name: "email",
-        Value: attributes.email,
+        Value: request.attributes.email,
       });
     }
 
-    if (attributes["custom:roles"]) {
+    if (request.attributes["custom:roles"]) {
       userAttributes.push({
         Name: "custom:roles",
-        Value: attributes["custom:roles"],
+        Value: request.attributes["custom:roles"],
       });
     }
 
@@ -82,8 +88,8 @@ export class CognitoService {
       }
       const command = new SignUpCommand({
         ClientId: configs.cognitoAppCientId,
-        Username: username,
-        Password: password,
+        Username: request.username,
+        Password: request.password,
         SecretHash: secretHash,
         UserAttributes: userAttributes,
       });
@@ -116,12 +122,14 @@ export class CognitoService {
     }
   }
 
-  public async verifyUser(username: string, code: string): Promise<any> {
-    const secretHash = this.generateSecretHash(username);
+  public async verifyUser(
+    requestBody: VerifyRequest,
+  ): Promise<VerifyUserResponse> {
+    const secretHash = this.generateSecretHash(requestBody.username);
     const confirmCommand = new ConfirmSignUpCommand({
       ClientId: configs.cognitoAppCientId,
-      Username: username,
-      ConfirmationCode: code,
+      Username: requestBody.username,
+      ConfirmationCode: requestBody.code,
       SecretHash: secretHash,
     });
 
@@ -129,12 +137,14 @@ export class CognitoService {
       await this.cognitoClient.send(confirmCommand);
       const getUserCommand = new AdminGetUserCommand({
         UserPoolId: configs.userPoolId,
-        Username: username,
+        Username: requestBody.username,
       });
 
       const userResponse = await this.cognitoClient.send(getUserCommand);
       if (!userResponse) {
-        throw new NotFoundError(`User with username ${username} not found.`);
+        throw new NotFoundError(
+          `User with username ${requestBody.username} not found.`,
+        );
       }
       const userAttributes = userResponse.UserAttributes || [];
 
@@ -144,7 +154,7 @@ export class CognitoService {
       if (!roleAttribute || !roleAttribute.Value) {
         // If the "custom:roles" attribute is not found or has no value, throw an error
         throw new BadRequestError(
-          `Role attribute "custom:roles" is missing or undefined for user ${username}.`,
+          `Role attribute "custom:roles" is missing or undefined for user ${requestBody.username}.`,
         );
       }
       const role = roleAttribute ? roleAttribute.Value : "user";
@@ -152,12 +162,12 @@ export class CognitoService {
       const groupName = role === "admin" ? "admin" : "user";
       const addToGroupCommand = new AdminAddUserToGroupCommand({
         UserPoolId: configs.userPoolId,
-        Username: username,
+        Username: requestBody.username,
         GroupName: groupName,
       });
       if (!addToGroupCommand) {
         throw new InternalServerError(
-          `Failed to add user ${username} to group ${groupName}.`,
+          `Failed to add user ${requestBody.username} to group ${groupName}.`,
         );
       }
 
@@ -180,18 +190,20 @@ export class CognitoService {
     }
   }
 
-  public async signInUser(username: string, password: string): Promise<any> {
+  public async signInUser(
+    requestBody: SignInRequest,
+  ): Promise<SignInUserResponse> {
     // Input validation
-    if (!username || !password) {
+    if (!requestBody.username || !requestBody.password) {
       throw new ValidationError("Username, and password are required.");
     }
-    const secretHash = this.generateSecretHash(username);
+    const secretHash = this.generateSecretHash(requestBody.username);
     const command = new InitiateAuthCommand({
       ClientId: configs.cognitoAppCientId,
       AuthFlow: "USER_PASSWORD_AUTH",
       AuthParameters: {
-        USERNAME: username,
-        PASSWORD: password,
+        USERNAME: requestBody.username,
+        PASSWORD: requestBody.password,
         SECRET_HASH: secretHash,
       },
     });
@@ -204,10 +216,9 @@ export class CognitoService {
           "Authentication result is missing from the response.",
         );
       }
-      const authResult = response.AuthenticationResult;
+      response.AuthenticationResult;
       return {
         message: "Sign-in successful!",
-        authResult,
       };
     } catch (error: any) {
       if (error instanceof InternalServerError) {
@@ -220,52 +231,52 @@ export class CognitoService {
     }
   }
 
-  public async initiatePasswordReset(username: string): Promise<any> {
+  public async initiatePasswordReset(
+    requestBody: InitiatePasswordResetRequest,
+  ): Promise<InitiatePasswordResetResponse> {
     // Input validation
-    if (!username) throw new ValidationError("Username is required.");
-    const secretHash = this.generateSecretHash(username);
-
+    if (!requestBody.username)
+      throw new ValidationError("Username is required.");
+    const secretHash = this.generateSecretHash(requestBody.username);
     const command = new ForgotPasswordCommand({
       ClientId: configs.cognitoAppCientId,
-      Username: username,
+      Username: requestBody.username,
       SecretHash: secretHash,
     });
 
     try {
       await this.cognitoClient.send(command);
-
       return {
-        message:
-          `Password reset initiated. Please check your email or phone for the code. (${username})`,
+        message: `Password reset initiated. Please check your email or phone for the code. (${requestBody.username})`,
       };
     } catch (error: any) {
       if (error instanceof ValidationError) {
         throw error;
       } else {
-        throw new InternalServerError(
-          ` ${error.message}`,
-        );
+        throw new InternalServerError(` ${error.message}`);
       }
     }
   }
 
   public async confirmPasswordReset(
-    username: string,
-    newPassword: string,
-    confirmationCode: string,
-  ): Promise<any> {
+    requestBody: ConfirmPasswordResetRequest,
+  ): Promise<ConfirmPasswordResetResponse> {
     // Input validation
-    if (!username || !newPassword || !confirmationCode) {
+    if (
+      !requestBody.username ||
+      !requestBody.newPassword ||
+      !requestBody.confirmationCode
+    ) {
       throw new ValidationError(
         "Username, new password, and confirmation code are required.",
       );
     }
-    const secretHash = this.generateSecretHash(username);
+    const secretHash = this.generateSecretHash(requestBody.username);
     const command = new ConfirmForgotPasswordCommand({
       ClientId: configs.cognitoAppCientId,
-      Username: username,
-      Password: newPassword,
-      ConfirmationCode: confirmationCode,
+      Username: requestBody.username,
+      Password: requestBody.newPassword,
+      ConfirmationCode: requestBody.confirmationCode,
       SecretHash: secretHash,
     });
     if (!command) {

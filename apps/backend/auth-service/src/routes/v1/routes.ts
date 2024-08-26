@@ -13,7 +13,7 @@ import type { Request as ExRequest, Response as ExResponse, RequestHandler, Rout
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-    "SignUpBody": {
+    "SignUpRequest": {
         "dataType": "refObject",
         "properties": {
             "username": {"dataType":"string","required":true},
@@ -24,7 +24,7 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "VerifyBody": {
+    "VerifyRequest": {
         "dataType": "refObject",
         "properties": {
             "username": {"dataType":"string","required":true},
@@ -33,7 +33,7 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "SignInBody": {
+    "SignInRequest": {
         "dataType": "refObject",
         "properties": {
             "username": {"dataType":"string","required":true},
@@ -177,7 +177,7 @@ export function RegisterRoutes(app: Router) {
 
             async function ProductController_signup(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    body: {"in":"body","name":"body","required":true,"ref":"SignUpBody"},
+                    body: {"in":"body","name":"body","required":true,"ref":"SignUpRequest"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -207,7 +207,7 @@ export function RegisterRoutes(app: Router) {
 
             async function ProductController_verify(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    body: {"in":"body","name":"body","required":true,"ref":"VerifyBody"},
+                    body: {"in":"body","name":"body","required":true,"ref":"VerifyRequest"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -237,7 +237,7 @@ export function RegisterRoutes(app: Router) {
 
             async function ProductController_signIn(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    body: {"in":"body","name":"body","required":true,"ref":"SignInBody"},
+                    body: {"in":"body","name":"body","required":true,"ref":"SignInRequest"},
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
 

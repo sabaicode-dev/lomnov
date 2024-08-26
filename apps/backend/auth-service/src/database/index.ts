@@ -15,6 +15,7 @@
 
 import mongoose from "mongoose";
 import configs from "../config";
+import { InternalServerError } from "../utils/error/customErrors";
 class Database {
   private static instance: Database;
   private connectionString: string;
@@ -34,8 +35,8 @@ class Database {
     try {
       await mongoose.connect(this.connectionString);
       console.log("MongoDB Connected");
-    } catch (error) {
-      console.error("MongoDB Connection Error:", error);
+    } catch (error: any) {
+      throw new InternalServerError(error.message)
       process.exit(1);
     }
   }

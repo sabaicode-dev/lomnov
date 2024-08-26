@@ -1,11 +1,16 @@
 import { Controller, Route, Post, Body, Tags, Request } from "tsoa";
 import { Request as ExRequest } from "express";
 import {
-  SignUpBody,
-  SignInBody,
+  SignUpRequest,
+  SignInRequest,
   InitiatePasswordResetRequest,
   ConfirmPasswordResetRequest,
-  VerifyBody,
+  VerifyRequest,
+  VerifyUserResponse,
+  SignUpUserResponse,
+  SignInUserResponse,
+  InitiatePasswordResetResponse,
+  ConfirmPasswordResetResponse,
 } from "@/src/utils/types/indext";
 import { AuthService } from "../services/auth.service";
 // =========================================================================
@@ -20,18 +25,22 @@ export class ProductController extends Controller {
   }
 
   @Post("/auth/signup")
-  public async signup(@Body() body: SignUpBody): Promise<any> {
+  public async signup(
+    @Body() requestBody: SignUpRequest,
+  ): Promise<SignUpUserResponse> {
     try {
-      return await this.authService.authSignUp(body);
+      return await this.authService.authSignUp(requestBody);
     } catch (error) {
       throw error;
     }
   }
 
   @Post("/auth/verify")
-  public async verify(@Body() body: VerifyBody): Promise<any> {
+  public async verify(
+    @Body() requestBody: VerifyRequest,
+  ): Promise<VerifyUserResponse> {
     try {
-      return await this.authService.authVerify(body);
+      return await this.authService.authVerify(requestBody);
     } catch (error) {
       throw error;
     }
@@ -39,11 +48,11 @@ export class ProductController extends Controller {
 
   @Post("/auth/signin")
   public async signIn(
-    @Body() body: SignInBody,
+    @Body() requestBody: SignInRequest,
     @Request() request: ExRequest,
-  ): Promise<any> {
+  ): Promise<SignInUserResponse> {
     try {
-      return await this.authService.authSignin(body, request);
+      return await this.authService.authSignin(requestBody, request);
     } catch (error) {
       throw error;
     }
@@ -51,23 +60,23 @@ export class ProductController extends Controller {
 
   @Post("/auth/password-reset")
   public async initiatePasswordReset(
-    @Body() body: InitiatePasswordResetRequest,
-  ) {
+    @Body() requestBody: InitiatePasswordResetRequest,
+  ): Promise<InitiatePasswordResetResponse> {
     try {
-      return await this.authService.authPasswordReset(body);
+      return await this.authService.authPasswordReset(requestBody);
     } catch (error) {
       throw error;
     }
   }
 
   @Post("/auth/confirm-password")
-  public async confirmPasswordReset(@Body() body: ConfirmPasswordResetRequest) {
+  public async confirmPasswordReset(
+    @Body() requestBody: ConfirmPasswordResetRequest,
+  ): Promise<ConfirmPasswordResetResponse> {
     try {
-      return await this.authService.authConfirmPassword(body);
+      return await this.authService.authConfirmPassword(requestBody);
     } catch (error) {
       throw error;
     }
   }
-
-
 }

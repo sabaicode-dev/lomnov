@@ -1,10 +1,15 @@
 import { AuthRepository } from "@/src/database/repositories/auth.repository";
 import {
   ConfirmPasswordResetRequest,
+  ConfirmPasswordResetResponse,
   InitiatePasswordResetRequest,
-  SignInBody,
-  SignUpBody,
-  VerifyBody,
+  InitiatePasswordResetResponse,
+  SignInRequest,
+  SignInUserResponse,
+  SignUpRequest,
+  SignUpUserResponse,
+  VerifyRequest,
+  VerifyUserResponse,
 } from "../utils/types/indext";
 import { Request as ExRequest } from "express";
 export class AuthService {
@@ -13,48 +18,54 @@ export class AuthService {
     this.authRepository = new AuthRepository();
   }
 
-  public async authSignUp(body: SignUpBody): Promise<any> {
+  public async authSignUp(
+    requestBody: SignUpRequest,
+  ): Promise<SignUpUserResponse> {
     try {
-      return await this.authRepository.signUp(body);
+      return await this.authRepository.signUp(requestBody);
     } catch (error) {
       throw error;
     }
   }
 
-  public async authVerify(body: VerifyBody): Promise<any> {
+  public async authVerify(
+    requestBody: VerifyRequest,
+  ): Promise<VerifyUserResponse> {
     try {
-      return await this.authRepository.verify(body);
+      return await this.authRepository.verify(requestBody);
     } catch (error) {
       throw error;
     }
   }
 
-  public async authSignin(body: SignInBody, request: ExRequest): Promise<any> {
+  public async authSignin(
+    requestBody: SignInRequest,
+    request: ExRequest,
+  ): Promise<SignInUserResponse> {
     try {
-      return await this.authRepository.signIn(body, request);
+      return await this.authRepository.signIn(requestBody, request);
     } catch (error) {
       throw error;
     }
   }
 
   public async authPasswordReset(
-    body: InitiatePasswordResetRequest,
-  ): Promise<any> {
+    requestBody: InitiatePasswordResetRequest,
+  ): Promise<InitiatePasswordResetResponse> {
     try {
-      return await this.authRepository.passwordReset(body);
+      return await this.authRepository.passwordReset(requestBody);
     } catch (error) {
       throw error;
     }
   }
 
   public async authConfirmPassword(
-    body: ConfirmPasswordResetRequest,
-  ): Promise<any> {
+    requestBody: ConfirmPasswordResetRequest,
+  ): Promise<ConfirmPasswordResetResponse> {
     try {
-      return await this.authRepository.confirmPassword(body);
+      return await this.authRepository.confirmPassword(requestBody);
     } catch (error) {
       throw error;
     }
   }
-
 }

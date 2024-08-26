@@ -2,10 +2,15 @@ import { CognitoService } from "@/src/services/cognito.service";
 
 import {
   ConfirmPasswordResetRequest,
+  ConfirmPasswordResetResponse,
   InitiatePasswordResetRequest,
-  SignInBody,
-  SignUpBody,
-  VerifyBody,
+  InitiatePasswordResetResponse,
+  SignInRequest,
+  SignInUserResponse,
+  SignUpRequest,
+  SignUpUserResponse,
+  VerifyRequest,
+  VerifyUserResponse,
 } from "@/src/utils/types/indext";
 import { Request as ExRequest } from "express";
 // ====================================================================
@@ -15,8 +20,8 @@ export class AuthRepository {
   constructor() {
     this.cognitoService = new CognitoService();
   }
-  public async signUp(body: SignUpBody): Promise<any> {
-    const { username, name, password, roles } = body;
+  public async signUp(requestBody: SignUpRequest): Promise<SignUpUserResponse> {
+    const { username, name, password, roles } = requestBody;
     const isPhoneNumber = username.startsWith("+");
     const attributes: {
       name: string;
@@ -33,15 +38,9 @@ export class AuthRepository {
     } else {
       attributes.email = username;
     }
-
+    const data = { username, password, attributes };
     try {
-      const response = await this.cognitoService.signUpUser(
-        username,
-        password,
-        attributes,
-      );
-
-
+      const response = await this.cognitoService.signUpUser(data);
 
       return response;
     } catch (error: any) {
@@ -49,20 +48,25 @@ export class AuthRepository {
     }
   }
 
-  public async verify(body: VerifyBody): Promise<any> {
-    const { username, code } = body;
+  public async verify(requestBody: VerifyRequest): Promise<VerifyUserResponse> {
+    const { username, code } = requestBody;
+    const data = { username, code };
     try {
-      const response = await this.cognitoService.verifyUser(username, code);
+      const response = await this.cognitoService.verifyUser(data);
       return response;
     } catch (error) {
       throw error;
     }
   }
 
-  public async signIn(body: SignInBody, request: ExRequest): Promise<any> {
-    const { username, password } = body;
+  public async signIn(
+    requestBody: SignInRequest,
+    request: ExRequest,
+  ): Promise<SignInUserResponse> {
+    const { username, password } = requestBody;
+    const data = { username, password };
     try {
-      const response = await this.cognitoService.signInUser(username, password);
+      const response = await this.cognitoService.signInUser(data);
       request.res?.cookie("accessToken", response.authResult?.AccessToken);
       request.res?.cookie("refreshToken", response.authResult?.RefreshToken);
       request.res?.cookie("idToken", response.authResult?.IdToken);
@@ -72,29 +76,27 @@ export class AuthRepository {
     }
   }
 
-  public async passwordReset(body: InitiatePasswordResetRequest): Promise<any> {
-    const { username } = body;
+  public async passwordReset(
+    requestBody: InitiatePasswordResetRequest,
+  ): Promise<InitiatePasswordResetResponse> {
+    const { username } = requestBody;
+    const data = { username };
     try {
-      return await this.cognitoService.initiatePasswordReset(username);
+      return await this.cognitoService.initiatePasswordReset(data);
     } catch (error) {
       throw error;
     }
   }
 
   public async confirmPassword(
-    body: ConfirmPasswordResetRequest,
-  ): Promise<any> {
-    const { username, newPassword, confirmationCode } = body;
+    requestBody: ConfirmPasswordResetRequest,
+  ): Promise<ConfirmPasswordResetResponse> {
+    const { username, newPassword, confirmationCode } = requestBody;
+    const data = { username, newPassword, confirmationCode };
     try {
-      return await this.cognitoService.confirmPasswordReset(
-        username,
-        newPassword,
-        confirmationCode,
-      );
+      return await this.cognitoService.confirmPasswordReset(data);
     } catch (error) {
       throw error;
     }
   }
-
-
 }
