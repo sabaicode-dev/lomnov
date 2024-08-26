@@ -2,10 +2,10 @@ import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import Image from "next/image";
 import PropertyTypeInfo from "../../../../components/organisms/property-type-info/PropertyTypeInfo";
 import PropertyDescription from "../../../../components/organisms/property-description/PropertyDescription";
-import ContactForm from "../../../../components/organisms/contact-form/ContactForm";
 import Map from "../../../../components/molecules/map/Map";
 import RecommendedProperties from "@/components/molecules/RecommendedProperties/RecommendedProperties";
-
+import { FacebookF, Telegram, TellPhone, Share } from "@/icons";
+import Link from "next/link";
 // Fetch property data
 async function fetchProperty(id: string): Promise<RealEstateItem> {
   const res = await fetch(
@@ -51,36 +51,6 @@ const page = async ({ params }: { params: { id: string } }) => {
                   <div className="grid grid-cols-3 lg:grid-cols-6 w-full items-center justify-center mx-auto gap-[10px] lg:gap-[20px] mr-[10px] lg:mr-[20px]">
                     <PropertyTypeInfo property={property} />
                   </div>
-                  {/* User Listing */}
-                  <div className="w-[15%]">
-                    <div className="text-center w-full lg:w-[90%] rounded-[10px]">
-                      <div className="block md:flex items-center justify-center">
-                        <div className="w-full items-center justify-center pb-[3px] sm:pb-0">
-                          <div className="flex items-center justify-center">
-                            <Image
-                              src="/mask-group@2x.png"
-                              alt="user"
-                              width={50}
-                              height={50}
-                              className="object-cover w-[40px] h-[40px] lg:w-[50px] lg:h-[50px]"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="w-full text-center pb-[5px] sm:pb-0">
-                          <div className="font-helvetica text-helvetica-caption md:text-helvetica-small lg:text-helvetica-paragraph text-charcoal">
-                            Listed by
-                          </div>
-                          <div className="font-helvetica uppercase text-helvetica-caption md:text-helvetica-small lg:text-helvetica-paragraph font-bold text-charcoal">
-                            {property.user}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mt-[10px] lg:mt-[5px]">
-                        <ContactForm propertyUser={property.user} />
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -95,7 +65,63 @@ const page = async ({ params }: { params: { id: string } }) => {
         </div>
 
         <div className="w-full mt-[200px] sm:mt-[190px] md:mt-[220px] lg:mt-[170px] xl:mt-[100px]">
-          <PropertyDescription property={property} />
+          <div className="max-w-[1300px] mx-auto flex justify-between">
+            {/* Property description */}
+            <PropertyDescription property={property} />
+            {/* User Listed */}
+            <div className="w-[40%] h-[50%] mx-auto p-[10px]">
+              <div className="w-full h-full border border-neutral p-0 lg:p-[10px] rounded-[10px] ">
+                <div className="flex flex-wrap-reverse p-[10px] lg:p-0  items-center justify-between">
+                  <div className="flex mt-[6px] lg:mt-0  flex-col w-full lg:w-auto flex-grow font-helvetica text-helvetica-paragraph text-charcoal">
+                    <span className="font-bold">{property.user}</span>
+                    <span className="break-words">loremipsum123@gmail.com</span>
+                  </div>
+                  <Link href={""}>
+                    <div className="w-full lg:w-auto flex items-center">
+                      <Image
+                        src="/mask-group@2x.png"
+                        alt="user"
+                        width={50}
+                        height={50}
+                        className="object-cover w-[40px] h-[40px] lg:w-[50px] lg:h-[50px]"
+                      />
+                    </div>
+                  </Link>
+                </div>
+
+                <div className="flex-grow h-px bg-neutral mt-1"></div>
+                <div className="mt-0 lg:mt-[15px] font-helvetica text-helvetica-paragraph text-charcoal p-[10px] lg:p-0">
+                  <span className="font-bold">Address</span>
+                  <p>{property.address}</p>
+                </div>
+                <div className="mt-0 lg:mt-[15px] p-[10px] lg:p-0 font-helvetica text-helvetica-paragraph text-charcoal">
+                  <span className="font-bold">Contact</span>
+                  <div className="flex text-olive-green">
+                    <Link href={"https://www.facebook.com/"}>
+                      <FacebookF props="w-[25px] h-[25px] mr-[10px]" />
+                    </Link>
+                    <Link href={"https://web.telegram.org/a/"}>
+                      <Telegram props="w-[25px] h-[25px]" />
+                    </Link>
+                  </div>
+                </div>
+                <div className="flex-grow h-px bg-neutral mt-[15px]"></div>
+                <div className="mt-0 lg:mt-[15px]  p-[10px] lg:p-0 flex w-full flex-wrap justify-between">
+                  <button className="flex items-center  font-helvetica text-helvetica-paragraph text-center text-charcoal">
+                    Save
+                  </button>
+                  <button className="flex items-center  font-helvetica text-helvetica-paragraph text-center text-charcoal">
+                    <TellPhone props="w-[20px] h-[20px] mr-[5px] text-olive-green" />
+                    Call Now
+                  </button>
+                  <button className="flex items-center  font-helvetica text-helvetica-paragraph text-center text-charcoal">
+                    <Share props="w-[20px] h-[20px] mr-[5px] text-olive-green" />
+                    Share
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
           <Map property={property.mapurl} />
         </div>
 

@@ -41,7 +41,7 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
     <animated.div
       ref={ref}
       style={fadeIn}
-      className="max-w-[1300px] mx-auto py-[10px] px-[10px]"
+      className="w-full mx-auto py-[10px] px-[10px]"
     >
       <div className="w-full">
         <div className="py-[5px] text-grayish-white max-w-[340px] rounded-8xs bg-neutral flex items-center">
@@ -51,7 +51,7 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
           </p>
         </div>
       </div>
-      <div className="flex flex-col lg:flex-row justify-between items-start gap-10">
+      <div className="flex flex-col lg:flex-row justify-between items-start gap-5">
         {/* Property Details */}
         <div className="w-full lg:w-1/2">
           <h1 className="font-coolvetica text-coolvetica-h2 text-olive-drab mb-4">
@@ -63,15 +63,15 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
         </div>
 
         {/* Property Images */}
-        <div className="w-full lg:w-1/2 grid grid-cols-2 sm:grid-cols-3 items-center lg:grid-cols-4 gap-[10px]">
+        <div className="w-full lg:w-1/2 grid grid-cols-2 sm:grid-cols-3 items-center lg:grid-cols-3 gap-[10px]">
           {property.images.map((image, index) => (
             <Image
               key={index}
-              className="w-full h-[150px] md:h-[150px] object-cover rounded-xl cursor-pointer"
+              className="w-full h-[140px] object-cover rounded-xl cursor-pointer"
               alt={`property-image-${index}`}
               src={image}
-              width={150}
-              height={150}
+              width={140}
+              height={140}
               onClick={() => openModal(image)}
             />
           ))}
