@@ -17,4 +17,9 @@ export { default as Area } from "./Area";
 export { default as Home2 } from "./Home2";
 export { default as Kitchen } from "./Kitchen";
 export { default as Parking } from "./Parking";
-export {default as IconDollar} from "./Dollar"
+export { default as IconDollar } from "./Dollar";
+export { default as ArrowDown } from "./ArrowDown-Vector";
+export { default as ArrowUp } from "./ArrowUp-Vector";
+export { default as Telegram } from "./Telegram";
+export { default as TellPhone } from "./TellPhone";
+export { default as Share } from "./Share";

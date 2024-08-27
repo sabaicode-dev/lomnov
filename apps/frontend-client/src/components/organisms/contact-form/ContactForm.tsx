@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Modal from "react-modal";
-import { animated, useSpring } from "react-spring";
+import { useSpring, animated } from "@react-spring/web";
 
 const ContactForm = ({ propertyUser }: { propertyUser: string }) => {
   const [isOpen, setIsOpen] = useState(false);

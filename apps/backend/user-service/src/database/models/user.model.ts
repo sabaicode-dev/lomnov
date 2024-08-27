@@ -22,7 +22,7 @@ const UserSchema = new Schema<User>(
     profile: { type: [String] },
     background: { type: [String] },
     favorite: { type: [String] },
-    role: { type: String, default: "user"}
+    role: { type: String, default:'user'}
   },
 
   { timestamps: true },

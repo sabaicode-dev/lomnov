@@ -26,7 +26,7 @@ const models: TsoaRoute.Models = {
             "profile": {"dataType":"array","array":{"dataType":"string"}},
             "background": {"dataType":"array","array":{"dataType":"string"}},
             "favorite": {"dataType":"array","array":{"dataType":"string"}},
-            "role": {"dataType":"string","required":true},
+            "role": {"dataType":"string"},
         },
         "additionalProperties": false,
     },

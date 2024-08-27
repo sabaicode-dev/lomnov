@@ -13,6 +13,6 @@ export interface User{
   profile?: string[];
   background?: string[];
   favorite?: string[];
-  role: string
+  role?: string 
 
 }

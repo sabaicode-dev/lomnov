@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { useInView } from "react-intersection-observer";
 import Image from "next/image";
-import { animated, useSpring } from "react-spring";
+import { useSpring, animated } from "@react-spring/web";
 import Modal from "react-modal";
 import Location from "@/icons/Location";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
@@ -26,8 +27,22 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
     transform: isOpen ? "scale(1)" : "scale(0.8)",
   });
 
+  const { ref, entry } = useInView({
+    triggerOnce: false,
+    threshold: 0.1,
+  });
+
+  const fadeIn = useSpring({
+    opacity: entry?.isIntersecting ? 1 : 0,
+    transform: entry?.isIntersecting ? "translateY(0)" : "translateY(50px)",
+  });
+
   return (
-    <div className="max-w-[1300px] mx-auto py-[10px] px-[10px]">
+    <animated.div
+      ref={ref}
+      style={fadeIn}
+      className="w-full mx-auto py-[10px] px-[10px]"
+    >
       <div className="w-full">
         <div className="py-[5px] text-grayish-white max-w-[340px] rounded-8xs bg-neutral flex items-center">
           <Location props="text-olive-green w-[20px] h-[20px]" />
@@ -36,7 +51,7 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
           </p>
         </div>
       </div>
-      <div className="flex flex-col lg:flex-row justify-between items-start gap-10">
+      <div className="flex flex-col lg:flex-row justify-between items-start gap-5">
         {/* Property Details */}
         <div className="w-full lg:w-1/2">
           <h1 className="font-coolvetica text-coolvetica-h2 text-olive-drab mb-4">
@@ -48,15 +63,15 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
         </div>
 
         {/* Property Images */}
-        <div className="w-full lg:w-1/2 grid grid-cols-2 sm:grid-cols-3 items-center lg:grid-cols-4 gap-[10px]">
+        <div className="w-full lg:w-1/2 grid grid-cols-2 sm:grid-cols-3 items-center lg:grid-cols-3 gap-[10px]">
           {property.images.map((image, index) => (
             <Image
               key={index}
-              className="w-full h-[150px] md:h-[150px] object-cover rounded-xl cursor-pointer"
+              className="w-full h-[140px] object-cover rounded-xl cursor-pointer"
               alt={`property-image-${index}`}
               src={image}
-              width={150}
-              height={150}
+              width={140}
+              height={140}
               onClick={() => openModal(image)}
             />
           ))}
@@ -72,19 +87,23 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
         ariaHideApp={false}
       >
         <div className="absolute inset-0" onClick={closeModal} />
-        <animated.div style={animationProps} className="max-w-full max-h-full">
+        <animated.div
+          style={animationProps}
+          className="max-w-[95%] max-h-[70%] flex items-center justify-center"
+        >
           {selectedImage && (
             <Image
               src={selectedImage}
               alt="Selected Property"
-              width={800}
-              height={800}
-              className="object-cover"
+              layout="responsive"
+              width={100}
+              height={60}
+              className="object-contain w-full h-full"
             />
           )}
         </animated.div>
       </Modal>
-    </div>
+    </animated.div>
   );
 };
 

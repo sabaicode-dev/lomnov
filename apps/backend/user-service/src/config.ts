@@ -6,6 +6,10 @@ type Config = {
   env: string;
   port: number;
   mongodbUrl: string;
+  awsAccessKeyId: string;
+  awsSecretAccessKey: string;
+  awsRegion: string;
+  awsS3BucketName: string
 };
 
 // Function to load and validate environment variables
@@ -20,6 +24,10 @@ function loadConfig(): Config {
     NODE_ENV: Joi.string().required(),
     PORT: Joi.number().default(3000),
     MONGODB_URL: Joi.string().required(),
+    AWS_ACCESS_KEY_ID: Joi.string().required(),
+    AWS_SECRET_ACCESS_KEY: Joi.string().required(),
+    AWS_REGION: Joi.string().required(),
+    AWS_S3_BUCKET_NAME: Joi.string().required()
   }).unknown().required();
 
   // Validate the environment variables
@@ -32,6 +40,10 @@ function loadConfig(): Config {
     env: envVars.NODE_ENV,
     port: envVars.PORT,
     mongodbUrl: envVars.MONGODB_URL,
+    awsAccessKeyId: envVars.AWS_ACCESS_KEY_ID,
+    awsSecretAccessKey: envVars.AWS_SECRET_ACCESS_KEY,
+    awsRegion: envVars.AWS_REGION,
+    awsS3BucketName: envVars.AWS_S3_BUCKET_NAME
   };
 }
 

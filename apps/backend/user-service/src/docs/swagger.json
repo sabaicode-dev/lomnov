@@ -63,8 +63,7 @@
 					"cognitoSub",
 					"firstName",
 					"lastName",
-					"userName",
-					"role"
+					"userName"
 				],
 				"type": "object",
 				"additionalProperties": false

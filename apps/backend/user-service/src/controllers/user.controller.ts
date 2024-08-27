@@ -1,18 +1,29 @@
 import { Controller, Route, Post, Body } from "tsoa";
-import { User } from "../utils/types/indext";
-import { UserModel } from "../database/models/user.model";
+import { RequestUserDTO, ResponseUserDTO } from "../utils/types/indext";
+import { UserService } from "@/src/services/user.service";
 
 @Route("api/v1")
 export class ProductController extends Controller {
+  private userService: UserService;
+  constructor() {
+    super();
+    this.userService = new UserService();
+  }
+
   @Post("/users")
-  public async createUser(@Body() requestBody: User): Promise<User> {
-    const { cognitoSub, firstName, lastName, userName } = requestBody;
-    const data = { cognitoSub, firstName, lastName, userName };
+  public async register(
+    @Body() requestBody: RequestUserDTO,
+  ): Promise<ResponseUserDTO> {
     try {
-      const response = await UserModel.create(data);
+      const response = await this.userService.createUser(requestBody);
       return response;
     } catch (error) {
-      throw error;
+      throw error
     }
   }
+
+  
+
+
+
 }
