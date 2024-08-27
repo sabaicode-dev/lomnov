@@ -7,6 +7,22 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"SignUpUserResponse": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"userSub": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message",
+					"userSub"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"SignUpRequest": {
 				"properties": {
 					"username": {
@@ -31,6 +47,18 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"VerifyUserResponse": {
+				"properties": {
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"VerifyRequest": {
 				"properties": {
 					"username": {
@@ -43,6 +71,43 @@
 				"required": [
 					"username",
 					"code"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AuthenticationResult": {
+				"properties": {
+					"AccessToken": {
+						"type": "string"
+					},
+					"ExpiresIn": {
+						"type": "number",
+						"format": "double"
+					},
+					"IdToken": {
+						"type": "string"
+					},
+					"RefreshToken": {
+						"type": "string"
+					},
+					"TokenType": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SignInUserResponse": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"authResult": {
+						"$ref": "#/components/schemas/AuthenticationResult"
+					}
+				},
+				"required": [
+					"message"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -63,6 +128,18 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"InitiatePasswordResetResponse": {
+				"properties": {
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"InitiatePasswordResetRequest": {
 				"properties": {
 					"username": {
@@ -71,6 +148,18 @@
 				},
 				"required": [
 					"username"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ConfirmPasswordResetResponse": {
+				"properties": {
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -182,7 +271,9 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/SignUpUserResponse"
+								}
 							}
 						}
 					}
@@ -212,7 +303,9 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/VerifyUserResponse"
+								}
 							}
 						}
 					}
@@ -242,7 +335,9 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/SignInUserResponse"
+								}
 							}
 						}
 					}
@@ -272,7 +367,9 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/InitiatePasswordResetResponse"
+								}
 							}
 						}
 					}
@@ -302,7 +399,9 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/ConfirmPasswordResetResponse"
+								}
 							}
 						}
 					}

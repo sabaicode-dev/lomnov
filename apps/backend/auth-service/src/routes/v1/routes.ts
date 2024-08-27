@@ -13,6 +13,15 @@ import type { Request as ExRequest, Response as ExResponse, RequestHandler, Rout
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+    "SignUpUserResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"string","required":true},
+            "userSub": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "SignUpRequest": {
         "dataType": "refObject",
         "properties": {
@@ -20,6 +29,14 @@ const models: TsoaRoute.Models = {
             "password": {"dataType":"string","required":true},
             "name": {"dataType":"string","required":true},
             "roles": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "VerifyUserResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -33,6 +50,27 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "AuthenticationResult": {
+        "dataType": "refObject",
+        "properties": {
+            "AccessToken": {"dataType":"string"},
+            "ExpiresIn": {"dataType":"double"},
+            "IdToken": {"dataType":"string"},
+            "RefreshToken": {"dataType":"string"},
+            "TokenType": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "SignInUserResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"string","required":true},
+            "authResult": {"ref":"AuthenticationResult"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "SignInRequest": {
         "dataType": "refObject",
         "properties": {
@@ -42,10 +80,26 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "InitiatePasswordResetResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "InitiatePasswordResetRequest": {
         "dataType": "refObject",
         "properties": {
             "username": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ConfirmPasswordResetResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -177,7 +231,7 @@ export function RegisterRoutes(app: Router) {
 
             async function ProductController_signup(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    body: {"in":"body","name":"body","required":true,"ref":"SignUpRequest"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"SignUpRequest"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -207,7 +261,7 @@ export function RegisterRoutes(app: Router) {
 
             async function ProductController_verify(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    body: {"in":"body","name":"body","required":true,"ref":"VerifyRequest"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"VerifyRequest"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -237,7 +291,7 @@ export function RegisterRoutes(app: Router) {
 
             async function ProductController_signIn(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    body: {"in":"body","name":"body","required":true,"ref":"SignInRequest"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"SignInRequest"},
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
 
@@ -268,7 +322,7 @@ export function RegisterRoutes(app: Router) {
 
             async function ProductController_initiatePasswordReset(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    body: {"in":"body","name":"body","required":true,"ref":"InitiatePasswordResetRequest"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"InitiatePasswordResetRequest"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -298,7 +352,7 @@ export function RegisterRoutes(app: Router) {
 
             async function ProductController_confirmPasswordReset(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    body: {"in":"body","name":"body","required":true,"ref":"ConfirmPasswordResetRequest"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"ConfirmPasswordResetRequest"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

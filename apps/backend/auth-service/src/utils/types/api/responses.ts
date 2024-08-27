@@ -8,14 +8,16 @@ export interface SignUpUserResponse {
 export interface VerifyUserResponse {
   message: string;
 }
-interface AuthenticationResult {
-  AccessToken: string;
-  RefreshToken: string;
-  IdToken: string;
+export interface AuthenticationResult {
+  AccessToken?: string;
+  ExpiresIn?: number;
+  IdToken?: string;
+  RefreshToken?: string;
+  TokenType?: string
 }
 export interface SignInUserResponse {
-  authResult?: AuthenticationResult;
   message: string;
+  authResult?: AuthenticationResult  ;
 }
 
 export interface InitiatePasswordResetResponse {

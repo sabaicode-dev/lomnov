@@ -10,6 +10,8 @@ type Config = {
   awsSecretAccessKey: string;
   awsRegion: string;
   awsS3BucketName: string
+  userPoolId: string;
+  cognitoAppCientId: string
 };
 
 // Function to load and validate environment variables
@@ -27,7 +29,10 @@ function loadConfig(): Config {
     AWS_ACCESS_KEY_ID: Joi.string().required(),
     AWS_SECRET_ACCESS_KEY: Joi.string().required(),
     AWS_REGION: Joi.string().required(),
-    AWS_S3_BUCKET_NAME: Joi.string().required()
+    AWS_S3_BUCKET_NAME: Joi.string().required(),
+    USER_POOL_ID: Joi.string().required(),
+    COGNITO_APP_CIENTID: Joi.string().required()
+
   }).unknown().required();
 
   // Validate the environment variables
@@ -43,7 +48,9 @@ function loadConfig(): Config {
     awsAccessKeyId: envVars.AWS_ACCESS_KEY_ID,
     awsSecretAccessKey: envVars.AWS_SECRET_ACCESS_KEY,
     awsRegion: envVars.AWS_REGION,
-    awsS3BucketName: envVars.AWS_S3_BUCKET_NAME
+    awsS3BucketName: envVars.AWS_S3_BUCKET_NAME,
+    userPoolId: envVars.USER_POOL_ID,
+    cognitoAppCientId: envVars.COGNITO_APP_CIENTID
   };
 }
 

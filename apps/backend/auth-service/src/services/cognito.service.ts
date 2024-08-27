@@ -216,9 +216,10 @@ export class CognitoService {
           "Authentication result is missing from the response.",
         );
       }
-      response.AuthenticationResult;
+      const authResult = response.AuthenticationResult;
       return {
         message: "Sign-in successful!",
+        authResult
       };
     } catch (error: any) {
       if (error instanceof InternalServerError) {

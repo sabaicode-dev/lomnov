@@ -7,7 +7,68 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"User": {
+			"ResponseUserDTO": {
+				"properties": {
+					"cognitoSub": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"userName": {
+						"type": "string"
+					},
+					"phoneNumber": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"age": {
+						"type": "number",
+						"format": "double"
+					},
+					"gender": {
+						"type": "string"
+					},
+					"dateOfBirth": {
+						"type": "string"
+					},
+					"profile": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"background": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"favorite": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"role": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"cognitoSub",
+					"firstName",
+					"lastName",
+					"userName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RequestUserDTO": {
 				"properties": {
 					"cognitoSub": {
 						"type": "string"
@@ -82,14 +143,14 @@
 	"paths": {
 		"/api/v1/users": {
 			"post": {
-				"operationId": "CreateUser",
+				"operationId": "Register",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/User"
+									"$ref": "#/components/schemas/ResponseUserDTO"
 								}
 							}
 						}
@@ -102,7 +163,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/User"
+								"$ref": "#/components/schemas/RequestUserDTO"
 							}
 						}
 					}

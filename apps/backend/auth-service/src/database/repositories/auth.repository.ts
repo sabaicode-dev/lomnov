@@ -6,7 +6,7 @@ import {
   InitiatePasswordResetRequest,
   InitiatePasswordResetResponse,
   SignInRequest,
-  SignInUserResponse,
+  // SignInUserResponse,
   SignUpRequest,
   SignUpUserResponse,
   VerifyRequest,
@@ -61,7 +61,7 @@ export class AuthRepository {
   public async signIn(
     requestBody: SignInRequest,
     request: ExRequest,
-  ): Promise<SignInUserResponse> {
+  ): Promise<any> {
     const { username, password } = requestBody;
     const data = { username, password };
     try {
@@ -69,6 +69,7 @@ export class AuthRepository {
       request.res?.cookie("accessToken", response.authResult?.AccessToken);
       request.res?.cookie("refreshToken", response.authResult?.RefreshToken);
       request.res?.cookie("idToken", response.authResult?.IdToken);
+      console.log(response.authResult)
       return { message: "Login successful" };
     } catch (error) {
       throw error;

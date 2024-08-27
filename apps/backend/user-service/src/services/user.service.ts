@@ -9,9 +9,10 @@ export class UserService {
 
   public async createUser(
     requestBody: RequestUserDTO,
+    req: Express.Request
   ): Promise<ResponseUserDTO> {
     try {
-      return await this.userRepository.create(requestBody);
+      return await this.userRepository.create(requestBody , req);
     } catch (error) {
       throw error;
     }
