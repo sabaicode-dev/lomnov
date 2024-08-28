@@ -1,7 +1,7 @@
 // =========================================================================
 
-import { ValidationError } from "@/src/utils/error/customErrors";
-import { RequestUserDTO, ResponseUserDTO } from "@/src/utils/types/indext";
+import { InternalServerError, NotFoundError, ValidationError } from "@/src/utils/error/customErrors";
+import { RequestUserDTO, ResponseFindUserDTO, ResponseUserDTO } from "@/src/utils/types/indext";
 import { UserModel } from "../models/user.model";
 // import { Request } from "express";
 // Extend the Express Request interface
@@ -20,9 +20,7 @@ export class UserRepository {
   ): Promise<ResponseUserDTO> {
     try {
       const { cognitoSub, firstName, lastName, userName } = requestBody;
-
-      // console.log("the best result" + req.user?.sub);
-
+      // console.log("the best result" + req.user);
       if (!cognitoSub || !firstName || !lastName || !userName) {
         throw new ValidationError(
           " CognitoSub , firstname, lastname and username are required!",
@@ -39,4 +37,21 @@ export class UserRepository {
       }
     }
   }
+
+  public async findUsers(query: any, skip: number, limit: number): Promise<ResponseFindUserDTO> {
+    try {
+      const [users, totalUsers] = await Promise.all([
+        UserModel.find(query).skip(skip).limit(limit).lean(), // Use lean for performance improvement
+        UserModel.countDocuments(query),
+      ]);
+
+      if(!users || !totalUsers){
+        throw new NotFoundError("Users not found")
+      }
+      return { users, totalUsers };
+    } catch (error: any) {
+      throw new InternalServerError(error.message)
+    }
+  }
+
 }

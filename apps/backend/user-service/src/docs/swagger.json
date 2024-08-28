@@ -7,8 +7,14 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"mongoose.Types.ObjectId": {
+				"type": "string"
+			},
 			"ResponseUserDTO": {
 				"properties": {
+					"_id": {
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
 					"cognitoSub": {
 						"type": "string"
 					},
@@ -128,6 +134,48 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"PaginationDTO": {
+				"properties": {
+					"currentPage": {
+						"type": "number",
+						"format": "double"
+					},
+					"totalPages": {
+						"type": "number",
+						"format": "double"
+					},
+					"totalUsers": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"currentPage",
+					"totalPages",
+					"totalUsers"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseAllUserDTO": {
+				"properties": {
+					"users": {
+						"items": {
+							"$ref": "#/components/schemas/ResponseUserDTO"
+						},
+						"type": "array"
+					},
+					"pagination": {
+						"$ref": "#/components/schemas/PaginationDTO"
+					}
+				},
+				"required": [
+					"users",
+					"pagination"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -164,6 +212,161 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/RequestUserDTO"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAllUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseAllUserDTO"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "firstName",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "lastName",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userName",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "role",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/users/me": {
+			"get": {
+				"operationId": "GetMe",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			},
+			"put": {
+				"operationId": "UpdateMe",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"cognitosub": {
+										"type": "string"
+									},
+									"profileFiles": {
+										"items": {
+											"type": "string",
+											"format": "binary"
+										},
+										"type": "array"
+									},
+									"backgroundFiles": {
+										"items": {
+											"type": "string",
+											"format": "binary"
+										},
+										"type": "array"
+									},
+									"firstName": {
+										"type": "string"
+									},
+									"lastName": {
+										"type": "string"
+									},
+									"userName": {
+										"type": "string"
+									},
+									"phoneNumber": {
+										"type": "string"
+									},
+									"address": {
+										"type": "string"
+									},
+									"gender": {
+										"type": "string"
+									},
+									"dateOfBirth": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"cognitosub"
+								]
 							}
 						}
 					}

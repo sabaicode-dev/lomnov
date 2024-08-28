@@ -48,12 +48,14 @@ const authenticateToken = async (
 
   try {
     const payload = await verifier.verify(token);
-    console.log(payload);
+    console.log('hello gateway', payload);
     // Assign roles to req.user
     req.user = {
       username: payload.username,
       roles: payload["cognito:groups"] || [], // Ensure roles is always an array
     };
+    console.log('hello gateway', req.user);
+
 
     next();
   } catch (error: any) {

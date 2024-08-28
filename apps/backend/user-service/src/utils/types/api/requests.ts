@@ -14,5 +14,15 @@ export interface RequestUserDTO {
   role?: string
 }
 
+export interface GetAllUsersQueryDTO {
+  page: number;
+  limit: number;
+  firstName?: string;
+  lastName?: string;
+  userName?: string;
+  role?: string;
+}
+
+
 
 
