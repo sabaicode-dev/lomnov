@@ -1,10 +1,9 @@
 // =========================================================================
 
 import { InternalServerError, NotFoundError, ValidationError } from "@/src/utils/error/customErrors";
-import { RequestUserDTO, ResponseFindUserDTO, ResponseUserDTO } from "@/src/utils/types/indext";
+import { RequestUserDTO, ResponseFindUserDTO, ResponseUserDTO, User } from "@/src/utils/types/indext";
 import { UserModel } from "../models/user.model";
-// import { Request } from "express";
-// Extend the Express Request interface
+
 declare module "express-serve-static-core" {
   interface Request {
     user?: {
@@ -13,6 +12,8 @@ declare module "express-serve-static-core" {
     };
   }
 }
+
+
 export class UserRepository {
   public async create(
     requestBody: RequestUserDTO,
@@ -53,5 +54,19 @@ export class UserRepository {
       throw new InternalServerError(error.message)
     }
   }
+
+  public async findByCognitoSub(cognitoSub: string): Promise<ResponseUserDTO | null> {
+    return UserModel.findOne({ cognitoSub:cognitoSub }).exec();
+  }
+
+  public async updateUserByCognitoSub(cognitoSub: string, updateData: Partial<User>): Promise<ResponseUserDTO | null> {
+    return UserModel.findOneAndUpdate(
+      { cognitoSub },
+      { $set: updateData },
+      { new: true },
+    ).exec();
+  }
+
+
 
 }

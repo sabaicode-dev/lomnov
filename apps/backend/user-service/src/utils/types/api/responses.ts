@@ -34,3 +34,17 @@ export interface ResponseFindUserDTO{
   users: ResponseUserDTO[];
   totalUsers: number;
 }
+
+
+export interface UpdateUserDTO {
+  cognitosub: string;
+  profileFiles?: Express.Multer.File[];
+  backgroundFiles?: Express.Multer.File[];
+  firstName?: string;
+  lastName?: string;
+  userName?: string;
+  phoneNumber?: string;
+  address?: string;
+  gender?: string;
+  dateOfBirth?: string;
+}

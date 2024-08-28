@@ -1,4 +1,17 @@
-import { Controller, Route, Post, Body, Request, Get, Query, Put, UploadedFiles, FormField } from "tsoa";
+import {
+  Controller,
+  Route,
+  Post,
+  Body,
+  Request,
+  Get,
+  Query,
+  Put,
+  UploadedFiles,
+  FormField,
+  Delete,
+  Path,
+} from "tsoa";
 import {
   RequestUserDTO,
   ResponseUserDTO,
@@ -7,7 +20,7 @@ import {
 } from "../utils/types/indext";
 import { UserService } from "@/src/services/user.service";
 import { UserModel } from "../database/models/user.model";
-import uploadFileToS3Service from "../services/uploadFileToS3.service";
+
 @Route("api/v1")
 export class ProductController extends Controller {
   private userService: UserService;
@@ -66,7 +79,6 @@ export class ProductController extends Controller {
     }
   }
 
-
   @Put("/users/me")
   public async updateMe(
     @FormField() cognitosub: string,
@@ -81,63 +93,41 @@ export class ProductController extends Controller {
     @FormField() dateOfBirth?: string,
   ): Promise<any> {
     try {
-      if (!cognitosub) {
-        throw new Error("CognitoSub is required");
-      }
-
-      const existingUser = await UserModel.findOne({ cognitoSub: cognitosub });
-
-      if (!existingUser) {
-        throw new Error("User not found");
-      }
-
-      // Initialize an update object
-      const updateData: Partial<typeof existingUser> = {};
-
-      // Handle profile update
-      if (profileFiles && profileFiles.length > 0) {
-        // Add new profile images to the array
-        const profileUrls = await Promise.all(
-          profileFiles.map((file) => uploadFileToS3Service.uploadFile(file)),
-        );
-        updateData.profile = [...new Set([...(existingUser.profile || []), ...profileUrls])];
-      }
-
-      // Handle background update
-      if (backgroundFiles && backgroundFiles.length > 0) {
-        // Add new background images to the array
-        const backgroundUrls = await Promise.all(
-          backgroundFiles.map((file) => uploadFileToS3Service.uploadFile(file)),
-        );
-        updateData.background = [...new Set([...(existingUser.background || []), ...backgroundUrls])];
-      }
-
-      // Update other fields if provided
-      if (firstName) updateData.firstName = firstName;
-      if (lastName) updateData.lastName = lastName;
-      if (userName) updateData.userName = userName;
-      if (phoneNumber) updateData.phoneNumber = phoneNumber;
-      if (address) updateData.address = address;
-      if (gender) updateData.gender = gender;
-      if (dateOfBirth) updateData.dateOfBirth = dateOfBirth;
-
-      // Update user in the database
-      const updatedUser = await UserModel.findOneAndUpdate(
-        { cognitoSub: cognitosub },
-        { $set: updateData },
-        { new: true }
-      );
-
-      if (!updatedUser) {
-        throw new Error("Error updating user");
-      }
-
-      return { message: "User updated successfully", user: updatedUser };
+      const updateData = {
+        firstName,
+        lastName,
+        userName,
+        phoneNumber,
+        address,
+        gender,
+        dateOfBirth,
+        cognitosub,
+        profileFiles,
+        backgroundFiles,
+      };
+      return await this.userService.updateUser(updateData);
     } catch (error) {
       console.error("Error updating user:", error);
       throw error;
     }
   }
 
+  @Delete("/my-profile/{profileId}")
+  public async deleteMyProfile(
+    @Path() profileId: number,
+
+  ): Promise<any> {
+    try {
+      const cognitosub = "adfdfadf";
+
+
+      await this.userService.deleteProfileImageByIndex(cognitosub, profileId);
+
+      return { message: "Profile image deleted successfully" };
+    } catch (error) {
+      console.error("Error deleting profile image:", error);
+      throw error;
+    }
+  }
 
 }
