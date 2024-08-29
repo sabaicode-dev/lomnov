@@ -14,7 +14,7 @@ import {
 } from "@/src/utils/types/indext";
 // =========================================================================
 
-@Tags("Handle By hand")
+@Tags("Manual Registration")
 @Route("api/v1")
 export class ProductController extends Controller {
   private authService: AuthService;

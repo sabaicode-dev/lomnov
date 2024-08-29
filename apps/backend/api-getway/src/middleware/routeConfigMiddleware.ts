@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ROUTE_PATHS, RouteConfig } from "../routes-def";
+import ROUTE_PATHS, {  RouteConfig } from "../routes-def";
 
 const findMatchingRoute = (
   path: string,

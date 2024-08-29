@@ -1,12 +1,13 @@
 import { IncomingMessage, ServerResponse, ClientRequest } from "http";
 import { createProxyMiddleware, Options } from "http-proxy-middleware";
-import { ROUTE_PATHS, RouteConfig } from "../routes-def";
+import ROUTE_PATHS,{ RouteConfig } from "../routes-def";
 import express from "express";
 import { Socket } from "net";
 
 interface ProxyConfig {
   [context: string]: Options<IncomingMessage, ServerResponse>;
 }
+
 const proxyConfigs: ProxyConfig = {};
 
 const createProxyOptions = (
@@ -15,7 +16,7 @@ const createProxyOptions = (
   target: routeConfig.target,
   changeOrigin: true,
   pathRewrite: (path, _req) => {
-    return path.replace(routeConfig.path, "");
+    return routeConfig.path+path;
   },
   on: {
     proxyReq: (
@@ -24,6 +25,9 @@ const createProxyOptions = (
       res: ServerResponse
     ) => {
       proxyReq.setHeader("x-api-gateway-header", "http://localhost:3000");
+      console.log(
+        `Proxy Request: ${req.method} ${req.url} -> ${routeConfig.target}${req.url}`
+      );
     },
     proxyRes: (
       proxyRes: IncomingMessage,
@@ -31,7 +35,7 @@ const createProxyOptions = (
       res: ServerResponse
     ) => {
       console.log(
-        `Proxied ${req.method} ${req.url} -> ${routeConfig.target}${req.url}`
+        `Proxied Response: ${req.method} ${req.url} -> ${routeConfig.target}${req.url}`
       );
     },
     error: (err: Error, req: IncomingMessage, res: ServerResponse | Socket) => {
@@ -49,7 +53,6 @@ const createProxyOptions = (
 Object.keys(ROUTE_PATHS).forEach((key) => {
   const routeConfig = ROUTE_PATHS[key];
   const proxyOption = createProxyOptions(routeConfig);
-
   proxyConfigs[routeConfig.path] = proxyOption;
 
   console.log(
@@ -59,9 +62,9 @@ Object.keys(ROUTE_PATHS).forEach((key) => {
   if (routeConfig.nestedRoutes) {
     routeConfig.nestedRoutes.forEach((nestedRoute) => {
       const nestedPath = `${routeConfig.path}${nestedRoute.path}`;
+      // const nestedPath = `${nestedRoute.path}`;
       proxyConfigs[nestedPath] = {
         ...proxyOption,
-        pathRewrite: (path) => path.replace(nestedPath, nestedRoute.path),
       };
       console.log(
         `Configured proxy for ${nestedPath} -> ${routeConfig.target}${nestedRoute.path}`
@@ -72,8 +75,13 @@ Object.keys(ROUTE_PATHS).forEach((key) => {
 
 const applyProxy = (app: express.Application) => {
   Object.keys(proxyConfigs).forEach((context: string) => {
+    console.log(`Applying proxy for context: ${context}`);
     app.use(context, createProxyMiddleware(proxyConfigs[context]));
   });
 };
 
 export default applyProxy;
+
+
+
+

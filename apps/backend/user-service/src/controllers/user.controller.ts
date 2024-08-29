@@ -24,7 +24,7 @@ import { UserService } from "@/src/services/user.service";
 // =========================================================
 
 @Tags(" User service")
-@Route("api/v1")
+@Route("api/v1/users")
 export class ProductController extends Controller {
   private userService: UserService;
   constructor() {
@@ -32,7 +32,7 @@ export class ProductController extends Controller {
     this.userService = new UserService();
   }
 
-  @Post("/users")
+  @Post("/")
   public async register(
     @Body() requestBody: RequestUserDTO,
     @Request() req: Express.Request,
@@ -46,7 +46,7 @@ export class ProductController extends Controller {
     }
   }
 
-  @Get("/users")
+  @Get("/")
   public async getAllUser(
     @Query() page: number = 1,
     @Query() limit: number = 10,
@@ -71,7 +71,7 @@ export class ProductController extends Controller {
     }
   }
 
-  @Get("/users/me")
+  @Get("/me")
   public async getMe(): Promise<ResponseUserDTO | null> {
     try {
       // console.log('hello req', req.user)
@@ -83,7 +83,7 @@ export class ProductController extends Controller {
     }
   }
 
-  @Put("/users/me")
+  @Put("/me")
   public async updateMe(
     @FormField() cognitosub: string,
     @UploadedFiles() profileFiles?: Express.Multer.File[], // Files for profile

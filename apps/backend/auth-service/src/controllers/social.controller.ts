@@ -4,7 +4,7 @@ declare module "express-session" {
   }
 }
 
-import { Controller, Get, Route, Request, Res, TsoaResponse } from "tsoa";
+import { Controller, Get, Route, Request, Res, TsoaResponse, Tags } from "tsoa";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
 import { randomBytes } from "crypto";
 import axios from "axios";
@@ -20,6 +20,7 @@ import {
 const cognitoClient = new CognitoIdentityProviderClient({
   region: configs.awsRegion,
 });
+@Tags("Social Login")
 @Route("api/v1/auth")
 export class AuthController extends Controller {
   @Get("/google-sign-in")

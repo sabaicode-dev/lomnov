@@ -25,12 +25,12 @@ app.use(authorizeRole);
 // ===============================
 // Log Report Request
 // ===============================
-app.use(requestLogger);
 //================================
 // Proxy Routes
 // ===============================
 
-applyProxy(app);
+applyProxy(app)
+app.use(requestLogger);
 app.listen(configs.port, () => {
   console.log(`API Gateway running on http://localhost:${configs.port}`);
 });

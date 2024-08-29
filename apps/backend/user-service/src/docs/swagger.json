@@ -406,7 +406,7 @@
 				}
 			}
 		},
-		"/api/v1/my-profile/{profileId}": {
+		"/api/v1/users/my-profile/{profileId}": {
 			"delete": {
 				"operationId": "DeleteMyProfile",
 				"responses": {
@@ -438,7 +438,7 @@
 				]
 			}
 		},
-		"/api/v1/my-background/{profileId}": {
+		"/api/v1/users/my-background/{profileId}": {
 			"delete": {
 				"operationId": "DeleteMyBackground",
 				"responses": {
@@ -468,7 +468,7 @@
 				]
 			}
 		},
-		"/api/v1/favorite/{propertyId}": {
+		"/api/v1/users/favorite/{propertyId}": {
 			"put": {
 				"operationId": "Favorite",
 				"responses": {

@@ -10,7 +10,7 @@ type Config = {
   cognitoAppCientSecret: string;
   cognitoAppDomain: string;
   redirect_uri: string;
-  productServiceUrl: string;
+  propertyServiceUrl: string;
   userServiceUrl: string;
   authServiceUrl: string;
   userPoolId: string;
@@ -34,7 +34,7 @@ function loadConfig(): Config {
     COGNITO_APP_DOMAIN: Joi.string().required(),
     AUTH_SERVICE_URL: Joi.string().required(),
     USER_SERVICE_URL: Joi.string().required(),
-    PRODUCT_SERVICE_URL: Joi.string().required(),
+    PROPERTY_SERVICE_URL: Joi.string().required(),
     USER_POOL_ID: Joi.string().required(),
   })
     .unknown()
@@ -54,7 +54,7 @@ function loadConfig(): Config {
     cognitoAppCientSecret: envVars.COGNITO_APP_CIENTSECRET,
     cognitoAppDomain: envVars.COGNITO_APP_DOMAIN,
     redirect_uri: envVars.REDIRECT_URI,
-    productServiceUrl: envVars.PRODUCT_SERVICE_URL,
+    propertyServiceUrl: envVars.PROPERTY_SERVICE_URL,
     userServiceUrl: envVars.USER_SERVICE_URL,
     authServiceUrl: envVars.AUTH_SERVICE_URL,
     userPoolId: envVars.USER_POOL_ID,
