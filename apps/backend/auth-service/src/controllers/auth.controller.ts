@@ -2,16 +2,15 @@ import { Controller, Route, Post, Body, Tags, Request } from "tsoa";
 import { Request as ExRequest } from "express";
 import { AuthService } from "@/src/services/auth.service";
 import {
-  SignUpRequest,
-  SignInRequest,
-  InitiatePasswordResetRequest,
-  ConfirmPasswordResetRequest,
-  VerifyRequest,
-  VerifyUserResponse,
-  SignUpUserResponse,
-  SignInUserResponse,
-  InitiatePasswordResetResponse,
-  ConfirmPasswordResetResponse,
+  RequestSignUpDTO,
+  RequestSignInDTO,
+  RequestConfirmPasswordResetDTO,
+  RequestVerifyDTO,
+  ResponseVerifyUserDTO,
+  ResponseSignUpUserDTO,
+  RequestInitiatePasswordResetDTO,
+  ResponseInitiatePasswordReset,
+  ResponseConfirmPasswordResetDTO,
 } from "@/src/utils/types/indext";
 // =========================================================================
 
@@ -26,8 +25,8 @@ export class ProductController extends Controller {
 
   @Post("/auth/signup")
   public async signup(
-    @Body() requestBody: SignUpRequest,
-  ): Promise<SignUpUserResponse> {
+    @Body() requestBody: RequestSignUpDTO,
+  ): Promise<ResponseSignUpUserDTO> {
     try {
       return await this.authService.authSignUp(requestBody);
     } catch (error) {
@@ -37,8 +36,8 @@ export class ProductController extends Controller {
 
   @Post("/auth/verify")
   public async verify(
-    @Body() requestBody: VerifyRequest,
-  ): Promise<VerifyUserResponse> {
+    @Body() requestBody: RequestVerifyDTO,
+  ): Promise<ResponseVerifyUserDTO> {
     try {
       return await this.authService.authVerify(requestBody);
     } catch (error) {
@@ -48,9 +47,9 @@ export class ProductController extends Controller {
 
   @Post("/auth/signin")
   public async signIn(
-    @Body() requestBody: SignInRequest,
+    @Body() requestBody: RequestSignInDTO,
     @Request() request: ExRequest,
-  ): Promise<SignInUserResponse> {
+  ): Promise<ResponseSignUpUserDTO> {
     try {
       return await this.authService.authSignin(requestBody, request);
     } catch (error) {
@@ -60,8 +59,8 @@ export class ProductController extends Controller {
 
   @Post("/auth/password-reset")
   public async initiatePasswordReset(
-    @Body() requestBody: InitiatePasswordResetRequest,
-  ): Promise<InitiatePasswordResetResponse> {
+    @Body() requestBody: RequestInitiatePasswordResetDTO,
+  ): Promise<ResponseInitiatePasswordReset> {
     try {
       return await this.authService.authPasswordReset(requestBody);
     } catch (error) {
@@ -71,8 +70,8 @@ export class ProductController extends Controller {
 
   @Post("/auth/confirm-password")
   public async confirmPasswordReset(
-    @Body() requestBody: ConfirmPasswordResetRequest,
-  ): Promise<ConfirmPasswordResetResponse> {
+    @Body() requestBody: RequestConfirmPasswordResetDTO,
+  ): Promise<ResponseConfirmPasswordResetDTO> {
     try {
       return await this.authService.authConfirmPassword(requestBody);
     } catch (error) {

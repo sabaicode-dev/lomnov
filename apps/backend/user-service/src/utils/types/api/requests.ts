@@ -24,5 +24,11 @@ export interface GetAllUsersQueryDTO {
 }
 
 
+// Request DTO
+export interface DeleteProfileImageRequestDTO {
+  cognitoSub: string;
+  profileId: number;
+}
+
 
 

@@ -1,16 +1,16 @@
 import { Request as ExRequest } from "express";
 import { CognitoService } from "@/src/services/cognito.service";
 import {
-  ConfirmPasswordResetRequest,
-  ConfirmPasswordResetResponse,
-  InitiatePasswordResetRequest,
-  InitiatePasswordResetResponse,
-  SignInRequest,
+  RequestConfirmPasswordResetDTO,
+  ResponseConfirmPasswordResetDTO,
+  RequestInitiatePasswordResetDTO,
+  ResponseInitiatePasswordReset,
+  RequestSignInDTO,
   // SignInUserResponse,
-  SignUpRequest,
-  SignUpUserResponse,
-  VerifyRequest,
-  VerifyUserResponse,
+  RequestSignUpDTO,
+  ResponseSignUpUserDTO,
+  RequestVerifyDTO,
+  ResponseVerifyUserDTO,
 } from "@/src/utils/types/indext";
 // ====================================================================
 
@@ -19,7 +19,7 @@ export class AuthRepository {
   constructor() {
     this.cognitoService = new CognitoService();
   }
-  public async signUp(requestBody: SignUpRequest): Promise<SignUpUserResponse> {
+  public async signUp(requestBody: RequestSignUpDTO): Promise<ResponseSignUpUserDTO> {
     const { username, name, password, roles } = requestBody;
     const isPhoneNumber = username.startsWith("+");
     const attributes: {
@@ -47,7 +47,7 @@ export class AuthRepository {
     }
   }
 
-  public async verify(requestBody: VerifyRequest): Promise<VerifyUserResponse> {
+  public async verify(requestBody: RequestVerifyDTO): Promise<ResponseVerifyUserDTO> {
     const { username, code } = requestBody;
     const data = { username, code };
     try {
@@ -59,7 +59,7 @@ export class AuthRepository {
   }
 
   public async signIn(
-    requestBody: SignInRequest,
+    requestBody: RequestSignInDTO,
     request: ExRequest,
   ): Promise<any> {
     const { username, password } = requestBody;
@@ -69,6 +69,8 @@ export class AuthRepository {
       request.res?.cookie("accessToken", response.authResult?.AccessToken);
       request.res?.cookie("refreshToken", response.authResult?.RefreshToken);
       request.res?.cookie("idToken", response.authResult?.IdToken);
+      request.res?.cookie("username",response.username)
+
       console.log(response.authResult)
       return { message: "Login successful" };
     } catch (error) {
@@ -77,8 +79,8 @@ export class AuthRepository {
   }
 
   public async passwordReset(
-    requestBody: InitiatePasswordResetRequest,
-  ): Promise<InitiatePasswordResetResponse> {
+    requestBody: RequestInitiatePasswordResetDTO,
+  ): Promise<ResponseInitiatePasswordReset> {
     const { username } = requestBody;
     const data = { username };
     try {
@@ -89,8 +91,8 @@ export class AuthRepository {
   }
 
   public async confirmPassword(
-    requestBody: ConfirmPasswordResetRequest,
-  ): Promise<ConfirmPasswordResetResponse> {
+    requestBody: RequestConfirmPasswordResetDTO,
+  ): Promise<ResponseConfirmPasswordResetDTO> {
     const { username, newPassword, confirmationCode } = requestBody;
     const data = { username, newPassword, confirmationCode };
     try {

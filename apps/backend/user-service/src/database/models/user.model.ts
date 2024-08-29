@@ -15,6 +15,7 @@ const UserSchema = new Schema<User>(
     lastName: { type: String, required: true },
     userName: {type:String, unique: true},
     phoneNumber: { type: String },
+    location: {type: String},
     address: { type: String },
     age: { type: Number },
     gender: { type: String },

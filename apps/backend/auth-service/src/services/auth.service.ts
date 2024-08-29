@@ -1,16 +1,16 @@
 import { Request as ExRequest } from "express";
 import { AuthRepository } from "@/src/database/repositories/auth.repository";
 import {
-  ConfirmPasswordResetRequest,
-  ConfirmPasswordResetResponse,
-  InitiatePasswordResetRequest,
-  InitiatePasswordResetResponse,
-  SignInRequest,
-  SignInUserResponse,
-  SignUpRequest,
-  SignUpUserResponse,
-  VerifyRequest,
-  VerifyUserResponse,
+  RequestConfirmPasswordResetDTO,
+  ResponseConfirmPasswordResetDTO,
+  RequestInitiatePasswordResetDTO,
+  ResponseInitiatePasswordReset,
+  RequestSignInDTO,
+  ResponseSignInUserDTO,
+  RequestSignUpDTO,
+  ResponseSignUpUserDTO,
+  RequestVerifyDTO,
+  ResponseVerifyUserDTO,
 } from "@/src/utils/types/indext";
 export class AuthService {
   private authRepository: AuthRepository;
@@ -19,8 +19,8 @@ export class AuthService {
   }
 
   public async authSignUp(
-    requestBody: SignUpRequest,
-  ): Promise<SignUpUserResponse> {
+    requestBody: RequestSignUpDTO,
+  ): Promise<ResponseSignUpUserDTO> {
     try {
       return await this.authRepository.signUp(requestBody);
     } catch (error) {
@@ -29,8 +29,8 @@ export class AuthService {
   }
 
   public async authVerify(
-    requestBody: VerifyRequest,
-  ): Promise<VerifyUserResponse> {
+    requestBody: RequestVerifyDTO,
+  ): Promise<ResponseVerifyUserDTO> {
     try {
       return await this.authRepository.verify(requestBody);
     } catch (error) {
@@ -39,9 +39,9 @@ export class AuthService {
   }
 
   public async authSignin(
-    requestBody: SignInRequest,
+    requestBody: RequestSignInDTO,
     request: ExRequest,
-  ): Promise<SignInUserResponse> {
+  ): Promise<ResponseSignInUserDTO> {
     try {
       return await this.authRepository.signIn(requestBody, request);
     } catch (error) {
@@ -50,8 +50,8 @@ export class AuthService {
   }
 
   public async authPasswordReset(
-    requestBody: InitiatePasswordResetRequest,
-  ): Promise<InitiatePasswordResetResponse> {
+    requestBody: RequestInitiatePasswordResetDTO,
+  ): Promise<ResponseInitiatePasswordReset> {
     try {
       return await this.authRepository.passwordReset(requestBody);
     } catch (error) {
@@ -60,8 +60,8 @@ export class AuthService {
   }
 
   public async authConfirmPassword(
-    requestBody: ConfirmPasswordResetRequest,
-  ): Promise<ConfirmPasswordResetResponse> {
+    requestBody: RequestConfirmPasswordResetDTO,
+  ): Promise<ResponseConfirmPasswordResetDTO> {
     try {
       return await this.authRepository.confirmPassword(requestBody);
     } catch (error) {

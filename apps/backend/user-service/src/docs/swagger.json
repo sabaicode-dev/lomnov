@@ -176,6 +176,18 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"DeleteProfileImageResponseDTO": {
+				"properties": {
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -204,6 +216,9 @@
 						}
 					}
 				},
+				"tags": [
+					" User service"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
@@ -231,6 +246,9 @@
 						}
 					}
 				},
+				"tags": [
+					" User service"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -296,11 +314,21 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/ResponseUserDTO"
+										}
+									],
+									"nullable": true
+								}
 							}
 						}
 					}
 				},
+				"tags": [
+					" User service"
+				],
 				"security": [],
 				"parameters": []
 			},
@@ -311,11 +339,16 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/RequestUserDTO"
+								}
 							}
 						}
 					}
 				},
+				"tags": [
+					" User service"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
@@ -381,11 +414,16 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/DeleteProfileImageResponseDTO"
+								}
 							}
 						}
 					}
 				},
+				"tags": [
+					" User service"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -395,6 +433,65 @@
 						"schema": {
 							"format": "double",
 							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/my-background/{profileId}": {
+			"delete": {
+				"operationId": "DeleteMyBackground",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					" User service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "profileId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/favorite/{propertyId}": {
+			"put": {
+				"operationId": "Favorite",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					" User service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "propertyId",
+						"required": true,
+						"schema": {
+							"type": "string"
 						}
 					}
 				]

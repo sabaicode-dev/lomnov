@@ -11,16 +11,19 @@ import {
   FormField,
   Delete,
   Path,
+  Tags,
 } from "tsoa";
 import {
   RequestUserDTO,
   ResponseUserDTO,
   ResponseAllUserDTO,
   GetAllUsersQueryDTO,
+  DeleteProfileImageResponseDTO,
 } from "../utils/types/indext";
 import { UserService } from "@/src/services/user.service";
-import { UserModel } from "../database/models/user.model";
+// =========================================================
 
+@Tags(" User service")
 @Route("api/v1")
 export class ProductController extends Controller {
   private userService: UserService;
@@ -42,6 +45,7 @@ export class ProductController extends Controller {
       throw error;
     }
   }
+
   @Get("/users")
   public async getAllUser(
     @Query() page: number = 1,
@@ -68,11 +72,11 @@ export class ProductController extends Controller {
   }
 
   @Get("/users/me")
-  public async getMe(): Promise<any> {
+  public async getMe(): Promise<ResponseUserDTO | null> {
     try {
       // console.log('hello req', req.user)
       const cognitosub = "adfdfadf";
-      const response = await UserModel.findOne({ cognitoSub: cognitosub });
+      const response = await this.userService.getMe(cognitosub);
       return response;
     } catch (error) {
       throw error;
@@ -91,7 +95,7 @@ export class ProductController extends Controller {
     @FormField() address?: string,
     @FormField() gender?: string,
     @FormField() dateOfBirth?: string,
-  ): Promise<any> {
+  ): Promise<RequestUserDTO | undefined> {
     try {
       const updateData = {
         firstName,
@@ -107,7 +111,6 @@ export class ProductController extends Controller {
       };
       return await this.userService.updateUser(updateData);
     } catch (error) {
-      console.error("Error updating user:", error);
       throw error;
     }
   }
@@ -115,19 +118,45 @@ export class ProductController extends Controller {
   @Delete("/my-profile/{profileId}")
   public async deleteMyProfile(
     @Path() profileId: number,
-
-  ): Promise<any> {
+  ): Promise<DeleteProfileImageResponseDTO> {
     try {
-      const cognitosub = "adfdfadf";
-
-
-      await this.userService.deleteProfileImageByIndex(cognitosub, profileId);
-
+      const requestDTO = {
+        cognitoSub: "adfdfadf", // Replace this with actual logic to get cognitoSub
+        profileId,
+      };
+      await this.userService.deleteProfileImageByIndex(requestDTO);
       return { message: "Profile image deleted successfully" };
     } catch (error) {
-      console.error("Error deleting profile image:", error);
       throw error;
     }
   }
 
+  @Delete("/my-background/{profileId}")
+  public async deleteMyBackground(@Path() profileId: number): Promise<any> {
+    try {
+      const cognitosub = "adfdfadf";
+      await this.userService.deleteBackgroundImageByIndex(
+        cognitosub,
+        profileId,
+      );
+      return { message: "Background image deleted successfully" };
+    } catch (error) {
+      console.error("Error deleting background image:", error);
+      throw error;
+    }
+  }
+
+  @Put("/favorite/{propertyId}")
+  public async favorite(@Path() propertyId: string): Promise<any> {
+    const cognitoSub = "adfdfadf"; // This should come from the authenticated user's token in a real app
+    try {
+      const updatedUser = await this.userService.addFavorite(
+        cognitoSub,
+        propertyId,
+      );
+      return { message: "Property added to favorites", user: updatedUser };
+    } catch (error) {
+      throw error;
+    }
+  }
 }

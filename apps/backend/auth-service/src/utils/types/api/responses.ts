@@ -1,11 +1,11 @@
 // types/api/responses.ts
 
-export interface SignUpUserResponse {
+export interface ResponseSignUpUserDTO {
   message: string;
-  userSub: string;
+  userSub?: string;
 }
 
-export interface VerifyUserResponse {
+export interface ResponseVerifyUserDTO {
   message: string;
 }
 export interface AuthenticationResult {
@@ -15,15 +15,16 @@ export interface AuthenticationResult {
   RefreshToken?: string;
   TokenType?: string
 }
-export interface SignInUserResponse {
+export interface ResponseSignInUserDTO {
   message: string;
   authResult?: AuthenticationResult  ;
+  username: string | undefined
 }
 
-export interface InitiatePasswordResetResponse {
+export interface ResponseInitiatePasswordReset {
   message: string;
 }
 
-export interface ConfirmPasswordResetResponse {
+export interface ResponseConfirmPasswordResetDTO {
   message: string;
 }

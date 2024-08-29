@@ -6,6 +6,7 @@ export interface User{
   lastName: string;
   userName: string;
   phoneNumber?: string;
+  location?: string;
   address?: string;
   age?: number;
   gender?: string;
@@ -13,6 +14,6 @@ export interface User{
   profile?: string[];
   background?: string[];
   favorite?: string[];
-  role?: string 
+  role?: string
 
 }

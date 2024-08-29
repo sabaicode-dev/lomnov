@@ -1,4 +1,6 @@
 import * as crypto from "crypto";
+import { jwtDecode } from "jwt-decode";
+import { JwtPayload } from "@/src/utils/types/indext";
 import {
   CognitoIdentityProviderClient,
   SignUpCommand,
@@ -17,17 +19,16 @@ import {
   ValidationError,
 } from "@/src/utils/error/customErrors";
 import {
-  ConfirmPasswordResetRequest,
-  ConfirmPasswordResetResponse,
-  InitiatePasswordResetRequest,
-  InitiatePasswordResetResponse,
-  SignInRequest,
-  SignInUserResponse,
-  // SignInUserResponse,
-  SignUpUserRequest,
-  SignUpUserResponse,
-  VerifyRequest,
-  VerifyUserResponse,
+  RequestConfirmPasswordResetDTO,
+  ResponseConfirmPasswordResetDTO,
+  RequestInitiatePasswordResetDTO,
+  ResponseInitiatePasswordReset,
+  RequestSignInDTO,
+  ResponseSignInUserDTO,
+  RequestSignUpUserDTO,
+  ResponseSignUpUserDTO,
+  RequestVerifyDTO,
+  ResponseVerifyUserDTO,
 } from "@/src/utils/types/indext";
 // =====================================================
 
@@ -47,8 +48,8 @@ export class CognitoService {
   }
 
   public async signUpUser(
-    request: SignUpUserRequest,
-  ): Promise<SignUpUserResponse> {
+    request: RequestSignUpUserDTO,
+  ): Promise<ResponseSignUpUserDTO> {
     const secretHash = this.generateSecretHash(request.username);
     const userAttributes = [
       {
@@ -123,8 +124,8 @@ export class CognitoService {
   }
 
   public async verifyUser(
-    requestBody: VerifyRequest,
-  ): Promise<VerifyUserResponse> {
+    requestBody: RequestVerifyDTO,
+  ): Promise<ResponseVerifyUserDTO> {
     const secretHash = this.generateSecretHash(requestBody.username);
     const confirmCommand = new ConfirmSignUpCommand({
       ClientId: configs.cognitoAppCientId,
@@ -191,8 +192,8 @@ export class CognitoService {
   }
 
   public async signInUser(
-    requestBody: SignInRequest,
-  ): Promise<SignInUserResponse> {
+    requestBody: RequestSignInDTO,
+  ): Promise<ResponseSignInUserDTO> {
     // Input validation
     if (!requestBody.username || !requestBody.password) {
       throw new ValidationError("Username, and password are required.");
@@ -217,9 +218,14 @@ export class CognitoService {
         );
       }
       const authResult = response.AuthenticationResult;
+      const decodedToken = jwtDecode<JwtPayload>(authResult.AccessToken!);
+      const extractedUsername = decodedToken.sub;
       return {
+
         message: "Sign-in successful!",
-        authResult
+        authResult,
+        username: extractedUsername,
+
       };
     } catch (error: any) {
       if (error instanceof InternalServerError) {
@@ -233,8 +239,8 @@ export class CognitoService {
   }
 
   public async initiatePasswordReset(
-    requestBody: InitiatePasswordResetRequest,
-  ): Promise<InitiatePasswordResetResponse> {
+    requestBody: RequestInitiatePasswordResetDTO,
+  ): Promise<ResponseInitiatePasswordReset> {
     // Input validation
     if (!requestBody.username)
       throw new ValidationError("Username is required.");
@@ -260,8 +266,8 @@ export class CognitoService {
   }
 
   public async confirmPasswordReset(
-    requestBody: ConfirmPasswordResetRequest,
-  ): Promise<ConfirmPasswordResetResponse> {
+    requestBody: RequestConfirmPasswordResetDTO,
+  ): Promise<ResponseConfirmPasswordResetDTO> {
     // Input validation
     if (
       !requestBody.username ||

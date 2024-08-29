@@ -39,6 +39,15 @@ export class UserRepository {
     }
   }
 
+  public async getMet(cognitoSub: string):Promise<ResponseUserDTO | null> {
+    try{
+      const response = await UserModel.findOne({ cognitoSub: cognitoSub });
+      return response;
+    }catch(error){
+      throw error
+    }
+  }
+
   public async findUsers(query: any, skip: number, limit: number): Promise<ResponseFindUserDTO> {
     try {
       const [users, totalUsers] = await Promise.all([
@@ -46,7 +55,7 @@ export class UserRepository {
         UserModel.countDocuments(query),
       ]);
 
-      if(!users || !totalUsers){
+      if (!users || !totalUsers) {
         throw new NotFoundError("Users not found")
       }
       return { users, totalUsers };
@@ -56,7 +65,7 @@ export class UserRepository {
   }
 
   public async findByCognitoSub(cognitoSub: string): Promise<ResponseUserDTO | null> {
-    return UserModel.findOne({ cognitoSub:cognitoSub }).exec();
+    return UserModel.findOne({ cognitoSub: cognitoSub }).exec();
   }
 
   public async updateUserByCognitoSub(cognitoSub: string, updateData: Partial<User>): Promise<ResponseUserDTO | null> {
@@ -66,6 +75,8 @@ export class UserRepository {
       { new: true },
     ).exec();
   }
+
+
 
 
 

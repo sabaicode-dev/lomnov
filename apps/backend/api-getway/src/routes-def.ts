@@ -21,35 +21,35 @@ export const ROUTE_PATHS: RoutesConfig = {
     target: configs.authServiceUrl,
     nestedRoutes: [
       {
-        path: "/signup",
+        path: "/api/v1/signup",
         methods: { POST: { authRequired: false, roles: [] } },
       },
       {
-        path: "/signin",
+        path: "/api/v1/signin",
         methods: { POST: { authRequired: false, roles: [] } },
       },
       {
-        path: "/verify",
+        path: "api/v1/auth/verify",
         methods: { POST: { authRequired: false, roles: [] } },
       },
       {
-        path: "/password-reset",
+        path: "api/v1/auth/password-reset",
         methods: { POST: { authRequired: false, roles: [] } },
       },
       {
-        path: "/confirm-password",
+        path: "api/v1/auth/confirm-password",
         methods: { POST: { authRequired: false, roles: [] } },
       },
       {
-        path: "/google-sign-in",
+        path: "api/v1/auth/google-sign-in",
         methods: { GET: { authRequired: false, roles: [] } },
       },
       {
-        path: "/facebook-sign-in",
+        path: "api/v1/auth/facebook-sign-in",
         methods: { GET: { authRequired: false, roles: [] } },
       },
       {
-        path: "/callback",
+        path: "api/v1/auth/callback",
         methods: { GET: { authRequired: false, roles: [] } },
       },
     ],

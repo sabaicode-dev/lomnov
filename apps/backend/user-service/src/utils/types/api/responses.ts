@@ -48,3 +48,9 @@ export interface UpdateUserDTO {
   gender?: string;
   dateOfBirth?: string;
 }
+
+
+// Response DTO
+export interface DeleteProfileImageResponseDTO {
+  message: string;
+}
