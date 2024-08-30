@@ -10,7 +10,7 @@ import geoip from "geoip-lite"; // Import geoip-lite
 const logDir = path.join(__dirname, '../logs'); // Point to the logs directory
 const logFilePath = path.join(logDir, 'request_logs.xlsx');
 
-const requestLogger = (req: Request, res: Response, next: NextFunction) => {
+const requestLogger = (req: Request, _res: Response, next: NextFunction) => {
   const ip = req.ip || ""; // Ensure ip is a string, default to an empty string
   const method = req.method;
   const endpoint = req.originalUrl;
@@ -55,7 +55,7 @@ const requestLogger = (req: Request, res: Response, next: NextFunction) => {
   const existingData = xlsx.utils.sheet_to_json(worksheet);
   existingData.push(logData);
   worksheet = xlsx.utils.json_to_sheet(existingData);
-  
+
   // Update the worksheet in the workbook
   workbook.Sheets["Logs"] = worksheet;
 

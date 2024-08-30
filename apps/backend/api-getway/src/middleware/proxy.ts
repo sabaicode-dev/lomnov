@@ -22,7 +22,7 @@ const createProxyOptions = (
     proxyReq: (
       proxyReq: ClientRequest,
       req: IncomingMessage,
-      res: ServerResponse
+      _res: ServerResponse
     ) => {
       proxyReq.setHeader("x-api-gateway-header", "http://localhost:3000");
       console.log(
@@ -30,15 +30,15 @@ const createProxyOptions = (
       );
     },
     proxyRes: (
-      proxyRes: IncomingMessage,
+      _proxyRes: IncomingMessage,
       req: IncomingMessage,
-      res: ServerResponse
+      _res: ServerResponse
     ) => {
       console.log(
         `Proxied Response: ${req.method} ${req.url} -> ${routeConfig.target}${req.url}`
       );
     },
-    error: (err: Error, req: IncomingMessage, res: ServerResponse | Socket) => {
+    error: (err: Error, _req: IncomingMessage, res: ServerResponse | Socket) => {
       console.error("Proxy error:", err);
       if (res instanceof ServerResponse) {
         res.statusCode = 500;
@@ -75,7 +75,6 @@ Object.keys(ROUTE_PATHS).forEach((key) => {
 
 const applyProxy = (app: express.Application) => {
   Object.keys(proxyConfigs).forEach((context: string) => {
-    console.log(`Applying proxy for context: ${context}`);
     app.use(context, createProxyMiddleware(proxyConfigs[context]));
   });
 };

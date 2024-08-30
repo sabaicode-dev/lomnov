@@ -1,8 +1,4 @@
 import configs from "./config";
-import { createProxyMiddleware, Options } from "http-proxy-middleware";
-import express from "express";
-import { IncomingMessage, ServerResponse, ClientRequest } from "http";
-import { Socket } from "net";
 
 export interface RouteConfig {
   path: string;
