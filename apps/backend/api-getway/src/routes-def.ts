@@ -46,6 +46,7 @@ const ROUTE_PATHS: RoutesConfig = {
     nestedRoutes: [
       { path: "/api-docs", methods: { GET: { authRequired: false, roles: [] } } },
       { path: "/me", methods: { GET: { authRequired: false, roles: [] } } },
+      { path: "/username", methods: { GET: { authRequired: false, roles: [] } } },
       { path: "/my-profile", methods: { DELETE: { authRequired: false, roles: [] } } },
       { path: "/my-background", methods: { POST: { authRequired: false, roles: [] } } },
       { path: "/fovorite", methods: { PUT: { authRequired: false, roles: [] } } },

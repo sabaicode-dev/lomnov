@@ -1,8 +1,9 @@
 import { IncomingMessage, ServerResponse, ClientRequest } from "http";
 import { createProxyMiddleware, Options } from "http-proxy-middleware";
-import ROUTE_PATHS,{ RouteConfig } from "../routes-def";
+import ROUTE_PATHS, { RouteConfig } from "../routes-def";
 import express from "express";
 import { Socket } from "net";
+import { loggingMiddleware } from "../utils/logger";
 
 interface ProxyConfig {
   [context: string]: Options<IncomingMessage, ServerResponse>;
@@ -11,34 +12,40 @@ interface ProxyConfig {
 const proxyConfigs: ProxyConfig = {};
 
 const createProxyOptions = (
-  routeConfig: RouteConfig
+  routeConfig: RouteConfig,
 ): Options<IncomingMessage, ServerResponse> => ({
   target: routeConfig.target,
   changeOrigin: true,
   pathRewrite: (path, _req) => {
-    return routeConfig.path+path;
+    // Extract the dynamic part of the path
+    const dynamicPath = path.replace(routeConfig.path, ""); // Remove the base path
+    console.log(dynamicPath);
+    return `${routeConfig.path}${dynamicPath}`; // Return the full path
   },
   on: {
     proxyReq: (
       proxyReq: ClientRequest,
       req: IncomingMessage,
-      _res: ServerResponse
+      res: ServerResponse,
     ) => {
       proxyReq.setHeader("x-api-gateway-header", "http://localhost:3000");
-      console.log(
-        `Proxy Request: ${req.method} ${req.url} -> ${routeConfig.target}${req.url}`
-      );
+      const nestedPath = `${routeConfig.target}${req.url}`;
+      loggingMiddleware(req, res, nestedPath, "Proxy Request");
     },
     proxyRes: (
       _proxyRes: IncomingMessage,
       req: IncomingMessage,
-      _res: ServerResponse
+      res: ServerResponse,
     ) => {
-      console.log(
-        `Proxied Response: ${req.method} ${req.url} -> ${routeConfig.target}${req.url}`
-      );
+      const nestedPath = `${routeConfig.target}${req.url}`;
+
+      loggingMiddleware(req, res, nestedPath, "Proxy Responsed");
     },
-    error: (err: Error, _req: IncomingMessage, res: ServerResponse | Socket) => {
+    error: (
+      err: Error,
+      _req: IncomingMessage,
+      res: ServerResponse | Socket,
+    ) => {
       console.error("Proxy error:", err);
       if (res instanceof ServerResponse) {
         res.statusCode = 500;
@@ -55,9 +62,9 @@ Object.keys(ROUTE_PATHS).forEach((key) => {
   const proxyOption = createProxyOptions(routeConfig);
   proxyConfigs[routeConfig.path] = proxyOption;
 
-  console.log(
-    `Configured proxy for ${routeConfig.path} -> ${routeConfig.target}`
-  );
+  // console.log(
+  //   `Configured proxy for ${routeConfig.path} -> ${routeConfig.target}`,
+  // );
 
   if (routeConfig.nestedRoutes) {
     routeConfig.nestedRoutes.forEach((nestedRoute) => {
@@ -66,9 +73,9 @@ Object.keys(ROUTE_PATHS).forEach((key) => {
       proxyConfigs[nestedPath] = {
         ...proxyOption,
       };
-      console.log(
-        `Configured proxy for ${nestedPath} -> ${routeConfig.target}${nestedRoute.path}`
-      );
+      // console.log(
+      //   `Configured proxy for ${nestedPath} -> ${routeConfig.target}${nestedRoute.path}`,
+      // );
     });
   }
 });
@@ -80,7 +87,3 @@ const applyProxy = (app: express.Application) => {
 };
 
 export default applyProxy;
-
-
-
-
