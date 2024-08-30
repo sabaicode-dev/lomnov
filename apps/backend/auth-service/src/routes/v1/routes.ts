@@ -25,6 +25,8 @@ const models: TsoaRoute.Models = {
     "RequestSignUpDTO": {
         "dataType": "refObject",
         "properties": {
+            "firstName": {"dataType":"string","required":true},
+            "lastName": {"dataType":"string","required":true},
             "username": {"dataType":"string","required":true},
             "password": {"dataType":"string","required":true},
             "name": {"dataType":"string","required":true},

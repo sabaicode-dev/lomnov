@@ -20,14 +20,14 @@ export class UserRepository {
     _req: Express.Request,
   ): Promise<ResponseUserDTO> {
     try {
-      const { cognitoSub, firstName, lastName, userName } = requestBody;
+      const { cognitoSub, firstName, lastName, email, userName } = requestBody;
       // console.log("the best result" + req.user);
       if (!cognitoSub || !firstName || !lastName || !userName) {
         throw new ValidationError(
           " CognitoSub , firstname, lastname and username are required!",
         );
       }
-      const data = { cognitoSub, firstName, lastName, userName };
+      const data = { cognitoSub, email, firstName, lastName, userName };
       const response = await UserModel.create(data);
       return response;
     } catch (error: any) {

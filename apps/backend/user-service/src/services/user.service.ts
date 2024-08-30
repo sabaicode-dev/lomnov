@@ -30,9 +30,9 @@ export class UserService {
   }
 
   public async getMe(cognitoSub: string): Promise<ResponseUserDTO | null> {
-    try{
+    try {
       return await this.userRepository.getMet(cognitoSub)
-    }catch(error){
+    } catch (error) {
       throw error
     }
   }
@@ -74,7 +74,7 @@ export class UserService {
   }
 
   public async updateUser(data: UpdateUserDTO): Promise<ResponseUserDTO | undefined> {
-    try{
+    try {
 
       const { cognitosub, profileFiles, backgroundFiles, ...updateFields } = data;
 
@@ -110,7 +110,7 @@ export class UserService {
       }
 
       return updatedUser;
-    }catch(error){
+    } catch (error) {
 
     }
   }

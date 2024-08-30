@@ -1,7 +1,7 @@
 // UserRequest.ts
 export interface User{
-
   cognitoSub: string;
+  email: string;
   firstName: string;
   lastName: string;
   userName: string;
@@ -15,5 +15,4 @@ export interface User{
   background?: string[];
   favorite?: string[];
   role?: string
-
 }

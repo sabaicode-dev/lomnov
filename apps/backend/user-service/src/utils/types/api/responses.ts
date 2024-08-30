@@ -3,10 +3,12 @@ import { Types } from 'mongoose';
 export interface ResponseUserDTO {
   _id?: Types.ObjectId;
   cognitoSub: string;
+  email: string;
   firstName: string;
   lastName: string;
   userName: string;
   phoneNumber?: string;
+  location?: string;
   address?: string;
   age?: number;
   gender?: string;

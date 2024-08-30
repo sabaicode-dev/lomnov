@@ -24,6 +24,12 @@
 			},
 			"RequestSignUpDTO": {
 				"properties": {
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
 					"username": {
 						"type": "string"
 					},
@@ -38,6 +44,8 @@
 					}
 				},
 				"required": [
+					"firstName",
+					"lastName",
 					"username",
 					"password",
 					"name",

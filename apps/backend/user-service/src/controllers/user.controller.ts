@@ -95,7 +95,7 @@ export class ProductController extends Controller {
     @FormField() address?: string,
     @FormField() gender?: string,
     @FormField() dateOfBirth?: string,
-  ): Promise<RequestUserDTO | undefined> {
+  ): Promise<ResponseUserDTO | undefined> {
     try {
       const updateData = {
         firstName,

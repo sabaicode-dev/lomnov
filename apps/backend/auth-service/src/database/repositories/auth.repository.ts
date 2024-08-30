@@ -12,6 +12,7 @@ import {
   RequestVerifyDTO,
   ResponseVerifyUserDTO,
 } from "@/src/utils/types/indext";
+import axios from "axios";
 // ====================================================================
 
 export class AuthRepository {
@@ -20,27 +21,34 @@ export class AuthRepository {
     this.cognitoService = new CognitoService();
   }
   public async signUp(requestBody: RequestSignUpDTO): Promise<ResponseSignUpUserDTO> {
-    const { username, name, password, roles } = requestBody;
-    const isPhoneNumber = username.startsWith("+");
-    const attributes: {
-      name: string;
-      phoneNumber?: string;
-      email?: string;
-      "custom:roles"?: string;
-    } = {
-      name,
-      "custom:roles": roles,
-    };
-
-    if (isPhoneNumber) {
-      attributes.phoneNumber = username;
-    } else {
-      attributes.email = username;
-    }
-    const data = { username, password, attributes };
     try {
-      const response = await this.cognitoService.signUpUser(data);
+      const { firstName, lastName, username, name, password, roles } = requestBody;
+      const isPhoneNumber = username.startsWith("+");
+      const attributes: {
+        name: string;
+        phoneNumber?: string;
+        email?: string;
+        "custom:roles"?: string;
+      } = {
+        name,
+        "custom:roles": roles,
+      };
 
+      if (isPhoneNumber) {
+        attributes.phoneNumber = username;
+      } else {
+        attributes.email = username;
+      }
+      const data = { username, password, attributes };
+      const response = await this.cognitoService.signUpUser(data);
+      console.log(response.userSub)
+      const userPayload = {
+        cognitoSub: response.userSub, // Cognito userSub
+        firstName,  // First name
+        lastName,   // Last name
+        userName: name // Username (not Cognito username)
+      };
+      await axios.post('http://localhost:4002/api/v1/users', userPayload);
       return response;
     } catch (error: any) {
       throw error;
@@ -69,7 +77,7 @@ export class AuthRepository {
       request.res?.cookie("accessToken", response.authResult?.AccessToken);
       request.res?.cookie("refreshToken", response.authResult?.RefreshToken);
       request.res?.cookie("idToken", response.authResult?.IdToken);
-      request.res?.cookie("username",response.username)
+      request.res?.cookie("username", response.username)
 
       console.log(response.authResult)
       return { message: "Login successful" };
