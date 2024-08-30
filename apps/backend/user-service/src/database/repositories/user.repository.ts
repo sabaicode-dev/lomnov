@@ -21,6 +21,10 @@ export class UserRepository {
   ): Promise<ResponseUserDTO> {
     try {
       const { cognitoSub, firstName, lastName, email, userName } = requestBody;
+      const usernameExist = await UserModel.find({ userName: userName });
+      if (usernameExist.length > 0) {
+        throw new ValidationError(" Username already existed")
+      }
       // console.log("the best result" + req.user);
       if (!cognitoSub || !firstName || !lastName || !userName) {
         throw new ValidationError(
@@ -39,11 +43,11 @@ export class UserRepository {
     }
   }
 
-  public async getMet(cognitoSub: string):Promise<ResponseUserDTO | null> {
-    try{
+  public async getMet(cognitoSub: string): Promise<ResponseUserDTO | null> {
+    try {
       const response = await UserModel.findOne({ cognitoSub: cognitoSub });
       return response;
-    }catch(error){
+    } catch (error) {
       throw error
     }
   }

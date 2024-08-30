@@ -13,6 +13,7 @@ import {
   ResponseVerifyUserDTO,
 } from "@/src/utils/types/indext";
 import axios from "axios";
+import { ValidationError } from "@/src/utils/error/customErrors";
 // ====================================================================
 
 export class AuthRepository {
@@ -40,17 +41,26 @@ export class AuthRepository {
         attributes.email = username;
       }
       const data = { username, password, attributes };
+      const findUsernameExist = await axios.get(`http://localhost:4002/api/v1/users/username/${name}`);
+      console.log(findUsernameExist)
+      if (findUsernameExist.data.usernameExist) {
+        throw new ValidationError(" Username already exist")
+      }
       const response = await this.cognitoService.signUpUser(data);
       console.log(response.userSub)
       const userPayload = {
         cognitoSub: response.userSub, // Cognito userSub
         firstName,  // First name
-        lastName,   // Last name
+        lastName,
+        email: username, // Last name
         userName: name // Username (not Cognito username)
       };
       await axios.post('http://localhost:4002/api/v1/users', userPayload);
       return response;
     } catch (error: any) {
+      if (error instanceof ValidationError) {
+        throw error
+      }
       throw error;
     }
   }
@@ -78,8 +88,6 @@ export class AuthRepository {
       request.res?.cookie("refreshToken", response.authResult?.RefreshToken);
       request.res?.cookie("idToken", response.authResult?.IdToken);
       request.res?.cookie("username", response.username)
-
-      console.log(response.authResult)
       return { message: "Login successful" };
     } catch (error) {
       throw error;

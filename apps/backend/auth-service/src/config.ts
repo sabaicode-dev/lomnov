@@ -11,7 +11,8 @@ type Config = {
   redirect_uri: string;
   awsRegion: string;
   userPoolId: string;
-  redirectToFrontend: string
+  redirectToFrontend: string;
+  userServiceDomain: string
 };
 
 // Function to load and validate environment variables
@@ -23,7 +24,6 @@ function loadConfig(): Config {
 
   // Define a schema for the environment variables
   const envVarsSchema = Joi.object({
-
     PORT: Joi.number().default(3000),
     MONGODB_URL: Joi.string().required(),
     COGNITO_APP_CIENTID: Joi.string().required(),
@@ -32,7 +32,8 @@ function loadConfig(): Config {
     COGNITO_APP_DOMAIN: Joi.string().required(),
     AWSREGION: Joi.string().required(),
     USER_POOL_ID: Joi.string().required(),
-    REDIRECT_TO_FRONTEND: Joi.string().required()
+    REDIRECT_TO_FRONTEND: Joi.string().required(),
+    USER_SERVICE_DOMAIN: Joi.string().required()
   })
     .unknown()
     .required();
@@ -53,7 +54,8 @@ function loadConfig(): Config {
     redirect_uri: envVars.REDIRECT_URI,
     awsRegion: envVars.AWSREGION,
     userPoolId: envVars.USER_POOL_ID,
-    redirectToFrontend: envVars.REDIRECT_TO_FRONTEND
+    redirectToFrontend: envVars.REDIRECT_TO_FRONTEND,
+    userServiceDomain: envVars.USER_SERVICE_DOMAIN
   };
 }
 

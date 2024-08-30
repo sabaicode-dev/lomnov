@@ -23,10 +23,12 @@ const models: TsoaRoute.Models = {
         "properties": {
             "_id": {"ref":"mongoose.Types.ObjectId"},
             "cognitoSub": {"dataType":"string","required":true},
+            "email": {"dataType":"string","required":true},
             "firstName": {"dataType":"string","required":true},
             "lastName": {"dataType":"string","required":true},
             "userName": {"dataType":"string","required":true},
             "phoneNumber": {"dataType":"string"},
+            "location": {"dataType":"string"},
             "address": {"dataType":"string"},
             "age": {"dataType":"double"},
             "gender": {"dataType":"string"},
@@ -43,10 +45,12 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "cognitoSub": {"dataType":"string","required":true},
+            "email": {"dataType":"string","required":true},
             "firstName": {"dataType":"string","required":true},
             "lastName": {"dataType":"string","required":true},
             "userName": {"dataType":"string","required":true},
             "phoneNumber": {"dataType":"string"},
+            "location": {"dataType":"string"},
             "address": {"dataType":"string"},
             "age": {"dataType":"double"},
             "gender": {"dataType":"string"},
@@ -159,6 +163,36 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'getAllUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/api/v1/users/username/:username',
+            ...(fetchMiddlewares<RequestHandler>(ProductController)),
+            ...(fetchMiddlewares<RequestHandler>(ProductController.prototype.findUsernameExite)),
+
+            async function ProductController_findUsernameExite(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    username: {"in":"path","name":"username","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new ProductController();
+
+              await templateService.apiHandler({
+                methodName: 'findUsernameExite',
                 controller,
                 response,
                 next,

@@ -10,6 +10,7 @@ import {
   ConfirmForgotPasswordCommand,
   AdminGetUserCommand,
   AdminAddUserToGroupCommand,
+  AdminDeleteUserCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import configs from "@/src/config";
 import {
@@ -97,7 +98,9 @@ export class CognitoService {
       if (!command) {
         throw new InternalServerError("Failed to create the sign-up command.");
       }
+
       const response = await this.cognitoClient.send(command);
+
       // Validate response
       if (!response || !response.UserSub) {
         throw new InternalServerError("UserSub is missing from the response.");
@@ -306,6 +309,20 @@ export class CognitoService {
           `An unexpected error occurred: ${error.message}`,
         );
       }
+    }
+  }
+
+  public async deleteUser(cognitoUserSub: string): Promise<void> {
+    const params = {
+      UserPoolId: configs.userPoolId, // The user pool ID for the user pool where you want to delete the user
+      Username: cognitoUserSub,    // The username (in this case, the Cognito user sub)
+    };
+
+    try {
+      const command = new AdminDeleteUserCommand(params);
+      await this.cognitoClient.send(command);
+    } catch (error: any) {
+     throw new InternalServerError(error.message)
     }
   }
 }

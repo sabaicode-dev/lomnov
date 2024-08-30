@@ -21,6 +21,7 @@ import {
   DeleteProfileImageResponseDTO,
 } from "../utils/types/indext";
 import { UserService } from "@/src/services/user.service";
+import { UserModel } from "../database/models/user.model";
 // =========================================================
 
 @Tags(" User service")
@@ -68,6 +69,20 @@ export class ProductController extends Controller {
     } catch (error) {
       this.setStatus(500);
       throw error;
+    }
+  }
+
+  @Get("/username/{username}")
+
+  public async findUsernameExite(@Path() username: string) {
+    try {
+      const response = await UserModel.find({ userName: username });
+      if (response.length > 0) {
+        return { usernameExist: true }
+      }
+      return {usernameExist: false}
+    } catch (error) {
+      throw error
     }
   }
 

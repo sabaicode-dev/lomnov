@@ -1,4 +1,4 @@
-import { Controller, Route, Post, Body, Tags, Request } from "tsoa";
+import { Controller, Route, Post, Body, Tags, Request, Delete, Path } from "tsoa";
 import { Request as ExRequest } from "express";
 import { AuthService } from "@/src/services/auth.service";
 import {
@@ -12,15 +12,19 @@ import {
   ResponseInitiatePasswordReset,
   ResponseConfirmPasswordResetDTO,
 } from "@/src/utils/types/indext";
+import { CognitoService } from "../services/cognito.service";
 // =========================================================================
 
 @Tags("Manual Registration")
 @Route("api/v1")
 export class ProductController extends Controller {
   private authService: AuthService;
+  private cognitoService: CognitoService
   constructor() {
     super();
     this.authService = new AuthService();
+    this.cognitoService = new CognitoService();
+
   }
 
   @Post("/auth/signup")
@@ -76,6 +80,15 @@ export class ProductController extends Controller {
       return await this.authService.authConfirmPassword(requestBody);
     } catch (error) {
       throw error;
+    }
+  }
+
+  @Delete("/auth/{cognitoSub}")
+  public async deleteUser (@Path() cognitoSub: string) {
+    try{
+      return await this.cognitoService.deleteUser(cognitoSub)
+    }catch(error){
+
     }
   }
 }
