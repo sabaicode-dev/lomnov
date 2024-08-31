@@ -1,13 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
-import configs from "../config";
+import configs from "@/src/config";
+import { User } from "@/src/utils/types/interface";
+import { UnauthorizedError } from "../utils/error/customErrors";
+// =================================================================
 
 // Extend the Request interface to include user
-interface User {
-  username: string;
-  roles: string[]; // Change here to match the expected type
-}
-
 declare global {
   namespace Express {
     interface Request {
@@ -22,35 +20,27 @@ const verifier = CognitoJwtVerifier.create({
   clientId: configs.cognitoAppCientId,
 });
 
-const authenticateToken = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+const authenticateToken = async (req: Request, _res: Response, next: NextFunction) => {
   const { routeConfig } = req;
-
-  if (
-    routeConfig &&
-    routeConfig.methods &&
-    !routeConfig.methods[req.method]?.authRequired
-  ) {
+  if (routeConfig && routeConfig.methods && !routeConfig.methods[req.method]?.authRequired) {
     return next();
   }
-
   const token = req.cookies?.["accessToken"];
   if (!token) {
-    return res.status(401).send("Unauthorized");
+    return next(new UnauthorizedError());
   }
 
   try {
     const payload = await verifier.verify(token);
+    if (!payload || typeof payload.username !== "string") {
+      return next(new UnauthorizedError("Invalid token payload."));
+    }
     req.user = {
-      username: payload.username,
-      roles: payload["cognito:groups"] || [], // Ensure roles is always an array
+      username: payload.username, roles: payload["cognito:groups"] || [], // Ensure roles is always an array
     };
     next();
   } catch (error: any) {
-    return res.status(401).send(error.message);
+    return next(new UnauthorizedError("Authentication failed."));
   }
 };
 

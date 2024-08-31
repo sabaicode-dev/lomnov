@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { RouteConfig } from "../routes-def"; // Import your RouteConfig interface
+import { RouteConfig } from "@/src/utils/types/interface"; 
+import { ForbiddenError, UnauthorizedError } from "@/src/utils/error/customErrors";
+// ============================================================
 
 // Extend the Express Request interface
 declare module "express-serve-static-core" {
@@ -13,38 +15,27 @@ declare module "express-serve-static-core" {
 }
 
 // Middleware to authorize user roles
-const authorizeRole = (req: Request, res: Response, next: NextFunction) => {
+const authorizeRole = (req: Request, _res: Response, next: NextFunction) => {
   const { methods } = req.routeConfig || {};
   const { method } = req;
   const methodConfig = methods && methods[method];
-console.log(req.user?.roles)
   // Skip authorization if authRequired is false
   if (methodConfig && !methodConfig.authRequired) {
     return next(); // Skip authorization, proceed to the next middleware
   }
-
   // Ensure user is authenticated
   if (!req.user || !req.user.roles) {
-    return res.status(401).json({ message: "Unauthorized: Please log in." });
+    return next(new UnauthorizedError("Unauthorized: Please log in."));
   }
-
   const userRoles = req.user.roles || [];
   const authorized = methodConfig?.roles?.some((role) =>
-    userRoles.includes(role)
+    userRoles.includes(role),
   );
-
   // Deny access if user is not authorized
   if (!authorized) {
-    return res
-      .status(403)
-      .json({
-        message:
-          "Forbidden: You do not have permission to access this resource.",
-      });
+    return next(new ForbiddenError("Forbidden: You do not have permission to access this resource."));
   }
-
-  next(); // Proceed if authorized or if authRequired is false
+  next(); // Proceed if authorized
 };
 
 export default authorizeRole;
-

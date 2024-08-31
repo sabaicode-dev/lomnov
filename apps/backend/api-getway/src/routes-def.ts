@@ -1,20 +1,6 @@
-import configs from "./config";
-
-export interface RouteConfig {
-  path: string;
-  target?: string;
-  methods?: {
-    [method: string]: {
-      authRequired: boolean;
-      roles: string[];
-    };
-  };
-  nestedRoutes?: RouteConfig[];
-}
-
-export interface RoutesConfig {
-  [route: string]: RouteConfig;
-}
+import configs from "@/src/config";
+import { RoutesConfig } from "@/src/utils/types/interface";
+// =============================================================
 
 const ROUTE_PATHS: RoutesConfig = {
   AUTH_SERVICE: {
@@ -25,15 +11,42 @@ const ROUTE_PATHS: RoutesConfig = {
       POST: { authRequired: false, roles: [] },
     },
     nestedRoutes: [
-      { path: "/api-docs", methods: { GET: { authRequired: false, roles: [] } } },
-      { path: "/signup", methods: { POST: { authRequired: false, roles: [] } } },
-      { path: "/signin", methods: { POST: { authRequired: false, roles: [] } } },
-      { path: "/verify", methods: { POST: { authRequired: false, roles: [] } } },
-      { path: "/password-reset", methods: { POST: { authRequired: false, roles: [] } } },
-      { path: "/confirm-password", methods: { POST: { authRequired: false, roles: [] } } },
-      { path: "/google-sign-in", methods: { GET: { authRequired: false, roles: [] } } },
-      { path: "/facebook-sign-in", methods: { GET: { authRequired: false, roles: [] } } },
-      { path: "/callback", methods: { GET: { authRequired: false, roles: [] } } },
+      {
+        path: "/api-docs",
+        methods: { GET: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/signup",
+        methods: { POST: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/signin",
+        methods: { POST: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/verify",
+        methods: { POST: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/password-reset",
+        methods: { POST: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/confirm-password",
+        methods: { POST: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/google-sign-in",
+        methods: { GET: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/facebook-sign-in",
+        methods: { GET: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/callback",
+        methods: { GET: { authRequired: false, roles: [] } },
+      },
     ],
   },
   USER_SERVICE: {
@@ -44,13 +57,27 @@ const ROUTE_PATHS: RoutesConfig = {
       POST: { authRequired: true, roles: ["user"] },
     },
     nestedRoutes: [
-      { path: "/api-docs", methods: { GET: { authRequired: false, roles: [] } } },
-      { path: "/me", methods: { GET: { authRequired: false, roles: [] } } },
-      { path: "/username", methods: { GET: { authRequired: false, roles: [] } } },
-      { path: "/my-profile", methods: { DELETE: { authRequired: false, roles: [] } } },
-      { path: "/my-background", methods: { POST: { authRequired: false, roles: [] } } },
-      { path: "/fovorite", methods: { PUT: { authRequired: false, roles: [] } } },
-
+      {
+        path: "/api-docs",
+        methods: { GET: { authRequired: false, roles: [] } },
+      },
+      { path: "/me", methods: { GET: { authRequired: true, roles: ["user"] } } },
+      {
+        path: "/username",
+        methods: { GET: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/my-profile",
+        methods: { DELETE: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/my-background",
+        methods: { POST: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/fovorite",
+        methods: { PUT: { authRequired: false, roles: [] } },
+      },
     ],
   },
   PROPERTY_SERVICE: {
@@ -61,17 +88,44 @@ const ROUTE_PATHS: RoutesConfig = {
       POST: { authRequired: true, roles: ["admin"] },
     },
     nestedRoutes: [
-      { path: "/api-docs", methods: { GET: { authRequired: false, roles: [] } } },
-      { path: "/signup", methods: { POST: { authRequired: false, roles: [] } } },
-      { path: "/signin", methods: { POST: { authRequired: false, roles: [] } } },
-      { path: "/verify", methods: { POST: { authRequired: false, roles: [] } } },
-      { path: "/password-reset", methods: { POST: { authRequired: false, roles: [] } } },
-      { path: "/confirm-password", methods: { POST: { authRequired: false, roles: [] } } },
-      { path: "/google-sign-in", methods: { GET: { authRequired: false, roles: [] } } },
-      { path: "/facebook-sign-in", methods: { GET: { authRequired: false, roles: [] } } },
-      { path: "/callback", methods: { GET: { authRequired: false, roles: [] } } },
+      {
+        path: "/api-docs",
+        methods: { GET: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/signup",
+        methods: { POST: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/signin",
+        methods: { POST: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/verify",
+        methods: { POST: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/password-reset",
+        methods: { POST: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/confirm-password",
+        methods: { POST: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/google-sign-in",
+        methods: { GET: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/facebook-sign-in",
+        methods: { GET: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/callback",
+        methods: { GET: { authRequired: false, roles: [] } },
+      },
     ],
   },
 };
 
-export default ROUTE_PATHS
+export default ROUTE_PATHS;
