@@ -39,7 +39,7 @@ export interface ResponseFindUserDTO{
 
 
 export interface UpdateUserDTO {
-  cognitosub: string;
+  request: Express.Request;
   profileFiles?: Express.Multer.File[];
   backgroundFiles?: Express.Multer.File[];
   firstName?: string;

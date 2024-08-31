@@ -88,7 +88,7 @@ export class AuthRepository {
       request.res?.cookie("refreshToken", response.authResult?.RefreshToken);
       request.res?.cookie("idToken", response.authResult?.IdToken);
       request.res?.cookie("username", response.username)
-      return { message: "Login successful" };
+      return { message: response.message};
     } catch (error) {
       throw error;
     }

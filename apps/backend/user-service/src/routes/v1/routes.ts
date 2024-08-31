@@ -210,6 +210,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
             async function ProductController_getMe(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -240,7 +241,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
             async function ProductController_updateMe(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    cognitosub: {"in":"formData","name":"cognitosub","required":true,"dataType":"string"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     profileFiles: {"in":"formData","name":"profileFiles","dataType":"array","array":{"dataType":"file"}},
                     backgroundFiles: {"in":"formData","name":"backgroundFiles","dataType":"array","array":{"dataType":"file"}},
                     firstName: {"in":"formData","name":"firstName","dataType":"string"},

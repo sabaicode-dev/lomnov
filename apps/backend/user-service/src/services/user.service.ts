@@ -1,5 +1,6 @@
 import configs from "../config";
 import { UserRepository } from "../database/repositories/user.repository";
+import { UnauthorizedError } from "../utils/error/customErrors";
 import {
   RequestUserDTO,
   ResponseUserDTO,
@@ -11,6 +12,13 @@ import {
 
 } from "../utils/types/indext";
 import uploadFileToS3Service from "./uploadFileToS3.service";
+declare global {
+  namespace Express {
+      interface Request {
+          cookies: { [key: string]: string }; // Define the structure of cookies
+      }
+  }
+}
 
 export class UserService {
   private userRepository: UserRepository;
@@ -29,9 +37,10 @@ export class UserService {
     }
   }
 
-  public async getMe(cognitoSub: string): Promise<ResponseUserDTO | null> {
+  public async getMe(request: Express.Request): Promise<ResponseUserDTO | null> {
+
     try {
-      return await this.userRepository.getMet(cognitoSub)
+      return await this.userRepository.getMet(request)
     } catch (error) {
       throw error
     }
@@ -76,10 +85,10 @@ export class UserService {
   public async updateUser(data: UpdateUserDTO): Promise<ResponseUserDTO | undefined> {
     try {
 
-      const { cognitosub, profileFiles, backgroundFiles, ...updateFields } = data;
-
+      const { request, profileFiles, backgroundFiles, ...updateFields } = data;
+      const cognitosub = request.cookies?.username
       if (!cognitosub) {
-        throw new Error("CognitoSub is required");
+        throw new UnauthorizedError();
       }
 
       const existingUser = await this.userRepository.findByCognitoSub(cognitosub);

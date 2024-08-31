@@ -83,12 +83,43 @@ export class ProductController extends Controller {
     }
   }
 
-  @Delete("/auth/{cognitoSub}")
-  public async deleteUser (@Path() cognitoSub: string) {
-    try{
-      return await this.cognitoService.deleteUser(cognitoSub)
-    }catch(error){
+  @Post("/auth/refresh-token/{refresh}")
+  public async refreshToken(@Path() refresh: string, @Request() request: ExRequest,) {
+    try {
+      const response = await this.cognitoService.refreshTokens(refresh);
+      // Set cookies with a max age of 7 days for the access token
+      request.res?.cookie("accessToken", response.authResult?.AccessToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+      request.res?.cookie("refreshToken", response.authResult?.RefreshToken, {
+        httpOnly: true,
+        secure: true,
+        // You can set a longer expiration for refresh token if needed
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      });
+      request.res?.cookie("idToken", response.authResult?.IdToken, {
+        httpOnly: true,
+        secure: true,
+      });
+      request.res?.cookie("username", response.username, {
+        httpOnly: true,
+        secure: true,
+      });
 
+      return { message: response.message };
+    } catch (error) {
+      throw error
     }
   }
+
+  @Delete("/auth/{cognitoSub}")
+  public async deleteUser(@Path() cognitoSub: string) {
+    try {
+      return await this.cognitoService.deleteUser(cognitoSub)
+    } catch (error) {
+      throw error
+    }
+  } 
 }

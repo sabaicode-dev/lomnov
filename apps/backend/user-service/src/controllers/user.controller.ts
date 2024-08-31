@@ -73,7 +73,6 @@ export class ProductController extends Controller {
   }
 
   @Get("/username/{username}")
-
   public async findUsernameExite(@Path() username: string) {
     try {
       const response = await UserModel.find({ userName: username });
@@ -87,11 +86,10 @@ export class ProductController extends Controller {
   }
 
   @Get("/me")
-  public async getMe(): Promise<ResponseUserDTO | null> {
+  public async getMe(@Request() request: Express.Request ): Promise<ResponseUserDTO | null> {
     try {
-      // console.log('hello req', req.user)
-      const cognitosub = "adfdfadf";
-      const response = await this.userService.getMe(cognitosub);
+
+      const response = await this.userService.getMe(request);
       return response;
     } catch (error) {
       throw error;
@@ -100,7 +98,7 @@ export class ProductController extends Controller {
 
   @Put("/me")
   public async updateMe(
-    @FormField() cognitosub: string,
+    @Request() request: Express.Request,
     @UploadedFiles() profileFiles?: Express.Multer.File[], // Files for profile
     @UploadedFiles() backgroundFiles?: Express.Multer.File[], // Files for background
     @FormField() firstName?: string,
@@ -120,7 +118,7 @@ export class ProductController extends Controller {
         address,
         gender,
         dateOfBirth,
-        cognitosub,
+        request,
         profileFiles,
         backgroundFiles,
       };

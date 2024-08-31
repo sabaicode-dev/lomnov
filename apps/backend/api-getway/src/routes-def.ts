@@ -61,7 +61,13 @@ const ROUTE_PATHS: RoutesConfig = {
         path: "/api-docs",
         methods: { GET: { authRequired: false, roles: [] } },
       },
-      { path: "/me", methods: { GET: { authRequired: true, roles: ["user"] } } },
+      {
+        path: "/me",
+        methods: {
+          GET: { authRequired: true, roles: ["user"] },
+          PUT: { authRequired: true, roles: ["user"] },
+        },
+      },
       {
         path: "/username",
         methods: { GET: { authRequired: false, roles: [] } },

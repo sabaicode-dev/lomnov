@@ -1,17 +1,10 @@
 // =========================================================================
 
-import { InternalServerError, NotFoundError, ValidationError } from "@/src/utils/error/customErrors";
+import { InternalServerError, NotFoundError, UnauthorizedError, ValidationError } from "@/src/utils/error/customErrors";
 import { RequestUserDTO, ResponseFindUserDTO, ResponseUserDTO, User } from "@/src/utils/types/indext";
 import { UserModel } from "../models/user.model";
 
-declare module "express-serve-static-core" {
-  interface Request {
-    user?: {
-      roles: string[];
-      [key: string]: any; // Additional properties can be added here
-    };
-  }
-}
+
 
 
 export class UserRepository {
@@ -43,8 +36,13 @@ export class UserRepository {
     }
   }
 
-  public async getMet(cognitoSub: string): Promise<ResponseUserDTO | null> {
+  public async getMet(request: Express.Request): Promise<ResponseUserDTO | null> {
     try {
+      const cognitoSub = request.cookies?.username;
+      if(!cognitoSub){
+        throw new UnauthorizedError()
+      }
+      console.log(cognitoSub)
       const response = await UserModel.findOne({ cognitoSub: cognitoSub });
       return response;
     } catch (error) {

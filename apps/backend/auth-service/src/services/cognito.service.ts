@@ -312,6 +312,51 @@ export class CognitoService {
     }
   }
 
+  public async refreshTokens(
+    refreshToken: string
+  ): Promise<ResponseSignInUserDTO> {
+    // Input validation
+    if (!refreshToken) {
+      throw new ValidationError("Refresh token is required.");
+    }
+
+    const command = new InitiateAuthCommand({
+      ClientId: configs.cognitoAppCientId,
+      AuthFlow: "REFRESH_TOKEN_AUTH",
+      AuthParameters: {
+        REFRESH_TOKEN: refreshToken,
+      },
+    });
+
+    try {
+      const response = await this.cognitoClient.send(command);
+      // Check if the response and AuthenticationResult are valid
+      if (!response || !response.AuthenticationResult) {
+        throw new InternalServerError(
+          "Authentication result is missing from the response."
+        );
+      }
+
+      const authResult = response.AuthenticationResult;
+      const decodedToken = jwtDecode<JwtPayload>(authResult.AccessToken!);
+      const extractedUsername = decodedToken.sub;
+
+      return {
+        message: "Token refresh successful!",
+        authResult,
+        username: extractedUsername,
+      };
+    } catch (error: any) {
+      if (error instanceof InternalServerError) {
+        throw error;
+      } else {
+        throw new InternalServerError(
+          `An unexpected error occurred: ${error.message}`
+        );
+      }
+    }
+  }
+
   public async deleteUser(cognitoUserSub: string): Promise<void> {
     const params = {
       UserPoolId: configs.userPoolId, // The user pool ID for the user pool where you want to delete the user
@@ -322,7 +367,7 @@ export class CognitoService {
       const command = new AdminDeleteUserCommand(params);
       await this.cognitoClient.send(command);
     } catch (error: any) {
-     throw new InternalServerError(error.message)
+      throw new InternalServerError(error.message)
     }
   }
 }

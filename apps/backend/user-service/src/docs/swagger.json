@@ -405,15 +405,12 @@
 				"security": [],
 				"parameters": [],
 				"requestBody": {
-					"required": true,
+					"required": false,
 					"content": {
 						"multipart/form-data": {
 							"schema": {
 								"type": "object",
 								"properties": {
-									"cognitosub": {
-										"type": "string"
-									},
 									"profileFiles": {
 										"items": {
 											"type": "string",
@@ -449,10 +446,7 @@
 									"dateOfBirth": {
 										"type": "string"
 									}
-								},
-								"required": [
-									"cognitosub"
-								]
+								}
 							}
 						}
 					}
