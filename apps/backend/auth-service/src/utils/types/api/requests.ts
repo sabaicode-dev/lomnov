@@ -1,42 +1,29 @@
 export interface RequestSignUpDTO {
   firstName: string;
-   lastName: string
+  lastName: string;
+  email: string;
   username: string;
   password: string;
-  name: string;
-  roles: string;
+  role?: string;
 }
 
 export interface RequestVerifyDTO {
-  username: string;
+  email: string;
   code: string;
 }
 
 export interface RequestSignInDTO {
-  username: string;
+  email: string;
   password: string;
-}
-
-export interface RequestInitiatePasswordResetDTO {
-  username: string;
-}
-
-export interface RequestConfirmPasswordResetDTO {
-  username: string;
-  newPassword: string;
-  confirmationCode: string;
 }
 
 // cognito service
 export interface RequestSignUpUserDTO {
-  username: string;
+  email: string;
   password: string;
-  attributes: {
-    name: string;
-    phoneNumber?: string;
-    email?: string;
-    "custom:roles"?: string;
-  };
+  username: string;
+  role?: string;
+
 }
 
 
@@ -47,11 +34,11 @@ export interface SignInUserRequest {
 
 
 export interface RequestInitiatePasswordResetDTO {
-  username: string
+  email: string
 }
 
 export interface RequestConfirmPasswordResetDTO {
-  username: string,
+  email: string,
   newPassword: string,
   confirmationCode: string
 }

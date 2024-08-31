@@ -13,7 +13,8 @@ import {
   ResponseVerifyUserDTO,
 } from "@/src/utils/types/indext";
 import axios from "axios";
-import { ValidationError } from "@/src/utils/error/customErrors";
+import { BadRequestError, InternalServerError, ValidationError } from "@/src/utils/error/customErrors";
+import configs from "@/src/config";
 // ====================================================================
 
 export class AuthRepository {
@@ -22,52 +23,50 @@ export class AuthRepository {
     this.cognitoService = new CognitoService();
   }
   public async signUp(requestBody: RequestSignUpDTO): Promise<ResponseSignUpUserDTO> {
+    let cognitoUserSub: string | undefined;
     try {
-      const { firstName, lastName, username, name, password, roles } = requestBody;
-      const isPhoneNumber = username.startsWith("+");
-      const attributes: {
-        name: string;
-        phoneNumber?: string;
-        email?: string;
-        "custom:roles"?: string;
-      } = {
-        name,
-        "custom:roles": roles,
-      };
-
-      if (isPhoneNumber) {
-        attributes.phoneNumber = username;
-      } else {
-        attributes.email = username;
-      }
-      const data = { username, password, attributes };
-      const findUsernameExist = await axios.get(`http://localhost:4002/api/v1/users/username/${name}`);
-      console.log(findUsernameExist)
+      const { firstName, lastName, email, username, password } = requestBody;
+      const data = { email, password, username, role: "user" }
+      const findUsernameExist = await axios.get(`${configs.userServiceDomain}/api/v1/users/username/${username}`);
       if (findUsernameExist.data.usernameExist) {
         throw new ValidationError(" Username already exist")
       }
       const response = await this.cognitoService.signUpUser(data);
-      console.log(response.userSub)
+      cognitoUserSub = response.userSub;
+      if (!response.userSub) {
+        throw new BadRequestError("Please signup again")
+      }
       const userPayload = {
         cognitoSub: response.userSub, // Cognito userSub
         firstName,  // First name
         lastName,
-        email: username, // Last name
-        userName: name // Username (not Cognito username)
+        email: email, // Last name
+        userName: username // Username (not Cognito username)
       };
-      await axios.post('http://localhost:4002/api/v1/users', userPayload);
-      return response;
+      await axios.post(`${configs.userServiceDomain}/api/v1/users`, userPayload);
+      return response
+
     } catch (error: any) {
-      if (error instanceof ValidationError) {
-        throw error
+      if (cognitoUserSub) {
+        try {
+          // If the database insertion fails, rollback the Cognito signup
+          await this.cognitoService.deleteUser(cognitoUserSub);
+        } catch (error: any) {
+          throw new InternalServerError(error.message)
+        }
       }
-      throw error;
+      if (error instanceof ValidationError || error instanceof BadRequestError) {
+        throw error
+      } else {
+        throw new InternalServerError("Please signup again");
+      }
+
     }
   }
 
   public async verify(requestBody: RequestVerifyDTO): Promise<ResponseVerifyUserDTO> {
-    const { username, code } = requestBody;
-    const data = { username, code };
+    const { email, code } = requestBody;
+    const data = { email, code };
     try {
       const response = await this.cognitoService.verifyUser(data);
       return response;
@@ -80,15 +79,15 @@ export class AuthRepository {
     requestBody: RequestSignInDTO,
     request: ExRequest,
   ): Promise<any> {
-    const { username, password } = requestBody;
-    const data = { username, password };
+    const { email, password } = requestBody;
+    const data = { email, password };
     try {
       const response = await this.cognitoService.signInUser(data);
       request.res?.cookie("accessToken", response.authResult?.AccessToken);
       request.res?.cookie("refreshToken", response.authResult?.RefreshToken);
       request.res?.cookie("idToken", response.authResult?.IdToken);
       request.res?.cookie("username", response.username)
-      return { message: response.message};
+      return { message: response.message };
     } catch (error) {
       throw error;
     }
@@ -97,8 +96,8 @@ export class AuthRepository {
   public async passwordReset(
     requestBody: RequestInitiatePasswordResetDTO,
   ): Promise<ResponseInitiatePasswordReset> {
-    const { username } = requestBody;
-    const data = { username };
+    const { email } = requestBody;
+    const data = { email };
     try {
       return await this.cognitoService.initiatePasswordReset(data);
     } catch (error) {
@@ -109,8 +108,8 @@ export class AuthRepository {
   public async confirmPassword(
     requestBody: RequestConfirmPasswordResetDTO,
   ): Promise<ResponseConfirmPasswordResetDTO> {
-    const { username, newPassword, confirmationCode } = requestBody;
-    const data = { username, newPassword, confirmationCode };
+    const { email, newPassword, confirmationCode } = requestBody;
+    const data = { email, newPassword, confirmationCode };
     try {
       return await this.cognitoService.confirmPasswordReset(data);
     } catch (error) {

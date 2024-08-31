@@ -30,13 +30,13 @@
 					"lastName": {
 						"type": "string"
 					},
+					"email": {
+						"type": "string"
+					},
 					"username": {
 						"type": "string"
 					},
 					"password": {
-						"type": "string"
-					},
-					"name": {
 						"type": "string"
 					},
 					"roles": {
@@ -46,9 +46,9 @@
 				"required": [
 					"firstName",
 					"lastName",
+					"email",
 					"username",
 					"password",
-					"name",
 					"roles"
 				],
 				"type": "object",
@@ -68,7 +68,7 @@
 			},
 			"RequestVerifyDTO": {
 				"properties": {
-					"username": {
+					"email": {
 						"type": "string"
 					},
 					"code": {
@@ -76,7 +76,7 @@
 					}
 				},
 				"required": [
-					"username",
+					"email",
 					"code"
 				],
 				"type": "object",
@@ -84,7 +84,7 @@
 			},
 			"RequestSignInDTO": {
 				"properties": {
-					"username": {
+					"email": {
 						"type": "string"
 					},
 					"password": {
@@ -92,7 +92,7 @@
 					}
 				},
 				"required": [
-					"username",
+					"email",
 					"password"
 				],
 				"type": "object",
@@ -112,12 +112,12 @@
 			},
 			"RequestInitiatePasswordResetDTO": {
 				"properties": {
-					"username": {
+					"email": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"username"
+					"email"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -136,7 +136,7 @@
 			},
 			"RequestConfirmPasswordResetDTO": {
 				"properties": {
-					"username": {
+					"email": {
 						"type": "string"
 					},
 					"newPassword": {
@@ -147,7 +147,7 @@
 					}
 				},
 				"required": [
-					"username",
+					"email",
 					"newPassword",
 					"confirmationCode"
 				],

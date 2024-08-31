@@ -11,7 +11,7 @@ interface UserDocument {
 const UserSchema = new Schema<User>(
   {
     cognitoSub: { type: String, required: true, unique: true },
-    email: {type: String, require: true, undefined: true},
+    email: {type: String, required: true, unique: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     userName: {type:String, unique: true},

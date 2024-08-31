@@ -27,9 +27,9 @@ const models: TsoaRoute.Models = {
         "properties": {
             "firstName": {"dataType":"string","required":true},
             "lastName": {"dataType":"string","required":true},
+            "email": {"dataType":"string","required":true},
             "username": {"dataType":"string","required":true},
             "password": {"dataType":"string","required":true},
-            "name": {"dataType":"string","required":true},
             "roles": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
@@ -46,7 +46,7 @@ const models: TsoaRoute.Models = {
     "RequestVerifyDTO": {
         "dataType": "refObject",
         "properties": {
-            "username": {"dataType":"string","required":true},
+            "email": {"dataType":"string","required":true},
             "code": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
@@ -55,7 +55,7 @@ const models: TsoaRoute.Models = {
     "RequestSignInDTO": {
         "dataType": "refObject",
         "properties": {
-            "username": {"dataType":"string","required":true},
+            "email": {"dataType":"string","required":true},
             "password": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
@@ -72,7 +72,7 @@ const models: TsoaRoute.Models = {
     "RequestInitiatePasswordResetDTO": {
         "dataType": "refObject",
         "properties": {
-            "username": {"dataType":"string","required":true},
+            "email": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -88,7 +88,7 @@ const models: TsoaRoute.Models = {
     "RequestConfirmPasswordResetDTO": {
         "dataType": "refObject",
         "properties": {
-            "username": {"dataType":"string","required":true},
+            "email": {"dataType":"string","required":true},
             "newPassword": {"dataType":"string","required":true},
             "confirmationCode": {"dataType":"string","required":true},
         },

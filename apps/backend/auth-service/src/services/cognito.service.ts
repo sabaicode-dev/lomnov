@@ -51,32 +51,24 @@ export class CognitoService {
   public async signUpUser(
     request: RequestSignUpUserDTO,
   ): Promise<ResponseSignUpUserDTO> {
-    const secretHash = this.generateSecretHash(request.username);
+    const secretHash = this.generateSecretHash(request.email);
     const userAttributes = [
       {
         Name: "name",
-        Value: request.attributes.name,
+        Value: request.username
       },
     ];
-
-    if (request.attributes.phoneNumber) {
-      userAttributes.push({
-        Name: "phone_number",
-        Value: request.attributes.phoneNumber,
-      });
-    }
-
-    if (request.attributes.email) {
+    if (request.email) {
       userAttributes.push({
         Name: "email",
-        Value: request.attributes.email,
+        Value: request.email,
       });
     }
 
-    if (request.attributes["custom:roles"]) {
+    if (request.role) {
       userAttributes.push({
         Name: "custom:roles",
-        Value: request.attributes["custom:roles"],
+        Value: request.role,
       });
     }
 
@@ -90,7 +82,7 @@ export class CognitoService {
       }
       const command = new SignUpCommand({
         ClientId: configs.cognitoAppCientId,
-        Username: request.username,
+        Username: request.email,
         Password: request.password,
         SecretHash: secretHash,
         UserAttributes: userAttributes,
@@ -129,10 +121,10 @@ export class CognitoService {
   public async verifyUser(
     requestBody: RequestVerifyDTO,
   ): Promise<ResponseVerifyUserDTO> {
-    const secretHash = this.generateSecretHash(requestBody.username);
+    const secretHash = this.generateSecretHash(requestBody.email);
     const confirmCommand = new ConfirmSignUpCommand({
       ClientId: configs.cognitoAppCientId,
-      Username: requestBody.username,
+      Username: requestBody.email,
       ConfirmationCode: requestBody.code,
       SecretHash: secretHash,
     });
@@ -141,13 +133,13 @@ export class CognitoService {
       await this.cognitoClient.send(confirmCommand);
       const getUserCommand = new AdminGetUserCommand({
         UserPoolId: configs.userPoolId,
-        Username: requestBody.username,
+        Username: requestBody.email,
       });
 
       const userResponse = await this.cognitoClient.send(getUserCommand);
       if (!userResponse) {
         throw new NotFoundError(
-          `User with username ${requestBody.username} not found.`,
+          `User with username ${requestBody.email} not found.`,
         );
       }
       const userAttributes = userResponse.UserAttributes || [];
@@ -158,7 +150,7 @@ export class CognitoService {
       if (!roleAttribute || !roleAttribute.Value) {
         // If the "custom:roles" attribute is not found or has no value, throw an error
         throw new BadRequestError(
-          `Role attribute "custom:roles" is missing or undefined for user ${requestBody.username}.`,
+          `Role attribute "custom:roles" is missing or undefined for user ${requestBody.email}.`,
         );
       }
       const role = roleAttribute ? roleAttribute.Value : "user";
@@ -166,12 +158,12 @@ export class CognitoService {
       const groupName = role === "admin" ? "admin" : "user";
       const addToGroupCommand = new AdminAddUserToGroupCommand({
         UserPoolId: configs.userPoolId,
-        Username: requestBody.username,
+        Username: requestBody.email,
         GroupName: groupName,
       });
       if (!addToGroupCommand) {
         throw new InternalServerError(
-          `Failed to add user ${requestBody.username} to group ${groupName}.`,
+          `Failed to add user ${requestBody.email} to group ${groupName}.`,
         );
       }
 
@@ -198,15 +190,15 @@ export class CognitoService {
     requestBody: RequestSignInDTO,
   ): Promise<ResponseSignInUserDTO> {
     // Input validation
-    if (!requestBody.username || !requestBody.password) {
+    if (!requestBody.email || !requestBody.password) {
       throw new ValidationError("Username, and password are required.");
     }
-    const secretHash = this.generateSecretHash(requestBody.username);
+    const secretHash = this.generateSecretHash(requestBody.email);
     const command = new InitiateAuthCommand({
       ClientId: configs.cognitoAppCientId,
       AuthFlow: "USER_PASSWORD_AUTH",
       AuthParameters: {
-        USERNAME: requestBody.username,
+        USERNAME: requestBody.email,
         PASSWORD: requestBody.password,
         SECRET_HASH: secretHash,
       },
@@ -245,19 +237,19 @@ export class CognitoService {
     requestBody: RequestInitiatePasswordResetDTO,
   ): Promise<ResponseInitiatePasswordReset> {
     // Input validation
-    if (!requestBody.username)
+    if (!requestBody.email)
       throw new ValidationError("Username is required.");
-    const secretHash = this.generateSecretHash(requestBody.username);
+    const secretHash = this.generateSecretHash(requestBody.email);
     const command = new ForgotPasswordCommand({
       ClientId: configs.cognitoAppCientId,
-      Username: requestBody.username,
+      Username: requestBody.email,
       SecretHash: secretHash,
     });
 
     try {
       await this.cognitoClient.send(command);
       return {
-        message: `Password reset initiated. Please check your email or phone for the code. (${requestBody.username})`,
+        message: `Password reset initiated. Please check your email or phone for the code. (${requestBody.email})`,
       };
     } catch (error: any) {
       if (error instanceof ValidationError) {
@@ -273,7 +265,7 @@ export class CognitoService {
   ): Promise<ResponseConfirmPasswordResetDTO> {
     // Input validation
     if (
-      !requestBody.username ||
+      !requestBody.email ||
       !requestBody.newPassword ||
       !requestBody.confirmationCode
     ) {
@@ -281,10 +273,10 @@ export class CognitoService {
         "Username, new password, and confirmation code are required.",
       );
     }
-    const secretHash = this.generateSecretHash(requestBody.username);
+    const secretHash = this.generateSecretHash(requestBody.email);
     const command = new ConfirmForgotPasswordCommand({
       ClientId: configs.cognitoAppCientId,
-      Username: requestBody.username,
+      Username: requestBody.email,
       Password: requestBody.newPassword,
       ConfirmationCode: requestBody.confirmationCode,
       SecretHash: secretHash,

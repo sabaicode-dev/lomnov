@@ -19,19 +19,19 @@ export class UserRepository {
         throw new ValidationError(" Username already existed")
       }
       // console.log("the best result" + req.user);
-      if (!cognitoSub || !firstName || !lastName || !userName) {
+      if (!cognitoSub || !firstName || !lastName  || !email || !userName ) {
         throw new ValidationError(
           " CognitoSub , firstname, lastname and username are required!",
         );
       }
       const data = { cognitoSub, email, firstName, lastName, userName };
       const response = await UserModel.create(data);
-      return response;
+      return response
     } catch (error: any) {
       if (error instanceof ValidationError) {
         throw error;
       } else {
-        throw new Error(error.message);
+       throw new InternalServerError(error.message)
       }
     }
   }
