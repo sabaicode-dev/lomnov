@@ -41,7 +41,7 @@ export class CognitoService {
     });
   }
 
-  private generateSecretHash(username: string): string {
+  private generateSecretHash(username: string | undefined): string {
     return crypto
       .createHmac("sha256", configs.cognitoAppCientSecret)
       .update(username + configs.cognitoAppCientId)
@@ -311,12 +311,15 @@ export class CognitoService {
     if (!refreshToken) {
       throw new ValidationError("Refresh token is required.");
     }
-
+    const cognitoSub = jwtDecode<JwtPayload>(refreshToken);
+    const sub = cognitoSub.sub;
+    const secretHash = this.generateSecretHash(sub);
     const command = new InitiateAuthCommand({
       ClientId: configs.cognitoAppCientId,
       AuthFlow: "REFRESH_TOKEN_AUTH",
       AuthParameters: {
         REFRESH_TOKEN: refreshToken,
+        SECRET_HASH: secretHash,
       },
     });
 
@@ -330,6 +333,7 @@ export class CognitoService {
       }
 
       const authResult = response.AuthenticationResult;
+      console.log(authResult)
       const decodedToken = jwtDecode<JwtPayload>(authResult.AccessToken!);
       const extractedUsername = decodedToken.sub;
 

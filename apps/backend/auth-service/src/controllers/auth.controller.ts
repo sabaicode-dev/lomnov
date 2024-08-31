@@ -121,5 +121,5 @@ export class ProductController extends Controller {
     } catch (error) {
       throw error
     }
-  } 
+  }
 }
