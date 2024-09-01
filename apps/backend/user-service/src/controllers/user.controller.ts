@@ -13,15 +13,18 @@ import {
   Path,
   Tags,
 } from "tsoa";
+import { Types } from "mongoose";
 import {
   RequestUserDTO,
   ResponseUserDTO,
   ResponseAllUserDTO,
   GetAllUsersQueryDTO,
   DeleteProfileImageResponseDTO,
-} from "../utils/types/indext";
+  FavoriteResponseDTO,
+  ResponseUsernameExist,
+} from "@/src/utils/types/indext";
 import { UserService } from "@/src/services/user.service";
-import { UserModel } from "../database/models/user.model";
+
 // =========================================================
 
 @Tags(" User service")
@@ -36,11 +39,9 @@ export class ProductController extends Controller {
   @Post("/")
   public async register(
     @Body() requestBody: RequestUserDTO,
-    @Request() req: Express.Request,
   ): Promise<ResponseUserDTO> {
     try {
-      // console.log('hello req', req.user)
-      const response = await this.userService.createUser(requestBody, req);
+      const response = await this.userService.createUser(requestBody);
       return response;
     } catch (error) {
       throw error;
@@ -67,28 +68,30 @@ export class ProductController extends Controller {
       };
       return await this.userService.getAllUsers(queries);
     } catch (error) {
-      this.setStatus(500);
       throw error;
     }
   }
 
   @Get("/username/{username}")
-  public async findUsernameExite(@Path() username: string) {
+  public async findUsernameExite(
+    @Path() username: string,
+  ): Promise<ResponseUsernameExist> {
     try {
-      const response = await UserModel.find({ userName: username });
-      if (response.length > 0) {
-        return { usernameExist: true }
+      const response = await this.userService.usernameExsit(username);
+      if (response && Object.keys(response).length > 0) {
+        return { usernameExist: true };
       }
-      return {usernameExist: false}
+      return { usernameExist: false };
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 
   @Get("/me")
-  public async getMe(@Request() request: Express.Request ): Promise<ResponseUserDTO | null> {
+  public async getMe(
+    @Request() request: Express.Request,
+  ): Promise<ResponseUserDTO | null> {
     try {
-
       const response = await this.userService.getMe(request);
       return response;
     } catch (error) {
@@ -131,10 +134,11 @@ export class ProductController extends Controller {
   @Delete("/my-profile/{profileId}")
   public async deleteMyProfile(
     @Path() profileId: number,
+    @Request() request: Express.Request,
   ): Promise<DeleteProfileImageResponseDTO> {
     try {
       const requestDTO = {
-        cognitoSub: "adfdfadf", // Replace this with actual logic to get cognitoSub
+        request, // Replace this with actual logic to get cognitoSub
         profileId,
       };
       await this.userService.deleteProfileImageByIndex(requestDTO);
@@ -145,12 +149,14 @@ export class ProductController extends Controller {
   }
 
   @Delete("/my-background/{profileId}")
-  public async deleteMyBackground(@Path() profileId: number): Promise<any> {
+  public async deleteMyBackground(
+    @Path() backgroundId: number,
+    @Path() request: Express.Request,
+  ): Promise<{ message: string }> {
     try {
-      const cognitosub = "adfdfadf";
       await this.userService.deleteBackgroundImageByIndex(
-        cognitosub,
-        profileId,
+        request,
+        backgroundId,
       );
       return { message: "Background image deleted successfully" };
     } catch (error) {
@@ -160,11 +166,13 @@ export class ProductController extends Controller {
   }
 
   @Put("/favorite/{propertyId}")
-  public async favorite(@Path() propertyId: string): Promise<any> {
-    const cognitoSub = "adfdfadf"; // This should come from the authenticated user's token in a real app
+  public async favorite(
+    @Path() propertyId: Types.ObjectId,
+    @Request() request: Express.Request,
+  ): Promise<FavoriteResponseDTO | null> {
     try {
       const updatedUser = await this.userService.addFavorite(
-        cognitoSub,
+        request,
         propertyId,
       );
       return { message: "Property added to favorites", user: updatedUser };

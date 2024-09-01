@@ -1,5 +1,6 @@
 // UserRequest.ts
-export interface User{
+import { Types } from "mongoose";
+export interface User {
   cognitoSub: string;
   email: string;
   firstName: string;
@@ -13,6 +14,6 @@ export interface User{
   dateOfBirth?: string;
   profile?: string[];
   background?: string[];
-  favorite?: string[];
-  role?: string
+  favorite?: Types.ObjectId[];
+  role?: string;
 }

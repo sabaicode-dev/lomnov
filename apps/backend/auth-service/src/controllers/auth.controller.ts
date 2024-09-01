@@ -1,4 +1,13 @@
-import { Controller, Route, Post, Body, Tags, Request, Delete, Path } from "tsoa";
+import {
+  Controller,
+  Route,
+  Post,
+  Body,
+  Tags,
+  Request,
+  Delete,
+  Path,
+} from "tsoa";
 import { Request as ExRequest } from "express";
 import { AuthService } from "@/src/services/auth.service";
 import {
@@ -11,6 +20,8 @@ import {
   RequestInitiatePasswordResetDTO,
   ResponseInitiatePasswordReset,
   ResponseConfirmPasswordResetDTO,
+  ResponseChangeNewPasswordDTO,
+  RequestchangePasswordDTO,
 } from "@/src/utils/types/indext";
 import { CognitoService } from "../services/cognito.service";
 // =========================================================================
@@ -19,12 +30,11 @@ import { CognitoService } from "../services/cognito.service";
 @Route("api/v1")
 export class ProductController extends Controller {
   private authService: AuthService;
-  private cognitoService: CognitoService
+  private cognitoService: CognitoService;
   constructor() {
     super();
     this.authService = new AuthService();
     this.cognitoService = new CognitoService();
-
   }
 
   @Post("/auth/signup")
@@ -61,6 +71,18 @@ export class ProductController extends Controller {
     }
   }
 
+  @Post("/auth/change-password")
+  public async changeNewPassword(
+    @Request() request: Express.Request,
+    @Body() requestBody: RequestchangePasswordDTO,
+  ): Promise<ResponseChangeNewPasswordDTO> {
+    try {
+      return await this.authService.authChangePassword(request, requestBody);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   @Post("/auth/password-reset")
   public async initiatePasswordReset(
     @Body() requestBody: RequestInitiatePasswordResetDTO,
@@ -84,7 +106,10 @@ export class ProductController extends Controller {
   }
 
   @Post("/auth/refresh-token/{refresh}")
-  public async refreshToken(@Path() refresh: string, @Request() request: ExRequest,) {
+  public async refreshToken(
+    @Path() refresh: string,
+    @Request() request: ExRequest,
+  ) {
     try {
       const response = await this.cognitoService.refreshTokens(refresh);
       // Set cookies with a max age of 7 days for the access token
@@ -110,16 +135,16 @@ export class ProductController extends Controller {
 
       return { message: response.message };
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 
   @Delete("/auth/{cognitoSub}")
   public async deleteUser(@Path() cognitoSub: string) {
     try {
-      return await this.cognitoService.deleteUser(cognitoSub)
+      return await this.cognitoService.deleteUser(cognitoSub);
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 }

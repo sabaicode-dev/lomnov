@@ -13,7 +13,7 @@ export interface RequestUserDTO {
   profile?: string[];
   background?: string[];
   favorite?: string[];
-  role?: string
+  role?: string;
 }
 
 export interface GetAllUsersQueryDTO {
@@ -25,12 +25,8 @@ export interface GetAllUsersQueryDTO {
   role?: string;
 }
 
-
 // Request DTO
 export interface DeleteProfileImageRequestDTO {
-  cognitoSub: string;
+  request: Express.Request;
   profileId: number;
 }
-
-
-

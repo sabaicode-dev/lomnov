@@ -12,9 +12,6 @@
 			},
 			"ResponseUserDTO": {
 				"properties": {
-					"_id": {
-						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
-					},
 					"cognitoSub": {
 						"type": "string"
 					},
@@ -63,7 +60,7 @@
 					},
 					"favorite": {
 						"items": {
-							"type": "string"
+							"$ref": "#/components/schemas/mongoose.Types.ObjectId"
 						},
 						"type": "array"
 					},
@@ -538,7 +535,7 @@
 						"name": "propertyId",
 						"required": true,
 						"schema": {
-							"type": "string"
+							"$ref": "#/components/schemas/mongoose.Types.ObjectId"
 						}
 					}
 				]

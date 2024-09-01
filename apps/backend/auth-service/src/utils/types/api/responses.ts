@@ -13,12 +13,12 @@ export interface AuthenticationResult {
   ExpiresIn?: number;
   IdToken?: string;
   RefreshToken?: string;
-  TokenType?: string
+  TokenType?: string;
 }
 export interface ResponseSignInUserDTO {
   message: string;
-  authResult?: AuthenticationResult  ;
-  username: string | undefined
+  authResult?: AuthenticationResult;
+  username: string | undefined;
 }
 
 export interface ResponseInitiatePasswordReset {
@@ -26,5 +26,9 @@ export interface ResponseInitiatePasswordReset {
 }
 
 export interface ResponseConfirmPasswordResetDTO {
+  message: string;
+}
+
+export interface ResponseChangeNewPasswordDTO {
   message: string;
 }

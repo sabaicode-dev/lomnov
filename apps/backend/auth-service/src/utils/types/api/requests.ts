@@ -23,24 +23,26 @@ export interface RequestSignUpUserDTO {
   password: string;
   username: string;
   role?: string;
-
 }
-
 
 export interface SignInUserRequest {
   username: string;
   password: string;
 }
 
-
 export interface RequestInitiatePasswordResetDTO {
-  email: string
+  email: string;
 }
 
 export interface RequestConfirmPasswordResetDTO {
-  email: string,
-  newPassword: string,
-  confirmationCode: string
+  email: string;
+  newPassword: string;
+  confirmationCode: string;
+}
+
+export interface RequestchangePasswordDTO {
+  previousPassword: string;
+  proposedPassword: string;
 }
 
 export interface JwtPayload {

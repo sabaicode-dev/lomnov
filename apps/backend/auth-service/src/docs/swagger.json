@@ -39,7 +39,7 @@
 					"password": {
 						"type": "string"
 					},
-					"roles": {
+					"role": {
 						"type": "string"
 					}
 				},
@@ -48,8 +48,7 @@
 					"lastName",
 					"email",
 					"username",
-					"password",
-					"roles"
+					"password"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -94,6 +93,22 @@
 				"required": [
 					"email",
 					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RequestchangePassword": {
+				"properties": {
+					"previousPassword": {
+						"type": "string"
+					},
+					"proposedPassword": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"previousPassword",
+					"proposedPassword"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -332,6 +347,46 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/RequestSignInDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/auth/change-password": {
+			"post": {
+				"operationId": "ChangeNewPassword",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Manual Registration"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RequestchangePassword"
 							}
 						}
 					}

@@ -1,6 +1,9 @@
 import * as crypto from "crypto";
 import { jwtDecode } from "jwt-decode";
-import { JwtPayload } from "@/src/utils/types/indext";
+import {
+  JwtPayload,
+  ResponseChangeNewPasswordDTO,
+} from "@/src/utils/types/indext";
 import {
   CognitoIdentityProviderClient,
   SignUpCommand,
@@ -11,6 +14,7 @@ import {
   AdminGetUserCommand,
   AdminAddUserToGroupCommand,
   AdminDeleteUserCommand,
+  ChangePasswordCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import configs from "@/src/config";
 import {
@@ -55,7 +59,7 @@ export class CognitoService {
     const userAttributes = [
       {
         Name: "name",
-        Value: request.username
+        Value: request.username,
       },
     ];
     if (request.email) {
@@ -216,11 +220,9 @@ export class CognitoService {
       const decodedToken = jwtDecode<JwtPayload>(authResult.AccessToken!);
       const extractedUsername = decodedToken.sub;
       return {
-
         message: "Sign-in successful!",
         authResult,
         username: extractedUsername,
-
       };
     } catch (error: any) {
       if (error instanceof InternalServerError) {
@@ -233,12 +235,30 @@ export class CognitoService {
     }
   }
 
+  public async changeUserPassword(
+    accessToken: string,
+    previousPassword: string,
+    proposedPassword: string,
+  ): Promise<ResponseChangeNewPasswordDTO> {
+    const command = new ChangePasswordCommand({
+      AccessToken: accessToken,
+      PreviousPassword: previousPassword,
+      ProposedPassword: proposedPassword,
+    });
+
+    try {
+      await this.cognitoClient.send(command);
+      return { message: "Password changed successfully." };
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
   public async initiatePasswordReset(
     requestBody: RequestInitiatePasswordResetDTO,
   ): Promise<ResponseInitiatePasswordReset> {
     // Input validation
-    if (!requestBody.email)
-      throw new ValidationError("Username is required.");
+    if (!requestBody.email) throw new ValidationError("Username is required.");
     const secretHash = this.generateSecretHash(requestBody.email);
     const command = new ForgotPasswordCommand({
       ClientId: configs.cognitoAppCientId,
@@ -305,7 +325,7 @@ export class CognitoService {
   }
 
   public async refreshTokens(
-    refreshToken: string
+    refreshToken: string,
   ): Promise<ResponseSignInUserDTO> {
     // Input validation
     if (!refreshToken) {
@@ -328,12 +348,12 @@ export class CognitoService {
       // Check if the response and AuthenticationResult are valid
       if (!response || !response.AuthenticationResult) {
         throw new InternalServerError(
-          "Authentication result is missing from the response."
+          "Authentication result is missing from the response.",
         );
       }
 
       const authResult = response.AuthenticationResult;
-      console.log(authResult)
+      console.log(authResult);
       const decodedToken = jwtDecode<JwtPayload>(authResult.AccessToken!);
       const extractedUsername = decodedToken.sub;
 
@@ -347,7 +367,7 @@ export class CognitoService {
         throw error;
       } else {
         throw new InternalServerError(
-          `An unexpected error occurred: ${error.message}`
+          `An unexpected error occurred: ${error.message}`,
         );
       }
     }
@@ -356,14 +376,14 @@ export class CognitoService {
   public async deleteUser(cognitoUserSub: string): Promise<void> {
     const params = {
       UserPoolId: configs.userPoolId, // The user pool ID for the user pool where you want to delete the user
-      Username: cognitoUserSub,    // The username (in this case, the Cognito user sub)
+      Username: cognitoUserSub, // The username (in this case, the Cognito user sub)
     };
 
     try {
       const command = new AdminDeleteUserCommand(params);
       await this.cognitoClient.send(command);
     } catch (error: any) {
-      throw new InternalServerError(error.message)
+      throw new InternalServerError(error.message);
     }
   }
 }

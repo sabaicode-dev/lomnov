@@ -1,6 +1,7 @@
 import configs from "../config";
 import { UserRepository } from "../database/repositories/user.repository";
 import { UnauthorizedError } from "../utils/error/customErrors";
+import { Types } from "mongoose"
 import {
   RequestUserDTO,
   ResponseUserDTO,
@@ -10,13 +11,15 @@ import {
   User,
   DeleteProfileImageRequestDTO,
 
+
+
 } from "../utils/types/indext";
 import uploadFileToS3Service from "./uploadFileToS3.service";
 declare global {
   namespace Express {
-      interface Request {
-          cookies: { [key: string]: string }; // Define the structure of cookies
-      }
+    interface Request {
+      cookies: { [key: string]: string }; // Define the structure of cookies
+    }
   }
 }
 
@@ -28,21 +31,11 @@ export class UserService {
 
   public async createUser(
     requestBody: RequestUserDTO,
-    req: Express.Request,
   ): Promise<ResponseUserDTO> {
     try {
-      return await this.userRepository.create(requestBody, req);
+      return await this.userRepository.create(requestBody);
     } catch (error) {
       throw error;
-    }
-  }
-
-  public async getMe(request: Express.Request): Promise<ResponseUserDTO | null> {
-
-    try {
-      return await this.userRepository.getMet(request)
-    } catch (error) {
-      throw error
     }
   }
 
@@ -82,15 +75,34 @@ export class UserService {
     }
   }
 
+  public async getMe(request: Express.Request): Promise<ResponseUserDTO | null> {
+    try {
+      const cognitoSub = request.cookies?.username;
+      if (!cognitoSub) {
+        throw new UnauthorizedError();
+      }
+      return await this.userRepository.getMet(cognitoSub)
+    } catch (error) {
+      throw error
+    }
+  }
+
+  public async usernameExsit(username: string): Promise<ResponseUserDTO | {}> {
+    try{
+      return await this.userRepository.findUsername(username);
+    }catch(error){
+      throw error
+    }
+  }
+
+
   public async updateUser(data: UpdateUserDTO): Promise<ResponseUserDTO | undefined> {
     try {
-
       const { request, profileFiles, backgroundFiles, ...updateFields } = data;
       const cognitosub = request.cookies?.username
       if (!cognitosub) {
         throw new UnauthorizedError();
       }
-
       const existingUser = await this.userRepository.findByCognitoSub(cognitosub);
       if (!existingUser) {
         throw new Error("User not found");
@@ -125,18 +137,22 @@ export class UserService {
   }
 
   public async deleteProfileImageByIndex(data: DeleteProfileImageRequestDTO): Promise<void> {
-    const existingUser = await this.userRepository.findByCognitoSub(data.cognitoSub);
-    console.log(existingUser)
+    const { profileId, request } = data;
+    const cognitoSub = request.cookies?.username;
+    if (!cognitoSub) {
+      throw new UnauthorizedError();
+    }
+    const existingUser = await this.userRepository.findByCognitoSub(cognitoSub);
     if (!existingUser) {
       throw new Error("User not found");
     }
 
-    if (!existingUser.profile || data.profileId < 0 || data.profileId >= existingUser.profile.length) {
+    if (!existingUser.profile || profileId < 0 || profileId >= existingUser.profile.length) {
       throw new Error("Invalid index");
     }
 
     // Get the profile URL at the specified index
-    const profileUrl = existingUser.profile[data.profileId];
+    const profileUrl = existingUser.profile[profileId];
 
     // Extract the S3 key from the profile URL
     const s3Key = profileUrl.split(`${configs.awsS3BucketName}.s3.${configs.awsRegion}.amazonaws.com/`)[1];
@@ -145,53 +161,66 @@ export class UserService {
     await uploadFileToS3Service.deleteFile(s3Key);
 
     // Remove the URL from the user's profile array
-    const updatedBackground = existingUser.profile.filter((_, i) => i !== data.profileId);
+    const updatedBackground = existingUser.profile.filter((_, i) => i !== profileId);
 
     // Update the user profile array in the database
-    await this.userRepository.updateUserByCognitoSub(data.cognitoSub, { profile: updatedBackground });
+    await this.userRepository.updateUserByCognitoSub(cognitoSub, { profile: updatedBackground });
   }
 
-  public async deleteBackgroundImageByIndex(cognitosub: string, index: number): Promise<any> {
-    const existingUser = await this.userRepository.findByCognitoSub(cognitosub);
-    console.log(existingUser)
-    if (!existingUser) {
-      throw new Error("User not found");
+  public async deleteBackgroundImageByIndex(request: Express.Request, index: number): Promise<void> {
+    try {
+
+      const cognitoSub = request.cookies?.username;
+      if (!cognitoSub) {
+        throw new UnauthorizedError();
+      }
+      const existingUser = await this.userRepository.findByCognitoSub(cognitoSub);
+      console.log(existingUser)
+      if (!existingUser) {
+        throw new Error("User not found");
+      }
+      if (!existingUser.background || index < 0 || index >= existingUser.background.length) {
+        throw new Error("Invalid index");
+      }
+      // Get the profile URL at the specified index
+      const backgroundUrl = existingUser.background[index];
+
+      // Extract the S3 key from the profile URL
+      const s3Key = backgroundUrl.split(`${configs.awsS3BucketName}.s3.${configs.awsRegion}.amazonaws.com/`)[1];
+
+      // Delete the file from S3
+      await uploadFileToS3Service.deleteFile(s3Key);
+
+      // Remove the URL from the user's profile array
+      const updatedBackground = existingUser.background.filter((_, i) => i !== index);
+
+      // Update the user profile array in the database
+      await this.userRepository.updateUserByCognitoSub(cognitoSub, { background: updatedBackground });
+    } catch (error: any) {
+      throw error
     }
-
-    if (!existingUser.background || index < 0 || index >= existingUser.background.length) {
-      throw new Error("Invalid index");
-    }
-
-    // Get the profile URL at the specified index
-    const backgroundUrl = existingUser.background[index];
-
-    // Extract the S3 key from the profile URL
-    const s3Key = backgroundUrl.split(`${configs.awsS3BucketName}.s3.${configs.awsRegion}.amazonaws.com/`)[1];
-
-    // Delete the file from S3
-    await uploadFileToS3Service.deleteFile(s3Key);
-
-    // Remove the URL from the user's profile array
-    const updatedBackground = existingUser.background.filter((_, i) => i !== index);
-
-    // Update the user profile array in the database
-    return await this.userRepository.updateUserByCognitoSub(cognitosub, { background: updatedBackground });
   }
 
-  public async addFavorite(cognitoSub: string, propertyId: string): Promise<any> {
-    const user = await this.userRepository.findByCognitoSub(cognitoSub);
-    if (!user) {
-      throw new Error("User not found");
+  public async addFavorite(request: Express.Request, propertyId: Types.ObjectId): Promise<ResponseUserDTO | null> {
+    try {
+      const cognitoSub = request.cookies?.username;
+      if (!cognitoSub) {
+        throw new UnauthorizedError();
+      }
+      const user = await this.userRepository.findByCognitoSub(cognitoSub);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      // Ensure the favorite array is initialized
+      user.favorite = user.favorite || [];
+      // Add the propertyId to the favorite array if it doesn't already exist
+      if (!user.favorite.includes(propertyId)) {
+        user.favorite.push(propertyId);
+      }
+      return this.userRepository.updateUserByCognitoSub(cognitoSub, { favorite: user.favorite });
+    } catch (error) {
+      throw error
     }
-    // Ensure the favorite array is initialized
-    user.favorite = user.favorite || [];
-
-    // Add the propertyId to the favorite array if it doesn't already exist
-    if (!user.favorite.includes(propertyId)) {
-      user.favorite.push(propertyId);
-    }
-
-    return this.userRepository.updateUserByCognitoSub(cognitoSub, { favorite: user.favorite });
   }
 
 
