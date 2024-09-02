@@ -148,10 +148,10 @@ export class ProductController extends Controller {
     }
   }
 
-  @Delete("/my-background/{profileId}")
+  @Delete("/my-background/{backgroundId}")
   public async deleteMyBackground(
     @Path() backgroundId: number,
-    @Path() request: Express.Request,
+    @Request() request: Express.Request,
   ): Promise<{ message: string }> {
     try {
       await this.userService.deleteBackgroundImageByIndex(

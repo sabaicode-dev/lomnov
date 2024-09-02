@@ -12,6 +12,14 @@
 			},
 			"ResponseUserDTO": {
 				"properties": {
+					"_id": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+							}
+						],
+						"nullable": true
+					},
 					"cognitoSub": {
 						"type": "string"
 					},
@@ -188,6 +196,18 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResponseUsernameExist": {
+				"properties": {
+					"usernameExist": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"usernameExist"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"DeleteProfileImageResponseDTO": {
 				"properties": {
 					"message": {
@@ -196,6 +216,27 @@
 				},
 				"required": [
 					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FavoriteResponseDTO": {
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"user": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ResponseUserDTO"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"required": [
+					"message",
+					"user"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -326,15 +367,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"properties": {
-										"usernameExist": {
-											"type": "boolean"
-										}
-									},
-									"required": [
-										"usernameExist"
-									],
-									"type": "object"
+									"$ref": "#/components/schemas/ResponseUsernameExist"
 								}
 							}
 						}
@@ -482,7 +515,7 @@
 				]
 			}
 		},
-		"/api/v1/users/my-background/{profileId}": {
+		"/api/v1/users/my-background/{backgroundId}": {
 			"delete": {
 				"operationId": "DeleteMyBackground",
 				"responses": {
@@ -490,7 +523,17 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
 							}
 						}
 					}
@@ -502,7 +545,7 @@
 				"parameters": [
 					{
 						"in": "path",
-						"name": "profileId",
+						"name": "backgroundId",
 						"required": true,
 						"schema": {
 							"format": "double",
@@ -520,7 +563,14 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/FavoriteResponseDTO"
+										}
+									],
+									"nullable": true
+								}
 							}
 						}
 					}

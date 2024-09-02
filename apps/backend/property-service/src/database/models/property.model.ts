@@ -21,10 +21,13 @@ const PropertySchema = new Schema<Property>(
     images: { type: [String], required: true },
     urlmap: { type: String },
     address: [LocalizedContentSchema],
+    location: {type: String},
     price: { type: Number },
+    category: {type: String},
+    transition: {type: String},
     detail: { type: Schema.Types.Mixed }, // Flexible key-value pairs
     status: { type: Boolean, default: true },
-    
+
   },
   { timestamps: true },
 );

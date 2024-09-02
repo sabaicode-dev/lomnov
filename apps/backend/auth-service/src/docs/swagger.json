@@ -97,7 +97,19 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"RequestchangePassword": {
+			"ResponseChangeNewPasswordDTO": {
+				"properties": {
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RequestchangePasswordDTO": {
 				"properties": {
 					"previousPassword": {
 						"type": "string"
@@ -362,15 +374,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"properties": {
-										"message": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"message"
-									],
-									"type": "object"
+									"$ref": "#/components/schemas/ResponseChangeNewPasswordDTO"
 								}
 							}
 						}
@@ -386,7 +390,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/RequestchangePassword"
+								"$ref": "#/components/schemas/RequestchangePasswordDTO"
 							}
 						}
 					}

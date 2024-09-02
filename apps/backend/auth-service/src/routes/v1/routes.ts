@@ -61,7 +61,15 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "RequestchangePassword": {
+    "ResponseChangeNewPasswordDTO": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "RequestchangePasswordDTO": {
         "dataType": "refObject",
         "properties": {
             "previousPassword": {"dataType":"string","required":true},
@@ -313,7 +321,7 @@ export function RegisterRoutes(app: Router) {
             async function ProductController_changeNewPassword(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
-                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"RequestchangePassword"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"RequestchangePasswordDTO"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

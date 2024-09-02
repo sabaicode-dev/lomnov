@@ -12,7 +12,10 @@ export interface Property {
   images: string[];
   urlmap?: string;
   address?: LocalizedContent[];
+  location: string,
   price?: number;
+  category: string,
+  transition: string,
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
 }

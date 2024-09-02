@@ -107,9 +107,17 @@ export class AuthService {
     try {
       const response = await this.cognitoService.signInUser(data);
       request.res?.cookie("accessToken", response.authResult?.AccessToken);
-      request.res?.cookie("refreshToken", response.authResult?.RefreshToken);
+      request.res?.cookie("refreshToken", response.authResult?.RefreshToken,{
+        httpOnly: true,
+        secure: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000
+      });
       request.res?.cookie("idToken", response.authResult?.IdToken);
-      request.res?.cookie("username", response.username);
+      request.res?.cookie("username", response.username,{
+        httpOnly: true,
+        secure: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000
+      });
       return { message: response.message };
     } catch (error) {
       throw error;

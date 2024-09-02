@@ -2,7 +2,6 @@ import { Socket } from "net";
 import { IncomingMessage, ServerResponse, ClientRequest } from "http";
 import {  Options } from "http-proxy-middleware";
 import { loggingMiddleware } from "@/src/utils/logger";
-import { InternalServerError } from "@/src/utils/error/customErrors";
 import { RouteConfig } from "@/src/utils/types/interface";
 // ==================================================================
 
@@ -36,17 +35,18 @@ const createProxyOptions = (
       loggingMiddleware(req, res, nestedPath, "Proxy Responsed");
     },
     error: (
-      err: Error,
+      _err: Error,
       _req: IncomingMessage,
       res: ServerResponse | Socket,
     ) => {
       if (res instanceof ServerResponse) {
         res.statusCode = 500;
+
         res.end("Proxy error");
       } else {
         res.destroy();
       }
-      throw new InternalServerError(err.message)
+
     },
   },
 });

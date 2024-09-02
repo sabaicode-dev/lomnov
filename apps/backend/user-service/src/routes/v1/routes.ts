@@ -21,6 +21,7 @@ const models: TsoaRoute.Models = {
     "ResponseUserDTO": {
         "dataType": "refObject",
         "properties": {
+            "_id": {"dataType":"union","subSchemas":[{"ref":"mongoose.Types.ObjectId"},{"dataType":"enum","enums":[null]}]},
             "cognitoSub": {"dataType":"string","required":true},
             "email": {"dataType":"string","required":true},
             "firstName": {"dataType":"string","required":true},
@@ -81,10 +82,27 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResponseUsernameExist": {
+        "dataType": "refObject",
+        "properties": {
+            "usernameExist": {"dataType":"boolean","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "DeleteProfileImageResponseDTO": {
         "dataType": "refObject",
         "properties": {
             "message": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "FavoriteResponseDTO": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"string","required":true},
+            "user": {"dataType":"union","subSchemas":[{"ref":"ResponseUserDTO"},{"dataType":"enum","enums":[null]}],"required":true},
         },
         "additionalProperties": false,
     },
@@ -114,7 +132,6 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             async function ProductController_register(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"RequestUserDTO"},
-                    req: {"in":"request","name":"req","required":true,"dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -280,6 +297,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             async function ProductController_deleteMyProfile(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     profileId: {"in":"path","name":"profileId","required":true,"dataType":"double"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -303,13 +321,14 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.delete('/api/v1/users/my-background/:profileId',
+        app.delete('/api/v1/users/my-background/:backgroundId',
             ...(fetchMiddlewares<RequestHandler>(ProductController)),
             ...(fetchMiddlewares<RequestHandler>(ProductController.prototype.deleteMyBackground)),
 
             async function ProductController_deleteMyBackground(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    profileId: {"in":"path","name":"profileId","required":true,"dataType":"double"},
+                    backgroundId: {"in":"path","name":"backgroundId","required":true,"dataType":"double"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -340,6 +359,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             async function ProductController_favorite(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     propertyId: {"in":"path","name":"propertyId","required":true,"ref":"mongoose.Types.ObjectId"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

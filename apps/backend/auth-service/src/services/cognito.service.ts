@@ -326,41 +326,37 @@ export class CognitoService {
 
   public async refreshTokens(
     refreshToken: string,
+    username: string,
   ): Promise<ResponseSignInUserDTO> {
-    // Input validation
-    if (!refreshToken) {
-      throw new ValidationError("Refresh token is required.");
-    }
-    const cognitoSub = jwtDecode<JwtPayload>(refreshToken);
-    const sub = cognitoSub.sub;
-    const secretHash = this.generateSecretHash(sub);
-    const command = new InitiateAuthCommand({
-      ClientId: configs.cognitoAppCientId,
-      AuthFlow: "REFRESH_TOKEN_AUTH",
-      AuthParameters: {
-        REFRESH_TOKEN: refreshToken,
-        SECRET_HASH: secretHash,
-      },
-    });
-
     try {
+      const secretHash = this.generateSecretHash(username);
+      const command = new InitiateAuthCommand({
+        ClientId: configs.cognitoAppCientId,
+        AuthFlow: "REFRESH_TOKEN_AUTH",
+        AuthParameters: {
+          REFRESH_TOKEN: refreshToken,
+          SECRET_HASH: secretHash,
+        },
+      });
       const response = await this.cognitoClient.send(command);
+
       // Check if the response and AuthenticationResult are valid
-      if (!response || !response.AuthenticationResult) {
+      if (!response?.AuthenticationResult) {
         throw new InternalServerError(
           "Authentication result is missing from the response.",
         );
       }
 
       const authResult = response.AuthenticationResult;
-      console.log(authResult);
-      const decodedToken = jwtDecode<JwtPayload>(authResult.AccessToken!);
-      const extractedUsername = decodedToken.sub;
+
+      // Decode the new access token to get the subject (sub)
+      const newDecodedToken = jwtDecode<JwtPayload>(authResult.AccessToken!);
+      const extractedUsername = newDecodedToken?.sub;
 
       return {
         message: "Token refresh successful!",
         authResult,
-        username: extractedUsername,
+        username: extractedUsername || "",
       };
     } catch (error: any) {
       if (error instanceof InternalServerError) {

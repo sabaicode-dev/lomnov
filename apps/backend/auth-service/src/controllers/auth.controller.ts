@@ -24,6 +24,7 @@ import {
   RequestchangePasswordDTO,
 } from "@/src/utils/types/indext";
 import { CognitoService } from "../services/cognito.service";
+import { InternalServerError } from "../utils/error/customErrors";
 // =========================================================================
 
 @Tags("Manual Registration")
@@ -111,18 +112,13 @@ export class ProductController extends Controller {
     @Request() request: ExRequest,
   ) {
     try {
-      const response = await this.cognitoService.refreshTokens(refresh);
+      const username = request.cookies.username;
+      const response = await this.cognitoService.refreshTokens(refresh, username);
       // Set cookies with a max age of 7 days for the access token
       request.res?.cookie("accessToken", response.authResult?.AccessToken, {
         httpOnly: true,
         secure: true,
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      });
-      request.res?.cookie("refreshToken", response.authResult?.RefreshToken, {
-        httpOnly: true,
-        secure: true,
-        // You can set a longer expiration for refresh token if needed
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       });
       request.res?.cookie("idToken", response.authResult?.IdToken, {
         httpOnly: true,
@@ -134,8 +130,9 @@ export class ProductController extends Controller {
       });
 
       return { message: response.message };
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+
+      throw new InternalServerError(`An error occurred: ${error.message}`);
     }
   }
 
