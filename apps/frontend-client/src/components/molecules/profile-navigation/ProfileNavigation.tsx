@@ -11,22 +11,22 @@ export default function ProfileNavigation({ username }: { username: string }) {
           <Link
             href={`/view-profile/${username}`}
             className={`py-[20px] ml-[10px] xl:ml-0  ${
-              activeTab === "saved-property"
+              activeTab === "post"
                 ? "text-olive-green border-b-2   border-olive-green"
                 : "text-charcoal border-b-2 "
             }`}
-            onClick={() => setActiveTab("saved-property")}
+            onClick={() => setActiveTab("post")}
           >
             Post
           </Link>
           <Link
             href={`/view-profile/contact/${username}`}
             className={`mx-[40px] py-[20px] ${
-              activeTab === "listed-property"
+              activeTab === "contact"
                 ? "text-olive-green border-b-2  border-olive-green"
                 : "text-charcoal border-b-2 "
             }`}
-            onClick={() => setActiveTab("listed-property")}
+            onClick={() => setActiveTab("contact")}
           >
             Contact
           </Link>
