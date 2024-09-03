@@ -3,6 +3,7 @@ import Banner from "@/components/molecules/banner/Banner";
 import Image from "next/image";
 import { FaCamera } from "react-icons/fa";
 import ProfileNavigation from "@/components/molecules/profile-navigation/ProfileNavigation";
+import ShareIcon from "@/icons/ShareIcon";
 
 async function fetchUsers() {
   const res = await fetch(`https://lomnov.onrender.com/api/v1/users?id=1`);
@@ -19,7 +20,7 @@ export default async function VisitLayout({
   children: React.ReactNode;
 }) {
   const user = await fetchUsers();
-  
+
   return (
     <div>
       <div className="relative">
@@ -64,6 +65,16 @@ export default async function VisitLayout({
                 {user.joinedDate} 15 jul 2033
               </span>
             </div>
+          </div>
+
+          <div className="flex absolute justify-end right-0 -bottom-[120px] space-x-[10px] items-center font-helvetica text-helvetica-paragraph text-charcoal pr-[10px] xl:pr-0">
+            <button className="py-[5px] px-[25px] rounded-[8px] bg-neutral">
+              Call Now
+            </button>
+            <button className="py-[5px] px-[25px] flex items-center justify-center rounded-[8px] bg-pale-gray">
+              <ShareIcon props="w-[20px] h-[20px] text-olive-green mr-[5px]"/>
+              Share
+            </button>
           </div>
         </div>
       </div>
