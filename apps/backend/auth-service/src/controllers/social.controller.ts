@@ -5,24 +5,19 @@ declare module "express-session" {
 }
 
 import { Controller, Get, Route, Request, Res, TsoaResponse, Tags } from "tsoa";
-import { CognitoJwtVerifier } from "aws-jwt-verify";
 import { randomBytes } from "crypto";
-import axios from "axios";
 import configs from "../config";
-
 import { Request as ExRequest } from "express";
-import {
-  CognitoIdentityProviderClient,
-  AdminGetUserCommand,
-  AdminUpdateUserAttributesCommand,
-  AdminAddUserToGroupCommand,
-} from "@aws-sdk/client-cognito-identity-provider";
-const cognitoClient = new CognitoIdentityProviderClient({
-  region: configs.awsRegion,
-});
+import { CognitoService } from "../services/cognito.service";
+
 @Tags("Social Login")
 @Route("api/v1/auth")
 export class AuthController extends Controller {
+  private cognitoService : CognitoService;
+  constructor() {
+    super()
+    this.cognitoService = new CognitoService()
+  }
   @Get("/google-sign-in")
   public async googleSignIn(
     @Request() request: ExRequest,
@@ -83,12 +78,10 @@ export class AuthController extends Controller {
   }
 
 
-
   @Get("/callback")
   public async callback(
     @Request() request: ExRequest,
-    @Res()
-    badRequest: TsoaResponse<400, { error: string; error_description: string }>,
+    @Res() badRequest: TsoaResponse<400, { error: string; error_description: string }>,
     @Res() redirect: TsoaResponse<302, void>
   ): Promise<void> {
     try {
@@ -102,119 +95,10 @@ export class AuthController extends Controller {
         });
       }
 
-      const authorizationHeader = `Basic ${Buffer.from(
-        `${configs.cognitoAppCientId}:${configs.cognitoAppCientSecret}`
-      ).toString("base64")}`;
-
-      const params = new URLSearchParams({
-        grant_type: "authorization_code",
-        code: code,
-        client_id: configs.cognitoAppCientId,
-        redirect_uri: configs.redirect_uri,
-      });
-
-      const response = await axios.post(
-        `${configs.cognitoAppDomain}/oauth2/token`,
-        params,
-        {
-          headers: {
-            Authorization: authorizationHeader,
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
-      );
-
-      const data = response.data;
-
-      if (!data.access_token || !data.id_token) {
-        return badRequest(400, {
-          error: "No tokens received",
-          error_description: "Failed to retrieve tokens",
-        });
-      }
-      // Set cookies for tokens
-      request.res?.cookie("accessToken", data.access_token);
-      request.res?.cookie("idToken", data.id_token);
-      request.res?.cookie("refreshToken", data.refresh_token);
-      // Verify and decode the ID token
-
-      const verifier = CognitoJwtVerifier.create({
-        userPoolId: configs.userPoolId,
-        tokenUse: "id",
-        clientId: configs.cognitoAppCientId,
-      });
-
-      const payload = await verifier.verify(data.id_token);
-      const username = payload.sub; // Extract the username
-
-      if (!username) {
-        return badRequest(400, {
-          error: "Invalid Token",
-          error_description: "Username not found in token",
-        });
-      }
-
-      // Check if the user exists and set default role if needed
-      const getUserCommand = new AdminGetUserCommand({
-        UserPoolId: configs.userPoolId,
-        Username: username,
-      });
-
-      const userAttributes = await cognitoClient.send(getUserCommand);
-
-      const roleAttribute = userAttributes.UserAttributes?.find(
-        (attr) => attr.Name === "custom:roles"
-      );
-
-      if (!roleAttribute) {
-        const updateCommand = new AdminUpdateUserAttributesCommand({
-          UserPoolId: configs.userPoolId,
-          Username: username,
-          UserAttributes: [
-            {
-              Name: "custom:roles",
-              Value: "user",
-            },
-          ],
-        });
-
-        await cognitoClient.send(updateCommand);
-
-        // Retrieve user attributes to determine role
-        const getUserCommand = new AdminGetUserCommand({
-          UserPoolId: configs.userPoolId,
-          Username: username,
-        });
-
-        const userAttributes = await cognitoClient.send(getUserCommand);
-        const roleAttribute = userAttributes.UserAttributes?.find(
-          (attr) => attr.Name === "custom:roles"
-        );
-
-        const role = roleAttribute ? roleAttribute.Value : "user";
-        console.log(`User role determined: ${role}`);
-
-        // Determine the group based on the role
-        const groupName = role === "admin" ? "admin" : "user";
-        console.log(`Adding user ${username} to group: ${groupName}`);
-        // Add user to the appropriate group
-        const addToGroupCommand = new AdminAddUserToGroupCommand({
-          UserPoolId: configs.userPoolId,
-          Username: username,
-          GroupName: groupName,
-        });
-
-        await cognitoClient.send(addToGroupCommand);
-        console.log(`User ${username} added to group ${groupName}`);
-      }
-
+      await this.cognitoService.handleCallback(code, request.res);
       return redirect(302, undefined, { Location: configs.redirectToFrontend });
     } catch (error: any) {
-      console.error("Callback error:", error);
-      return badRequest(400, {
-        error: "server_error",
-        error_description: "An error occurred on the server",
-      });
+      throw error
     }
   }
 

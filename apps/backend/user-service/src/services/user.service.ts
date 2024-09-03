@@ -201,25 +201,38 @@ export class UserService {
     }
   }
 
-  public async addFavorite(request: Express.Request, propertyId: Types.ObjectId): Promise<ResponseUserDTO | null> {
+  public async toggleFavorite(
+    request: Express.Request,
+    propertyId: Types.ObjectId,
+  ): Promise<ResponseUserDTO | null> {
     try {
       const cognitoSub = request.cookies?.username;
       if (!cognitoSub) {
         throw new UnauthorizedError();
       }
+
       const user = await this.userRepository.findByCognitoSub(cognitoSub);
       if (!user) {
         throw new Error("User not found");
       }
+
       // Ensure the favorite array is initialized
       user.favorite = user.favorite || [];
-      // Add the propertyId to the favorite array if it doesn't already exist
-      if (!user.favorite.includes(propertyId)) {
-        user.favorite.push(propertyId);
+
+      // Check if the propertyId is already in the favorites
+      const existingFavoriteIndex = user.favorite.findIndex(fav => fav.propertyId?.equals(propertyId));
+
+      if (existingFavoriteIndex > -1) {
+        // Remove the property from favorites if it exists
+        user.favorite.splice(existingFavoriteIndex, 1);
+      } else {
+        // Add the propertyId to the favorite array if it doesn't already exist
+        user.favorite.push({ propertyId: propertyId, addedAt: new Date() });
       }
+
       return this.userRepository.updateUserByCognitoSub(cognitoSub, { favorite: user.favorite });
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 

@@ -1,20 +1,8 @@
 services:
-  api-gateway:
-    container_name: api-gateway
-    build:
-      context: ../backend/api-getway
-      dockerfile: Dockerfile
-    ports:
-      - "4000:4000"
-    volumes:
-      - ./api-getway:/app
-    environment:
-      NODE_ENV: development
-
   auth-service:
     container_name: auth-service
     build:
-      context: ../backend/auth-service
+      context: ./auth-service
       dockerfile: Dockerfile
     ports:
       - "4001:4001"
@@ -22,27 +10,4 @@ services:
       - ./auth-service:/app
     environment:
       NODE_ENV: development
-      
-  property-service:
-    container_name: property-service
-    build:
-      context: ../backend/property-service
-      dockerfile: Dockerfile
-    ports:
-      - "4003:4003"
-    volumes:
-      - ./property-service:/app
-    environment:
-      NODE_ENV: development
-
-  user-service:
-    container_name: user-service
-    build:
-      context: ../backend/user-service
-      dockerfile: Dockerfile
-    ports:
-      - "4002:4002"
-    volumes:
-      - ./user-service:/app
-    environment:
-      NODE_ENV: development
+   

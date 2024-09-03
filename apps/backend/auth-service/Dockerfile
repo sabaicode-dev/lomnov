@@ -3,7 +3,8 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package.json .
-RUN yarn install
+
+RUN npm install && npm install -g nodemon
 
 COPY ./src ./src
 COPY tsconfig.json nodemon.json tsoa.json ./

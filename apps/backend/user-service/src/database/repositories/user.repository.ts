@@ -89,6 +89,20 @@ export class UserRepository {
     }
   }
 
+  // public async updateUserByCognitoSub(
+  //   cognitoSub: string,
+  //   updateData: Partial<User>,
+  // ): Promise<ResponseUpdateUserDTO | null> {
+  //   try {
+  //     return UserModel.findOneAndUpdate(
+  //       { cognitoSub },
+  //       { $set: { propertyId: updateData}  },
+  //       { new: true },
+  //     ).exec();
+  //   } catch (error: any) {
+  //     throw error;
+  //   }
+  // }
   public async updateUserByCognitoSub(
     cognitoSub: string,
     updateData: Partial<User>,
@@ -96,7 +110,7 @@ export class UserRepository {
     try {
       return UserModel.findOneAndUpdate(
         { cognitoSub },
-        { $set: updateData },
+        { $set: updateData }, // Update only the necessary fields
         { new: true },
       ).exec();
     } catch (error: any) {

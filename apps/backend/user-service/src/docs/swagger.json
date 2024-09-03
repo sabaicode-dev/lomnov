@@ -10,6 +10,19 @@
 			"mongoose.Types.ObjectId": {
 				"type": "string"
 			},
+			"FavoriteItem": {
+				"properties": {
+					"propertyId": {
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
+					"addedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ResponseUserDTO": {
 				"properties": {
 					"_id": {
@@ -68,7 +81,7 @@
 					},
 					"favorite": {
 						"items": {
-							"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+							"$ref": "#/components/schemas/FavoriteItem"
 						},
 						"type": "array"
 					},
@@ -557,7 +570,7 @@
 		},
 		"/api/v1/users/favorite/{propertyId}": {
 			"put": {
-				"operationId": "Favorite",
+				"operationId": "ToggleFavorite",
 				"responses": {
 					"200": {
 						"description": "Ok",

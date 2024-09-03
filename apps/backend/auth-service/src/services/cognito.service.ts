@@ -1,5 +1,6 @@
 import * as crypto from "crypto";
 import { jwtDecode } from "jwt-decode";
+import { CognitoJwtVerifier } from "aws-jwt-verify";
 import {
   JwtPayload,
   ResponseChangeNewPasswordDTO,
@@ -15,6 +16,7 @@ import {
   AdminAddUserToGroupCommand,
   AdminDeleteUserCommand,
   ChangePasswordCommand,
+  AdminUpdateUserAttributesCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import configs from "@/src/config";
 import {
@@ -35,6 +37,7 @@ import {
   RequestVerifyDTO,
   ResponseVerifyUserDTO,
 } from "@/src/utils/types/indext";
+import axios from "axios";
 // =====================================================
 
 export class CognitoService {
@@ -382,4 +385,136 @@ export class CognitoService {
       throw new InternalServerError(error.message);
     }
   }
+
+  public async getTokens(code: string): Promise<any> {
+    try {
+      const authorizationHeader = `Basic ${Buffer.from(
+        `${configs.cognitoAppCientId}:${configs.cognitoAppCientSecret}`,
+      ).toString("base64")}`;
+      const params = new URLSearchParams({
+        grant_type: "authorization_code",
+        code: code,
+        client_id: configs.cognitoAppCientId,
+        redirect_uri: configs.redirect_uri,
+      });
+      const response = await axios.post(
+        `${configs.cognitoAppDomain}/oauth2/token`,
+        params,
+        {
+          headers: {
+            Authorization: authorizationHeader,
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async verifyIdToken(idToken: string): Promise<any> {
+    try {
+      const verifier = CognitoJwtVerifier.create({
+        userPoolId: configs.userPoolId,
+        tokenUse: "id",
+        clientId: configs.cognitoAppCientId,
+      });
+      return await verifier.verify(idToken);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async getUserAttributes(username: string): Promise<any> {
+    try {
+      const getUserCommand = new AdminGetUserCommand({
+        UserPoolId: configs.userPoolId,
+        Username: username,
+      });
+      return await this.cognitoClient.send(getUserCommand);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async updateUserRole(username: string, role: string): Promise<void> {
+    try {
+      const updateCommand = new AdminUpdateUserAttributesCommand({
+        UserPoolId: configs.userPoolId,
+        Username: username,
+        UserAttributes: [
+          {
+            Name: "custom:roles",
+            Value: role,
+          },
+        ],
+      });
+      await this.cognitoClient.send(updateCommand);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async addUserToGroup(
+    username: string,
+    groupName: string,
+  ): Promise<void> {
+    try {
+      const addToGroupCommand = new AdminAddUserToGroupCommand({
+        UserPoolId: configs.userPoolId,
+        Username: username,
+        GroupName: groupName,
+      });
+      await this.cognitoClient.send(addToGroupCommand);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async handleCallback(code: string, res: any): Promise<void> {
+    try {
+      const data = await this.getTokens(code);
+      if (!data.access_token || !data.id_token) {
+        throw new ValidationError("Failed to retrieve tokens");
+      }
+      // Set cookies for tokens
+      res.cookie("accessToken", data.access_token);
+      res.cookie("idToken", data.id_token);
+      res.cookie("refreshToken", data.refresh_token);
+
+      // Verify and decode the ID token
+      const payload = await this.verifyIdToken(data.id_token);
+      const username = payload.sub; // Extract the username
+
+      if (!username) {
+        throw new Error("Username not found in token");
+      }
+
+      // Get user attributes
+      const userAttributes = await this.getUserAttributes(username);
+      let roleAttribute = userAttributes.UserAttributes?.find(
+        (attr: any) => attr.Name === "custom:roles",
+      );
+
+      if (!roleAttribute) {
+        // Set default role
+        await this.updateUserRole(username, "user");
+
+        // Re-fetch attributes to determine role
+        const updatedUserAttributes = await this.getUserAttributes(username);
+        roleAttribute = updatedUserAttributes.UserAttributes?.find(
+          (attr: any) => attr.Name === "custom:roles",
+        );
+      }
+
+      const role = roleAttribute ? roleAttribute.Value : "user";
+      // Add user to the appropriate group
+      const groupName = role === "admin" ? "admin" : "user";
+      await this.addUserToGroup(username, groupName);
+    } catch (error) {
+      throw error;
+    }
+  }
+  
 }

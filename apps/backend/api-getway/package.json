@@ -4,8 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
-    "dev": "yarn nodemon src/server.ts"
+    "build": "node build-script.js",
+    "dev": "yarn nodemon src/server.ts",
+    "start:local": "node ./build/server.js"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",

@@ -9,6 +9,11 @@ interface UserDocument {
   updatedAt: Date;
 }
 
+const FavoriteSchema = new Schema({
+  propertyId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
+  addedAt: { type: Date, default: Date.now }, // Optional: tracks when the product was favorited
+});
+
 const UserSchema = new Schema<User>(
   {
     cognitoSub: { type: String, required: true, unique: true },
@@ -24,7 +29,7 @@ const UserSchema = new Schema<User>(
     dateOfBirth: { type: String },
     profile: { type: [String] },
     background: { type: [String] },
-    favorite: { type: [Schema.Types.ObjectId] },
+    favorite: { type: [FavoriteSchema] },
     role: { type: String, default: "user" },
   },
 

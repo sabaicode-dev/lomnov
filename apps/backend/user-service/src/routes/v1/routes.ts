@@ -18,6 +18,15 @@ const models: TsoaRoute.Models = {
         "type": {"dataType":"string","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "FavoriteItem": {
+        "dataType": "refObject",
+        "properties": {
+            "propertyId": {"dataType":"union","subSchemas":[{"ref":"mongoose.Types.ObjectId"},{"dataType":"undefined"}],"required":true},
+            "addedAt": {"dataType":"union","subSchemas":[{"dataType":"datetime"},{"dataType":"undefined"}],"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ResponseUserDTO": {
         "dataType": "refObject",
         "properties": {
@@ -35,7 +44,7 @@ const models: TsoaRoute.Models = {
             "dateOfBirth": {"dataType":"string"},
             "profile": {"dataType":"array","array":{"dataType":"string"}},
             "background": {"dataType":"array","array":{"dataType":"string"}},
-            "favorite": {"dataType":"array","array":{"dataType":"refAlias","ref":"mongoose.Types.ObjectId"}},
+            "favorite": {"dataType":"array","array":{"dataType":"refObject","ref":"FavoriteItem"}},
             "role": {"dataType":"string"},
         },
         "additionalProperties": false,
@@ -354,9 +363,9 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/v1/users/favorite/:propertyId',
             ...(fetchMiddlewares<RequestHandler>(ProductController)),
-            ...(fetchMiddlewares<RequestHandler>(ProductController.prototype.favorite)),
+            ...(fetchMiddlewares<RequestHandler>(ProductController.prototype.toggleFavorite)),
 
-            async function ProductController_favorite(request: ExRequest, response: ExResponse, next: any) {
+            async function ProductController_toggleFavorite(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     propertyId: {"in":"path","name":"propertyId","required":true,"ref":"mongoose.Types.ObjectId"},
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
@@ -371,7 +380,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                 const controller = new ProductController();
 
               await templateService.apiHandler({
-                methodName: 'favorite',
+                methodName: 'toggleFavorite',
                 controller,
                 response,
                 next,

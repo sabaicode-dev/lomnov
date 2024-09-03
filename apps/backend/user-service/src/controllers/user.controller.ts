@@ -166,18 +166,18 @@ export class ProductController extends Controller {
   }
 
   @Put("/favorite/{propertyId}")
-  public async favorite(
-    @Path() propertyId: Types.ObjectId,
-    @Request() request: Express.Request,
-  ): Promise<FavoriteResponseDTO | null> {
-    try {
-      const updatedUser = await this.userService.addFavorite(
-        request,
-        propertyId,
-      );
-      return { message: "Property added to favorites", user: updatedUser };
-    } catch (error) {
-      throw error;
-    }
+public async toggleFavorite(
+  @Path() propertyId: Types.ObjectId,
+  @Request() request: Express.Request,
+): Promise<FavoriteResponseDTO | null> {
+  try {
+    const updatedUser = await this.userService.toggleFavorite(request, propertyId);
+    const action = updatedUser?.favorite?.some(fav => fav.propertyId?.equals(propertyId))
+      ? "added to"
+      : "removed from";
+    return { message: `Property ${action} favorites`, user: updatedUser };
+  } catch (error) {
+    throw error;
   }
+}
 }
