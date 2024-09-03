@@ -20,7 +20,7 @@ const UserListed = ({ property }: { property: RealEstateItem }) => {
             <span className="font-bold">{property.user}</span>
             <span className="break-words">loremipsum123@gmail.com</span>
           </div>
-          <Link href={""}>
+          <Link href={`/view-profile/${property.user}`}>
             <div className="w-full lg:w-auto flex items-center">
               <Image
                 src="/mask-group@2x.png"

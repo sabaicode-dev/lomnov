@@ -1,8 +1,6 @@
-import Footer from "@/components/organisms/footer/Footer";
-import Header from "@/components/organisms/header/Header";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-
+// import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -16,12 +14,5 @@ export default function SettingLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Header />
-        {children}
-      </body>
-    </html>
-  );
+  return <div className={inter.className}>{children}</div>;
 }
