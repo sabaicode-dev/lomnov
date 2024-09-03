@@ -41,6 +41,8 @@ const config: Config = {
         "olive-green": "#7D7757",
         "olive-drab": "#79826A",
         "grayish-white": "#E0E0DC",
+        "olive-gray": "#79796B",
+        "pale-gray": "#BCBCB3",
         neutral: "#B5B49E",
         beige: "#E5D2B0",
         charcoal: "#252728",
@@ -91,7 +93,7 @@ const config: Config = {
       },
     },
   },
-  
+
   plugins: [require("@tailwindcss/typography"), require("@tailwindcss/forms")],
 };
 export default config;

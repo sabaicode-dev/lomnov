@@ -2,7 +2,7 @@ import React from "react";
 import Banner from "@/components/molecules/banner/Banner";
 import Image from "next/image";
 import { FaCamera } from "react-icons/fa";
-import ProfileTabs from "@/components/molecules/setting-tabs/SettingTabs";
+import ProfileTabs from "@/components/molecules/profile-tabs/ProfileTabs";
 
 async function fetchUsers() {
   const res = await fetch(`https://lomnov.onrender.com/api/v1/users?id=1`);
