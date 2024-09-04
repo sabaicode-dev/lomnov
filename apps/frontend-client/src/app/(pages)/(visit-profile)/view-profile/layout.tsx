@@ -4,6 +4,7 @@ import Image from "next/image";
 import { FaCamera } from "react-icons/fa";
 import ProfileNavigation from "@/components/molecules/profile-navigation/ProfileNavigation";
 import ShareIcon from "@/icons/ShareIcon";
+import UserPostedProperties from "@/components/organisms/user-posted-properties/UserPostedProperties";
 
 async function fetchUsers() {
   const res = await fetch(`https://lomnov.onrender.com/api/v1/users?id=1`);
