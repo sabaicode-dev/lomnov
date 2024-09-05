@@ -25,8 +25,6 @@ const models: TsoaRoute.Models = {
     "RequestSignUpDTO": {
         "dataType": "refObject",
         "properties": {
-            "firstName": {"dataType":"string","required":true},
-            "lastName": {"dataType":"string","required":true},
             "email": {"dataType":"string","required":true},
             "username": {"dataType":"string","required":true},
             "password": {"dataType":"string","required":true},
@@ -35,10 +33,23 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "AuthenticationResult": {
+        "dataType": "refObject",
+        "properties": {
+            "AccessToken": {"dataType":"string"},
+            "ExpiresIn": {"dataType":"double"},
+            "IdToken": {"dataType":"string"},
+            "RefreshToken": {"dataType":"string"},
+            "TokenType": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ResponseVerifyUserDTO": {
         "dataType": "refObject",
         "properties": {
             "message": {"dataType":"string","required":true},
+            "authResult": {"ref":"AuthenticationResult"},
         },
         "additionalProperties": false,
     },

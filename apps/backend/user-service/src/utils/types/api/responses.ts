@@ -4,8 +4,8 @@ export interface ResponseUserDTO {
   _id?: Types.ObjectId | null;
   cognitoSub: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   userName: string;
   phoneNumber?: string;
   location?: string;
@@ -23,8 +23,8 @@ export interface ResponseFindUserBySubDTO {
   _id?: Types.ObjectId | null;
   cognitoSub: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   userName: string;
   phoneNumber?: string;
   location?: string;
@@ -42,8 +42,8 @@ export interface ResponseUpdateUserDTO {
   _id?: Types.ObjectId | null;
   cognitoSub: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   userName: string;
   phoneNumber?: string;
   location?: string;

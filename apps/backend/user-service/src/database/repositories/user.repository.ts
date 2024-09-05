@@ -16,21 +16,21 @@ import { UserModel } from "../models/user.model";
 
 
 export class UserRepository {
-  
+
   public async create(requestBody: RequestUserDTO): Promise<ResponseUserDTO> {
     try {
-      const { cognitoSub, firstName, lastName, email, userName } = requestBody;
+      const { cognitoSub, email, userName } = requestBody;
       const usernameExist = await UserModel.find({ userName: userName });
       if (usernameExist.length > 0) {
         throw new ValidationError(" Username already existed");
       }
       // console.log("the best result" + req.user);
-      if (!cognitoSub || !firstName || !lastName || !email || !userName) {
+      if (!cognitoSub ||  !email || !userName) {
         throw new ValidationError(
           " CognitoSub , firstname, lastname and username are required!",
         );
       }
-      const data = { cognitoSub, email, firstName, lastName, userName };
+      const data = { cognitoSub, email,userName };
       const response = await UserModel.create(data);
       return response;
     } catch (error: any) {
@@ -119,4 +119,5 @@ export class UserRepository {
       throw error;
     }
   }
+
 }

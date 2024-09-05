@@ -21,6 +21,11 @@ export interface ResponseSignInUserDTO {
   username: string | undefined;
 }
 
+export interface ResponseVerifyUserDTO {
+  message: string;
+  authResult?: AuthenticationResult;
+}
+
 export interface ResponseInitiatePasswordReset {
   message: string;
 }

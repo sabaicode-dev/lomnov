@@ -1,8 +1,8 @@
 export interface RequestUserDTO {
   cognitoSub: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   userName: string;
   phoneNumber?: string;
   location?: string;

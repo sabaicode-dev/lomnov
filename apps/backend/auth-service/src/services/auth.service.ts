@@ -17,7 +17,6 @@ import configs from "../config";
 import { CognitoService } from "./cognito.service";
 import {
   BadRequestError,
-  InternalServerError,
   UnauthorizedError,
   ValidationError,
 } from "../utils/error/customErrors";
@@ -37,9 +36,9 @@ export class AuthService {
   public async authSignUp(
     requestBody: RequestSignUpDTO,
   ): Promise<ResponseSignUpUserDTO> {
-    let cognitoUserSub: string | undefined;
+    // let cognitoUserSub: string | undefined;
     try {
-      const { firstName, lastName, email, username, password } = requestBody;
+      const { email, username, password } = requestBody;
       const data = { email, password, username, role: "user" };
       const findUsernameExist = await axios.get(
         `${configs.userServiceDomain}/api/v1/users/username/${username}`,
@@ -48,39 +47,24 @@ export class AuthService {
         throw new ValidationError(" Username already exist");
       }
       const response = await this.cognitoService.signUpUser(data);
-      cognitoUserSub = response.userSub;
+      // cognitoUserSub = response.userSub;
       if (!response.userSub) {
         throw new BadRequestError("Please signup again");
       }
-      const userPayload = {
-        cognitoSub: response.userSub, // Cognito userSub
-        firstName, // First name
-        lastName,
-        email: email, // Last name
-        userName: username, // Username (not Cognito username)
-      };
-      await axios.post(
-        `${configs.userServiceDomain}/api/v1/users`,
-        userPayload,
-      );
+      // const userPayload = {
+      //   cognitoSub: response.userSub, // Cognito userSub
+      //   firstName, // First name
+      //   lastName,
+      //   email: email, // Last name
+      //   userName: username, // Username (not Cognito username)
+      // };
+      // await axios.post(
+      //   `${configs.userServiceDomain}/api/v1/users`,
+      //   userPayload,
+      // );
       return response;
     } catch (error: any) {
-      if (cognitoUserSub) {
-        try {
-          // If the database insertion fails, rollback the Cognito signup
-          await this.cognitoService.deleteUser(cognitoUserSub);
-        } catch (error: any) {
-          throw new InternalServerError(error.message);
-        }
-      }
-      if (
-        error instanceof ValidationError ||
-        error instanceof BadRequestError
-      ) {
-        throw error;
-      } else {
-        throw new InternalServerError("Please signup again");
-      }
+      throw error
     }
   }
 

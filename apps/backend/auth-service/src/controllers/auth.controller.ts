@@ -124,10 +124,7 @@ export class ProductController extends Controller {
         httpOnly: true,
         secure: true,
       });
-      request.res?.cookie("username", response.username, {
-        httpOnly: true,
-        secure: true,
-      });
+    
 
       return { message: response.message };
     } catch (error: any) {

@@ -1,9 +1,7 @@
 import { User } from "@/src/utils/types/indext";
 import { Schema, model } from "mongoose";
-
 // ==================================================================
 // Define the PropertyDocument interface that includes timestamps
-
 interface UserDocument {
   createdAt: Date;
   updatedAt: Date;
@@ -18,17 +16,17 @@ const UserSchema = new Schema<User>(
   {
     cognitoSub: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    firstName: { type: String, default: "" },
+    lastName: { type: String, default: "" },
     userName: { type: String, unique: true },
-    phoneNumber: { type: String },
-    location: { type: String },
-    address: { type: String },
-    age: { type: Number },
-    gender: { type: String },
-    dateOfBirth: { type: String },
-    profile: { type: [String] },
-    background: { type: [String] },
+    phoneNumber: { type: String, default: "" },
+    location: { type: String, default: "" },
+    address: { type: String, default: "" },
+    age: { type: Number, default: "" },
+    gender: { type: String, default: "" },
+    dateOfBirth: { type: String, default: "" },
+    profile: { type: [String], default: [] },
+    background: { type: [String], default: [] },
     favorite: { type: [FavoriteSchema] },
     role: { type: String, default: "user" },
   },

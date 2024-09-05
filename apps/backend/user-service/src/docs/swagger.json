@@ -92,8 +92,6 @@
 				"required": [
 					"cognitoSub",
 					"email",
-					"firstName",
-					"lastName",
 					"userName"
 				],
 				"type": "object",
@@ -160,8 +158,6 @@
 				"required": [
 					"cognitoSub",
 					"email",
-					"firstName",
-					"lastName",
 					"userName"
 				],
 				"type": "object",

@@ -8,8 +8,8 @@ export interface FavoriteItem {
 export interface User {
   cognitoSub: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   userName: string;
   phoneNumber?: string;
   location?: string;

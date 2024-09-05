@@ -24,12 +24,6 @@
 			},
 			"RequestSignUpDTO": {
 				"properties": {
-					"firstName": {
-						"type": "string"
-					},
-					"lastName": {
-						"type": "string"
-					},
 					"email": {
 						"type": "string"
 					},
@@ -44,8 +38,6 @@
 					}
 				},
 				"required": [
-					"firstName",
-					"lastName",
 					"email",
 					"username",
 					"password"
@@ -53,10 +45,35 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"AuthenticationResult": {
+				"properties": {
+					"AccessToken": {
+						"type": "string"
+					},
+					"ExpiresIn": {
+						"type": "number",
+						"format": "double"
+					},
+					"IdToken": {
+						"type": "string"
+					},
+					"RefreshToken": {
+						"type": "string"
+					},
+					"TokenType": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ResponseVerifyUserDTO": {
 				"properties": {
 					"message": {
 						"type": "string"
+					},
+					"authResult": {
+						"$ref": "#/components/schemas/AuthenticationResult"
 					}
 				},
 				"required": [

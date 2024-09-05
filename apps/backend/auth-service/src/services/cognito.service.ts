@@ -175,6 +175,15 @@ export class CognitoService {
       }
 
       await this.cognitoClient.send(addToGroupCommand);
+      // Prepare user payload for database insertion
+      const userPayload = {
+        cognitoSub: userResponse.Username, // Use Username for cognitoSub
+        email: requestBody.email,
+        userName: userResponse.UserAttributes?.find(attr => attr.Name === 'name')?.Value || '',
+      };
+
+      // Insert user information into the database
+      await axios.post(`${configs.userServiceDomain}/api/v1/users`, userPayload);
       return { message: "User verified and added to group successfully." };
     } catch (error: any) {
       if (
@@ -330,7 +339,7 @@ export class CognitoService {
   public async refreshTokens(
     refreshToken: string,
     username: string,
-  ): Promise<ResponseSignInUserDTO> {
+  ): Promise<ResponseVerifyUserDTO> {
     try {
       const secretHash = this.generateSecretHash(username);
       const command = new InitiateAuthCommand({
@@ -352,14 +361,10 @@ export class CognitoService {
 
       const authResult = response.AuthenticationResult;
 
-      // Decode the new access token to get the subject (sub)
-      const newDecodedToken = jwtDecode<JwtPayload>(authResult.AccessToken!);
-      const extractedUsername = newDecodedToken?.sub;
-
       return {
         message: "Token refresh successful!",
         authResult,
-        username: extractedUsername || "",
+
       };
     } catch (error: any) {
       if (error instanceof InternalServerError) {
@@ -486,7 +491,7 @@ export class CognitoService {
       // Verify and decode the ID token
       const payload = await this.verifyIdToken(data.id_token);
       const username = payload.sub; // Extract the username
-
+      const email = payload.email;
       if (!username) {
         throw new Error("Username not found in token");
       }
@@ -512,9 +517,22 @@ export class CognitoService {
       // Add user to the appropriate group
       const groupName = role === "admin" ? "admin" : "user";
       await this.addUserToGroup(username, groupName);
+      // Step 5: Insert user into database
+      const userPayload = {
+        cognitoSub: username, // Cognito user ID
+        email: email,
+        userName: payload['preferred_username'] || payload['name'], // Adjust based on available fields
+      };
+
+      await axios.post(
+        `${configs.userServiceDomain}/api/v1/users`,
+        userPayload
+      );
+
     } catch (error) {
       throw error;
     }
   }
-  
+
+
 }

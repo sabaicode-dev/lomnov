@@ -30,7 +30,7 @@ export class UserService {
   }
 
   public async createUser(
-    requestBody: RequestUserDTO,
+    requestBody: RequestUserDTO
   ): Promise<ResponseUserDTO> {
     try {
       return await this.userRepository.create(requestBody);
