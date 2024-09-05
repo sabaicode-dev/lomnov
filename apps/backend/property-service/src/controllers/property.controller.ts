@@ -11,17 +11,27 @@ import {
   Put,
   Path,
   Tags,
+  Request
 } from "tsoa";
 import { PropertyService } from "@/src/services/property.service";
-import { Property, CreatePropertyDTO } from "@/src/utils/types/indext";
-
+import {  RequestPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
+import { Request as Express } from "express";
+import { UnauthorizedError } from "../utils/error/customErrors";
 // ====================================================================
+
+declare global {
+  namespace Express {
+    interface Request {
+      cookies: { [key: string]: string }; // Define the structure of cookies
+    }
+  }
+}
 
 @Tags("Property Service")
 @Route("api/v1")
 export class PropertyController extends Controller {
-  private propertyService: PropertyService;
 
+  private propertyService: PropertyService;
   constructor() {
     super();
     this.propertyService = new PropertyService();
@@ -35,21 +45,32 @@ export class PropertyController extends Controller {
     @FormField() description: string,
     @FormField() urlmap?: string,
     @FormField() address?: string,
+    @FormField() location?: string,
     @FormField() price?: number,
-    @FormField() detail?: string, // JSON string representing key-value pairs
-  ): Promise<Property> {
+    @FormField() category?: string,
+    @FormField() transition?: string,
+    @FormField() detail?: string,
+    @Request()  request?: Express.Request
+  ): Promise<ResponseCreatePropertyDTO> {
     try {
-      const propertyData: CreatePropertyDTO = {
-        title: JSON.parse(title),
+      const cognitoSub = request?.cookies.username!;
+      if(!cognitoSub){
+        throw new UnauthorizedError();
+      }
+      const propertyData: RequestPropertyDTO = {
+        cognitoSub,
+        title: JSON.parse(title) ,
         description: JSON.parse(description),
         thumbnail: "",
         images: [],
         urlmap,
-        address: address ? JSON.parse(address) :[],
+        location: location ? JSON.parse(location) : [],
+        address: address ? JSON.parse(address) : [],
         price,
-        detail: detail ? JSON.parse(detail) : {},
+        category: category ? JSON.parse(category) : [],
+        transition: transition ? JSON.parse(transition) : [],
+        detail: detail ? JSON.parse(detail) : [],
       };
-
       return await this.propertyService.createProperty(propertyData, {
         thumbnail,
         images,
@@ -59,26 +80,88 @@ export class PropertyController extends Controller {
     }
   }
 
+
   @Get("/properties")
   public async getProperty(
     @Query() title?: string,
+    @Query() description?: string,
+    @Query() address?: string,
+    @Query() location?: string,
+    @Query() category?: string,
+    @Query() transition?: string,
     @Query() price?: number,
     @Query() language?: string,
     @Query() price_gte?: number,
     @Query() price_lte?: number,
-  ): Promise<Property> {
+    @Query() page: number = 1,
+    @Query() limit: number = 10,
+    // @Request() request?: Express.Request
+  ): Promise<ResponseAllPropertyDTO> {
     try {
-      return await this.propertyService.getProperty(
+      // const cognitoSub = request?.cookies.username!
+      const queries = {
+        // cognitoSub,
         title,
+        description,
+        address,
+        location,
+        category,
+        transition,
         price,
         language,
         price_gte,
         price_lte,
-      );
+        page,
+        limit,
+      };
+      return await this.propertyService.getProperties(queries);
     } catch (error) {
-      console.error("Error fetching properties:", error);
-      this.setStatus(500);
-      throw new Error("Failed to fetch properties");
+     throw error
+    }
+  }
+
+
+  @Get("/properties/me")
+  public async getPropertyMe(
+    @Query() title?: string,
+    @Query() description?: string,
+    @Query() address?: string,
+    @Query() location?: string,
+    @Query() category?: string,
+    @Query() transition?: string,
+    @Query() price?: number,
+    @Query() language?: string,
+    @Query() price_gte?: number,
+    @Query() price_lte?: number,
+    @Query() page: number = 1,
+    @Query() limit: number = 10,
+    @Request() request?: Express.Request,
+  ): Promise<ResponseAllPropertyDTO> {
+    try {
+
+      const cognitoSub = request?.cookies.username!
+      if( !cognitoSub){
+        throw new UnauthorizedError()
+      }
+      const queries = {
+        cognitoSub,
+        title,
+        description,
+        address,
+        location,
+        category,
+        transition,
+        price,
+        language,
+        price_gte,
+        price_lte,
+        page,
+        limit,
+      };
+
+      return await this.propertyService.getPropertiesMe(queries);
+    } catch (error) {
+     throw error
     }
   }
 
@@ -94,7 +177,7 @@ export class PropertyController extends Controller {
     @FormField() price?: number,
     @FormField() detail?: string,
     @FormField() status?: boolean,
-  ): Promise<Property | null> {
+  ): Promise<ResponseUpdatePropertyDTO | null> {
     try {
       // Parsing JSON strings to objects
       const parsedTitle = title ? JSON.parse(title) : undefined;
@@ -105,7 +188,7 @@ export class PropertyController extends Controller {
       const parsedAddress = address ? JSON.parse(address) : undefined;
 
       // Construct property data object
-      const propertyData: Partial<Property> = {
+      const propertyData: Partial<RequestUpdatePropertyDTO> = {
         title: parsedTitle,
         description: parsedDescription,
         urlmap,
@@ -140,4 +223,5 @@ export class PropertyController extends Controller {
       throw new Error("Failed to delete property");
     }
   }
+
 }

@@ -1,14 +1,22 @@
 import { PropertyModel } from "@/src/database/models/property.model";
 import uploadFileToS3Service from "@/src/services/uploadFileToS3.service";
 import deleteFileFromS3Service from "@/src/services/uploadFileToS3.service";
-import { Property, CreatePropertyDTO } from "@/src/utils/types/indext";
+import {
+  RequestPropertyDTO,
+  RequestUpdatePropertyDTO,
+  ResponseCreatePropertyDTO,
+  ResponseFindPropertyDTO,
+  ResponseUpdatePropertyDTO,
+
+} from "@/src/utils/types/indext";
 // =========================================================================
 
 export class PropertyRepository {
+
   public async create(
-    propertyData: CreatePropertyDTO,
+    propertyData: RequestPropertyDTO,
     files: { thumbnail: Express.Multer.File; images: Express.Multer.File[] },
-  ): Promise<Property> {
+  ): Promise<ResponseCreatePropertyDTO> {
     try {
       // Upload the thumbnail and images to S3
       const thumbnailUrl = await uploadFileToS3Service.uploadFile(
@@ -17,85 +25,50 @@ export class PropertyRepository {
       const imageUrls = await Promise.all(
         files.images.map((file) => uploadFileToS3Service.uploadFile(file)),
       );
-
       // Add the URLs to the property data
       const propertyWithUrls = {
         ...propertyData,
         thumbnail: thumbnailUrl,
         images: imageUrls,
       };
-
       // Save the property in the database
       const newProperty = new PropertyModel(propertyWithUrls);
       await newProperty.save();
       return newProperty;
     } catch (error) {
-      console.error("Error saving property to database:", error);
-      throw new Error("Error saving property to database");
+     throw error
     }
   }
 
-  public async get(
-    title?: string,
-    price?: number,
-    language?: string,
-    price_gte?: number,
-    price_lte?: number,
-  ): Promise<any> {
-    try {
-      const query: any = {};
+  public async findProperties(
+    filters: any,
+    skip: number,
+    limit: number,
+  ): Promise<ResponseFindPropertyDTO[]> {
+    return PropertyModel.find(filters).skip(skip).limit(limit).lean();
+  }
 
-      if (title) {
-        query["title.content"] = { $regex: title, $options: "i" };
-      }
+  public async countProperties(filters: any): Promise<number> {
+    return PropertyModel.countDocuments(filters);
+  }
 
-      if (price) {
-        query["price"] = price;
-      } else {
-        if (price_gte !== undefined) {
-          query["price"] = { ...query["price"], $gte: price_gte };
-        }
-        if (price_lte !== undefined) {
-          query["price"] = { ...query["price"], $lte: price_lte };
-        }
-      }
+  public async findPropertiesMe(
+    filters: any,
+    skip: number,
+    limit: number,
+  ): Promise<ResponseFindPropertyDTO[]> {
+    return PropertyModel.find(filters).skip(skip).limit(limit).lean();
+  }
 
-      if (language) {
-        query["title.language"] = language;
-        query["description.language"] = language;
-        query["address.language"] = language;
-      }
-
-      let properties = await PropertyModel.find(query).lean(); // Use .lean() to get plain objects
-
-      if (language) {
-        properties = properties.map((property) => {
-          return {
-            ...property,
-            title:
-              property.title?.filter((t: any) => t.language === language) || [],
-            description:
-              property.description?.filter(
-                (d: any) => d.language === language,
-              ) || [],
-            address:
-              property.address?.filter((a: any) => a.language === language) ||
-              [],
-          };
-        });
-      }
-
-      return properties;
-    } catch (error) {
-      throw error;
-    }
+  public async countPropertiesMe(filters: any): Promise<number> {
+    return PropertyModel.countDocuments(filters);
   }
 
   public async update(
     propertyId: string,
-    propertyData: Partial<Property>,
+    propertyData: Partial<RequestUpdatePropertyDTO>,
     files: { thumbnail?: Express.Multer.File; images?: Express.Multer.File[] },
-  ): Promise<Property | null> {
+  ): Promise<ResponseUpdatePropertyDTO | null> {
     try {
       const existingProperty = await PropertyModel.findById(propertyId);
 
@@ -169,6 +142,8 @@ export class PropertyRepository {
       throw new Error("Failed to delete property");
     }
   }
-
   // Additional database operations can be added here (e.g., find, update, delete).
+
+  
+
 }

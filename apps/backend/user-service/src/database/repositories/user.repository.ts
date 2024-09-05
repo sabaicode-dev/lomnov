@@ -14,7 +14,9 @@ import {
 import { UserModel } from "../models/user.model";
 // =========================================================================
 
+
 export class UserRepository {
+  
   public async create(requestBody: RequestUserDTO): Promise<ResponseUserDTO> {
     try {
       const { cognitoSub, firstName, lastName, email, userName } = requestBody;

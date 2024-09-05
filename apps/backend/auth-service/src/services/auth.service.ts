@@ -31,7 +31,6 @@ declare global {
 }
 export class AuthService {
   private cognitoService: CognitoService;
-
   constructor() {
     this.cognitoService = new CognitoService();
   }

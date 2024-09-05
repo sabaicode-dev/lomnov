@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path'
 import { loggingMiddleware } from './utils/request-response-logger/logger';
 import { errorHandler } from './utils/error/errorHanler';
+import cookieParser from 'cookie-parser';
 
 // Dynamically load swagger.json
 const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, 'docs/swagger.json'), 'utf8'));
@@ -13,6 +14,7 @@ const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, 'docs/sw
 // Initialize App Express
 // ========================
 const app = express();
+app.use(cookieParser());
 
 // ========================
 // Global Middleware
@@ -40,3 +42,4 @@ app.use("/api/v1/properties/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerD
 app.use(errorHandler)
 
 export default app;
+

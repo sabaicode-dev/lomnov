@@ -6,16 +6,17 @@ export interface LocalizedContent {
 }
 
 export interface Property {
+  cognitoSub: string,
   title?: LocalizedContent[];
   description?: LocalizedContent[];
   thumbnail: string;
   images: string[];
   urlmap?: string;
   address?: LocalizedContent[];
-  location: string,
+  location: LocalizedContent[],
   price?: number;
-  category: string,
-  transition: string,
+  category: LocalizedContent[],
+  transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
 }

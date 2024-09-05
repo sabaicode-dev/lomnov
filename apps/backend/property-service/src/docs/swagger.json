@@ -7,6 +7,9 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"mongoose.Types.ObjectId": {
+				"type": "string"
+			},
 			"LocalizedContent": {
 				"properties": {
 					"content": {
@@ -29,8 +32,14 @@
 				"type": "object",
 				"description": "Construct a type with a set of properties K of type T"
 			},
-			"Property": {
+			"ResponseCreatePropertyDTO": {
 				"properties": {
+					"_id": {
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
+					"cognitoSub": {
+						"type": "string"
+					},
 					"title": {
 						"items": {
 							"$ref": "#/components/schemas/LocalizedContent"
@@ -61,9 +70,27 @@
 						},
 						"type": "array"
 					},
+					"location": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
 					"price": {
 						"type": "number",
 						"format": "double"
+					},
+					"category": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"transition": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
 					},
 					"detail": {
 						"$ref": "#/components/schemas/Record_string.any_"
@@ -73,8 +100,134 @@
 					}
 				},
 				"required": [
+					"_id",
+					"cognitoSub",
 					"thumbnail",
-					"images"
+					"images",
+					"location",
+					"category",
+					"transition"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Pagination": {
+				"properties": {
+					"currentPage": {
+						"type": "number",
+						"format": "double"
+					},
+					"totalPages": {
+						"type": "number",
+						"format": "double"
+					},
+					"totalProperty": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"currentPage",
+					"totalPages",
+					"totalProperty"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseAllPropertyDTO": {
+				"properties": {
+					"properties": {
+						"items": {
+							"$ref": "#/components/schemas/ResponseCreatePropertyDTO"
+						},
+						"type": "array"
+					},
+					"pagination": {
+						"$ref": "#/components/schemas/Pagination"
+					}
+				},
+				"required": [
+					"properties",
+					"pagination"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseUpdatePropertyDTO": {
+				"properties": {
+					"_id": {
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
+					"cognitoSub": {
+						"type": "string"
+					},
+					"title": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"description": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"thumbnail": {
+						"type": "string"
+					},
+					"images": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"urlmap": {
+						"type": "string"
+					},
+					"address": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"location": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"category": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"transition": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"detail": {
+						"$ref": "#/components/schemas/Record_string.any_"
+					},
+					"status": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"_id",
+					"cognitoSub",
+					"thumbnail",
+					"images",
+					"location",
+					"category",
+					"transition"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -100,7 +253,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/Property"
+									"$ref": "#/components/schemas/ResponseCreatePropertyDTO"
 								}
 							}
 						}
@@ -141,7 +294,16 @@
 									"address": {
 										"type": "string"
 									},
+									"location": {
+										"type": "string"
+									},
 									"price": {
+										"type": "string"
+									},
+									"category": {
+										"type": "string"
+									},
+									"transition": {
 										"type": "string"
 									},
 									"detail": {
@@ -167,7 +329,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/Property"
+									"$ref": "#/components/schemas/ResponseAllPropertyDTO"
 								}
 							}
 						}
@@ -181,6 +343,46 @@
 					{
 						"in": "query",
 						"name": "title",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "description",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "address",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "location",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "category",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "transition",
 						"required": false,
 						"schema": {
 							"type": "string"
@@ -220,6 +422,152 @@
 							"format": "double",
 							"type": "number"
 						}
+					},
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/properties/me": {
+			"get": {
+				"operationId": "GetPropertyMe",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseAllPropertyDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "title",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "description",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "address",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "location",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "category",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "transition",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "price",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "language",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "price_gte",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "price_lte",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
 					}
 				]
 			}
@@ -235,7 +583,7 @@
 								"schema": {
 									"allOf": [
 										{
-											"$ref": "#/components/schemas/Property"
+											"$ref": "#/components/schemas/ResponseUpdatePropertyDTO"
 										}
 									],
 									"nullable": true

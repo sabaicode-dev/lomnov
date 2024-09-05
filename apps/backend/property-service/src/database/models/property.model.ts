@@ -12,26 +12,29 @@ const LocalizedContentSchema = new Schema<LocalizedContent>({
   language: { type: String },
 });
 
+const DetailSchema = new Schema({
+  language: { type: String, required: true },
+  content: { type: Map, of: String, required: true }, // Flexible key-value pairs
+});
+
 const PropertySchema = new Schema<Property>(
   {
-
-    title: [LocalizedContentSchema],
-    description: [LocalizedContentSchema],
+    cognitoSub: { type: String, required: true},
+    title: { type: [LocalizedContentSchema], required: true },
+    description: { type: [LocalizedContentSchema], required: true },
     thumbnail: { type: String, required: true },
     images: { type: [String], required: true },
     urlmap: { type: String },
-    address: [LocalizedContentSchema],
-    location: {type: String},
+    address: { type: [LocalizedContentSchema], required: true },
+    location: { type: [LocalizedContentSchema], required: true },
     price: { type: Number },
-    category: {type: String},
-    transition: {type: String},
-    detail: { type: Schema.Types.Mixed }, // Flexible key-value pairs
+    category: { type: [LocalizedContentSchema], required: true },
+    transition: { type: [LocalizedContentSchema], required: true },
+    detail: { type: [DetailSchema], required: true }, // Array of detail objects with flexible content
     status: { type: Boolean, default: true },
-
   },
   { timestamps: true },
 );
-
 // Add a pre-save middleware to adjust timestamps
 PropertySchema.pre<PropertyDocument>("save", function (next) {
   const timezoneOffset = 7 * 60 * 60 * 1000; // 7 hours in milliseconds
