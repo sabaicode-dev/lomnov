@@ -1,36 +1,21 @@
-"use client";
-import React, { useEffect, useState } from "react";
+// pages/listed-properties.tsx
+
+import { GetServerSideProps } from "next";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import ItemCard from "@/components/molecules/item-card/ItemCard";
 import PropertyActions from "@/components/molecules/properties-action/PropertyActions";
+import { useState } from "react";
 
-const ListedProperties = ({ userId }: { userId: string }) => {
-  const [listedProperties, setListedProperties] = useState<RealEstateItem[]>(
-    [],
-  );
+interface ListedPropertiesProps {
+  listedProperties: RealEstateItem[];
+  user: string;
+}
+
+const ListedProperties = ({
+  listedProperties,
+  user,
+}: ListedPropertiesProps) => {
   const [selectedProperties, setSelectedProperties] = useState<number[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchListedProperties = async () => {
-      try {
-        const res = await fetch(
-          `https://lomnov.onrender.com/api/v1/properties?userId=${userId}`,
-        );
-        if (!res.ok) {
-          throw new Error("Failed to fetch listed properties");
-        }
-        const data = await res.json();
-        setListedProperties(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchListedProperties();
-  }, [userId]);
 
   const handleSelectProperty = (id: number) => {
     setSelectedProperties((prevSelected) =>
@@ -41,23 +26,16 @@ const ListedProperties = ({ userId }: { userId: string }) => {
   };
 
   const handlePost = () => {
-    // Implement post functionality
     alert("Post selected properties");
   };
 
   const handleUpdate = () => {
-    // Implement update functionality
     alert("Update selected property");
   };
 
   const handleDelete = () => {
-    // Implement delete functionality
     alert("Delete selected properties");
   };
-
-  if (loading) {
-    return <p>Loading listed properties...</p>;
-  }
 
   return (
     <>
@@ -68,7 +46,7 @@ const ListedProperties = ({ userId }: { userId: string }) => {
         onDelete={handleDelete}
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        {listedProperties.length > 0 ? (
+        {listedProperties?.length > 0 ? (
           listedProperties.map((property) => (
             <div key={property.id}>
               <input
@@ -89,3 +67,19 @@ const ListedProperties = ({ userId }: { userId: string }) => {
 };
 
 export default ListedProperties;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { user } = context.query;
+
+  const res = await fetch(
+    `https://lomnov.onrender.com/api/v1/properties?user=${user}`,
+  );
+  const listedProperties = await res.json();
+
+  return {
+    props: {
+      listedProperties,
+      user,
+    },
+  };
+};

@@ -15,7 +15,7 @@ const Banner: React.FC<BannerProps> = ({ background }) => {
           alt="banner"
           layout="fill"
           objectFit="cover"
-          className="brightness-75"
+          className="brightness-75 overflow-hidden"
         />
 
         {/* Title */}

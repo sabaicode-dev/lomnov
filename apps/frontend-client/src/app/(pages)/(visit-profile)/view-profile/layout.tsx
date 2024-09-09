@@ -2,33 +2,46 @@ import React from "react";
 import Banner from "@/components/molecules/banner/Banner";
 import Image from "next/image";
 import { FaCamera } from "react-icons/fa";
-import ProfileNavigation from "@/components/molecules/profile-navigation/ProfileNavigation";
+import VisitProfileNavigation from "@/components/molecules/visit-profile-navigation/VisitProfileNavigation";
 import ShareIcon from "@/icons/ShareIcon";
-import UserPostedProperties from "@/components/organisms/user-posted-properties/UserPostedProperties";
 
-async function fetchUsers() {
-  const res = await fetch(`https://lomnov.onrender.com/api/v1/users?id=1`);
-  if (!res.ok) {
-    throw new Error("Failed to fetch user data");
+async function fetchUsers(username: string) {
+  try {
+    const res = await fetch(
+      `https://lomnov.onrender.com/api/v1/users?username=${username}`,
+    );
+    if (!res.ok) {
+      throw new Error("Failed to fetch user data");
+    }
+    const data = await res.json();
+    return data[0];
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return null;
   }
-  const data = await res.json();
-  return data[0]; // Adjust this to match your API response
 }
 
 export default async function VisitLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: { username: string };
 }) {
-  const user = await fetchUsers();
+  console.log("Params received in layout:", params);
+
+  const user = await fetchUsers("seyha");
+
+  if (!user) {
+    return <div>User not found or an error occurred</div>;
+  }
 
   return (
     <div>
       <div className="relative">
         <Banner background={user.background} />
         <div className="max-w-[1300px] mx-auto relative">
-          {/* Edit cover photo button */}
-          <div className="absolute right-[0px] bottom-[50px]  flex justify-end pr-[10px] xl:pr-0">
+          <div className="absolute right-[0px] bottom-[50px] flex justify-end pr-[10px] xl:pr-0">
             <div className="flex items-center bg-white font-helvetica text-helvetica-paragraph text-charcoal px-[10px] py-[5px] rounded-md">
               <label
                 htmlFor="file-input"
@@ -42,7 +55,6 @@ export default async function VisitLayout({
           </div>
 
           <div className="flex items-center pl-[10px] xl:pl-0 mt-[30px]">
-            {/* User profile */}
             <div className="absolute flex items-center justify-center sm:w-[135px] sm:h-[135px] w-[125px] h-[125px] rounded-full bg-grayish-white">
               <div className="sm:w-[125px] sm:h-[125px] w-[120px] h-[120px] rounded-full overflow-hidden bg-grayish-white">
                 <Image src={user.profile} alt="user" width={125} height={125} />
@@ -55,7 +67,6 @@ export default async function VisitLayout({
               </label>
               <input type="file" id="profile-photo-input" className="hidden" />
             </div>
-            {/* User name */}
             <div className="absolute left-[170px] items-center text-helvetica-small font-helvetica text-olive-gray mt-[10px]">
               <span className="font-helvetica text-helvetica-h4 font-bold text-charcoal capitalize">
                 {user.firstname} {user.lastname}
@@ -63,7 +74,7 @@ export default async function VisitLayout({
               <span className="flex items-center mt-[10px]">
                 Joined
                 <div className="w-[5px] h-[5px] mx-[5px] rounded-full bg-olive-gray"></div>
-                {user.joinedDate} 15 jul 2033
+                {user.joinedDate}
               </span>
             </div>
           </div>
@@ -73,17 +84,14 @@ export default async function VisitLayout({
               Call Now
             </button>
             <button className="py-[5px] px-[25px] flex items-center justify-center rounded-[8px] bg-pale-gray">
-              <ShareIcon props="w-[20px] h-[20px] text-olive-green mr-[5px]"/>
+              <ShareIcon props="w-[20px] h-[20px] text-olive-green mr-[5px]" />
               Share
             </button>
           </div>
         </div>
       </div>
 
-      {/* Navigation Links */}
-      <ProfileNavigation username={user.username} />
-
-      {/* Page Content */}
+      <VisitProfileNavigation username={user.username} />
       <div className="mt-10">{children}</div>
     </div>
   );

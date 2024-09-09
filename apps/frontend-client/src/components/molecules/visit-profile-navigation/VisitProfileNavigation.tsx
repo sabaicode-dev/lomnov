@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 
-export default function ProfileNavigation({ username }: { username: string }) {
+export default function VisitProfileNavigation({ username }: { username: string }) {
   const [activeTab, setActiveTab] = useState("post");
   return (
     <div className="w-full mt-[70px]  mx-auto ">
