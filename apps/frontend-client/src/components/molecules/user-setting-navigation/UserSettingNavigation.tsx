@@ -1,32 +1,41 @@
-"use client";
-import React, { useState } from "react";
+// components/molecules/user-setting-navigation/UserProfileNavigation.tsx
+
+"use client"; // Enable client-side rendering for this component
+import React from "react";
+import { usePathname } from "next/navigation"; // Hook to get the current path
 import Link from "next/link";
 
-export default function UserSettingNavigation({ username }: { username: string }) {
-  const [activeTab, setActiveTab] = useState("general-info");
+interface UserProfileNavigationProps {
+  username: string;
+}
+
+const UserSettingNavigation = ({ username }: UserProfileNavigationProps) => {
+  const pathname = usePathname(); // Get the current path
+  
+  const isGeneralInfoActive = pathname === `/setting/${username}`;
+  const isPasswordActive = pathname === `/setting/password/${username}`;
+
   return (
-    <div className="w-full mt-[70px]  mx-auto ">
+    <div className="w-full mt-[70px] mx-auto ">
       <div className="border-b border-neutral">
         <div className="flex max-w-[1300px] justify-start mx-auto font-helvetica text-helvetica-paragraph font-bold">
           <Link
-            href={`/view-profile/${username}`}
-            className={`py-[20px] ml-[10px] xl:ml-0  ${
-              activeTab === "general-info"
-                ? "text-olive-green border-b-2   border-olive-green"
-                : "text-charcoal border-b-2 "
+            href={`/setting/${username}`}
+            className={`py-[20px] ml-[10px] xl:ml-0 ${
+              isGeneralInfoActive
+                ? "text-olive-green border-b-2 border-olive-green"
+                : "text-charcoal border-b-2"
             }`}
-            onClick={() => setActiveTab("general-info")}
           >
             General Info
           </Link>
           <Link
-            href={`/view-profile/setting/${username}`}
+            href={`/setting/password/${username}`}
             className={`mx-[40px] py-[20px] ${
-              activeTab === "setting"
-                ? "text-olive-green border-b-2  border-olive-green"
-                : "text-charcoal border-b-2 "
+              isPasswordActive
+                ? "text-olive-green border-b-2 border-olive-green"
+                : "text-charcoal border-b-2"
             }`}
-            onClick={() => setActiveTab("setting")}
           >
             Password
           </Link>
@@ -34,4 +43,6 @@ export default function UserSettingNavigation({ username }: { username: string }
       </div>
     </div>
   );
-}
+};
+
+export default UserSettingNavigation;
