@@ -1,17 +1,17 @@
 export interface RealEstateDetail {
   land_size: string;
   total_land_size: string;
-  building_size: string;
-  total_building_size: string;
+  // building_size: string;
+  // total_building_size: string;
   road_size: string;
   area: string;
   bed_room: number;
   bath_room: number;
-  living_room: number;
+  // living_room: number;
   kitchen: number;
   parking: number;
-  garden: string;
-  swimming_pool: string;
+  // garden: string;
+  // swimming_pool: string;
 }
 
 export interface RealEstateItem {
@@ -34,14 +34,8 @@ export interface RealEstateItem {
   location: string;
   baths: string;
   beds: string;
-}
-
-export interface PropertyCardProps {
-  imageUrl: string;
-  price: string;
-  title: string;
-  location: string;
-  baths: number;
-  beds: number;
-  label: string;
+  kitchens: string;
+  area: string;
+  parking: string;
+  name:string
 }

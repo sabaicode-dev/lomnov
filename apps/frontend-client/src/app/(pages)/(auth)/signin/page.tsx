@@ -38,7 +38,7 @@ const SignInPage = () => {
           </div>
         </header>
 
-        <div className="w-full absolute mx-auto top-[330px]">
+        <div className="w-full absolute mx-auto top-[330px] px-5">
           <LoginForm />
         </div>
       </div>

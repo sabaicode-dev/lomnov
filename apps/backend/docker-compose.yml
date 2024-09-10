@@ -1,0 +1,13 @@
+services:
+  auth-service:
+    container_name: auth-service
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "4001:4001"
+    volumes:
+      - ./auth-service:/app
+    environment:
+      NODE_ENV: development
+   

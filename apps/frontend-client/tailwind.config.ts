@@ -31,7 +31,7 @@ const config: Config = {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       transitionProperty: {
         height: "height",
@@ -46,6 +46,7 @@ const config: Config = {
         charcoal: "#252728",
         white: "#FFFFFF",
       },
+      spacing: {},
       fontFamily: {
         coolvetica: ["Coolvetica", "sans-serif"],
         helvetica: ["Helvetica", "Arial", "sans-serif"],
@@ -65,7 +66,6 @@ const config: Config = {
         "coolvetica-text": ["16px", { lineHeight: "20px" }],
         "coolvetica-caption": ["12px", { lineHeight: "16px" }],
         "coolvetica-form-label": ["14px", { lineHeight: "18px" }],
-
         "helvetica-h1": ["48px", { lineHeight: "56px" }],
         "helvetica-h2": ["36px", { lineHeight: "44px" }],
         "helvetica-h3": ["30px", { lineHeight: "36px" }],
@@ -77,6 +77,11 @@ const config: Config = {
         "helvetica-caption": ["12px", { lineHeight: "16px" }],
         "helvetica-form-label": ["14px", { lineHeight: "18px" }],
       },
+      borderRadius: {
+        "11xl": "30px",
+        xl: "20px",
+        "8xs": "5px",
+      },
       screens: {
         sm: "640px",
         md: "768px",
@@ -86,6 +91,7 @@ const config: Config = {
       },
     },
   },
+
   plugins: [require("@tailwindcss/typography"), require("@tailwindcss/forms")],
 };
 export default config;

@@ -20,13 +20,6 @@ export interface MenuProp {
   showAuthLinks?: boolean;
 }
 
-const options = [
-  { label: "English", imgSrc: "/path/to/image1.jpg" },
-  { label: "Khmer", imgSrc: "/path/to/image2.jpg" },
-  // Add more options as needed
-];
-const defaultOption = { label: "English", imgSrc: "/path/to/english.jpg" };
-
 function ContainerHeader({
   menu,
   showLogo = true,
@@ -39,7 +32,7 @@ function ContainerHeader({
 
   return (
     <>
-      <div className=" 2xl:w-[1300px] w-full lg:m-auto h-full flex flex-row items-center justify-between py-3 px-3 xl:px-0  z-20 ">
+      <div className=" xl:w-[1300px] w-full lg:m-auto h-full flex flex-row items-center justify-between py-3 px-3 xl:px-0 z-20 ">
         <div onClick={() => handleClickMenu()} className=" md:hidden mt-4">
           <Menu props=" mr-2 text-[25px] text-white" />
         </div>
@@ -66,11 +59,11 @@ function ContainerHeader({
         <div
           className={
             isMenu
-              ? `lg:w-[40%] xl:w-[50%] w-[65%] h-[100vh] md:h-fit bg-gradient-to-r bg-gray md:bg-transparent shadow-lg  md:shadow-none fixed md:static left-0 top-0 flex md:flex-row flex-col md:items-center md:justify-center transition-all ease-in-out duration-500  `
-              : "lg:w-[40%] xl:w-[60%] w-[65%] h-[100vh] md:h-auto bg-gradient-to-r  md:bg-transparent shadow-lg md:shadow-none fixed md:static left-[-100%] top-0 flex md:flex-row flex-col md:items-center  md:justify-center transition-all ease-in-out duration-500 bg-twitter "
+              ? `lg:w-[40%] xl:w-[50%] w-[65%] h-[100vh] md:h-fit bg-gradient-to-r bg-gray md:bg-transparent shadow-lg  md:shadow-none fixed md:static left-0 top-0 flex md:flex-row flex-col md:items-center md:justify-center transition-all ease-in-out duration-500 bg-olive-green `
+              : "lg:w-[40%] xl:w-[60%] w-[65%] h-[100vh] md:h-auto bg-gradient-to-r  md:bg-transparent shadow-lg md:shadow-none fixed md:static left-[-100%] top-0 flex md:flex-row flex-col md:items-center  md:justify-center transition-all ease-in-out duration-500  "
           }
         >
-          <div className=" w-full h-[80px] bg-[#000000e0] flex flex-row items-center px-5 gap-3 md:hidden ">
+          <div className=" w-full h-[80px] bg-black flex flex-row items-center px-5 gap-3 md:hidden ">
             {/* <div className=" w-[50px] h-[50px] bg-white rounded-full"> */}
             <Image src={logo} alt="" width="100" height="100" />
             {/* </div> */}
@@ -79,7 +72,7 @@ function ContainerHeader({
 
           <NavigateList menu={menu} />
           <div className="md:hidden w-[100px] bg-white">
-            <SelectLang options={options} defaultOption={defaultOption} />
+            <SelectLang />
           </div>
         </div>
         {showAuthLinks && (
@@ -100,12 +93,12 @@ function ContainerHeader({
             </select> */}
 
             <div className="hidden md:flex w-[150px]">
-              <SelectLang options={options} defaultOption={defaultOption} />
+              <SelectLang />
             </div>
 
             <Link
-              href={"signin"}
-              className=" md:py-[5px] md:px-5 py-[5px] px-4 border-[1px] md:border-[2px] border-[#E5D2B0] rounded-[8px] md:text-[18px] text-white md:font-[600] font-[500]"
+              href={"/signin"}
+              className=" md:py-[5px] md:px-5 py-[5px] px-4 border-[1px] md:border-[2px] border-[#E5D2B0] rounded-[8px] md:text-[18px] text-white md:font-[600] font-[500] hover:border-white"
             >
               Login
             </Link>
