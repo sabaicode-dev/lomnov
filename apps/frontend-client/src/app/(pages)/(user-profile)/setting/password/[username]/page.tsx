@@ -3,6 +3,7 @@
 import React from "react";
 import Layout from "../../layout"; // Import the layout
 import UserSettingHeader from "@/components/molecules/user-setting-header/UserSettingHeader";
+import PasswordForm from "@/components/organisms/password-form/PasswordForm";
 
 async function fetchUserDetails(username: string) {
   const res = await fetch(
@@ -25,7 +26,9 @@ const PasswordPage = async ({ params }: { params: { username: string } }) => {
   return (
     <Layout>
       <UserSettingHeader user={user} /> {/* Reusing the ProfileHeader */}
-      <div className="max-w-[1300px] mx-auto">Password</div>
+      <div className="max-w-[1300px] mx-auto">
+        <PasswordForm />
+      </div>
     </Layout>
   );
 };

@@ -1,32 +1,41 @@
-"use client";
-import React, { useState } from "react";
+// components/molecules/user-setting-navigation/UserProfileNavigation.tsx
+
+"use client"; // Enable client-side rendering for this component
+import React from "react";
+import { usePathname } from "next/navigation"; // Hook to get the current path
 import Link from "next/link";
 
-export default function VisitProfileNavigation({ username }: { username: string }) {
-  const [activeTab, setActiveTab] = useState("post");
+interface UserProfileNavigationProps {
+  username: string;
+}
+
+const UserSettingNavigation = ({ username }: UserProfileNavigationProps) => {
+  const pathname = usePathname(); // Get the current path
+
+  const isPostActive = pathname === `/view-profile/${username}`;
+  const isContactActive = pathname === `/view-profile/contact/${username}`;
+
   return (
-    <div className="w-full mt-[70px]  mx-auto ">
+    <div className="w-full mt-[70px] mx-auto ">
       <div className="border-b border-neutral">
         <div className="flex max-w-[1300px] justify-start mx-auto font-helvetica text-helvetica-paragraph font-bold">
           <Link
             href={`/view-profile/${username}`}
-            className={`py-[20px] ml-[10px] xl:ml-0  ${
-              activeTab === "post"
-                ? "text-olive-green border-b-2   border-olive-green"
-                : "text-charcoal border-b-2 "
+            className={`py-[20px] ml-[10px] xl:ml-0 ${
+              isPostActive
+                ? "text-olive-green border-b-2 border-olive-green"
+                : "text-charcoal border-b-2"
             }`}
-            onClick={() => setActiveTab("post")}
           >
             Post
           </Link>
           <Link
             href={`/view-profile/contact/${username}`}
             className={`mx-[40px] py-[20px] ${
-              activeTab === "contact"
-                ? "text-olive-green border-b-2  border-olive-green"
-                : "text-charcoal border-b-2 "
+              isContactActive
+                ? "text-olive-green border-b-2 border-olive-green"
+                : "text-charcoal border-b-2"
             }`}
-            onClick={() => setActiveTab("contact")}
           >
             Contact
           </Link>
@@ -34,4 +43,6 @@ export default function VisitProfileNavigation({ username }: { username: string 
       </div>
     </div>
   );
-}
+};
+
+export default UserSettingNavigation;

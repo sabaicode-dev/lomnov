@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "../layout"; // Import the layout
 
 import UserSettingHeader from "@/components/molecules/user-setting-header/UserSettingHeader";
+import GeneralInfoForm from "@/components/organisms/general-info-form/GeneralInfoForm";
 
 async function fetchUserDetails(username: string) {
   const res = await fetch(
@@ -25,7 +26,9 @@ const GeneralPage = async ({ params }: { params: { username: string } }) => {
     <Layout>
       <div className="">
         <UserSettingHeader user={user} />
-        <div className="max-w-[1300px] mx-auto">General Info</div>
+        <div className="max-w-[1300px] mx-auto">
+          <GeneralInfoForm user={user} />
+        </div>
       </div>
     </Layout>
   );
