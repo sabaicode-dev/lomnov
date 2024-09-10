@@ -2,7 +2,7 @@ import React from "react";
 import Banner from "@/components/molecules/banner/Banner";
 import Image from "next/image";
 import { FaCamera } from "react-icons/fa";
-import ProfileNavigation from "@/components/molecules/visit-profile-navigation/VisitProfileNavigation";
+import UserSettingNavigation from "@/components/molecules/user-setting-navigation/UserSettingNavigation";
 import ShareIcon from "@/icons/ShareIcon";
 
 async function fetchUsers() {
@@ -80,7 +80,7 @@ export default async function VisitLayout({
       </div>
 
       {/* Navigation Links */}
-      <ProfileNavigation username={user.username} />
+      <UserSettingNavigation username={user.username} />
 
       {/* Page Content */}
       <div className="mt-10">{children}</div>

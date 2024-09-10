@@ -1,11 +1,11 @@
 "use client";
 
 import { IconDollar } from "@/icons";
+
 import { useState } from "react";
 
 interface Option {
-  label: string;
-  imgSrc: string;
+  name: string;
 }
 
 interface CustomDropdownProps {
@@ -13,12 +13,29 @@ interface CustomDropdownProps {
   defaultOption: Option;
 }
 
-const SelectPrice: React.FC<CustomDropdownProps> = ({
-  options,
-  defaultOption,
-}) => {
+interface SelectPropertiesProps {
+  onChange: (option: Option) => void;
+}
+
+const price = [
+  { name: "30000-50000" },
+  { name: "50000-70000" },
+  { name: "70000-90000" },
+  { name: "90000-110000" },
+  { name: "110000-130000" },
+  { name: "130000-150000" },
+  { name: "150000-170000" },
+  { name: "170000-190000" },
+  { name: "190000-220000" },
+  { name: "220000-250000" },
+  { name: "250000-500000" },
+];
+
+const defaultLocation = { name: "Price" };
+
+const SelectPrice: React.FC<SelectPropertiesProps> = ({ onChange }) => {
   const [selectedOption, setSelectedOption] = useState<Option | null>(
-    defaultOption,
+    defaultLocation,
   );
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,6 +44,7 @@ const SelectPrice: React.FC<CustomDropdownProps> = ({
   const handleOptionClick = (option: Option) => {
     setSelectedOption(option);
     setIsOpen(false);
+    onChange(option);
   };
 
   return (
@@ -39,7 +57,7 @@ const SelectPrice: React.FC<CustomDropdownProps> = ({
           <div className="flex items-center">
             <IconDollar props="mr-3 text-olive-green" />
             <span className="text-black text-[14px] lg:mr-20">
-              {selectedOption.label}
+              {selectedOption.name}
             </span>
           </div>
         ) : (
@@ -62,15 +80,17 @@ const SelectPrice: React.FC<CustomDropdownProps> = ({
       </button>
       {isOpen && (
         <div
-          className={` rounded-md absolute left-0 right-0 z-10 mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"}`}
+          className={`rounded-md absolute left-0 right-0 z-20 mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-[190px] overflow-auto opacity-100 p-2" : "max-h-0 opacity-0"}`}
         >
-          {options.map((option, index) => (
+          {price.map((option, index) => (
             <div
               key={index}
-              className="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-700  "
+              className="flex items-center py-2 cursor-pointer hover:bg-olive-green overflow-auto px-2 rounded-md"
               onClick={() => handleOptionClick(option)}
             >
-              <span className="text-black text-[14px]">{option.label}</span>
+              <span className="text-black text-[14px] capitalize w-full hover:text-white">
+                {option.name} $
+              </span>
             </div>
           ))}
         </div>

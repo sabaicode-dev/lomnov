@@ -5,12 +5,18 @@
   "license": "MIT",
   "workspaces": [
     "apps/*",
+    "apps/backend/*",
     "packages/*"
   ],
   "scripts": {
     "start": "concurrently \"yarn workspace ms-ui-components watch\" \"yarn workspace frontend-client dev\" \"yarn workspace frontend-dashboard dev\"",
     "start:client": "concurrently \"yarn workspace ms-ui-components watch\" \"yarn workspace frontend-client dev\"",
-    "start:dashboard": "concurrently \"yarn workspace ms-ui-components watch\" \"yarn workspace frontend-dashboard dev\""
+    "start:dashboard": "concurrently \"yarn workspace ms-ui-components watch\" \"yarn workspace frontend-dashboard dev\"",
+    "start:auth-service": "concurrently \"yarn workspace auth-service run dev\"",
+    "start:user-service": "concurrently \"yarn workspace user-service run dev\"",
+    "start:property-service": " concurrently \"yarn workspace property-service run dev\"",
+    "start:notification-service": "concurrently \"yarn workspace notification-service run dev \"",
+    "start:api-getway": " concurrently \"yarn workspace api-getway run dev\""
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
@@ -19,6 +25,8 @@
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
     "@storybook/testing-library": "^0.2.2",
+    "msw": "^2.3.4",
+    "msw-storybook-addon": "^2.0.3",
     "react-hook-form": "^7.51.5",
     "swiper": "^11.1.8",
     "yup": "^1.4.0"

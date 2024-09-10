@@ -120,8 +120,8 @@ const ItemCard = ({ item, flexRow }: ItemCardProps) => {
       <div
         className={
           flexRow
-            ? "bg-olive-green w-[50%] relative overflow-hidden z-10 b rounded-[15px] hover:transition-all hover:duration-1000 ease-out "
-            : "w-full h-[65%] relative overflow-hidden z-10 bg-olive-green rounded-[15px] hover:transition-all hover:duration-1000 ease-out  "
+            ? "bg-olive-green w-[50%] relative overflow-hidden z-10 b rounded-[15px] hover:transition-all duration-1000 ease-out "
+            : "w-full h-[65%] relative overflow-hidden z-10 bg-olive-green rounded-[15px] hover:transition-all duration-1000 ease-out  "
         }
       >
         <Link
@@ -230,6 +230,7 @@ const ItemCard = ({ item, flexRow }: ItemCardProps) => {
                   }
                 >
                   {item.detail.bed_room} Bed
+                  {item.category}
                 </span>
               </div>
             </div>

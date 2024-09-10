@@ -132,7 +132,7 @@ const page = async ({ params }: { params: { id: string } }) => {
             </div> */}
             <UserListed property={property} />
           </div>
-          <Map property={property.mapurl} />
+          <Map property={property.mapurl}  />
         </div>
 
         {/* Recommend Properties */}
