@@ -8,7 +8,7 @@ import Address from "@/icons/Home";
 
 async function fetchUserDetails(username: string) {
   const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/users?username=${username}`,
+    `https://lomnov.onrender.com/api/v1/users?username=${username}`
   );
   if (!res.ok) {
     throw new Error("Failed to fetch user details");
@@ -31,28 +31,47 @@ const SavedPropertiesPage = async ({
   return (
     <Layout>
       <VisitProfileHeader user={user} />
-      <div className="max-w-[1300px] mx-auto">
+      <div className="max-w-[1300px] mx-auto p-4">
         <div
-          className="bg-white w-[688px] h-[257px] mt-[5px] p-5 shadow-md rounded-lg"
-          style={{ marginTop: "8px" }} 
+          className="bg-white w-full sm:w-[688px] h-auto sm:h-[257px] mt-5 p-5  rounded-lg"
         >
           <h3 className="font-bold text-lg mb-5">Contact info</h3>
-          <div className="grid grid-cols-[auto_auto_1fr] gap-x-[10px] gap-y-5">
-            <Email props="w-[23px] h-[20px] text-olive-green" />
-            <label className="font-bold">Email</label>
-            <span>: {user.email}</span>
+          <div className="space-y-4">
+            {/* Email */}
+            <div className="flex items-center space-x-3">
+              <Email props="w-[23px] h-[20px] text-olive-green" />
+              <label className="font-bold text-base">Email</label>
+              <span className="text-sm sm:text-base font-medium text-gray-800">
+                {user.email}
+              </span>
+            </div>
 
-            <Phone props="w-[23px] h-[20px] text-olive-green" />
-            <label className="font-bold">Phone number</label>
-            <span>: {user.phonenumber}</span>
+            {/* Phone */}
+            <div className="flex items-center space-x-3">
+              <Phone props="w-[23px] h-[20px] text-olive-green" />
+              <label className="font-bold text-base">Phone number</label>
+              <span className="text-sm sm:text-base font-medium text-gray-800">
+                {user.phonenumber}
+              </span>
+            </div>
 
-            <Location props="w-[23px] h-[20px] text-olive-green" />
-            <label className="font-bold">Location</label>
-            <span>: {user.location}</span>
+            {/* Location */}
+            <div className="flex items-center space-x-3">
+              <Location props="w-[23px] h-[20px] text-olive-green" />
+              <label className="font-bold text-base">Location</label>
+              <span className="text-sm sm:text-base font-medium text-gray-800">
+                {user.location}
+              </span>
+            </div>
 
-            <Address props="w-[23px] h-[20px] text-olive-green" />
-            <label className="font-bold">Address</label>
-            <span>: {user.address}</span>
+            {/* Address */}
+            <div className="flex items-center space-x-3">
+              <Address props="w-[23px] h-[20px] text-olive-green" />
+              <label className="font-bold text-base">Address</label>
+              <span className="text-sm sm:text-base font-medium text-gray-800">
+                {user.address}
+              </span>
+            </div>
           </div>
         </div>
       </div>
