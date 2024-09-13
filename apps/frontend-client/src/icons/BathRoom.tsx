@@ -7,8 +7,6 @@ function BathRoom({ props }: prop) {
   return (
     <>
       <LuBath className={props} />
-
-
     </>
   );
 }
