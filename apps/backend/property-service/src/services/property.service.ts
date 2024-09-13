@@ -181,12 +181,14 @@ export class PropertyService {
     propertyId: string,
     propertyData: Partial<RequestUpdatePropertyDTO>,
     files: { thumbnail?: Express.Multer.File; images?: Express.Multer.File[] },
+    cognitoSub: string
   ): Promise<ResponseUpdatePropertyDTO | null> {
     try {
       const updatedProperty = await this.propertyRepository.update(
         propertyId,
         propertyData,
         files,
+        cognitoSub
       );
       return updatedProperty;
     } catch (error) {

@@ -1,6 +1,7 @@
 import { PropertyModel } from "@/src/database/models/property.model";
 import uploadFileToS3Service from "@/src/services/uploadFileToS3.service";
 import deleteFileFromS3Service from "@/src/services/uploadFileToS3.service";
+import { NotFoundError, UnauthorizedError, } from "@/src/utils/error/customErrors";
 import {
   RequestPropertyDTO,
   RequestUpdatePropertyDTO,
@@ -68,12 +69,20 @@ export class PropertyRepository {
     propertyId: string,
     propertyData: Partial<RequestUpdatePropertyDTO>,
     files: { thumbnail?: Express.Multer.File; images?: Express.Multer.File[] },
+    cognitoSub: string
   ): Promise<ResponseUpdatePropertyDTO | null> {
     try {
+      if (!cognitoSub) {
+        throw new UnauthorizedError("Unauthorized");
+      }
       const existingProperty = await PropertyModel.findById(propertyId);
-
       if (!existingProperty) {
-        throw new Error("Property not found");
+        throw new NotFoundError ("Property not found");
+      }
+
+      // Check if the property belongs to the user
+      if (existingProperty.cognitoSub !== cognitoSub) {
+        throw new UnauthorizedError("Unauthorized access");
       }
 
       // Handle thumbnail update
@@ -144,6 +153,6 @@ export class PropertyRepository {
   }
   // Additional database operations can be added here (e.g., find, update, delete).
 
-  
+
 
 }

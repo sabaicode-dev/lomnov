@@ -103,13 +103,10 @@ const ROUTE_PATHS: RoutesConfig = {
         methods: { GET: { authRequired: false, roles: [] } },
       },
       {
-        path: "/signup",
-        methods: { POST: { authRequired: false, roles: [] } },
+        path: "/me",
+        methods: { GET: { authRequired: true, roles: ["user"] } },
       },
-      {
-        path: "/signin",
-        methods: { POST: { authRequired: false, roles: [] } },
-      },
+
 
     ],
   },

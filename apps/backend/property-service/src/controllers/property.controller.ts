@@ -14,7 +14,7 @@ import {
   Request
 } from "tsoa";
 import { PropertyService } from "@/src/services/property.service";
-import {  RequestPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
+import { RequestPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
 import { Request as Express } from "express";
 import { UnauthorizedError } from "../utils/error/customErrors";
 // ====================================================================
@@ -50,16 +50,16 @@ export class PropertyController extends Controller {
     @FormField() category?: string,
     @FormField() transition?: string,
     @FormField() detail?: string,
-    @Request()  request?: Express.Request
+    @Request() request?: Express.Request
   ): Promise<ResponseCreatePropertyDTO> {
     try {
       const cognitoSub = request?.cookies.username!;
-      if(!cognitoSub){
+      if (!cognitoSub) {
         throw new UnauthorizedError();
       }
       const propertyData: RequestPropertyDTO = {
         cognitoSub,
-        title: JSON.parse(title) ,
+        title: JSON.parse(title),
         description: JSON.parse(description),
         thumbnail: "",
         images: [],
@@ -79,7 +79,6 @@ export class PropertyController extends Controller {
       throw error;
     }
   }
-
 
   @Get("/properties")
   public async getProperty(
@@ -116,10 +115,9 @@ export class PropertyController extends Controller {
       };
       return await this.propertyService.getProperties(queries);
     } catch (error) {
-     throw error
+      throw error
     }
   }
-
 
   @Get("/properties/me")
   public async getPropertyMe(
@@ -138,9 +136,8 @@ export class PropertyController extends Controller {
     @Request() request?: Express.Request,
   ): Promise<ResponseAllPropertyDTO> {
     try {
-
       const cognitoSub = request?.cookies.username!
-      if( !cognitoSub){
+      if (!cognitoSub) {
         throw new UnauthorizedError()
       }
       const queries = {
@@ -161,11 +158,11 @@ export class PropertyController extends Controller {
 
       return await this.propertyService.getPropertiesMe(queries);
     } catch (error) {
-     throw error
+      throw error
     }
   }
 
-  @Put("/properties/{propertyId}")
+  @Put("/properties/me/{propertyId}")
   public async updateProperty(
     @Path() propertyId: string,
     @UploadedFile() thumbnail?: Express.Multer.File,
@@ -174,16 +171,27 @@ export class PropertyController extends Controller {
     @FormField() description?: string,
     @FormField() urlmap?: string,
     @FormField() address?: string,
+    @FormField() location?: string,
+    @FormField() category?: string,
+    @FormField() transition?: string,
     @FormField() price?: number,
     @FormField() detail?: string,
     @FormField() status?: boolean,
+    @Request() request?: Express.Request,
   ): Promise<ResponseUpdatePropertyDTO | null> {
     try {
+      const cognitoSub = request?.cookies.username!
+      if (!cognitoSub) {
+        throw new UnauthorizedError()
+      }
       // Parsing JSON strings to objects
       const parsedTitle = title ? JSON.parse(title) : undefined;
       const parsedDescription = description
         ? JSON.parse(description)
         : undefined;
+      const parseLocation = location ? JSON.parse(location) : undefined;
+      const parseCategory = category ? JSON.parse(category) : undefined;
+      const parseTransition = transition ? JSON.parse(transition) : undefined;
       const parsedDetail = detail ? JSON.parse(detail) : undefined;
       const parsedAddress = address ? JSON.parse(address) : undefined;
 
@@ -193,7 +201,10 @@ export class PropertyController extends Controller {
         description: parsedDescription,
         urlmap,
         address: parsedAddress,
+        location: parseLocation,
         price,
+        category: parseCategory,
+        transition: parseTransition,
         detail: parsedDetail,
         status,
       };
@@ -202,15 +213,14 @@ export class PropertyController extends Controller {
         propertyId,
         propertyData,
         { thumbnail, images },
+        cognitoSub
       );
     } catch (error) {
-      console.error("Error in updateProperty:", error);
-      this.setStatus(500);
-      throw new Error("Failed to update property");
+      throw error
     }
   }
 
-  @Delete("/properties/{propertyId}")
+  @Delete("/properties/me/{propertyId}")
   public async deleteProperty(
     @Path() propertyId: string,
   ): Promise<{ message: string }> {

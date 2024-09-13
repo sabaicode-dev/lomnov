@@ -105,6 +105,7 @@ export class UserRepository {
   //     throw error;
   //   }
   // }
+  
   public async updateUserByCognitoSub(
     cognitoSub: string,
     updateData: Partial<User>,
