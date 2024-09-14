@@ -20,6 +20,7 @@ import {
   UnauthorizedError,
   ValidationError,
 } from "../utils/error/customErrors";
+import setCookie from "../middlewares/cookies";
 
 // ===================================================================
 declare global {
@@ -91,22 +92,23 @@ export class AuthService {
     try {
       const response = await this.cognitoService.signInUser(data);
 
-      request.res?.cookie("accessToken", response.authResult?.AccessToken, {
-        httpOnly: true,
-        secure: true,
-        maxAge: 1 * 60 * 1000
-      });
-      request.res?.cookie("refreshToken", response.authResult?.RefreshToken, {
-        httpOnly: true,
-        secure: true,
-        maxAge: 30 * 24 * 60 * 60 * 1000
-      });
-      request.res?.cookie("idToken", response.authResult?.IdToken);
-      request.res?.cookie("username", response.username, {
-        httpOnly: true,
-        secure: true,
-        maxAge: 30 * 24 * 60 * 60 * 1000
-      });
+      // Check if request.res exists before setting cookies
+      if (request.res) {
+        // Use the setCookie utility to set cookies only if the values are defined
+        if (response.authResult?.AccessToken) {
+          setCookie(request.res, "accessToken", response.authResult.AccessToken);
+        }
+        if (response.authResult?.RefreshToken) {
+          setCookie(request.res, "refreshToken", response.authResult.RefreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000 }); // 30 days
+        }
+        if (response.authResult?.IdToken) {
+          setCookie(request.res, "idToken", response.authResult.IdToken); // No maxAge, expires with session
+        }
+        if (response.username) {
+          setCookie(request.res, "username", response.username, { maxAge: 30 * 24 * 60 * 60 * 1000 }); // 30 days
+        }
+      }
+
       return { message: response.message };
     } catch (error) {
       throw error;
