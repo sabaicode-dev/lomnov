@@ -223,9 +223,11 @@ export class PropertyController extends Controller {
   @Delete("/properties/me/{propertyId}")
   public async deleteProperty(
     @Path() propertyId: string,
+    @Request() request?: Express.Request
   ): Promise<{ message: string }> {
     try {
-      const result = await this.propertyService.deleteProperty(propertyId);
+      const cognitoSub = request?.cookies.username;
+      const result = await this.propertyService.deleteProperty(propertyId, cognitoSub );
       return { message: result ? "Delete successfully" : "Property not found" };
     } catch (error) {
       console.error("Error in deleteProperty:", error);

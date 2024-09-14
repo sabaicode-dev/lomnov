@@ -20,6 +20,7 @@ import {
   UnauthorizedError,
   ValidationError,
 } from "../utils/error/customErrors";
+
 // ===================================================================
 declare global {
   namespace Express {
@@ -89,6 +90,7 @@ export class AuthService {
     const data = { email, password };
     try {
       const response = await this.cognitoService.signInUser(data);
+
       request.res?.cookie("accessToken", response.authResult?.AccessToken, {
         httpOnly: true,
         secure: true,
