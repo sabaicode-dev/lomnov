@@ -11,7 +11,7 @@ const Banner: React.FC<BannerProps> = ({ background }) => {
     <div className="w-full mx-auto">
       <header className="relative w-full h-[400px]">
         <Image
-          src={background!}
+          src={background || banner}
           alt="banner"
           layout="fill"
           objectFit="cover"

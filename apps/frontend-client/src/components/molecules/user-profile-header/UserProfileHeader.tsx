@@ -5,6 +5,7 @@ import Image from "next/image";
 import Banner from "@/components/molecules/banner/Banner";
 import { FaCamera } from "react-icons/fa";
 import UserProfileNavigation from "../user-profile-navigation/UserProfileNavigation";
+import userProfile from "@/images/User-60.svg"
 
 interface UserProfileHeaderProps {
   user: {
@@ -40,7 +41,7 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
             {/* User profile */}
             <div className="absolute flex items-center justify-center sm:w-[135px] sm:h-[135px] w-[125px] h-[125px] rounded-full bg-grayish-white">
               <div className="sm:w-[125px] sm:h-[125px] w-[120px] h-[120px] rounded-full overflow-hidden bg-grayish-white">
-                <Image src={user.profile} alt="user" width={125} height={125} />
+                <Image src={user.profile || userProfile} alt="user" width={125} height={125} />
               </div>
               <label
                 htmlFor="profile-photo-input"
