@@ -3,54 +3,51 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 
-async function fetchItem(id: string): Promise<RealEstateItem> {
+async function fetchCompareItems(
+  item1Id: string,
+  item2Id: string,
+): Promise<RealEstateItem[]> {
   const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/properties?id=${id}`,
+    `https://lomnov.onrender.com/api/v1/properties?id=${item1Id}&id=${item2Id}`,
   );
   if (!res.ok) {
-    throw new Error("Failed to fetch item");
+    throw new Error("Failed to fetch items");
   }
   return res.json();
 }
 
 function ComparePage() {
-  const searchParams = useSearchParams(); // Use this to access query parameters
+  const searchParams = useSearchParams();
   const item1 = searchParams.get("item1");
   const item2 = searchParams.get("item2");
 
-  const [itemDetails1, setItemDetails1] = useState<RealEstateItem | null>(null);
-  const [itemDetails2, setItemDetails2] = useState<RealEstateItem | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // Add a loading state
+  const [items, setItems] = useState<RealEstateItem[] | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (item1 && item2) {
-      // Fetch both items
-      Promise.all([fetchItem(item1), fetchItem(item2)])
-        .then(([data1, data2]) => {
-          setItemDetails1(data1);
-          setItemDetails2(data2);
+      fetchCompareItems(item1, item2)
+        .then((data) => {
+          setItems(data);
+          setLoading(false);
         })
         .catch((error) => {
-          console.error("Error fetching items:", error);
-        })
-        .finally(() => {
-          setIsLoading(false); // Stop loading after fetch completes
+          console.error("Error fetching compare items:", error);
+          setLoading(false);
         });
-    } else {
-      setIsLoading(false); // Stop loading if query parameters are missing
     }
   }, [item1, item2]);
 
-  if (isLoading) {
-    return <div>Loading...</div>; // Display a loading message while fetching data
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
-  if (!itemDetails1 || !itemDetails2) {
-    return <div>No items to compare</div>; // Display if no valid items are found
+  if (!items || items.length < 2) {
+    return <div>Unable to fetch both items for comparison.</div>;
   }
 
   return (
-    <div className="mt-[120px] mb-[50px]">
+    <div className="mt-[100px] max-h-full">
       <button
         onClick={() => window.history.back()}
         className="text-lg font-bold"
@@ -58,17 +55,19 @@ function ComparePage() {
         ← Back
       </button>
       <div className="grid grid-cols-2 gap-4">
+        {/* Item 1 */}
         <div>
-          <h2>{itemDetails1.title}</h2>
-          <p>{itemDetails1.address}</p>
-          <p>{itemDetails1.price}</p>
-
+          <h2>{items[0].title}</h2>
+          <p>{items[0].address}</p>
+          <p>Price: ${items[0].price}</p>
           {/* Add more fields to compare */}
         </div>
+
+        {/* Item 2 */}
         <div>
-          <h2>{itemDetails2.title}</h2>
-          <p>{itemDetails2.address}</p>
-          <p>{itemDetails2.price}</p>
+          <h2>{items[1].title}</h2>
+          <p>{items[1].address}</p>
+          <p>Price: ${items[1].price}</p>
           {/* Add more fields to compare */}
         </div>
       </div>
