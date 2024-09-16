@@ -236,7 +236,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/api/v1/properties/:propertyId',
+        app.put('/api/v1/properties/me/:propertyId',
             upload.fields([{"name":"thumbnail","maxCount":1,"multiple":false},{"name":"images","multiple":true}]),
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.updateProperty)),
@@ -250,9 +250,13 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                     description: {"in":"formData","name":"description","dataType":"string"},
                     urlmap: {"in":"formData","name":"urlmap","dataType":"string"},
                     address: {"in":"formData","name":"address","dataType":"string"},
+                    location: {"in":"formData","name":"location","dataType":"string"},
+                    category: {"in":"formData","name":"category","dataType":"string"},
+                    transition: {"in":"formData","name":"transition","dataType":"string"},
                     price: {"in":"formData","name":"price","dataType":"string"},
                     detail: {"in":"formData","name":"detail","dataType":"string"},
                     status: {"in":"formData","name":"status","dataType":"string"},
+                    request: {"in":"request","name":"request","dataType":"object"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -276,7 +280,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.delete('/api/v1/properties/:propertyId',
+        app.delete('/api/v1/properties/me/:propertyId',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.deleteProperty)),
 

@@ -38,6 +38,7 @@ import {
   ResponseVerifyUserDTO,
 } from "@/src/utils/types/indext";
 import axios from "axios";
+import setCookie from "../middlewares/cookies";
 // =====================================================
 
 export class CognitoService {
@@ -484,13 +485,18 @@ export class CognitoService {
         throw new ValidationError("Failed to retrieve tokens");
       }
       // Set cookies for tokens
-      res.cookie("accessToken", data.access_token);
-      res.cookie("idToken", data.id_token);
-      res.cookie("refreshToken", data.refresh_token);
+      setCookie(res, "accessToken", data.access_token)
+      setCookie(res, "idToken", data.id_token)
+      setCookie(res, "refreshToken", data.refresh_token)
+      // res.cookie("accessToken", data.access_token);
+      // res.cookie("idToken", data.id_token);
+      // res.cookie("refreshToken", data.refresh_token);
 
       // Verify and decode the ID token
       const payload = await this.verifyIdToken(data.id_token);
       const username = payload.sub; // Extract the username
+      setCookie(res, "username", username)
+
       const email = payload.email;
       if (!username) {
         throw new Error("Username not found in token");

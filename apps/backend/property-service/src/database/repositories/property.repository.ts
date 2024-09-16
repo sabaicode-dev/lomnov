@@ -1,6 +1,7 @@
 import { PropertyModel } from "@/src/database/models/property.model";
 import uploadFileToS3Service from "@/src/services/uploadFileToS3.service";
 import deleteFileFromS3Service from "@/src/services/uploadFileToS3.service";
+import { NotFoundError, UnauthorizedError, } from "@/src/utils/error/customErrors";
 import {
   RequestPropertyDTO,
   RequestUpdatePropertyDTO,
@@ -36,7 +37,7 @@ export class PropertyRepository {
       await newProperty.save();
       return newProperty;
     } catch (error) {
-     throw error
+      throw error
     }
   }
 
@@ -68,12 +69,20 @@ export class PropertyRepository {
     propertyId: string,
     propertyData: Partial<RequestUpdatePropertyDTO>,
     files: { thumbnail?: Express.Multer.File; images?: Express.Multer.File[] },
+    cognitoSub: string
   ): Promise<ResponseUpdatePropertyDTO | null> {
     try {
+      if (!cognitoSub) {
+        throw new UnauthorizedError("Unauthorized");
+      }
       const existingProperty = await PropertyModel.findById(propertyId);
-
       if (!existingProperty) {
-        throw new Error("Property not found");
+        throw new NotFoundError("Property not found");
+      }
+
+      // Check if the property belongs to the user
+      if (existingProperty.cognitoSub !== cognitoSub) {
+        throw new UnauthorizedError("Unauthorized access");
       }
 
       // Handle thumbnail update
@@ -108,13 +117,24 @@ export class PropertyRepository {
       );
       return updatedProperty;
     } catch (error) {
-      console.error("Error updating property:", error);
-      throw new Error("Error updating property");
+      throw error
     }
   }
 
-  public async delete(propertyId: string): Promise<boolean> {
+  public async delete(propertyId: string, cognitoSub: string | undefined): Promise<boolean> {
     try {
+      if (!cognitoSub) {
+        throw new UnauthorizedError("Unauthorized");
+      }
+      const existingProperty = await PropertyModel.findById(propertyId);
+      if (!existingProperty) {
+        throw new NotFoundError("Property not found");
+      }
+
+      // Check if the property belongs to the user
+      if (existingProperty.cognitoSub !== cognitoSub) {
+        throw new UnauthorizedError("Unauthorized access");
+      }
       const property = await PropertyModel.findById(propertyId);
 
       if (!property) {
@@ -138,12 +158,8 @@ export class PropertyRepository {
       await PropertyModel.findByIdAndDelete(propertyId);
       return true;
     } catch (error) {
-      console.error("Error in PropertyRepository.delete:", error);
-      throw new Error("Failed to delete property");
+      throw error
     }
   }
-  // Additional database operations can be added here (e.g., find, update, delete).
-
-  
 
 }

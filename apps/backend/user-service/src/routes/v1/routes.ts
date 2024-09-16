@@ -30,7 +30,7 @@ const models: TsoaRoute.Models = {
     "ResponseUserDTO": {
         "dataType": "refObject",
         "properties": {
-            "_id": {"dataType":"union","subSchemas":[{"ref":"mongoose.Types.ObjectId"},{"dataType":"enum","enums":[null]}]},
+            "_id": {"ref":"mongoose.Types.ObjectId","required":true},
             "cognitoSub": {"dataType":"string","required":true},
             "email": {"dataType":"string","required":true},
             "firstName": {"dataType":"string"},
