@@ -87,7 +87,7 @@ import { CiSquarePlus } from "react-icons/ci";
 // };
 
 //** New Card */
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
