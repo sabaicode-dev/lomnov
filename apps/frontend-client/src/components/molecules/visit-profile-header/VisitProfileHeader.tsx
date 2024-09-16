@@ -1,5 +1,3 @@
-// components/molecules/profile-header/ProfileHeader.tsx
-
 import React from "react";
 import Image from "next/image";
 import Banner from "@/components/molecules/banner/Banner";
@@ -65,12 +63,15 @@ const VisitProfileHeader = ({ user }: VisitProfileHeaderProps) => {
             </div>
           </div>
 
-          <div className="flex absolute justify-end right-0 -bottom-[120px] space-x-[10px] items-center font-helvetica text-helvetica-paragraph text-charcoal pr-[10px] xl:pr-0">
-            <button className="py-[5px] px-[25px] rounded-[8px] bg-neutral">
+          <div className="flex flex-col sm:flex-row sm:justify-end items-center absolute right-0 bottom-[-70px] space-y-2 sm:space-y-0 sm:space-x-3 pr-2 sm:pr-4 mt-4">
+            {/* Call Now Button */}
+            <button className="h-[40px] py-2 px-6 w-full sm:w-auto text-center rounded-lg bg-olive-green text-white hover:bg-olive-dark transition-all duration-300 ease-in-out">
               Call Now
             </button>
-            <button className="py-[5px] px-[25px] flex items-center justify-center rounded-[8px] bg-pale-gray">
-              <ShareIcon props="w-[20px] h-[20px] text-olive-green mr-[5px]" />
+
+            {/* Share Button */}
+            <button className="h-[40px] py-2 px-6 w-full sm:w-auto flex items-center justify-center rounded-lg bg-gray-200 hover:bg-gray-300 transition-all duration-300 ease-in-out">
+              <ShareIcon props="w-5 h-5 text-olive-green mr-2" />
               Share
             </button>
           </div>
@@ -83,3 +84,4 @@ const VisitProfileHeader = ({ user }: VisitProfileHeaderProps) => {
 };
 
 export default VisitProfileHeader;
+  
