@@ -1,6 +1,5 @@
 "use client";
 
-//** New */
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import InputField from "../../../../../../../packages/ui-components/src/components/inputfield/InputField";
@@ -8,8 +7,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Google from "../../../../icons/Google";
 import Facebook from "../../../../icons/Facebook";
-
-// import { Facebook } from "@/icons";
+import axios from "axios";
 
 // Define the Zod schema
 const loginSchema = z.object({
@@ -24,7 +22,6 @@ const LoginForm: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
-
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
   // UseForm with Zod schema for validation
@@ -36,14 +33,23 @@ const LoginForm: React.FC = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  // Handle form submission
-  const onSubmit = (data: LoginData) => {
-    console.log("Form data:", data);
-    // Implement your form submission logic here
+  const onSubmit = async (data: LoginData) => {
+    try {
+      const response = await axios.post('http://localhost:4001/api/v1/auth/signin', {
+        email: data.email,
+        password: data.password,
+      }, { withCredentials: true });
+      if(response.data.message){
+        window.location.href = "/"
+      }
+    } catch (error: any) {
+      console.error("Login failed:", error.response?.data || error.message);
+      // Handle error (e.g., show error message to user)
+    }
   };
 
   return (
-    <div className="w-full sm:w-[500px]  lg:w-[550px] mx-auto bg-white rounded-[30px] border border-neutral py-10">
+    <div className="w-full sm:w-[500px] lg:w-[550px] mx-auto bg-white rounded-[30px] border border-neutral py-10">
       {/* Title */}
       <div className="text-center">
         <h2 className="font-coolvetica text-helvetica-h2 text-charcoal tracking-coolvetica-tight mb-4">

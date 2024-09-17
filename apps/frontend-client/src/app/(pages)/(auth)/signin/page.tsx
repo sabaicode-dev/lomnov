@@ -2,9 +2,6 @@ import React from "react";
 import LoginForm from "../../../../components/organisms/auth/form-login/LoginForm";
 import { Facebook, Google } from "@/icons";
 import Image from "next/image";
-import image from "@/images/Login_logo.png";
-import Footer from "@/components/organisms/footer/Footer";
-import Header from "@/components/organisms/header/Header";
 import banner from "@/images/banner.png";
 
 const SignInPage = () => {
