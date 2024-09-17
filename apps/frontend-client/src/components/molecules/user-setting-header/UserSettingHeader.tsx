@@ -22,7 +22,7 @@ const UserSettingHeader = ({ user }: UserSettingHeaderProps) => {
   return (
     <>
      <div className="relative">
-        <Banner background={user.background} />
+        <Banner background={user!.background} />
         <div className="max-w-[1300px] mx-auto relative">
           {/* Edit cover photo button */}
           <div className="absolute right-[0px] bottom-[50px]  flex justify-end pr-[10px] xl:pr-0">
@@ -55,12 +55,12 @@ const UserSettingHeader = ({ user }: UserSettingHeaderProps) => {
             {/* User name */}
             <div className="absolute left-[170px] items-center text-helvetica-small font-helvetica text-olive-gray mt-[10px]">
               <span className="font-helvetica text-helvetica-h4 font-bold text-charcoal capitalize">
-                {user.fistname} {user.lastname}
+                {user!.fistname} {user!.lastname}
               </span>
               <span className="flex items-center mt-[10px]">
                 Joined
                 <div className="w-[5px] h-[5px] mx-[5px] rounded-full bg-olive-gray"></div>
-                {user.joinedDate} 15 jul 2033
+                {user!.joinedDate} 15 jul 2033
               </span>
             </div>
           </div>

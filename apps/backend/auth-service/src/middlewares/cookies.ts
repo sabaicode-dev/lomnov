@@ -1,16 +1,17 @@
-import { CookieOptions, Response } from 'express';
+import { CookieOptions, Response } from "express";
 
 function setCookie(
   response: Response,
   name: string,
   value: string,
-  options: CookieOptions = {}
+  options: CookieOptions = {},
 ) {
   const defaultOptions: CookieOptions = {
+    path: "/",
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-    sameSite: 'lax', // Default to lax same-site policy
-    maxAge: 5 * 60 * 1000,  // Default 5 minutes expiration
+    secure: false,
+    sameSite: "none",
+    maxAge: 5 * 60 * 1000, // Default 5 minutes expiration
     ...options, // Allow overriding defaults
   };
 
