@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser"
 import session from "express-session";
 import { loggingMiddleware } from "./utils/request-response-logger/logger";
 import { errorHandler } from "./utils/error/errorHanler";
+import cors from "cors"
 const { randomBytes } = require("crypto");
 // Dynamically load swagger.json
 const swaggerDocument = JSON.parse(
@@ -28,6 +29,10 @@ app.use(
     cookie: { secure: false }, // Set to false for local development without HTTPS
   }),
 );
+app.use(cors({
+  origin: 'http://localhost:3000', // Your frontend URL
+  credentials: true, // Allow credentials (cookies)
+}));
 // ========================
 // Global Middleware
 // ========================

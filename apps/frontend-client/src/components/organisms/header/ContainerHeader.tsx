@@ -95,13 +95,38 @@ function ContainerHeader({
             <div className="hidden md:flex w-[150px]">
               <SelectLang />
             </div>
-
+            {/*
             <Link
               href={"/signin"}
               className=" md:py-[5px] md:px-5 py-[5px] px-4 border-[1px] md:border-[2px] border-[#E5D2B0] rounded-[8px] md:text-[18px] text-white md:font-[600] font-[500] hover:border-white"
             >
               Login
-            </Link>
+            </Link> */}
+
+            {
+              <div className=" relative">
+                <div className=" w-[50px] h-[50px] rounded-full bg-black border flex justify-center items-center overflow-hidden relative">
+                  <Image
+                    src={""}
+                    alt=""
+                    className=" w-full h-full object-cover"
+                  />
+                </div>
+
+                <div className=" w-[180px]  bg-white absolute right-0  rounded-md flex flex-col items-center px-3 py-2">
+                  <div>
+                    <div className=" w-[70px] h-[70px] rounded-full border-[1px] border-blue-400 ">
+                      <Image src={""} alt=""/>
+                    </div>
+                    <p className=" text-[14px]">Seyhaoeurn</p>
+                  </div>
+                  <div className="flex flex-col mt-3">
+                    <Link href={""}> Profile  </Link>
+                    <Link href={""}> Setting  </Link>
+                  </div>
+                </div>
+              </div>
+            }
           </div>
         )}
       </div>
