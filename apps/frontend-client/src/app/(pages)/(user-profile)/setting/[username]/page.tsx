@@ -5,13 +5,16 @@ import UserSettingHeader from "@/components/molecules/user-setting-header/UserSe
 import GeneralInfoForm from "@/components/organisms/general-info-form/GeneralInfoForm";
 
 async function fetchUserDetails(username: string) {
-  const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/users?username=${username}`,
-  );
+  // const res = await fetch(
+  //   `https://lomnov.onrender.com/api/v1/users?username=${username}`,
+  // );
+  const res = await fetch(`http://localhost:4002/api/v1/users/me`);
+
   if (!res.ok) {
     throw new Error("Failed to fetch user details");
   }
   const user = await res.json();
+
   return user[0]; // Adjust this based on your API response
 }
 

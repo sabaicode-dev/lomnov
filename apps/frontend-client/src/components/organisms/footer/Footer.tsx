@@ -24,7 +24,7 @@ const Footer: React.FC<FooterProps> = ({
 }) => {
   return (
     <footer className="w-full h-auto bg-olive-drab mt-5  flex flex-col ">
-      <div className="relative py-10">
+      <div className="relative py-[45px]">
         <Image
           src={imageFooter}
           alt=""
