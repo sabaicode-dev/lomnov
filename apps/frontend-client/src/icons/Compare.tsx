@@ -1,10 +1,11 @@
 import React from "react";
-import compareicon from "@/images/iconamoon_compare.svg"
+import compareicon from "@/images/iconamoon_compare.svg";
 import Image from "next/image";
 interface prop {
   props?: string;
+  onClick: () => void;
 }
-function Compare({ props }: prop) {
+function Compare({ props, onClick }: prop) {
   return (
     <>
       <Image
@@ -13,6 +14,7 @@ function Compare({ props }: prop) {
         width={18}
         height={23}
         className={props}
+        onClick={onClick}
       />
     </>
   );

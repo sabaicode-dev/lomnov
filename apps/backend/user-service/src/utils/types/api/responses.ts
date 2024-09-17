@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { FavoriteItem } from "../indext";
 export interface ResponseUserDTO {
-  _id?: Types.ObjectId | null;
+  _id: Types.ObjectId ;
   cognitoSub: string;
   email: string;
   firstName?: string;
@@ -20,7 +20,7 @@ export interface ResponseUserDTO {
 }
 
 export interface ResponseFindUserBySubDTO {
-  _id?: Types.ObjectId | null;
+  _id: Types.ObjectId ;
   cognitoSub: string;
   email: string;
   firstName?: string;
@@ -39,7 +39,7 @@ export interface ResponseFindUserBySubDTO {
 }
 
 export interface ResponseUpdateUserDTO {
-  _id?: Types.ObjectId | null;
+  _id: Types.ObjectId ;
   cognitoSub: string;
   email: string;
   firstName?: string;

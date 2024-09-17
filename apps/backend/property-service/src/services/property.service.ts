@@ -181,12 +181,14 @@ export class PropertyService {
     propertyId: string,
     propertyData: Partial<RequestUpdatePropertyDTO>,
     files: { thumbnail?: Express.Multer.File; images?: Express.Multer.File[] },
+    cognitoSub: string
   ): Promise<ResponseUpdatePropertyDTO | null> {
     try {
       const updatedProperty = await this.propertyRepository.update(
         propertyId,
         propertyData,
         files,
+        cognitoSub
       );
       return updatedProperty;
     } catch (error) {
@@ -195,10 +197,10 @@ export class PropertyService {
     }
   }
 
-  public async deleteProperty(propertyId: string): Promise<boolean> {
+  public async deleteProperty(propertyId: string, cognitoSub: string| undefined ): Promise<boolean> {
     try {
       // Delegate the delete operation to the repository
-      return await this.propertyRepository.delete(propertyId);
+      return await this.propertyRepository.delete(propertyId, cognitoSub);
     } catch (error) {
       console.error("Error in PropertyService.deleteProperty:", error);
       throw new Error("Failed to delete property");

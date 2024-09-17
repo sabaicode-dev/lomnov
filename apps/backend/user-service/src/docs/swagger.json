@@ -26,12 +26,7 @@
 			"ResponseUserDTO": {
 				"properties": {
 					"_id": {
-						"allOf": [
-							{
-								"$ref": "#/components/schemas/mongoose.Types.ObjectId"
-							}
-						],
-						"nullable": true
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
 					},
 					"cognitoSub": {
 						"type": "string"
@@ -90,6 +85,7 @@
 					}
 				},
 				"required": [
+					"_id",
 					"cognitoSub",
 					"email",
 					"userName"

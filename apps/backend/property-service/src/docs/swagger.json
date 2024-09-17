@@ -572,7 +572,7 @@
 				]
 			}
 		},
-		"/api/v1/properties/{propertyId}": {
+		"/api/v1/properties/me/{propertyId}": {
 			"put": {
 				"operationId": "UpdateProperty",
 				"responses": {
@@ -634,6 +634,15 @@
 										"type": "string"
 									},
 									"address": {
+										"type": "string"
+									},
+									"location": {
+										"type": "string"
+									},
+									"category": {
+										"type": "string"
+									},
+									"transition": {
 										"type": "string"
 									},
 									"price": {
