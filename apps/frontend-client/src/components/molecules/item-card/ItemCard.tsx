@@ -107,70 +107,10 @@ export interface ItemCardProps {
 const ItemCard = ({ item, flexRow, handleCompareClick }: ItemCardProps) => {
   // const flexRow = false;
   const [isLike, setIsLike] = useState(false);
-  // const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([]);
-  // const [showCompareBar, setShowCompareBar] = useState(false);
-  // // const [isMounted, setIsMounted] = useState(false);
-  // const router = useRouter();
 
   const toggleIsLike = () => {
     setIsLike((isLike) => !isLike);
   };
-
-  // const handleCompareClick = (item: RealEstateItem) => {
-  //   setSelectedItems((prevSelectedItems) => {
-  //     console.log("Previous selected items:", prevSelectedItems);
-
-  //     const isAlreadySelected = prevSelectedItems.some(
-  //       (selectedItem) => selectedItem.id === item.id,
-  //     );
-
-  //     // If the item is already selected, remove it from the list (deselect)
-  //     if (isAlreadySelected) {
-  //       const updatedItems = prevSelectedItems.filter(
-  //         (selectedItem) => selectedItem.id !== item.id,
-  //       );
-  //       console.log(
-  //         "Removed item:",
-  //         item.id,
-  //         "Updated items after removal:",
-  //         updatedItems,
-  //       );
-
-  //       if (updatedItems.length === 0) {
-  //         setShowCompareBar(false); // Hide compare bar if no items are left
-  //       }
-  //       return updatedItems;
-  //     }
-
-  //     // Add the item if fewer than 2 items are selected
-  //     if (prevSelectedItems.length < 2) {
-  //       const newSelectedItems = [...prevSelectedItems, item];
-  //       console.log(
-  //         "Added new item:",
-  //         item.id,
-  //         "Updated items after adding:",
-  //         newSelectedItems,
-  //       );
-  //       setShowCompareBar(true); // Show compare bar
-  //       return newSelectedItems;
-  //     }
-
-  //     return prevSelectedItems; // Prevent adding more than 2 items
-  //   });
-  // };
-
-  // const handleRemoveItem = (id: number) => {
-  //   setSelectedItems((prevSelectedItems) => {
-  //     const updatedItems = prevSelectedItems.filter((item) => item.id !== id);
-  //     console.log("Removed item:", id, "Updated items:", updatedItems);
-
-  //     if (updatedItems.length === 0) {
-  //       setShowCompareBar(false);
-  //     }
-
-  //     return updatedItems;
-  //   });
-  // };
 
   return (
     <>
