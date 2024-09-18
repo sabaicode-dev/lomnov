@@ -4,13 +4,13 @@ import { User } from "@/libs/types/user-types/user";
 
 const GeneralInfoForm = ({ user }: { user: User }) => {
   const [formData, setFormData] = useState({
-    username: user.username,
-    firstname: user.firstname,
-    lastname: user.lastname,
+    username: user.userName,
+    firstname: user.firstName,
+    lastname: user.lastName,
     email: user.email,
     location: user.location,
     address: user.address,
-    phone: user.phone,
+    phone: user.phoneNumber,
   });
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
