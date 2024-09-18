@@ -161,6 +161,6 @@ function ComparePage() {
       </div>
     </div>
   );
-}
+}//
 
 export default ComparePage;
