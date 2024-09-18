@@ -10,7 +10,7 @@ function setCookie(
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
     sameSite: 'lax', // Default to lax same-site policy
-    maxAge: 5 * 60 * 1000,  // Default 5 minutes expiration
+    maxAge:  8 * 60 * 60 * 1000,  // Default 5 minutes expiration
     ...options, // Allow overriding defaults
   };
 

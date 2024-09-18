@@ -31,7 +31,7 @@ export class AuthRepository {
   ): Promise<ResponseSignUpUserDTO> {
     let cognitoUserSub: string | undefined;
     try {
-      const { firstName, lastName, email, username, password } = requestBody;
+      const {  email, username, password } = requestBody;
       const data = { email, password, username, role: "user" };
       const findUsernameExist = await axios.get(
         `${configs.userServiceDomain}/api/v1/users/username/${username}`,
@@ -44,17 +44,17 @@ export class AuthRepository {
       if (!response.userSub) {
         throw new BadRequestError("Please signup again");
       }
-      const userPayload = {
-        cognitoSub: response.userSub, // Cognito userSub
-        firstName, // First name
-        lastName,
-        email: email, // Last name
-        userName: username, // Username (not Cognito username)
-      };
-      await axios.post(
-        `${configs.userServiceDomain}/api/v1/users`,
-        userPayload,
-      );
+      
+      // const userPayload = {
+      //   cognitoSub: response.userSub, // Cognito userSub
+      //   email: email, // Last name
+      //   userName: username, // Username (not Cognito username)
+      // };
+      // await axios.post(
+      //   `${configs.userServiceDomain}/api/v1/users`,
+      //   userPayload,
+      // );
+
       return response;
     } catch (error: any) {
       if (cognitoUserSub) {

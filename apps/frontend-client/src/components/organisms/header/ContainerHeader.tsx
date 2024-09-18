@@ -1,11 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavigateList from "@/components/molecules/navigate-list/NavigateList";
 import Menu from "@/icons/Menu";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/images/lomnov-logo.png";
 import SelectLang from "@/components/molecules/select-lang/SelectLang";
+import { BiUser } from "react-icons/bi";
+import { Setting, SignOut, User } from "@/icons";
+import axios from "axios";
 
 interface IMenus {
   id?: number;
@@ -20,6 +23,29 @@ export interface MenuProp {
   showAuthLinks?: boolean;
 }
 
+// Define the TypeScript interface for the user data
+interface UserData {
+  _id: string;
+  cognitoSub: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  age: number | null;
+  background: string[];
+  createdAt: string;
+  dateOfBirth: string;
+  favorite: string[];
+  gender: string;
+  location: string;
+  phoneNumber: string;
+  profile: string[];
+  role: string;
+  updatedAt: string;
+  userName: string;
+}
+
+
 function ContainerHeader({
   menu,
   showLogo = true,
@@ -30,6 +56,39 @@ function ContainerHeader({
     setIsMenu((isMenu) => !isMenu);
   };
 
+  // Step 1: Create state for storing user data
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [error, setError] = useState(null); // Optional: for handling errors
+  const [loading, setLoading] = useState(true); // Optional: for loading state
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        setLoading(true); // Set loading to true before making the request
+        const response = await axios.get(
+          "http://localhost:4000/api/v1/users/me",
+
+          {withCredentials: true },
+        );
+        console.log(response.data)
+        setUserData(response.data); // Step 2: Store the fetched data in state
+      } catch (error: any) {
+        setError(error.response?.data || error.message); // Handle the error
+      } finally {
+        setLoading(false); // Set loading to false after the request is completed
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // Display a loading indicator
+  }
+
+  // if (error) {
+  //   return <div>Error: {error}</div>; // Display an error message if the request fails
+  // }
   return (
     <>
       <div className=" xl:w-[1300px] w-full lg:m-auto h-full flex flex-row items-center justify-between py-3 px-3 xl:px-0 z-20 ">
@@ -112,18 +171,32 @@ function ContainerHeader({
                     className=" w-full h-full object-cover"
                   />
                 </div>
-
-                <div className=" w-[180px]  bg-white absolute right-0  rounded-md flex flex-col items-center px-3 py-2">
-                  <div>
-                    <div className=" w-[70px] h-[70px] rounded-full border-[1px] border-blue-400 ">
-                      <Image src={""} alt=""/>
+                <div className=" w-[220px]  bg-white absolute right-0  rounded-md flex flex-col items-center px-3 py-2">
+                  <div className=" w-full flex flex-row items-center justify-start gap-2">
+                    <div className=" w-[50px] h-[50px] rounded-full border-[1px] border-blue-400 ">
+                      <Image src={userData?.profile[0]!} alt="" />
                     </div>
-                    <p className=" text-[14px]">Seyhaoeurn</p>
+                    <p className=" text-[14px]">{ userData!.userName }</p>
                   </div>
-                  <div className="flex flex-col mt-3">
-                    <Link href={""}> Profile  </Link>
-                    <Link href={""}> Setting  </Link>
+                  <div className="flex flex-col items-start justify-start mt-3 border-y-[1px] border-y-blue-500  w-full py-3">
+                    <Link
+                      href={""}
+                      className=" hover:bg-blue-500 hover:text-white w-full rounded-lg p-2 flex items-center gap-2"
+                    >
+                      <User props=" text-olive-green " /> Profile{" "}
+                    </Link>
+                    <Link
+                      href={""}
+                      className=" hover:bg-blue-500 hover:text-white w-full rounded-lg p-2 flex items-center gap-2"
+                    >
+                      {" "}
+                      <Setting props=" text-olive-green " /> Setting{" "}
+                    </Link>
                   </div>
+                  <button className="mt-2 p-2  w-full rounded-[25px] font-[500] flex items-center">
+                    {" "}
+                    <SignOut /> Logout{" "}
+                  </button>
                 </div>
               </div>
             }
