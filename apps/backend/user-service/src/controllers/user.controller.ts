@@ -111,6 +111,7 @@ export class ProductController extends Controller {
     @FormField() address?: string,
     @FormField() gender?: string,
     @FormField() dateOfBirth?: string,
+    @FormField() location? : string,
   ): Promise<ResponseUserDTO | undefined> {
     try {
       const updateData = {
@@ -119,6 +120,7 @@ export class ProductController extends Controller {
         userName,
         phoneNumber,
         address,
+        location,
         gender,
         dateOfBirth,
         request,
