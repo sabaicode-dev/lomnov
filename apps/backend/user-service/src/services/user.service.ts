@@ -78,6 +78,7 @@ export class UserService {
   public async getMe(request: Express.Request): Promise<ResponseUserDTO | null> {
     try {
       const cognitoSub = request.cookies?.username;
+      console.log(cognitoSub)
       if (!cognitoSub) {
         throw new UnauthorizedError();
       }
