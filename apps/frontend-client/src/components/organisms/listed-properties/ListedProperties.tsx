@@ -5,11 +5,14 @@ import ItemCard from "@/components/molecules/item-card/ItemCard";
 import PropertyActions from "@/components/molecules/properties-action/PropertyActions";
 import Image from "next/image";
 import Remove from "@/icons/Remove";
+import axios from "axios";
 
 interface ListedPropertiesProps {
+  
   user: string;
+  
 }
-
+ 
 const ListedProperties = ({ user }: ListedPropertiesProps) => {
   const [listedProperties, setListedProperties] = useState<RealEstateItem[]>(
     [],
@@ -19,20 +22,19 @@ const ListedProperties = ({ user }: ListedPropertiesProps) => {
   const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([]);
   const [showCompareBar, setShowCompareBar] = useState(false);
 
-  // Fetch properties based on the user
   useEffect(() => {
     async function fetchProperties() {
       try {
-        const res = await fetch(
-          `https://lomnov.onrender.com/api/v1/properties?user=${user}`,
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/properties/me`,
+          { withCredentials: true }, // Ensuring credentials like cookies are included
         );
-        if (!res.ok) {
-          throw new Error("Failed to fetch properties");
-        }
-        const properties = await res.json();
-        setListedProperties(properties);
+        console.log(res.data);
+        
+        // Accessing the properties array inside the response object
+        setListedProperties(res.data.properties); // Correctly accessing the properties array
       } catch (error) {
-        console.error(error);
+        console.error("Failed to fetch properties:", error);
       } finally {
         setLoading(false);
       }

@@ -1,25 +1,40 @@
 import React from "react";
 import Layout from "../../layout"; // Import the layout
 import UserProfileHeader from "@/components/molecules/user-profile-header/UserProfileHeader"; // Adjust this to your file path
+import axios from "axios";
+import { cookies } from "next/headers";
 
-async function fetchUserDetails(username: string) {
-  const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/users?username=${username}`,
-  );
+async function fetchUserDetails() {
+  try {
+    // Get the cookies
+    const accessToken = cookies().get("accessToken")?.value;
+    const username = cookies().get("username")?.value;
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch user details");
+    // Make sure the cookies are available before making the request
+    if (!accessToken || !username) {
+      throw new Error("Required cookies not found");
+    }
+
+    // Make the API call, passing cookies in the 'Cookie' header
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/users/me`,
+      {
+        headers: {
+          Cookie: `accessToken=${accessToken}; username=${username}`,
+        },
+        withCredentials: true, // This is important for cookies to be sent
+      },
+    );
+
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    return null;
   }
-  const user = await res.json();
-  return user[0]; // Adjust this based on your API response
 }
 
-const SavedPropertiesPage = async ({
-  params,
-}: {
-  params: { username: string };
-}) => {
-  const user = await fetchUserDetails(params.username);
+const SavedPropertiesPage = async () => {
+  const user = await fetchUserDetails();
 
   if (!user) {
     return <div>User not found</div>;

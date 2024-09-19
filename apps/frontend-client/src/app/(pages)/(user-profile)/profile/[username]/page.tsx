@@ -1,21 +1,38 @@
 import React from "react";
 import Layout from "../layout"; // Import the layout
+import { cookies } from "next/headers";
 import ListedProperties from "@/components/organisms/listed-properties/ListedProperties";
 import UserProfileHeader from "@/components/molecules/user-profile-header/UserProfileHeader";
+import axios from "axios";
 
-async function fetchUserDetails(username: string) {
-  const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/users?username=${username}`,
-  );
-  if (!res.ok) {
-    throw new Error("Failed to fetch user details");
+async function fetchUserDetails() {
+  try {
+    // Get the cookies
+    const accessToken = cookies().get("accessToken")?.value;
+    const username = cookies().get("username")?.value;
+
+    // Make sure the cookies are available before making the request
+    if (!accessToken || !username) {
+      throw new Error("Required cookies not found");
+    }
+
+    // Make the API call, passing cookies in the 'Cookie' header
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/users/me`, {
+      headers: {
+        Cookie: `accessToken=${accessToken}; username=${username}`,
+      },
+      withCredentials: true, // This is important for cookies to be sent
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    return null;
   }
-  const user = await res.json();
-  return user[0]; // Adjust this based on your API response
 }
 
-const ProfilePage = async ({ params }: { params: { username: string } }) => {
-  const user = await fetchUserDetails(params.username);
+const ProfilePage = async () => {
+  const user = await fetchUserDetails();
 
   if (!user) {
     return <div>User not found</div>;
@@ -25,7 +42,7 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
     <Layout>
       <div className="">
         <UserProfileHeader user={user} />
-        <ListedProperties user={params.username} />
+        <ListedProperties user={user.userName} />
       </div>
     </Layout>
   );
