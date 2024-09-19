@@ -79,7 +79,6 @@ export class UserService {
     try {
       const cognitoSub = request.cookies?.username;
       console.log(cognitoSub)
-      
       if (!cognitoSub) {
         throw new UnauthorizedError();
       }

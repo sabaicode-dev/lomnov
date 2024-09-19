@@ -29,7 +29,7 @@ const PasswordForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-[10px] p-[20px] rounded-[16px] font-helvetica text-helvetica-paragraph text-charcoal max-w-[600px] bg-white border border-pale-gray"
+      className="space-y-[10px] mt-[40px] p-[20px] rounded-[16px] font-helvetica text-helvetica-paragraph text-charcoal max-w-[600px] bg-white border border-pale-gray"
     >
       <div>
         <label className="block mb-[5px] font-bold">Current Password</label>

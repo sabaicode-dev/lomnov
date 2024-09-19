@@ -4,13 +4,13 @@ import { User } from "@/libs/types/user-types/user";
 
 const GeneralInfoForm = ({ user }: { user: User }) => {
   const [formData, setFormData] = useState({
-    username: user.username,
-    firstname: user.firstname,
-    lastname: user.lastname,
+    username: user.userName,
+    firstname: user.firstName,
+    lastname: user.lastName,
     email: user.email,
     location: user.location,
     address: user.address,
-    phone: user.phone,
+    phone: user.phoneNumber,
   });
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
@@ -29,7 +29,7 @@ const GeneralInfoForm = ({ user }: { user: User }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-[10px] p-[20px] rounded-[16px] font-helvetica text-helvetica-paragraph text-charcoal max-w-[600px] bg-white border border-pale-gray"
+      className="space-y-[10px] mt-[40px] p-[20px] rounded-[16px] font-helvetica text-helvetica-paragraph text-charcoal max-w-[600px] bg-white border border-pale-gray"
     >
       <div>
         <label className="block mb-[5px] font-bold">User name</label>

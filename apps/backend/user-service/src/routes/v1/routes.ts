@@ -276,6 +276,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                     address: {"in":"formData","name":"address","dataType":"string"},
                     gender: {"in":"formData","name":"gender","dataType":"string"},
                     dateOfBirth: {"in":"formData","name":"dateOfBirth","dataType":"string"},
+                    location: {"in":"formData","name":"location","dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
