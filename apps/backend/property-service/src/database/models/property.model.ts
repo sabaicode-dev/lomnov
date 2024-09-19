@@ -35,6 +35,7 @@ const PropertySchema = new Schema<Property>(
   },
   { timestamps: true },
 );
+
 // Add a pre-save middleware to adjust timestamps
 PropertySchema.pre<PropertyDocument>("save", function (next) {
   const timezoneOffset = 7 * 60 * 60 * 1000; // 7 hours in milliseconds

@@ -1,5 +1,3 @@
-// profile/[username]/page.tsx
-
 import React from "react";
 import Layout from "../layout"; // Import the layout
 import ListedProperties from "@/components/organisms/listed-properties/ListedProperties";

@@ -6,10 +6,15 @@ import authenticateToken from "@/src//middleware/authenticateToken";
 import authorizeRole from "@/src//middleware/autherizeRole";
 import requestLogger from "@/src//middleware/request-response-logger";
 import { errorHandler } from "@/src/utils/error/errorHanler";
+import cors from "cors"
 // ========================================================================
 
 const app = express();
 app.use(cookieParser());
+app.use(cors({
+  origin: 'http://localhost:3000', // Your frontend URL
+  credentials: true, // Allow credentials (cookies)
+}));
 // ===============================
 // Check route and http request
 // ===============================

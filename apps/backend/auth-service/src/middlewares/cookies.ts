@@ -9,9 +9,9 @@ function setCookie(
   const defaultOptions: CookieOptions = {
     path: "/",
     httpOnly: true,
-    secure: false,
-    sameSite: "none",
-    maxAge: 5 * 60 * 1000, // Default 5 minutes expiration
+    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+    sameSite: 'lax', // Default to lax same-site policy
+    maxAge:  8 * 60 * 60 * 1000,  // Default 5 minutes expiration
     ...options, // Allow overriding defaults
   };
 

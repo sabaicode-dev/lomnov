@@ -15,6 +15,7 @@ export interface RealEstateDetail {
 }
 
 export interface RealEstateItem {
+  _id: object;
   id: number;
   user: string;
   transaction: string;
