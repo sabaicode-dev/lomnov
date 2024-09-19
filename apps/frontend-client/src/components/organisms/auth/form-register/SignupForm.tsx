@@ -4,16 +4,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import InputField from "../../../../../../../packages/ui-components/src/components/inputfield/InputField";
-
-import Image from "next/image";
-import banner from "@/images/banner.png";
+import axios from "axios";
 
 // Define the Zod schema
 const signupSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  username: z.string().min(1, "Username is required"),
   email: z.string().email("Invalid email address"),
+  username: z.string().min(1, "Username is required"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });
 
@@ -22,15 +18,13 @@ type SignupData = z.infer<typeof signupSchema>;
 
 const SignupForm: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [FirstNameFocused, setFirstNameFocused] = useState(false);
-  const [lastNameFocused, setlastNameFocused] = useState(false);
-  const [userNameFocused, setuserNameFocused] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
-
+  const [userNameFocused, setUserNameFocused] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
-
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
+  
   const {
     register,
     handleSubmit,
@@ -39,11 +33,25 @@ const SignupForm: React.FC = () => {
     resolver: zodResolver(signupSchema),
   });
 
-  const onSubmit = (data: SignupData) => {
-    console.log("Form data:", data);
-    // Implement your form submission logic here
-  };
+  const onSubmit = async (data: SignupData) => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL_AUTH}/auth/signup`,
+        {
+          email: data.email,
+          username: data.username,
+          password: data.password,
+        },
+      );
 
+      // Handle success - redirect to verification page
+      if (response.status === 200) {
+        window.location.href = `/verify?email=${encodeURIComponent(data.email)}`;
+      }
+    } catch (error) {
+      setErrorMessage("Signup failed. Please try again.");
+    }
+  };
   return (
     <div className="max-w-[600px] mx-auto bg-white rounded-[30px] border border-neutral py-10">
       {/* Title */}
@@ -64,32 +72,12 @@ const SignupForm: React.FC = () => {
         <div className="flex-grow h-px bg-charcoal"></div>
       </div>
 
+      {errorMessage && (
+        <p className="text-red-500 text-center">{errorMessage}</p>
+      )}
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <fieldset>
-          <InputField
-            label="First Name"
-            type="text"
-            register={register("firstName")}
-            error={errors.firstName?.message}
-            isFocused={FirstNameFocused}
-            setIsFocused={setFirstNameFocused}
-          />
-          <InputField
-            label="Last Name"
-            type="text"
-            register={register("lastName")}
-            error={errors.lastName?.message}
-            isFocused={lastNameFocused}
-            setIsFocused={setlastNameFocused}
-          />
-          <InputField
-            label="Username"
-            type="text"
-            register={register("username")}
-            error={errors.username?.message}
-            isFocused={userNameFocused}
-            setIsFocused={setuserNameFocused}
-          />
           <InputField
             label="Email"
             type="email"
@@ -97,6 +85,14 @@ const SignupForm: React.FC = () => {
             error={errors.email?.message}
             isFocused={emailFocused}
             setIsFocused={setEmailFocused}
+          />
+          <InputField
+            label="Username"
+            type="text"
+            register={register("username")}
+            error={errors.username?.message}
+            isFocused={userNameFocused}
+            setIsFocused={setUserNameFocused}
           />
           <InputField
             label="Password"
