@@ -8,11 +8,9 @@ import Remove from "@/icons/Remove";
 import axios from "axios";
 
 interface ListedPropertiesProps {
-  
   user: string;
-  
 }
- 
+
 const ListedProperties = ({ user }: ListedPropertiesProps) => {
   const [listedProperties, setListedProperties] = useState<RealEstateItem[]>(
     [],
@@ -29,8 +27,7 @@ const ListedProperties = ({ user }: ListedPropertiesProps) => {
           `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/properties/me`,
           { withCredentials: true }, // Ensuring credentials like cookies are included
         );
-        console.log(res.data);
-        
+
         // Accessing the properties array inside the response object
         setListedProperties(res.data.properties); // Correctly accessing the properties array
       } catch (error) {
