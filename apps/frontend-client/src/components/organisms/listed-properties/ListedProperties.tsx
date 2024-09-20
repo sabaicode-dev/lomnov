@@ -27,7 +27,7 @@ const ListedProperties = ({ user }: ListedPropertiesProps) => {
           `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/properties/me`,
           { withCredentials: true }, // Ensuring credentials like cookies are included
         );
-
+        console.log(res)
         // Accessing the properties array inside the response object
         setListedProperties(res.data.properties); // Correctly accessing the properties array
       } catch (error) {

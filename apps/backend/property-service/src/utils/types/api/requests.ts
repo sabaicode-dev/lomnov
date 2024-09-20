@@ -19,7 +19,7 @@ export interface RequestPropertyDTO {
 }
 
 export interface RequestQueryPropertyDTO {
-  // cognitoSub: string;
+  cognitoSub: string | undefined;
   title?: string | undefined;
   description?: string | undefined;
   address?: string;

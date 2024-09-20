@@ -6,9 +6,9 @@ import Map from "../../../../components/molecules/map/Map";
 import RecommendedProperties from "@/components/molecules/RecommendedProperties/RecommendedProperties";
 import UserListed from "@/components/organisms/user-listed-property/UserListed";
 // Fetch property data
-async function fetchProperty(id: string): Promise<RealEstateItem> {
+async function fetchProperty(cognitoSub: string): Promise<RealEstateItem> {
   const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/properties?id=${id}`,
+    `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/properties?cognitoSub=${cognitoSub}`,
   );
   if (!res.ok) {
     throw new Error("Failed to fetch property data");
