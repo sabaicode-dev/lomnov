@@ -44,9 +44,8 @@ esbuild.build({
     '@': path.resolve(__dirname, '.')
   }
 }).then(() => {
-  // (1) Solve: Copy swagger.json after successful build
-  fs.copySync(path.resolve(__dirname, 'src/docs/swagger.json'), path.resolve(__dirname, 'build/docs/swagger.json'));
-  console.log('Swagger JSON copied successfully!');
+
+  fs.copySync(path.resolve(__dirname, 'src/configs/.env.production'), path.resolve(__dirname, 'build/configs/.env.production'));
 
 }).catch(error => {
   console.error('Build failed:', error);

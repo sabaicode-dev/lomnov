@@ -8,8 +8,6 @@ import logo from "@/images/lomnov-logo.png";
 import SelectLang from "@/components/molecules/select-lang/SelectLang";
 import { Setting, SignOut, User } from "@/icons";
 import axios from "axios";
-import Cookies from "js-cookie";
-import { cookies } from "next/headers";
 interface IMenus {
   id?: number;
   name?: string;
@@ -81,6 +79,7 @@ function ContainerHeader({
   };
   const handleLogout = async () => {
     try {
+
       // Call the backend to invalidate the session (if applicable)
       // await axios.post(
       //   "http://localhost:4000/api/v1/auth/logout", // Replace with your actual logout endpoint
@@ -89,8 +88,7 @@ function ContainerHeader({
       // );
 
       // Clear the local user data
-      Cookies.remove("accessToken");
-      Cookies.remove("refreshToken");
+
       setUserData(null);
 
       // Remove cookies or local storage if you're using them

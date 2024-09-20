@@ -14,24 +14,24 @@ esbuild.build({
     '.ts': 'ts',
   },
   plugins: [
-    // (2) Solve: https://stackoverflow.com/questions/62136515/swagger-ui-express-plugin-issue-with-webpack-bundling-in-production-mode/63048697#63048697
-    copy({
+     // (2) Solve: https://stackoverflow.com/questions/62136515/swagger-ui-express-plugin-issue-with-webpack-bundling-in-production-mode/63048697#63048697
+     copy({
       assets: [
         {
-          from: `../node_modules/swagger-ui-dist/*.css`,
-          to: './',
+          from: `../../../node_modules/swagger-ui-dist/*.css`,
+          to: "./",
         },
         {
-          from: `../node_modules/swagger-ui-dist/*.js`,
-          to: './',
+          from: `../../../node_modules/swagger-ui-dist/*.js`,
+          to: "./",
         },
         {
-          from: `../node_modules/swagger-ui-dist/*.png`,
-          to: './',
+          from: `../../../node_modules/swagger-ui-dist/*.png`,
+          to: "./",
         },
         {
-          from: './src/configs/.env.local',
-          to: './configs',
+          from: "./src/configs/.env.local",
+          to: "./configs",
         },
       ],
     }),
@@ -46,7 +46,12 @@ esbuild.build({
 }).then(() => {
   // (1) Solve: Copy swagger.json after successful build
   fs.copySync(path.resolve(__dirname, 'src/docs/swagger.json'), path.resolve(__dirname, 'build/docs/swagger.json'));
-  console.log('Swagger JSON copied successfully!');
+  fs.copySync(path.resolve(__dirname, 'src/configs/.env.production'), path.resolve(__dirname, 'build/configs/.env.production'));
+  console.log('swagger copied successfully!');
+
+
+
+
 
 }).catch(error => {
   console.error('Build failed:', error);

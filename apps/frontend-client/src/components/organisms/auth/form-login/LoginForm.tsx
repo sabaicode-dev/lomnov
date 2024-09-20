@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Google from "../../../../icons/Google";
 import Facebook from "../../../../icons/Facebook";
 import axios from "axios";
+import Link from "next/link";
 
 // Define the Zod schema
 const loginSchema = z.object({
@@ -111,9 +112,9 @@ const LoginForm: React.FC = () => {
           <label className="flex items-center">
             <input type="checkbox" className="mr-2" /> Remember Me
           </label>
-          <a href="#" className="text-olive-green">
+          <Link href="/forgot-password" className="text-olive-green">
             Forgot Password?
-          </a>
+          </Link>
         </div>
 
         {/* Sign In Button */}

@@ -342,6 +342,14 @@
 				"parameters": [
 					{
 						"in": "query",
+						"name": "cognitoSub",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
 						"name": "title",
 						"required": false,
 						"schema": {
