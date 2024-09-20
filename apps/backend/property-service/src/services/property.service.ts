@@ -99,8 +99,8 @@ export class PropertyService {
   private buildFilters(queries: RequestQueryPropertyDTO): Promise<ResponseAllPropertyDTO> {
     try{
       const {
+        cognitoSub,
         title,
-        // cognitoSub,
         description,
         address,
         location,
@@ -112,17 +112,31 @@ export class PropertyService {
         price_lte,
       } = queries;
       const filters: any = {};
-      // if(cognitoSub){
 
-      // }
-      if (title || description || address || location || category || transition) {
-        filters["title.content"] = { $regex: title, $options: "i" };
-        filters["description.content"] = { $regex: description, $options: "i" };
-        filters["address.content"] = { $regex: address, $options: "i" };
-        filters["location.content"] = { $regex: location, $options: "i" };
-        filters["category.content"] = { $regex: category, $options: "i" };
-        filters["transi.content"] = { $regex: category, $options: "i" };
+      if (cognitoSub || title || description || address || location || category || transition) {
+        if (typeof cognitoSub === 'string') {
+          filters["cognitoSub"] = cognitoSub;  // Exact match for cognitoSub
+        }
+        if (typeof title === 'string') {
+          filters["title.content"] = { $regex: title, $options: "i" };
+        }
+        if (typeof description === 'string') {
+          filters["description.content"] = { $regex: description, $options: "i" };
+        }
+        if (typeof address === 'string') {
+          filters["address.content"] = { $regex: address, $options: "i" };
+        }
+        if (typeof location === 'string') {
+          filters["location.content"] = { $regex: location, $options: "i" };
+        }
+        if (typeof category === 'string') {
+          filters["category.content"] = { $regex: category, $options: "i" };
+        }
+        if (typeof transition === 'string') {
+          filters["transition.content"] = { $regex: transition, $options: "i" };
+        }
       }
+
       if (price) {
         filters.price = price;
       } else {
