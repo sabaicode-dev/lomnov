@@ -159,6 +159,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
             async function PropertyController_getProperty(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    cognitoSub: {"in":"query","name":"cognitoSub","dataType":"string"},
                     title: {"in":"query","name":"title","dataType":"string"},
                     description: {"in":"query","name":"description","dataType":"string"},
                     address: {"in":"query","name":"address","dataType":"string"},
