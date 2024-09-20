@@ -1,5 +1,3 @@
-// components/molecules/user-profile-navigation/UserProfileNavigation.tsx
-
 "use client"; // Enable client-side rendering for this component
 import React from "react";
 import { usePathname } from "next/navigation"; // Hook to get the current path
@@ -11,9 +9,10 @@ interface UserProfileNavigationProps {
 
 const UserProfileNavigation = ({ username }: UserProfileNavigationProps) => {
   const pathname = usePathname(); // Get the current path
-  
+
   const isListedPropertiesActive = pathname === `/profile/${username}`;
-  const isSavedPropertiesActive = pathname === `/profile/saved-properties/${username}`;
+  const isSavedPropertiesActive =
+    pathname === `/profile/saved-properties/${username}`;
 
   return (
     <div className="w-full mt-[70px] mx-auto ">

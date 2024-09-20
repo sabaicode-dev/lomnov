@@ -232,6 +232,7 @@ export class CognitoService {
       const authResult = response.AuthenticationResult;
       const decodedToken = jwtDecode<JwtPayload>(authResult.AccessToken!);
       const extractedUsername = decodedToken.sub;
+      
       return {
         message: "Sign-in successful!",
         authResult,

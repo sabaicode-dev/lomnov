@@ -1,31 +1,46 @@
-// profile/saved-properties/[username]/page.tsx
-
-import React from "react";
-import Layout from "../../layout"; // Import the layout
+import axios from "axios";
+import { cookies } from "next/headers";
 import UserSettingHeader from "@/components/molecules/user-setting-header/UserSettingHeader";
+import Layout from "../../layout";
 import PasswordForm from "@/components/organisms/password-form/PasswordForm";
 
-async function fetchUserDetails(username: string) {
-  const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/users?username=${username}`,
-  );
-  if (!res.ok) {
-    throw new Error("Failed to fetch user details");
+async function fetchUserDetails() {
+  try {
+    const accessToken = cookies().get("accessToken")?.value;
+    const username = cookies().get("username")?.value;
+
+    if (!accessToken || !username) {
+      throw new Error("Access token not found");
+    }
+
+    // Fetch user details using the access token
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/users/me`,
+      {
+        headers: {
+          Cookie: `accessToken=${accessToken}; username=${username}`,
+        },
+        withCredentials: true, // This is important for cookies to be sent
+      },
+    );
+
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    return null;
   }
-  const user = await res.json();
-  return user[0]; // Adjust this based on your API response
 }
 
-const PasswordPage = async ({ params }: { params: { username: string } }) => {
-  const user = await fetchUserDetails(params.username);
+const PasswordPage = async () => {
+  const userDetails = await fetchUserDetails();
 
-  if (!user) {
+  if (!userDetails) {
     return <div>User not found</div>;
   }
 
   return (
     <Layout>
-      <UserSettingHeader user={user} /> {/* Reusing the ProfileHeader */}
+      <UserSettingHeader user={userDetails} />
       <div className="max-w-[1300px] mx-auto">
         <PasswordForm />
       </div>

@@ -1,12 +1,13 @@
-import { CookieOptions, Response } from 'express';
+import { CookieOptions, Response } from "express";
 
 function setCookie(
   response: Response,
   name: string,
   value: string,
-  options: CookieOptions = {}
+  options: CookieOptions = {},
 ) {
   const defaultOptions: CookieOptions = {
+    path: "/",
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
     sameSite: 'lax', // Default to lax same-site policy

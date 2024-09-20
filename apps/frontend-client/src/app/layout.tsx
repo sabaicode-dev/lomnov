@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/organisms/header/Header";
 import Footer from "@/components/organisms/footer/Footer";
 
-const inter = Inter({ subsets: ["latin"] });
+const popins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"], // Define different weights you want
+});
 
 export const metadata: Metadata = {
   // icons: {
@@ -22,10 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Header/>
+      <body className={popins.className}>
+        <Header />
         {children}
-        <Footer/>
+        <Footer />
       </body>
     </html>
   );

@@ -32,6 +32,7 @@ import React, { useState, useEffect } from "react";
 import ItemCard from "../item-card/ItemCard";
 import Image from "next/image";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
+import Remove from "@/icons/Remove";
 
 // Fetch properties from server
 async function fetchProperties(): Promise<RealEstateItem[]> {
@@ -110,7 +111,7 @@ const ItemCardListWrapper = () => {
 
   return (
     <div>
-      <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
+      <div className="grid z-0 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
         {items.map((item) => (
           <ItemCard
             key={item.id}
@@ -122,7 +123,7 @@ const ItemCardListWrapper = () => {
       </div>
 
       {showCompareBar && (
-        <div className="fixed bottom-0 left-0 w-full bg-gray-800 text-white p-4 flex justify-end space-x-2 items-center">
+        <div className="fixed z-10 bottom-0 float-section-shadow left-0 w-full bg-grayish-white text-helvetica-paragraph text-charcoal p-3 flex justify-end space-x-2 items-center">
           <span>
             {selectedItems.length < 2
               ? "Select 2 items to compare"
@@ -134,21 +135,21 @@ const ItemCardListWrapper = () => {
                 <Image
                   src={item.thumbnail}
                   alt={item.title}
-                  width={300}
-                  height={300}
+                  width={100}
+                  height={100}
                   className="w-16 h-16 object-cover rounded"
                 />
                 <button
                   onClick={() => handleCompareClick(item)}
-                  className="absolute top-0 right-0 text-white bg-red-500 rounded-full w-5 h-5 flex items-center justify-center"
+                  className="absolute -top-[5px] -right-[5px]"
                 >
-                  &times;
+                  <Remove props="w-[15px] h-[15px]"/>
                 </button>
               </div>
             ))}
           </div>
           <button
-            className={`bg-blue-500 px-4 py-2 rounded ${
+            className={`bg-neutral  px-4 py-2 rounded ${
               selectedItems.length < 2 ? "opacity-50 cursor-not-allowed" : ""
             }`}
             onClick={() => {

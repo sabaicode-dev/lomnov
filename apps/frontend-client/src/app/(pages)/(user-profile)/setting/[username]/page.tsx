@@ -16,12 +16,16 @@ async function fetchUserDetails() {
     }
 
     // Make the API call, passing cookies in the 'Cookie' header
-    const res = await axios.get(`http://localhost:4000/api/v1/users/me`, {
-      headers: {
-        Cookie: `accessToken=${accessToken}; username=${username}`,
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/users/me`,
+      {
+        headers: {
+          Cookie: `accessToken=${accessToken}; username=${username}`
+        },
+        withCredentials: true, // This is important for cookies to be sent
       },
-      withCredentials: true, // This is important for cookies to be sent
-    });
+    );
+console.log("user:",res);
 
     return res.data;
   } catch (error) {

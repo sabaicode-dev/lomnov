@@ -91,6 +91,9 @@ const config: Config = {
         xl: "1280px",
         "2xl": "1440px",
       },
+      boxShadow: {
+        "float-section-shadow":"box-shadow"
+      }
     },
   },
 

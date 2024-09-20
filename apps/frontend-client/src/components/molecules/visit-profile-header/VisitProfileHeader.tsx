@@ -8,12 +8,13 @@ import userProfile from "@/images/User-60.svg"
 
 interface VisitProfileHeaderProps {
   user: {
-    username: string;
+    userName: string;
     background: string;
     profile: string;
-    fistname: string;
-    lastname: string;
+    firstName: string;
+    lastName: string;
     joinedDate: string;
+    createdAt: string;
   };
 }
 
@@ -54,7 +55,8 @@ const VisitProfileHeader = ({ user }: VisitProfileHeaderProps) => {
             {/* User name */}
             <div className="absolute left-[170px] items-center text-helvetica-small font-helvetica text-olive-gray mt-[10px]">
               <span className="font-helvetica text-helvetica-h4 font-bold text-charcoal capitalize">
-                {user.fistname} {user.lastname}
+                {user.firstName} {user.lastName}
+                {user.userName} 
               </span>
               <span className="flex items-center mt-[10px]">
                 Joined
@@ -79,7 +81,7 @@ const VisitProfileHeader = ({ user }: VisitProfileHeaderProps) => {
         </div>
       </div>
       {/* UserProfileNavigation */}
-      <VisitProfileNavigation username={user.username} />
+      <VisitProfileNavigation username={user.userName} />
     </>
   );
 };

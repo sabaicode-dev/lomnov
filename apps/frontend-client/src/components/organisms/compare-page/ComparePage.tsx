@@ -1,6 +1,7 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   RealEstateDetail,
   RealEstateItem,
@@ -93,34 +94,36 @@ function ComparePage() {
   };
 
   return (
-    <div className="mt-[80px] px-4 md:px-8 lg:px-16">
+    <div className="mt-[160px] max-w-[1300px] mx-auto lg:p-0 p-[10px]">
       <button
         onClick={() => window.history.back()}
-        className="text-lg font-bold mb-6 text-[#7D7757] flex items-center hover:underline"
+        className="text-lg font-bold mb-6 text-olive-green flex items-center hover:underline"
       >
         <FaArrowLeft className="mr-2" /> Back
       </button>
 
       {/* Property Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+      <div className="grid grid-cols-2 md:grid-cols-2 gap-[10px] md:gap-5 max-w-5xl mx-auto">
         {/* Property 1 */}
-        <div className="border rounded-lg p-4 sm:p-6 shadow-lg bg-pale-gray transform hover:scale-105 transition-transform duration-300 ease-in-out w-full flex flex-col items-center justify-between h-full">
-          <div className="w-full flex-grow">
-            <Image
-              src={items[0].thumbnail}
-              alt={items[0].title}
-              width={350}
-              height={200}
-              className="rounded-lg object-cover w-full h-72 mb-4"
-            />
+        <Link href={`/detail/${item1}`}>
+          <div className="border rounded-lg p-4 sm:p-6 shadow-lg bg-pale-gray transform hover:scale-105 transition-transform duration-300 ease-in-out w-full flex flex-col items-center justify-between h-full">
+            <div className="w-full flex-grow">
+              <Image
+                src={items[0].thumbnail}
+                alt={items[0].title}
+                width={350}
+                height={200}
+                className="rounded-lg object-cover w-full h-72 mb-4"
+              />
+            </div>
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 text-center">
+              {items[0].title}
+            </h2>
+            <p className="text-gray-600 mt-2 text-center">{items[0].address}</p>
           </div>
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900 text-center">
-            {items[0].title}
-          </h2>
-          <p className="text-gray-600 mt-2 text-center">{items[0].address}</p>
-        </div>
-
+        </Link>
         {/* Property 2 */}
+        <Link href={`/detail/${item2}`}>
         <div className="border rounded-lg p-4 sm:p-6 shadow-lg bg-pale-gray transform hover:scale-105 transition-transform duration-300 ease-in-out w-full flex flex-col items-center justify-between h-full">
           <div className="w-full flex-grow">
             <Image
@@ -136,6 +139,7 @@ function ComparePage() {
           </h2>
           <p className="text-gray-600 mt-2 text-center">{items[1].address}</p>
         </div>
+        </Link>
       </div>
 
       {/* Comparison Table */}
