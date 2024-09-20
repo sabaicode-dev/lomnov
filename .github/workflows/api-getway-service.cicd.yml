@@ -1,12 +1,14 @@
 name: CI/CD Pipeline for API Gateway Service
+
 on:
   pull_request:
-    branches: 
-        - main
+    branches:
+      - main
     paths:
       - "apps/backend/api-gateway/**"
   push:
-    branches: [main]
+    branches:
+      - main
     paths:
       - "apps/backend/api-gateway/**"
 
