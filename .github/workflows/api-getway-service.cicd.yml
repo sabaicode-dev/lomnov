@@ -1,5 +1,4 @@
 name: CI/CD Pipeline for API Gateway Service
-
 on:
   pull_request:
     branches:
