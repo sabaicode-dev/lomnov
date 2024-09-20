@@ -82,6 +82,7 @@ export class PropertyController extends Controller {
 
   @Get("/properties")
   public async getProperty(
+    @Query() cognitoSub?: string,
     @Query() title?: string,
     @Query() description?: string,
     @Query() address?: string,
@@ -99,7 +100,7 @@ export class PropertyController extends Controller {
     try {
       // const cognitoSub = request?.cookies.username!
       const queries = {
-        // cognitoSub,
+        cognitoSub,
         title,
         description,
         address,
