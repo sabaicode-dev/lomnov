@@ -6,13 +6,15 @@ import "swiper/swiper-bundle.css";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "@/app/globals.css";
 import ItemCard from "@/components/molecules/item-card/ItemCard";
-import { RealEstateItem } from "@/libs/types/api-properties/property-response";
+import { RealEstateItem,PropertiesResponse } from "@/libs/types/api-properties/property-response";
 import Image from "next/image";
 import Remove from "@/icons/Remove";
 
-const ExclusiveHomesSlider = ({ items }: { items: RealEstateItem[] }) => {
+const ExclusiveHomesSlider = ({ items }: { items: PropertiesResponse }) => {
   const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([]);
   const [showCompareBar, setShowCompareBar] = useState(false);
+
+  // console.log("items:", items);
 
   // Retrieve selected items from localStorage when the component mounts
   useEffect(() => {
@@ -99,11 +101,16 @@ const ExclusiveHomesSlider = ({ items }: { items: RealEstateItem[] }) => {
           1024: { slidesPerView: 4 },
         }}
       >
-        {items.map((item) => (
-          <SwiperSlide key={item.id}>
-            <ItemCard item={item} handleCompareClick={handleCompareClick} />
-          </SwiperSlide>
-        ))}
+        {Array.isArray(items.properties) && items.properties.length > 0 ? (
+          items.properties.map((item) => (
+            <SwiperSlide key={String(item._id)}>
+              <ItemCard item={item} handleCompareClick={handleCompareClick} />
+            </SwiperSlide>
+          ))
+        ) : (
+          <p>No items available</p>
+        )}
+
         <div className="swiper-pagination mt-20 py-2"> </div>
         {/* <div className="swiper-button-prev"></div>
         <div className="swiper-button-next"></div> */}
@@ -131,7 +138,7 @@ const ExclusiveHomesSlider = ({ items }: { items: RealEstateItem[] }) => {
                   onClick={() => handleCompareClick(item)}
                   className="absolute -top-[5px] -right-[5px]"
                 >
-                  <Remove props="w-[15px] h-[15px]"/>
+                  <Remove props="w-[15px] h-[15px]" />
                 </button>
               </div>
             ))}

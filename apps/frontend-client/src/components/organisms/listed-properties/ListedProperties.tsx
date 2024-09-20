@@ -20,22 +20,22 @@ const ListedProperties = ({ user }: ListedPropertiesProps) => {
   const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([]);
   const [showCompareBar, setShowCompareBar] = useState(false);
 
-  useEffect(() => {
-    async function fetchProperties() {
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/properties/me`,
-          { withCredentials: true }, // Ensuring credentials like cookies are included
-        );
-        console.log(res)
-        // Accessing the properties array inside the response object
-        setListedProperties(res.data.properties); // Correctly accessing the properties array
-      } catch (error) {
-        console.error("Failed to fetch properties:", error);
-      } finally {
-        setLoading(false);
-      }
+  async function fetchProperties() {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/properties/me`,
+        { withCredentials: true }, // Ensuring credentials like cookies are included
+      );
+      console.log(res.data.properties)
+      // Accessing the properties array inside the response object
+      setListedProperties(res.data.properties); // Correctly accessing the properties array
+    } catch (error) {
+      console.error("Failed to fetch properties:", error);
+    } finally {
+      setLoading(false);
     }
+  }
+  useEffect(() => {
 
     fetchProperties();
   }, [user]);

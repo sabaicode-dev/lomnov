@@ -104,14 +104,221 @@ export interface ItemCardProps {
   handleCompareClick: (item: RealEstateItem) => void;
 }
 
-const ItemCard = ({ item, flexRow, handleCompareClick }: ItemCardProps) => {
+// const ItemCard = ({ item, flexRow, handleCompareClick }: ItemCardProps) => {
 
-  console.log(item)
-  // const flexRow = false;
+//   console.log(item)
+//   // const flexRow = false;
+//   const [isLike, setIsLike] = useState(false);
+
+//   const toggleIsLike = () => {
+//     setIsLike((isLike) => !isLike);
+//   };
+
+//   return (
+//     <>
+//       <div
+//         className={
+//           flexRow
+//             ? " flex  h-[150px] sm:h-[180px] md:h-[150px] gap-3 rounded-[20px] overflow-hidden shadow-md   bg-white border-[1px] border-neutral p-4"
+//             : "w-full h-[380px] rounded-[20px] overflow-hidden shadow-md flew flex-col gap-5 bg-white border-[1px] border-neutral p-4"
+//         }
+//       >
+//         <div
+//           className={
+//             flexRow
+//               ? "bg-olive-green w-[50%] relative overflow-hidden z-10 b rounded-[15px] hover:transition-all duration-1000 ease-out "
+//               : "w-full h-[65%] relative overflow-hidden z-10 bg-olive-green rounded-[15px] hover:transition-all duration-1000 ease-out  "
+//           }
+//         >
+//           <Link
+//             href={`/detail/${item.id}`}
+//             className=" absolute w-full h-full rounded-[15px] overflow-hidden transition-transform duration-300 transform hover:scale-110"
+//           >
+//             <div className=" group absolute left-0 top-0 w-full h-full hover:bg-[#00000033] z-2 transition duration-300">
+//               {/* dfdfd */}
+//             </div>
+//             <Image
+//               src={item.thumbnail}
+//               alt={item.title}
+//               width={500}
+//               height={500}
+//               className="w-full h-full object-cover "
+//             />
+//           </Link>
+
+//           {/* Item Type */}
+//           <p
+//             className={
+//               flexRow
+//                 ? "absolute py-[3px] px-4 top-[10px] left-[17px] sm:left-[10px] bg-olive-green text-white text-[12px] rounded-[13px]  font-[600] "
+//                 : "absolute py-[3px] px-4 top-[10px] left-[17px] sm:left-[10px] bg-olive-green text-white text-[14px] rounded-[13px]  font-[600] "
+//             }
+//           >
+//             {item.category}
+//           </p>
+
+//           {/* Favorite Icon */}
+//           <div
+//             className="absolute top-[10px] right-[17px] sm:right-[10px] cursor-pointer"
+//             onClick={toggleIsLike}
+//           >
+//             {isLike ? (
+//               <HeartInline
+//                 props={
+//                   flexRow ? "text-white text-[18px]" : "text-white text-[25px]"
+//                 }
+//               />
+//             ) : (
+//               <HeartOutline
+//                 props={
+//                   flexRow ? "text-white text-[18px]" : "text-white text-[25px]"
+//                 }
+//               />
+//             )}
+//           </div>
+
+//           {/* Price */}
+//           <p className="absolute bottom-[10px] left-[17px] sm:left-[10px] text-white font-helvetica font-[600] text-[16px] ">
+//             ${item.price}10,00
+//           </p>
+//         </div>
+//         <div
+//           className={
+//             flexRow
+//               ? " flex flex-col text-[14px] gap-2 w-[50%]"
+//               : "flex flex-col gap-2 h-[35%]  py-5 "
+//           }
+//         >
+//           <p className={" capitalize font-[600] text-olive-drab "}>
+//             {item.title}
+//           </p>
+//           <p className={flexRow ? "mb-5" : ""}>{item.address}</p>
+//           <div className=" bottom-0 sm:bottom-[10px] w-full">
+//             <div className="flex  items-center">
+//               <div
+//                 className={
+//                   flexRow
+//                     ? "w-[60%] sm:w-[65%] flex gap-3 items-center"
+//                     : "w-[50%] sm:w-[65%] gap-7 flex items-center"
+//                 }
+//               >
+//                 <div className="flex  justify-between  font-helvetica text-helvetica-paragraph  ">
+//                   <BathRoom
+//                     props={
+//                       flexRow
+//                         ? "text-[18px] text-olive-drab"
+//                         : " text-[20px] text-olive-drab "
+//                     }
+//                   />
+//                   <span
+//                     className={
+//                       flexRow
+//                         ? "font-[600] text-[10px]"
+//                         : "font-[600] text-[12px]"
+//                     }
+//                   >
+//                     {item.detail.bath_room} Bath
+//                   </span>
+//                 </div>
+//                 <div className="flex  justify-between   font-helvetica text-helvetica-paragraph font-bold">
+//                   <BedRoom
+//                     props={
+//                       flexRow
+//                         ? "text-olive-drab text-[18px]"
+//                         : " text-olive-drab  text-[20px]"
+//                     }
+//                   />
+//                   <span
+//                     className={
+//                       flexRow
+//                         ? "font-[600] text-[10px]"
+//                         : "font-[600] text-[12px]"
+//                     }
+//                   >
+//                     {item.detail.bed_room} Bed
+//                     {item.category}
+//                   </span>
+//                 </div>
+//               </div>
+//               <div className="w-[40%] sm:w-[35%] flex justify-end items-center">
+//                 <Compare
+//                   props="cursor-pointer"
+//                   onClick={() => handleCompareClick(item)}
+//                 />
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* {showCompareBar && selectedItems.length > 0 && (
+//         <div className="fixed bottom-0 left-0 w-full bg-gray-800 text-white p-4 flex justify-end space-x-2 items-center">
+//           <span>
+//             {selectedItems.length < 2
+//               ? "Select 2 items to compare"
+//               : "Ready to compare"}
+//           </span>
+//           <div className="flex items-center gap-4">
+//             {selectedItems.map((item) => (
+//               <div key={item.id} className="relative">
+//                 <Image
+//                   src={item.thumbnail}
+//                   alt={item.title}
+//                   width={100}
+//                   height={100}
+//                   className="w-16 h-16 object-cover rounded"
+//                 />
+//                 <button
+//                   onClick={() => handleRemoveItem(item.id)}
+//                   className="absolute top-0 right-0 text-white bg-red-500 rounded-full w-5 h-5 flex items-center justify-center"
+//                 >
+//                   &times;
+//                 </button>
+//               </div>
+//             ))}
+//           </div>
+//           <button
+//             className={`bg-blue-500 px-4 py-2 rounded ${
+//               selectedItems.length < 2 ? "opacity-50 cursor-not-allowed" : ""
+//             }`}
+//             onClick={() => {
+//               if (selectedItems.length === 2) {
+//                 router.push(
+//                   `/compare?item1=${selectedItems[0].id}&item2=${selectedItems[1].id}`,
+//                 );
+//               }
+//             }}
+//             disabled={selectedItems.length < 2}
+//           >
+//             Compare
+//           </button>
+//         </div>
+//       )} */}
+//     </>
+//   );
+// };
+
+// export default ItemCard;
+
+const ItemCard = ({ item, flexRow, handleCompareClick }: ItemCardProps) => {
   const [isLike, setIsLike] = useState(false);
 
+  // Function to toggle the "like" state
   const toggleIsLike = () => {
     setIsLike((isLike) => !isLike);
+  };
+
+  // Function to get the content for a specific language (e.g., English by default)
+  const getContentByLanguage = (arrOrStr: any, lang: string) => {
+    if (Array.isArray(arrOrStr)) {
+      const contentItem = arrOrStr.find((i) => i.language === lang);
+      return contentItem ? contentItem.content : arrOrStr[0]?.content;
+    } else if (typeof arrOrStr === "string") {
+      return arrOrStr; // Return the string directly if it's not an array
+    } else {
+      console.error("Expected an array but got:", arrOrStr);
+      return ""; // Or handle it as needed
+    }
   };
 
   return (
@@ -134,15 +341,13 @@ const ItemCard = ({ item, flexRow, handleCompareClick }: ItemCardProps) => {
             href={`/detail/${item.id}`}
             className=" absolute w-full h-full rounded-[15px] overflow-hidden transition-transform duration-300 transform hover:scale-110"
           >
-            <div className=" group absolute left-0 top-0 w-full h-full hover:bg-[#00000033] z-2 transition duration-300">
-              {/* dfdfd */}
-            </div>
+            <div className="group absolute left-0 top-0 w-full h-full hover:bg-[#00000033] z-2 transition duration-300" />
             <Image
               src={item.thumbnail}
-              alt={item.title}
+              alt={getContentByLanguage(item.title, "eng")}
               width={500}
               height={500}
-              className="w-full h-full object-cover "
+              className="w-full h-full object-cover"
             />
           </Link>
 
@@ -154,7 +359,8 @@ const ItemCard = ({ item, flexRow, handleCompareClick }: ItemCardProps) => {
                 : "absolute py-[3px] px-4 top-[10px] left-[17px] sm:left-[10px] bg-olive-green text-white text-[14px] rounded-[13px]  font-[600] "
             }
           >
-            {item.category}
+            {getContentByLanguage(item.category, "eng")}{" "}
+            {/* Render category in English */}
           </p>
 
           {/* Favorite Icon */}
@@ -179,7 +385,7 @@ const ItemCard = ({ item, flexRow, handleCompareClick }: ItemCardProps) => {
 
           {/* Price */}
           <p className="absolute bottom-[10px] left-[17px] sm:left-[10px] text-white font-helvetica font-[600] text-[16px] ">
-            ${item.price}10,00
+            ${item.price}
           </p>
         </div>
         <div
@@ -189,12 +395,16 @@ const ItemCard = ({ item, flexRow, handleCompareClick }: ItemCardProps) => {
               : "flex flex-col gap-2 h-[35%]  py-5 "
           }
         >
-          <p className={" capitalize font-[600] text-olive-drab "}>
-            {item.title}
+          <p className={"capitalize font-[600] text-olive-drab"}>
+            {getContentByLanguage(item.title, "eng")}{" "}
+            {/* Render title in English */}
           </p>
-          <p className={flexRow ? "mb-5" : ""}>{item.address}</p>
-          <div className=" bottom-0 sm:bottom-[10px] w-full">
-            <div className="flex  items-center">
+          <p className={flexRow ? "mb-5" : ""}>
+            {getContentByLanguage(item.address, "eng")}{" "}
+            {/* Render address in English */}
+          </p>
+          <div className="bottom-0 sm:bottom-[10px] w-full">
+            <div className="flex items-center">
               <div
                 className={
                   flexRow
@@ -202,12 +412,12 @@ const ItemCard = ({ item, flexRow, handleCompareClick }: ItemCardProps) => {
                     : "w-[50%] sm:w-[65%] gap-7 flex items-center"
                 }
               >
-                <div className="flex  justify-between  font-helvetica text-helvetica-paragraph  ">
+                <div className="flex justify-between font-helvetica text-helvetica-paragraph">
                   <BathRoom
                     props={
                       flexRow
                         ? "text-[18px] text-olive-drab"
-                        : " text-[20px] text-olive-drab "
+                        : "text-[20px] text-olive-drab"
                     }
                   />
                   <span
@@ -217,15 +427,16 @@ const ItemCard = ({ item, flexRow, handleCompareClick }: ItemCardProps) => {
                         : "font-[600] text-[12px]"
                     }
                   >
-                    {item.detail.bath_room} Bath
+                    {item.detail.bathrooms} Bath{" "}
+                    {/* Access the bathroom count */}
                   </span>
                 </div>
-                <div className="flex  justify-between   font-helvetica text-helvetica-paragraph font-bold">
+                <div className="flex justify-between font-helvetica text-helvetica-paragraph font-bold">
                   <BedRoom
                     props={
                       flexRow
                         ? "text-olive-drab text-[18px]"
-                        : " text-olive-drab  text-[20px]"
+                        : "text-olive-drab text-[20px]"
                     }
                   />
                   <span
@@ -235,8 +446,7 @@ const ItemCard = ({ item, flexRow, handleCompareClick }: ItemCardProps) => {
                         : "font-[600] text-[12px]"
                     }
                   >
-                    {item.detail.bed_room} Bed
-                    {item.category}
+                    {item.detail.bedrooms} Bed
                   </span>
                 </div>
               </div>
@@ -250,50 +460,6 @@ const ItemCard = ({ item, flexRow, handleCompareClick }: ItemCardProps) => {
           </div>
         </div>
       </div>
-
-      {/* {showCompareBar && selectedItems.length > 0 && (
-        <div className="fixed bottom-0 left-0 w-full bg-gray-800 text-white p-4 flex justify-end space-x-2 items-center">
-          <span>
-            {selectedItems.length < 2
-              ? "Select 2 items to compare"
-              : "Ready to compare"}
-          </span>
-          <div className="flex items-center gap-4">
-            {selectedItems.map((item) => (
-              <div key={item.id} className="relative">
-                <Image
-                  src={item.thumbnail}
-                  alt={item.title}
-                  width={100}
-                  height={100}
-                  className="w-16 h-16 object-cover rounded"
-                />
-                <button
-                  onClick={() => handleRemoveItem(item.id)}
-                  className="absolute top-0 right-0 text-white bg-red-500 rounded-full w-5 h-5 flex items-center justify-center"
-                >
-                  &times;
-                </button>
-              </div>
-            ))}
-          </div>
-          <button
-            className={`bg-blue-500 px-4 py-2 rounded ${
-              selectedItems.length < 2 ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            onClick={() => {
-              if (selectedItems.length === 2) {
-                router.push(
-                  `/compare?item1=${selectedItems[0].id}&item2=${selectedItems[1].id}`,
-                );
-              }
-            }}
-            disabled={selectedItems.length < 2}
-          >
-            Compare
-          </button>
-        </div>
-      )} */}
     </>
   );
 };
