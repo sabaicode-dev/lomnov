@@ -62,12 +62,11 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
             <div className="absolute left-[170px] items-center text-helvetica-small font-helvetica text-olive-gray mt-[10px]">
               <span className="font-helvetica text-helvetica-h4 font-bold text-charcoal capitalize">
                 {user.firstName} {user.lastName}
-                {user.userName}
               </span>
               <span className="flex items-center mt-[10px]">
                 Joined
                 <div className="w-[5px] h-[5px] mx-[5px] rounded-full bg-olive-gray"></div>
-                Jul 15 2023
+                {user.createdAt}
               </span>
             </div>
           </div>
