@@ -6,8 +6,7 @@ on:
     paths:
       - "apps/backend/api-gateway/**"
   push:
-    branches: 
-        - main
+    branches: [main]
     paths:
       - "apps/backend/api-gateway/**"
 
