@@ -6,15 +6,17 @@ import Phone from "@/icons/Phone";
 import Location from "@/icons/Location";
 import Address from "@/icons/Home";
 
-async function fetchUserDetails(username: string) {
+async function fetchUserDetails(userName: string) {
+  // console.log(process.env.NEXT_PUBLIC_BASE_URL_GETWAY);
   const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/users?username=${username}`
+    `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/users?userName=${userName}`,
   );
   if (!res.ok) {
     throw new Error("Failed to fetch user details");
   }
   const user = await res.json();
-  return user[0]; // Adjust this based on your API response
+  // console.log(user.users[0]);
+  return user.users[0]; // Adjust this based on your API response
 }
 
 const SavedPropertiesPage = async ({
@@ -32,9 +34,7 @@ const SavedPropertiesPage = async ({
     <Layout>
       <VisitProfileHeader user={user} />
       <div className="max-w-[1300px] mx-auto p-4">
-        <div
-          className="bg-white w-full sm:w-[688px] h-auto sm:h-[257px] mt-5 p-5  rounded-lg"
-        >
+        <div className="bg-white w-full sm:w-[688px] h-auto sm:h-[257px] mt-5 p-5  rounded-lg">
           <h3 className="font-bold text-lg mb-5">Contact info</h3>
           <div className="space-y-4">
             {/* Email */}

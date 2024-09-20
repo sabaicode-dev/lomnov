@@ -3,19 +3,22 @@ import Layout from "../layout"; // Import the layout
 import VisitProfileHeader from "@/components/molecules/visit-profile-header/VisitProfileHeader";
 import UserPostedProperties from "@/components/organisms/user-posted-properties/UserPostedProperties";
 
-async function fetchUserDetails(username: string) {
+async function fetchUserDetails(userName: string) {
+  // console.log(process.env.NEXT_PUBLIC_BASE_URL_GETWAY);
   const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/users?username=${username}`,
+    `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/users?userName=${userName}`,
   );
   if (!res.ok) {
     throw new Error("Failed to fetch user details");
   }
   const user = await res.json();
-  return user[0]; // Adjust this based on your API response
+  // console.log(user.users[0]);
+  return user.users[0]; // Adjust this based on your API response
 }
 
 const ProfilePage = async ({ params }: { params: { username: string } }) => {
   const user = await fetchUserDetails(params.username);
+  // console.log("hello" + user);
 
   if (!user) {
     return <div>User not found</div>;
@@ -23,10 +26,11 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
 
   return (
     <Layout>
-      <div className="">
+      <div >
         <VisitProfileHeader user={user} />
         <div className="max-w-[1300px] mx-auto mt-[20px] p-[10px] lg:p-0">
-        <UserPostedProperties user={user.username} />
+          listed properties
+          {/* <UserPostedProperties user={user.username} /> */}
         </div>
       </div>
     </Layout>
