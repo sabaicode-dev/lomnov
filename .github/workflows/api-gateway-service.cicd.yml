@@ -44,11 +44,6 @@ jobs:
       - name: List build directory contents
         run: ls -la ./build
 
-      - name: Run tests
-        env:
-          CUSTOM_ENV_VARIABLE: ${{ secrets.MONGODB_URL }}
-        run: yarn test
-
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
         with:

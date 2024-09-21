@@ -47,8 +47,7 @@ esbuild.build({
 
   // fs.copySync(path.resolve(__dirname, 'src/configs/.env.production'), path.resolve(__dirname, 'build/configs/.env.production'));
     // (1) Solve: Copy swagger.json after successful build
-
-
+    
     // Copy package.json after ensuring the build was successful
     fs.copySync(path.resolve(__dirname, 'package.json'), path.resolve(__dirname, 'build/package.json'));
     console.log('Package.json copied successfully!');
