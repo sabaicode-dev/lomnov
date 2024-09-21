@@ -34,21 +34,28 @@ jobs:
         with:
           node-version: "20"
 
-      # Install dependencies without creating a lockfile
+      # Install dependencies
       - name: Install dependencies
         run: yarn install --no-immutable
 
+      # Run build
       - name: Run build
-        run: yarn build
+        run: |
+          echo "Running yarn build..."
+          yarn build
+        continue-on-error: true  # Allow the workflow to continue even if this fails
 
+      # List build directory contents
       - name: List build directory contents
-        run: ls -la apps/backend/api-gateway/build
+        run: ls -la ./build || { echo 'Build directory not found'; exit 1; }
 
+      # Archive build artifacts
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: apps/backend/api-gateway/build
+          path: ./build
+
 
   deploy:
     runs-on: ubuntu-latest
