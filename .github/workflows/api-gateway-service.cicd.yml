@@ -56,7 +56,6 @@ jobs:
           name: build
           path: ./build
 
-
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -67,10 +66,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
-          path: apps/backend/api-gateway/build 
+          path: ./apps/backend/api-gateway/build  # Adjust path as necessary
 
       - name: List downloaded artifacts
-        run: ls -la apps/backend/api-gateway/build
+        run: ls -la ./apps/backend/api-gateway/build
 
       - name: Prepare Deployment Directories
         uses: appleboy/ssh-action@master
@@ -90,7 +89,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: "apps/backend/api-gateway/build/*"
+          source: "./apps/backend/api-gateway/build/*"
           target: "/home/ubuntu/apps/build"
           strip_components: 1
 
@@ -105,8 +104,8 @@ jobs:
             echo "NODE_ENV=production" > /home/ubuntu/apps/build/configs/.env.production
             echo "PORT=${{secrets.API_GETWAY_PORT}}" >> /home/ubuntu/apps/build/configs/.env.production
             echo "MONGODB_URL=${{secrets.MONGODB_URL}}" >> /home/ubuntu/apps/build/configs/.env.production
-            echo "COGNITO_APP_CIENTID=${{secrets.COGNITO_APP_CIENTID}}" >> /home/ubuntu/apps/build/configs/.env.production
-            echo "COGNITO_APP_CIENTSECRET=${{secrets.COGNITO_APP_CIENTSECRET}}" >> /home/ubuntu/apps/build/configs/.env.production
+            echo "COGNITO_APP_CLIENTID=${{secrets.COGNITO_APP_CLIENTID}}" >> /home/ubuntu/apps/build/configs/.env.production
+            echo "COGNITO_APP_CLIENTSECRET=${{secrets.COGNITO_APP_CLIENTSECRET}}" >> /home/ubuntu/apps/build/configs/.env.production
             echo "COGNITO_APP_DOMAIN=${{secrets.COGNITO_APP_DOMAIN}}" >> /home/ubuntu/apps/build/configs/.env.production
             echo "REDIRECT_URI=${{secrets.REDIRECT_URI}}" >> /home/ubuntu/apps/build/configs/.env.production
             echo "USER_POOL_ID=${{secrets.USER_POOL_ID}}" >> /home/ubuntu/apps/build/configs/.env.production
@@ -126,7 +125,7 @@ jobs:
             source /home/ubuntu/.profile
 
             cd /home/ubuntu/apps/build
-            yarn install --production --skip-build
+            yarn install --production
 
             # Debug: List files after installation
             ls -la 
@@ -138,3 +137,4 @@ jobs:
             else
               echo "Application is not running. Starting..."
               pm2 start yarn --name api-gateway -- start
+            fi
