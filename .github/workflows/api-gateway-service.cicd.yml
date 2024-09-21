@@ -42,7 +42,7 @@ jobs:
         run: yarn build
 
       - name: List build directory contents
-        run: ls -la ./build
+        run: ls -la apps/backend/api-gateway/build
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
@@ -63,10 +63,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
-          path: ./apps/backend/api-gateway/build  # Adjust path as necessary
+          path: apps/backend/api-gateway/build  # Adjust path as necessary
 
       - name: List downloaded artifacts
-        run: ls -la ./apps/backend/api-gateway/build
+        run: ls -la apps/backend/api-gateway/build
 
       - name: Prepare Deployment Directories
         uses: appleboy/ssh-action@master
@@ -86,7 +86,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: "./apps/backend/api-gateway/build/*"
+          source: "apps/backend/api-gateway/build/*"
           target: "/home/ubuntu/apps/build"
           strip_components: 1
 
