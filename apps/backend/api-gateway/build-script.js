@@ -45,7 +45,7 @@ esbuild.build({
   }
 }).then(() => {
 
-  fs.copySync(path.resolve(__dirname, 'src/configs/.env.production'), path.resolve(__dirname, 'build/configs/.env.production'));
+  // fs.copySync(path.resolve(__dirname, 'src/configs/.env.production'), path.resolve(__dirname, 'build/configs/.env.production'));
 
 }).catch(error => {
   console.error('Build failed:', error);
