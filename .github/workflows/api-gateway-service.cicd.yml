@@ -36,7 +36,7 @@ jobs:
 
       # Install dependencies without creating a lockfile
       - name: Install dependencies
-        run: yarn install --skip-build
+        run: yarn install 
 
       - name: Run build
         run: yarn build
