@@ -19,29 +19,34 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: "apps/backend/api-gateway" 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Ensures all branches and tags are fetched
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20" # Use the version of Node.js that your project requires
+          node-version: "20"
 
       - name: Install dependencies
-        run: yarn install --immutable
-        
+        run: yarn install
+
       - name: Run build
         run: yarn build
+
+      - name: List build directory contents
+        run: ls -la apps/backend/api-gateway
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: ./apps/backend/api-gateway/build
+          path: apps/backend/api-gateway
 
   deploy:
     runs-on: ubuntu-latest
