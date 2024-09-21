@@ -9,8 +9,8 @@
     "start:local": "node ./build/server.js",
     "start:pm2-production": "pm2 start ecosystem.config.js",
     "start:pm2-local": "pm2 start ecosystem.local.config.js",
-    "stop": "pm2 stop api-getway",
-    "restart": "pm2 reload api-getway"
+    "stop": "pm2 stop api-gateway",
+    "restart": "pm2 reload api-gateway"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",

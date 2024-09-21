@@ -21,7 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "apps/backend/api-gateway" 
+        working-directory: "apps/backend/api-gateway"
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -33,20 +34,21 @@ jobs:
         with:
           node-version: "20"
 
+      # Install dependencies without creating a lockfile
       - name: Install dependencies
-        run: yarn install --no-lockfile
+        run: yarn install --skip-build
 
       - name: Run build
         run: yarn build
 
       - name: List build directory contents
-        run: ls -la apps/backend/api-gateway
+        run: ls -la ./apps/backend/api-gateway/build
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: apps/backend/api-gateway
+          path: ./apps/backend/api-gateway/build
 
   deploy:
     runs-on: ubuntu-latest
@@ -117,16 +119,15 @@ jobs:
             source /home/ubuntu/.profile
 
             cd /home/ubuntu/apps/build
-            yarn install --production
+            yarn install --production --skip-build
 
             # Debug: List files after installation
             ls -la 
 
             # Check if the PM2 process is running
-            if pm2 show user-service > /dev/null; then
+            if pm2 show api-gateway > /dev/null; then
               echo "Application is running. Restarting..."
-              pm2 restart user-service
+              pm2 restart api-gateway
             else
               echo "Application is not running. Starting..."
-              pm2 start yarn --name user-service -- start
-            fi
+              pm2 start yarn --name api-gateway -- start

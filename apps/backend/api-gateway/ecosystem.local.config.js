@@ -1,6 +1,6 @@
 module.exports = {
   apps: [{
-    name: "api-getway",
+    name: "api-gateway",
     script: "./build/server.js",
     instances: 1,
     autorestart: true,
