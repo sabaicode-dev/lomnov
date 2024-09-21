@@ -38,23 +38,25 @@ jobs:
       - name: Install dependencies
         run: yarn install --no-immutable
 
-      # Run build
       - name: Run build
-        run: |
-          echo "Running yarn build..."
-          yarn build
-        continue-on-error: true  # Allow the workflow to continue even if this fails
+        run: yarn build
 
-      # List build directory contents
       - name: List build directory contents
-        run: ls -la ./build || { echo 'Build directory not found'; exit 1; }
+        run: ls -la ./build
 
-      # Archive build artifacts
+      - name: Run tests
+        env:
+          CUSTOM_ENV_VARIABLE: ${{ secrets.MONGODB_URL }}
+        run: yarn test
+
       - name: Archive build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: ./build
+          path: |
+            ./build
+            ./package.json
+            ./yarn.lock
 
   deploy:
     runs-on: ubuntu-latest
