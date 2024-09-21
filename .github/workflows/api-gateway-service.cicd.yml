@@ -32,8 +32,8 @@ jobs:
           node-version: "20" # Use the version of Node.js that your project requires
 
       - name: Install dependencies
-        run: yarn install
-
+        run: yarn install --immutable
+        
       - name: Run build
         run: yarn build
 
