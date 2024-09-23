@@ -9,7 +9,11 @@
     "start:local": "node ./build/server.js",
     "start:pm2-production": "pm2 start ecosystem.config.js",
     "start:pm2-local": "pm2 start ecosystem.local.config.js",
+<<<<<<< HEAD
     "stop": "pm2 stop api-gateway",
+=======
+    "stop:pm2": "pm2 stop api-gateway",
+>>>>>>> 9ad1d8ec200754c6703652ab862b714febc99c8e
     "restart": "pm2 reload api-gateway"
   },
   "dependencies": {

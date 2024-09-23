@@ -16,7 +16,7 @@
     "start:user-service": "concurrently \"yarn workspace user-service run dev\"",
     "start:property-service": " concurrently \"yarn workspace property-service run dev\"",
     "start:notification-service": "concurrently \"yarn workspace notification-service run dev \"",
-    "start:api-getway": " concurrently \"yarn workspace api-getway run dev\""
+    "start:api-gateway": " concurrently \"yarn workspace api-gateway run dev\""
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

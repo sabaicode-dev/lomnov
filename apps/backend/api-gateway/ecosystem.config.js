@@ -1,7 +1,7 @@
 module.exports = {
   apps: [{
-    name: "api-gateway",
-    script: "./build/server.js",
+    name: "api-gateway-service",
+    script: "./server.js",
     instances: 1,
     autorestart: true,
     watch: false,
