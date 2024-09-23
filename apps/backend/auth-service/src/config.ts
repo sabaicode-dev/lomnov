@@ -4,7 +4,6 @@ import Joi from "joi";
 
 type Config = {
   port: number;
-  mongodbUrl: string;
   cognitoAppCientId: string;
   cognitoAppCientSecret: string;
   cognitoAppDomain: string;
@@ -25,7 +24,6 @@ function loadConfig(): Config {
   // Define a schema for the environment variables
   const envVarsSchema = Joi.object({
     PORT: Joi.number().default(3000),
-    MONGODB_URL: Joi.string().required(),
     COGNITO_APP_CIENTID: Joi.string().required(),
     COGNITO_APP_CIENTSECRET: Joi.string().required(),
     REDIRECT_URI: Joi.string().required(),
@@ -47,7 +45,6 @@ function loadConfig(): Config {
   return {
 
     port: envVars.PORT,
-    mongodbUrl: envVars.MONGODB_URL,
     cognitoAppCientId: envVars.COGNITO_APP_CIENTID,
     cognitoAppCientSecret: envVars.COGNITO_APP_CIENTSECRET,
     cognitoAppDomain: envVars.COGNITO_APP_DOMAIN,
