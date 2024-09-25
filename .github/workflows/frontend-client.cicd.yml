@@ -39,7 +39,7 @@ jobs:
 
       # Install dependencies
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --no-immutable
 
       # Build the Next.js frontend for production
       - name: Build frontend
