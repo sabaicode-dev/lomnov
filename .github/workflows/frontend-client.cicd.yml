@@ -1,17 +1,21 @@
 name: CI/CD Pipeline for Frontend-Client (Next.js)
 
-# Trigger workflow on push to main branch or manual dispatch
+
 on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "apps/frontend-client/**"
-  push:
-    branches:
-      - main
-    paths:
-      - "apps/frontend-client/**"
+    pull_request:
+      branches:
+        - main
+      paths:
+        - "apps/frontend-client/**"
+    push:
+      branches:
+        - main
+      paths:
+        - "apps/frontend-client/**"
+  
+defaults:
+    run:
+      working-directory: apps/frontend-client
 
 jobs:
   build:
@@ -26,7 +30,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "20"
+          node-version: '20'
 
       # Navigate to frontend-client directory
       - name: Change directory to frontend-client
@@ -43,13 +47,13 @@ jobs:
 
       # Save build output for deploy job
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3  # Update to v3
         with:
           name: frontend-build
-          path: apps/frontend-client/.next # Store Next.js build artifacts
-
+          path: apps/frontend-client/.next  # Store Next.js build artifacts
+          
   deploy:
-    needs: build # This ensures the deploy job only runs after the build job completes successfully
+    needs: build  # This ensures the deploy job only runs after the build job completes successfully
     runs-on: ubuntu-latest
 
     steps:
@@ -61,14 +65,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "20"
+          node-version: '20'
 
       # Download the build artifacts from the build job
       - name: Download build artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3  # Update to v3
         with:
           name: frontend-build
-          path: apps/frontend-client/.next # This will be used by SST for deployment
+          path: apps/frontend-client/.next  # This will be used by SST for deployment
 
       # Navigate to frontend-client directory
       - name: Change directory to frontend-client
@@ -79,7 +83,7 @@ jobs:
       - name: SST Deploy to AWS
         run: npx sst deploy --stage prod
         env:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            AWS_DEFAULT_REGION: "us-east-1"
-            AWS_DEFAULT_OUTPUT: "json" # Set output to JSON for AWS CLI
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'us-east-1'  # Change to your AWS region
+          AWS_DEFAULT_OUTPUT: "json" # Set output to JSON for AWS CLI
