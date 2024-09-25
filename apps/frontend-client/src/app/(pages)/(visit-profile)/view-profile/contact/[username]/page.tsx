@@ -1,3 +1,5 @@
+// profile/saved-properties/[username]/page.tsx
+
 import React from "react";
 import Layout from "../../layout"; // Import the layout
 import VisitProfileHeader from "@/components/molecules/visit-profile-header/VisitProfileHeader";
@@ -32,9 +34,7 @@ const SavedPropertiesPage = async ({
     <Layout>
       <VisitProfileHeader user={user} />
       <div className="max-w-[1300px] mx-auto p-4">
-        <div
-          className="bg-white w-full sm:w-[688px] h-auto sm:h-[257px] mt-5 p-5  rounded-lg"
-        >
+        <div className="bg-white w-full sm:w-[688px] h-auto sm:h-[257px] mt-5 p-5 rounded-lg">
           <h3 className="font-bold text-lg mb-5">Contact info</h3>
           <div className="space-y-4">
             {/* Email */}
@@ -78,5 +78,14 @@ const SavedPropertiesPage = async ({
     </Layout>
   );
 };
+
+// This function gets called at build time
+export async function generateStaticParams() {
+  // Replace this with the actual logic to get the list of usernames
+  const usernames = ['user1', 'user2', 'user3']; // Example usernames
+  return usernames.map((username) => ({
+    username,
+  }));
+}
 
 export default SavedPropertiesPage;

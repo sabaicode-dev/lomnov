@@ -100,73 +100,38 @@ const VerifyAccount: React.FC = () => {
     }
   };
 
+  const isCodeComplete = code.every((digit) => digit !== "");
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-md rounded-md px-8 py-10 max-w-md w-full text-center">
-        <h2 className="text-2xl font-semibold mb-4 text-gray-700">
-          Mobile Phone Verification
-        </h2>
-        <p className="text-gray-500 mb-6">
-          Enter the 6-digit verification code that was sent to your phone number.
-        </p>
-
-        <form onSubmit={handleSubmit}>
-          <div className="flex justify-center gap-3 mb-6">
-            {code.map((digit, index) => (
-              <input
-                key={index}
-                id={`digit-${index}`}
-                type="text"
-                maxLength={1}
-                value={digit}
-                onChange={(e) => handleInputChange(e, index)}
-                onKeyDown={(e) => handleKeyDown(e, index)}
-                aria-label={`Digit ${index + 1}`}
-                className="w-12 h-12 text-center border border-gray-300 rounded-md text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            ))}
-          </div>
-
-          {errorMessage && (
-            <p className="text-red-500 mb-4" aria-live="assertive">
-              {errorMessage}
-            </p>
-          )}
-          {successMessage && (
-            <p className="text-green-500 mb-4" aria-live="polite">
-              {successMessage}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`${
-              isLoading ? "bg-gray-400" : "bg-blue-600"
-            } text-white w-full py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500`}
-          >
-            {isLoading ? "Verifying..." : "Verify Account"}
-          </button>
-        </form>
-
-        <p className="mt-4 text-gray-500">
-          Did not receive a code?{" "}
-          <button
-            className="text-blue-600 hover:underline"
-            onClick={handleResendCode}
-            disabled={isLoading}
-          >
-            {isLoading ? "Resending..." : "Resend"}
-          </button>
-        </p>
-        {resendMessage && (
-          <p className="text-blue-500 mt-4" aria-live="polite">
-            {resendMessage}
-          </p>
-        )}
+    <form onSubmit={handleSubmit}>
+      <div className="flex justify-center gap-3 mb-6">
+        {code.map((digit, index) => (
+          <input
+            key={index}
+            id={`digit-${index}`}
+            type="text"
+            maxLength={1}
+            value={digit}
+            onChange={(e) => handleInputChange(e, index)}
+            onKeyDown={(e) => handleKeyDown(e, index)}
+            className="w-12 h-12 text-center border border-gray-300 rounded-md text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        ))}
       </div>
-    </div>
+
+      {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
+      {successMessage && <p role="alert" className="text-green-500 mb-4">{successMessage}</p>}
+
+      <button
+        type="submit"
+        disabled={isLoading || !isCodeComplete}
+        className={`${isLoading ? "bg-gray-400" : "bg-blue-600"} text-white w-full py-3 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+      >
+        {isLoading ? "Verifying..." : "Verify Account"}
+      </button>
+    </form>
   );
 };
+
 
 export default VerifyAccount;

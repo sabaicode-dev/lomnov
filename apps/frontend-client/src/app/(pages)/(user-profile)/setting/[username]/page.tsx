@@ -50,4 +50,14 @@ const GeneralPage = async () => {
   );
 };
 
+// This function gets called at build time
+export async function generateStaticParams() {
+  // Replace this with the actual logic to get the list of usernames
+  const usernames = ['user1', 'user2', 'user3']; // Example usernames
+  return usernames.map((username) => ({
+    username,
+  }));
+}
+
+
 export default GeneralPage;
