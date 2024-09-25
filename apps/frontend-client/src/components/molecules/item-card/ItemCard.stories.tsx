@@ -1,9 +1,9 @@
 import React from "react";
 import { Meta, StoryFn } from "@storybook/react";
-import { ItemCard, ItemCardProps } from "./ItemCard";
-import { RealEstateItem } from "@/libs/types/api-properties/property-response";
+import ItemCard, { ItemCardProps } from "./ItemCard";
+// import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 
-const mockItem: RealEstateItem = {
+const mockItem: any = {
   id: 1,
   user: "user1",
   transaction: "sell",
@@ -16,12 +16,13 @@ const mockItem: RealEstateItem = {
     "https://i.pinimg.com/736x/5f/71/e5/5f71e51ad525d565115d27cb368cef9b.jpg",
   ],
   detail: {
+
     land_size: "21m x 54m",
     total_land_size: "1134 10m²",
     building_size: "16m x 45m",
     total_building_size: "720m²",
     road_size: "12m",
-    bed_room: 4,
+    bed_room:2,
     bath_room: 5,
     living_room: 1,
     kitchen: 1,
@@ -29,6 +30,7 @@ const mockItem: RealEstateItem = {
     garden: "garden",
     swimming_pool: "swimming pool",
     area: "200m²", // Add this line
+
   },
   address: "123 Main St, Anytown, USA",
   mapurl: "",

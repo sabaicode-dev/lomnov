@@ -13,7 +13,7 @@ interface ItemProps {
   item: Item;
 }
 
-function ServiceCard({ item }: ItemProps) {
+function ServiceCard({ item }: any) {
   return (
     <div className="w-full h-[400px] shadow-md bg-white rounded-md flex flex-col gap-3 items-center justify-center p-5 px-5">
       <Image src={item.thumbnail} alt="" width={200} height={200} priority />

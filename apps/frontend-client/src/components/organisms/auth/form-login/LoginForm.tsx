@@ -36,7 +36,7 @@ const LoginForm: React.FC = () => {
 
   const onSubmit = async (data: LoginData) => {
     try {
-      const response = await axios.post('http://localhost:4001/api/v1/auth/signin', {
+      const response = await axios.post('http://3.91.40.193:4000/api/v1/auth/signin', {
         email: data.email,
         password: data.password,
       }, { withCredentials: true });

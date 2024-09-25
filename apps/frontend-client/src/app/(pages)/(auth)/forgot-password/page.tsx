@@ -3,16 +3,18 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 
-const VerifyAccount: React.FC = () => {
+const ForgotPassword: React.FC = () => {
   const searchParams = useSearchParams();
-  const email = searchParams.get("email");
+  const emailFromParams = searchParams.get("email");
+  const [email, setEmail] = useState(emailFromParams || "");
   const [code, setCode] = useState<string[]>(Array(6).fill(""));
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number,
+    index: number
   ) => {
     const value = e.target.value;
     if (/^\d$/.test(value)) {
@@ -30,7 +32,7 @@ const VerifyAccount: React.FC = () => {
 
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    index: number,
+    index: number
   ) => {
     if (e.key === "Backspace" && !code[index]) {
       const previousInput = document.getElementById(`digit-${index - 1}`);
@@ -41,6 +43,7 @@ const VerifyAccount: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const verificationCode = code.join("");
+    setIsLoading(true);
 
     try {
       const response = await axios.post(
@@ -48,7 +51,7 @@ const VerifyAccount: React.FC = () => {
         {
           email: email,
           code: verificationCode,
-        },
+        }
       );
 
       if (response.data.message) {
@@ -66,31 +69,28 @@ const VerifyAccount: React.FC = () => {
     } catch (error) {
       setErrorMessage("Something went wrong. Please try again.");
       setSuccessMessage(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <main id="content" role="main" className="w-full  max-w-md mx-auto p-6">
-      <div className="mt-7 bg-white  rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700 border-2 border-indigo-300">
+    <main id="content" role="main" className="w-full max-w-md mx-auto p-6">
+      <div className="mt-7 bg-white rounded-xl shadow-lg dark:bg-gray-800 dark:border-gray-700 border-2 border-indigo-300">
         <div className="p-4 sm:p-7">
           <div className="text-center">
             <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">
-              Forgot password?
+              Verify Your Account
             </h1>
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              Remember your password?
-              <a
-                className="text-blue-600 decoration-2 hover:underline font-medium"
-                href="#"
-              >
-                Login here
-              </a>
+              Enter the 6-digit code sent to your email to verify your account.
             </p>
           </div>
 
           <div className="mt-5">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="grid gap-y-4">
+                {/* Email Field */}
                 <div>
                   <label className="block text-sm font-bold ml-1 mb-2 dark:text-white">
                     Email address
@@ -100,6 +100,8 @@ const VerifyAccount: React.FC = () => {
                       type="email"
                       id="email"
                       name="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm"
                       required
                       aria-describedby="email-error"
@@ -109,15 +111,47 @@ const VerifyAccount: React.FC = () => {
                     className="hidden text-xs text-red-600 mt-2"
                     id="email-error"
                   >
-                    Please include a valid email address so we can get back to
-                    you
+                    Please include a valid email address.
                   </p>
                 </div>
+
+                {/* Verification Code Input */}
+                <div className="flex justify-center gap-3 mb-6">
+                  {code.map((digit, index) => (
+                    <input
+                      key={index}
+                      id={`digit-${index}`}
+                      type="text"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handleInputChange(e, index)}
+                      onKeyDown={(e) => handleKeyDown(e, index)}
+                      className="w-12 h-12 text-center border border-gray-300 rounded-md text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  ))}
+                </div>
+
+                {/* Error or Success Message */}
+                {errorMessage && (
+                  <p className="text-red-500 mb-4 text-center">
+                    {errorMessage}
+                  </p>
+                )}
+                {successMessage && (
+                  <p className="text-green-500 mb-4 text-center">
+                    {successMessage}
+                  </p>
+                )}
+
+                {/* Submit Button */}
                 <button
                   type="submit"
-                  className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
+                  disabled={isLoading}
+                  className={`${
+                    isLoading ? "bg-gray-400" : "bg-blue-500"
+                  } text-white w-full py-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm`}
                 >
-                  Reset password
+                  {isLoading ? "Verifying..." : "Verify Account"}
                 </button>
               </div>
             </form>
@@ -128,7 +162,7 @@ const VerifyAccount: React.FC = () => {
       <p className="mt-3 flex justify-center items-center text-center divide-x divide-gray-300 dark:divide-gray-700">
         <a
           className="pr-3.5 inline-flex items-center gap-x-2 text-sm text-gray-600 decoration-2 hover:underline hover:text-blue-600 dark:text-gray-500 dark:hover:text-gray-200"
-          href="#"
+          href="https://github.com"
           target="_blank"
         >
           <svg
@@ -154,4 +188,4 @@ const VerifyAccount: React.FC = () => {
   );
 };
 
-export default VerifyAccount;
+export default ForgotPassword;

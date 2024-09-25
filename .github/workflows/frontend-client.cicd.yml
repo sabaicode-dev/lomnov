@@ -1,0 +1,85 @@
+name: CI/CD Pipeline for Frontend-Client (Next.js)
+
+# Trigger workflow on push to main branch or manual dispatch
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "apps/frontend-client/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/frontend-client/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      # Navigate to frontend-client directory
+      - name: Change directory to frontend-client
+        working-directory: apps/frontend-client
+        run: echo "Switched to frontend-client directory"
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Build the Next.js frontend for production
+      - name: Build frontend
+        run: npm run build
+
+      # Save build output for deploy job
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: frontend-build
+          path: apps/frontend-client/.next # Store Next.js build artifacts
+
+  deploy:
+    needs: build # This ensures the deploy job only runs after the build job completes successfully
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository (required by SST to access configuration files)
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+
+      # Download the build artifacts from the build job
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: frontend-build
+          path: apps/frontend-client/.next # This will be used by SST for deployment
+
+      # Navigate to frontend-client directory
+      - name: Change directory to frontend-client
+        working-directory: apps/frontend-client
+        run: echo "Switched to frontend-client directory"
+
+      # Deploy with SST
+      - name: SST Deploy to AWS
+        run: npx sst deploy --stage prod
+        env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_DEFAULT_REGION: "us-east-1"
+            AWS_DEFAULT_OUTPUT: "json" # Set output to JSON for AWS CLI

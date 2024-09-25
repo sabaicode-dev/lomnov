@@ -43,7 +43,7 @@ const ProfileTabs = ({ user }: { user: User }) => {
         )}
         {activeTab === "listed-property" && (
           <div className="mt-[20px]">
-            <ListedProperties userId={user.id} />
+            {/* <ListedProperties userId={user.id} /> */}
           </div>
         )}
       </div>
