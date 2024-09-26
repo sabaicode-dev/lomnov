@@ -99,12 +99,14 @@ import Compare from "@/icons/Compare";
 import { useRouter } from "next/navigation";
 
 export interface ItemCardProps {
-  item: RealEstateItem;
+  item: any;
   flexRow?: boolean;
   handleCompareClick: (item: RealEstateItem) => void;
 }
 
 const ItemCard = ({ item, flexRow, handleCompareClick }: ItemCardProps) => {
+
+  console.log(item)
   // const flexRow = false;
   const [isLike, setIsLike] = useState(false);
 

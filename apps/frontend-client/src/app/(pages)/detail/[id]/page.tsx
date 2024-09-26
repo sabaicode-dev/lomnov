@@ -6,20 +6,22 @@ import Map from "../../../../components/molecules/map/Map";
 import RecommendedProperties from "@/components/molecules/RecommendedProperties/RecommendedProperties";
 import UserListed from "@/components/organisms/user-listed-property/UserListed";
 // Fetch property data
-async function fetchProperty(id: string): Promise<RealEstateItem> {
+async function fetchProperty(cognitoSub: string): Promise<RealEstateItem> {
   const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/properties?id=${id}`,
+    `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/properties?cognitoSub=${cognitoSub}`,
   );
   if (!res.ok) {
-    throw new Error("Failed to fetch property data");
+    throw new Error("Failed to fetch propertise data");
   }
+  console.log(res);
+  
   const data = await res.json();
   return data[0]; // Adjust this to match your API response
 }
 
 // Server component to fetch property data
 const page = async ({ params }: { params: { id: string } }) => {
-  const property = await fetchProperty(params.id);
+  const properties = await fetchProperty(params.id);
 
   return (
     <>
@@ -27,8 +29,8 @@ const page = async ({ params }: { params: { id: string } }) => {
         <div className="w-full relative bg-grayish-white h-[300px] sm:h-[400px] md:h-[450px] lg:h-[600px] xl:h-[700px] 2xl:h-[850px] overflow-hidden text-olive-green">
           <Image
             className="top-0 left-0 w-full h-full object-cover"
-            src={property.thumbnail}
-            alt={property.title}
+            src={properties.thumbnail}
+            alt={properties.title}
             objectFit="cover"
             layout="fill"
           />
@@ -48,7 +50,7 @@ const page = async ({ params }: { params: { id: string } }) => {
                 <div className="flex justify-evenly w-full mx-auto">
                   {/* Properties Listing */}
                   <div className="grid grid-cols-3 lg:grid-cols-6 w-full items-center justify-center mx-auto gap-[10px] lg:gap-[20px] mr-[10px] lg:mr-[20px]">
-                    <PropertyTypeInfo property={property} />
+                    <PropertyTypeInfo property={properties} />
                   </div>
                 </div>
               </div>
@@ -66,7 +68,7 @@ const page = async ({ params }: { params: { id: string } }) => {
         <div className="w-full mt-[200px] sm:mt-[190px] md:mt-[220px] lg:mt-[170px] xl:mt-[100px]">
           <div className="max-w-[1300px] mx-auto flex justify-between">
             {/* Property description */}
-            <PropertyDescription property={property} />
+            <PropertyDescription property={properties} />
             {/* User Listed */}
             {/* <div className="w-[40%] h-[50%] mx-auto p-[10px]">
               <div className="w-full h-full border border-neutral p-0 lg:p-[10px] rounded-[10px] ">
@@ -130,16 +132,16 @@ const page = async ({ params }: { params: { id: string } }) => {
                 </div>
               </div>
             </div> */}
-            <UserListed property={property} />
+            <UserListed property={properties} />
           </div>
-          <Map property={property.mapurl}  />
+          <Map property={properties.mapurl}  />
         </div>
 
         {/* Recommend Properties */}
         <div className="w-full mt-[50px]">
           <RecommendedProperties
-            category={property.category}
-            address={property.address}
+            category={properties.category}
+            address={properties.address}
           />
         </div>
       </div>
@@ -148,3 +150,4 @@ const page = async ({ params }: { params: { id: string } }) => {
 };
 
 export default page;
+  
