@@ -92,16 +92,30 @@ const ItemCardListWrapper = () => {
         const updatedItems = prevSelectedItems.filter(
           (selectedItem) => selectedItem.id !== item.id,
         );
+        // Hide compare bar if no items left
         if (updatedItems.length === 0) {
-          setShowCompareBar(false); // Hide compare bar if no items left
+          setShowCompareBar(false);
         }
+
+        // Update localStorage with the new selected items
+        localStorage.setItem(
+          "selectedCompareItems",
+          JSON.stringify(updatedItems),
+        );
         return updatedItems;
       }
 
       // Add the item if fewer than 2 items are selected
       if (prevSelectedItems.length < 2) {
         const newSelectedItems = [...prevSelectedItems, item];
-        setShowCompareBar(true); // Show compare bar
+        // Show compare bar
+        setShowCompareBar(true);
+
+        // Update localStorage with the new selected items
+        localStorage.setItem(
+          "selectedCompareItems",
+          JSON.stringify(newSelectedItems),
+        );
         return newSelectedItems;
       }
 
@@ -143,7 +157,7 @@ const ItemCardListWrapper = () => {
                   onClick={() => handleCompareClick(item)}
                   className="absolute -top-[5px] -right-[5px]"
                 >
-                  <Remove props="w-[15px] h-[15px]"/>
+                  <Remove props="w-[15px] h-[15px]" />
                 </button>
               </div>
             ))}

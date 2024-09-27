@@ -40,3 +40,12 @@ export interface RealEstateItem {
   parking: string;
   name: string;
 }
+
+export interface PropertiesResponse {
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalProperty: number;
+  };
+  properties: RealEstateItem[];
+}

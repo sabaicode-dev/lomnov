@@ -39,19 +39,7 @@ interface User {
 }
 
 interface VisitProfileHeaderProps {
-<<<<<<< HEAD
-  user: {
-    userName: string;
-    background: string;
-    profile: string;
-    firstName: string;
-    lastName: string;
-    joinedDate: string;
-    createdAt: string;
-  };
-=======
   user: User;
->>>>>>> d3498cf66c9da233726db58de3685957a944b9cf
 }
 
 const VisitProfileHeader = ({ user }: VisitProfileHeaderProps) => {
@@ -99,10 +87,6 @@ const VisitProfileHeader = ({ user }: VisitProfileHeaderProps) => {
             <div className="absolute left-[170px] items-center text-helvetica-small font-helvetica text-olive-gray mt-[10px]">
               <span className="font-helvetica text-helvetica-h4 font-bold text-charcoal capitalize">
                 {user.firstName} {user.lastName}
-<<<<<<< HEAD
-                {user.userName} 
-=======
->>>>>>> d3498cf66c9da233726db58de3685957a944b9cf
               </span>
               <span className="flex items-center mt-[10px]">
                 Joined
