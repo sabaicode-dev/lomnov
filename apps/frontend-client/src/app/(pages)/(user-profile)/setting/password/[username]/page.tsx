@@ -7,7 +7,7 @@ import PasswordForm from "@/components/organisms/password-form/PasswordForm";
 
 async function fetchUserDetails(username: string) {
   const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/users?username=${username}`,
+    `https://lomnov.onrender.com/api/v1/users?username=${username}`
   );
   if (!res.ok) {
     throw new Error("Failed to fetch user details");
