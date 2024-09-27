@@ -4,75 +4,75 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 
 const ForgotPassword: React.FC = () => {
-  const searchParams = useSearchParams();
-  const emailFromParams = searchParams.get("email");
-  const [email, setEmail] = useState(emailFromParams || "");
-  const [code, setCode] = useState<string[]>(Array(6).fill(""));
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const searchParams = useSearchParams();
+  // const emailFromParams = searchParams.get("email");
+  // const [email, setEmail] = useState(emailFromParams || "");
+  // const [code, setCode] = useState<string[]>(Array(6).fill(""));
+  // const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    const value = e.target.value;
-    if (/^\d$/.test(value)) {
-      const newCode = [...code];
-      newCode[index] = value;
-      setCode(newCode);
+  // const handleInputChange = (
+  //   e: React.ChangeEvent<HTMLInputElement>,
+  //   index: number
+  // ) => {
+  //   const value = e.target.value;
+  //   if (/^\d$/.test(value)) {
+  //     const newCode = [...code];
+  //     newCode[index] = value;
+  //     setCode(newCode);
 
-      // Focus next input if it's not the last one
-      if (index < 5 && value) {
-        const nextInput = document.getElementById(`digit-${index + 1}`);
-        nextInput?.focus();
-      }
-    }
-  };
+  //     // Focus next input if it's not the last one
+  //     if (index < 5 && value) {
+  //       const nextInput = document.getElementById(`digit-${index + 1}`);
+  //       nextInput?.focus();
+  //     }
+  //   }
+  // };
 
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    if (e.key === "Backspace" && !code[index]) {
-      const previousInput = document.getElementById(`digit-${index - 1}`);
-      previousInput?.focus();
-    }
-  };
+  // const handleKeyDown = (
+  //   e: React.KeyboardEvent<HTMLInputElement>,
+  //   index: number
+  // ) => {
+  //   if (e.key === "Backspace" && !code[index]) {
+  //     const previousInput = document.getElementById(`digit-${index - 1}`);
+  //     previousInput?.focus();
+  //   }
+  // };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const verificationCode = code.join("");
-    setIsLoading(true);
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   const verificationCode = code.join("");
+  //   setIsLoading(true);
 
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL_AUTH}/auth/verify`,
-        {
-          email: email,
-          code: verificationCode,
-        }
-      );
+  //   try {
+  //     const response = await axios.post(
+  //       `${process.env.NEXT_PUBLIC_BASE_URL_AUTH}/auth/verify`,
+  //       {
+  //         email: email,
+  //         code: verificationCode,
+  //       }
+  //     );
 
-      if (response.data.message) {
-        setSuccessMessage("Account verified successfully!");
-        setErrorMessage(null);
+  //     if (response.data.message) {
+  //       setSuccessMessage("Account verified successfully!");
+  //       setErrorMessage(null);
 
-        // Redirect to sign-in page after 2 seconds
-        setTimeout(() => {
-          window.location.href = "/signin"; // Replace with your actual sign-in page route
-        }, 2000);
-      } else {
-        setErrorMessage("Verification failed. Please try again.");
-        setSuccessMessage(null);
-      }
-    } catch (error) {
-      setErrorMessage("Something went wrong. Please try again.");
-      setSuccessMessage(null);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //       // Redirect to sign-in page after 2 seconds
+  //       setTimeout(() => {
+  //         window.location.href = "/signin"; // Replace with your actual sign-in page route
+  //       }, 2000);
+  //     } else {
+  //       setErrorMessage("Verification failed. Please try again.");
+  //       setSuccessMessage(null);
+  //     }
+  //   } catch (error) {
+  //     setErrorMessage("Something went wrong. Please try again.");
+  //     setSuccessMessage(null);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <main id="content" role="main" className="w-full max-w-md mx-auto p-6">
@@ -108,7 +108,7 @@ const ForgotPassword: React.FC = () => {
               </p>
             </div>
 
-           
+
             <div className="flex justify-center gap-3 mb-6">
               {code.map((digit, index) => (
                 <input
