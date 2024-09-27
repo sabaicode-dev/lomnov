@@ -4,7 +4,7 @@ import { NextjsSite } from "sst/constructs";
 export default {
   config(_input) {
     return {
-      name: "real-estate",
+      name: "frontend-client",
       region: "us-east-1",
     };
   },

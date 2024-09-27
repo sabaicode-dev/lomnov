@@ -18,7 +18,6 @@ const loginSchema = z.object({
 
 // Type definition for form data
 type LoginData = z.infer<typeof loginSchema>;
-
 const LoginForm: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
