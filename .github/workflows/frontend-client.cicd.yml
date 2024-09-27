@@ -3,12 +3,12 @@ name: CI/CD Pipeline for Frontend-Client (Next.js)
 on:
   push:
     branches:
-      - deploy/frontend
+      - main
     paths:
       - "apps/frontend-client/**"
   pull_request:
     branches:
-      - deploy/frontend
+      - main
     paths:
       - "apps/frontend-client/**"
 
@@ -41,7 +41,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref == 'refs/heads/deploy/frontend'
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Checkout repository
