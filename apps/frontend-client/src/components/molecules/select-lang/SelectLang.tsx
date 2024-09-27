@@ -21,13 +21,13 @@ const defaultOption = { label: "English", imgSrc: englishFlage };
 
 const SelectLang: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<Option | null>(
-    defaultOption,
+    // defaultOption,
   );
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
-  const handleOptionClick = (option: Option) => {
+  const handleOptionClick = (option: any) => {
     setSelectedOption(option);
     setIsOpen(false);
   };

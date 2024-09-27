@@ -147,4 +147,13 @@ const page = async ({ params }: { params: { id: string } }) => {
   );
 };
 
+// This function gets called at build time
+export async function generateStaticParams() {
+  // Replace this with the actual logic to get the list of usernames
+  const id = ["1", "2", "3"]; // Example usernames
+  return id.map((id) => ({
+    id,
+  }));
+}
+
 export default page;

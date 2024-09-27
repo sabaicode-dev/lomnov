@@ -18,17 +18,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@utils/*": ["../../packages/libs/utils/*"],
-      "@types/*": ["../../packages/libs/types/*"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "src/components/organisms/auth/form-login/InputField.stories.tsx"
-, "src/components/molecules/inputfield/InputField.storiess.tsxx"  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

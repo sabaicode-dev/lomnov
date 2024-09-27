@@ -52,6 +52,7 @@ const Footer: React.FC<FooterProps> = ({
               <div className="flex flex-col gap-1">
                 {menus.map((item) => (
                   <Link
+                    key={item.id}
                     href={item.slug}
                     className="text-[14px] text-neutral capitalize "
                   >

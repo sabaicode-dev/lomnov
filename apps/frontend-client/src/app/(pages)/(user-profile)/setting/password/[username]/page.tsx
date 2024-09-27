@@ -7,7 +7,7 @@ import PasswordForm from "@/components/organisms/password-form/PasswordForm";
 
 async function fetchUserDetails(username: string) {
   const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/users?username=${username}`,
+    `https://lomnov.onrender.com/api/v1/users?username=${username}`
   );
   if (!res.ok) {
     throw new Error("Failed to fetch user details");
@@ -32,5 +32,13 @@ const PasswordPage = async ({ params }: { params: { username: string } }) => {
     </Layout>
   );
 };
+// This function gets called at build time
+export async function generateStaticParams() {
+  // Replace this with the actual logic to get the list of usernames
+  const usernames = ['user1', 'user2', 'user3']; // Example usernames
+  return usernames.map((username) => ({
+    username,
+  }));
+}
 
 export default PasswordPage;

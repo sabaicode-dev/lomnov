@@ -26,6 +26,7 @@ export default function Home() {
           height={"400"}
           className=" absolute left-0 top-0 w-full h-full object-cover"
         />
+        
         <div className=" bg-[#0000002e] absolute left-0 top-0 w-full h-full ">
           <div className="w-full h-full xl:w-[1300px]  m-auto px-2 xl:px-0 flex flex-col lg:flex-row gap-10 ">
             <div className="w-full lg:w-[30%] h-full py-32 ">

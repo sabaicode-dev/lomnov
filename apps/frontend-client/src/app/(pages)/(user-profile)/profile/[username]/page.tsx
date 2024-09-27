@@ -6,14 +6,30 @@ import ListedProperties from "@/components/organisms/listed-properties/ListedPro
 import UserProfileHeader from "@/components/molecules/user-profile-header/UserProfileHeader";
 
 async function fetchUserDetails(username: string) {
-  const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/users?username=${username}`,
-  );
-  if (!res.ok) {
-    throw new Error("Failed to fetch user details");
+  try {
+    const res = await fetch(
+      `https://lomnov.onrender.com/api/v1/users?username=${username}`
+    );
+    if (!res.ok) {
+      throw new Error("Failed to fetch user details");
+    }
+    const user = await res.json();
+    return user[0]; // Adjust this based on your API response
+  } catch (error) {
+    console.error(error);
+    return null; // Return null or a default user object
   }
-  const user = await res.json();
-  return user[0]; // Adjust this based on your API response
+}
+
+
+export async function generateStaticParams() {
+  // You should return a list of usernames or whatever parameters you need
+  const res = await fetch(`https://lomnov.onrender.com/api/v1/users`); // Adjust endpoint as needed
+  const users = await res.json();
+
+  return users.map((user: { username: string }) => ({
+    username: user.username,
+  }));
 }
 
 const ProfilePage = async ({ params }: { params: { username: string } }) => {

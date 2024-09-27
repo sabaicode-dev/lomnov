@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ItemCardList from "../item-card-list/ItemCardList"; // The server component
+// import ItemCardList from "../item-card-list/ItemCardList"; // The server component
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import ComparisonBar from "../comparison-bar/ComparisionBar";
 
@@ -18,7 +18,7 @@ const ComparisonManager = () => {
 
   return (
     <>
-      <ItemCardList toggleCompare={toggleCompare} selectedItems={selectedItems} />
+      {/* <ItemCardList toggleCompare={toggleCompare} selectedItems={selectedItems} /> */}
       <ComparisonBar selectedItems={selectedItems} />
     </>
   );

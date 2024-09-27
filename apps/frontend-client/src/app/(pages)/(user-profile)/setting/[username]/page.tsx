@@ -6,27 +6,25 @@ import GeneralInfoForm from "@/components/organisms/general-info-form/GeneralInf
 
 async function fetchUserDetails() {
   try {
-    // Get the cookies
     const accessToken = cookies().get("accessToken")?.value;
     const username = cookies().get("username")?.value;
 
-    // Make sure the cookies are available before making the request
     if (!accessToken || !username) {
       throw new Error("Required cookies not found");
     }
 
-    // Make the API call, passing cookies in the 'Cookie' header
     const res = await axios.get(`http://localhost:4000/api/v1/users/me`, {
       headers: {
-        Cookie: `accessToken=${accessToken}; username=${username}`,
+        Authorization: `Bearer ${accessToken}`, // Add the authorization header
       },
-      withCredentials: true, // This is important for cookies to be sent
+      withCredentials: true, // Cookies will be sent automatically
     });
 
     return res.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching user details:", error);
-    return null;
+    // Return an error message or code if needed
+    return { error: error.message || "An unknown error occurred" };
   }
 }
 
@@ -34,13 +32,13 @@ const GeneralPage = async () => {
   const userDetails = await fetchUserDetails();
 
   console.log(userDetails);
-  if (!userDetails) {
-    return <div>User not found</div>;
+  if (!userDetails || userDetails.error) {
+    return <div>User not found or error fetching details</div>;
   }
 
   return (
     <Layout>
-      <div className="">
+      <div>
         <UserSettingHeader user={userDetails} />
         <div className="max-w-[1300px] mx-auto">
           <GeneralInfoForm user={userDetails} />
@@ -49,5 +47,7 @@ const GeneralPage = async () => {
     </Layout>
   );
 };
+
+
 
 export default GeneralPage;

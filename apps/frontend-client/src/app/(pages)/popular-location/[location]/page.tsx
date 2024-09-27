@@ -5,7 +5,8 @@ import SelectProperties from '@/components/molecules/select-properties/SelectPro
 import ItemCardList from '@/components/molecules/item-card-list/ItemCardList';
 
 
-function page() {
+
+function page({ params }: { params: { location: string } }) {
   return (
     <main>
       {/* Banner */}
@@ -50,5 +51,12 @@ function page() {
     </main>
   )
 }
-
+// This function gets called at build time
+export async function generateStaticParams() {
+  // Here you should provide the list of locations you want to pre-render
+  const locations = ['location1', 'location2', 'location3']; // Example locations
+  return locations.map((location) => ({
+    location,
+  }));
+}
 export default page

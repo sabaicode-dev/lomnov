@@ -29,4 +29,13 @@ const SavedPropertiesPage = async ({ params }: { params: { username: string } })
   );
 };
 
+// This function gets called at build time
+export async function generateStaticParams() {
+  // Here you should provide the list of usernames you want to pre-render
+  const usernames = ['user1', 'user2', 'user3']; // Example usernames
+  return usernames.map((username) => ({
+    username,
+  }));
+}
+
 export default SavedPropertiesPage;

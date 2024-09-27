@@ -67,7 +67,7 @@ function ContainerHeader({
     try {
       setLoading(true);
       const response = await axios.get(
-        "http://localhost:4000/api/v1/users/me",
+        "http://3.91.40.193:4000/api/v1/users/me",
         { withCredentials: true }
       );
       setUserData(response.data); // Store user data when logged in
