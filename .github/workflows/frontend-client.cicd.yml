@@ -35,10 +35,6 @@ jobs:
       - name: Build frontend
         run: yarn build
 
-      # Verify .next directory exists after build
-      - name: Verify .next directory exists
-        run: ls apps/frontend-client/.next
-
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
