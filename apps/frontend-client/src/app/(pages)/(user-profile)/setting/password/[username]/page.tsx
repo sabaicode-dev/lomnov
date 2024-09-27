@@ -32,7 +32,6 @@ const PasswordPage = async ({ params }: { params: { username: string } }) => {
     </Layout>
   );
 };
-
 // This function gets called at build time
 export async function generateStaticParams() {
   // Replace this with the actual logic to get the list of usernames
