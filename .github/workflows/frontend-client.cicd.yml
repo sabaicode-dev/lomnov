@@ -26,7 +26,7 @@ jobs:
           node-version: "20"
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --no-immutable
 
       - name: Build the Next.js project
         run: yarn build

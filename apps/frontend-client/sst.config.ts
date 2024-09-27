@@ -18,6 +18,7 @@
 //     });
 //   },
 // } satisfies SSTConfig;
+
 import { SSTConfig } from "sst";
 import { NextjsSite } from "sst/constructs";
 
