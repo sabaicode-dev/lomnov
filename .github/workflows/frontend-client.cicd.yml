@@ -1,16 +1,19 @@
 name: CI/CD Pipeline for Frontend-Client (Next.js)
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "apps/frontend-client/**"
   pull_request:
     branches:
       - main
     paths:
       - "apps/frontend-client/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/frontend-client/**"
+defaults:
+  run:
+    working-directory: apps/frontend-client
 
 jobs:
   build:
@@ -48,7 +51,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: frontend-build
 

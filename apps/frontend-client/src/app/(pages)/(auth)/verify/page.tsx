@@ -99,9 +99,7 @@ const VerifyAccount: React.FC = () => {
   //     setIsLoading(false);
   //   }
   // };
-
   // const isCodeComplete = code.every((digit) => digit !== "");
-
   return (
     <>
     </>
