@@ -4,6 +4,7 @@ import banner from "@/images/banner.png";
 import SelectProperties from "@/components/molecules/select-properties/SelectProperties";
 import SelectPrice from "@/components/molecules/select-price/SelectPrice";
 import SelectLocations from "@/components/molecules/select-locations/SelectLocations";
+import ListedProperties from "@/components/organisms/listed-properties/ListedProperties";
 // ===================================================================
 
 function page() {
@@ -50,6 +51,8 @@ function page() {
 
       <div className="w-full lg:w-[1300px] m-auto  mt-32 px-2 lg:px-0">
         <ItemCardList />
+        {/* <ListedProperties user={}/> */}
+
       </div>
     </main>
   );
@@ -109,6 +112,7 @@ export default page;
             </div>
 
             <ItemCardList />
+
           </div>
         </div>
       </main>

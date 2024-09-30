@@ -7,6 +7,22 @@ import Image from "next/image";
 import Remove from "@/icons/Remove";
 import axios from "axios";
 
+// Move the fetchProperties function outside to match the behavior of ItemCardList
+async function fetchProperties(user: string): Promise<RealEstateItem[]> {
+  console.log("Fetching properties for user:", user);
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/properties/me`,
+      { withCredentials: true },
+    );
+    console.log("Fetched properties:", res.data.properties);
+    return res.data.properties;
+  } catch (error) {
+    console.error("Failed to fetch properties:", error);
+    return [];
+  }
+}
+
 interface ListedPropertiesProps {
   user: string;
 }
@@ -20,28 +36,30 @@ const ListedProperties = ({ user }: ListedPropertiesProps) => {
   const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([]);
   const [showCompareBar, setShowCompareBar] = useState(false);
 
-  async function fetchProperties() {
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/properties/me`,
-        { withCredentials: true }, // Ensuring credentials like cookies are included
-      );
-      console.log(res.data.properties)
-      // Accessing the properties array inside the response object
-      setListedProperties(res.data.properties); // Correctly accessing the properties array
-    } catch (error) {
-      console.error("Failed to fetch properties:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  // Track component mount and re-render
   useEffect(() => {
+    console.log("ListedProperties component mounted or re-rendered");
 
-    fetchProperties();
+    const loadProperties = async () => {
+      console.log("Loading properties for user:", user);
+      const properties = await fetchProperties(user);
+      setListedProperties(properties);
+      setLoading(false);
+    };
+
+    if (user) {
+      loadProperties();
+    }
   }, [user]);
+
+  // Track updates to selectedItems state
+  useEffect(() => {
+    console.log("Selected items updated:", selectedItems);
+  }, [selectedItems]);
 
   // Retrieve selected items from localStorage when the component mounts
   useEffect(() => {
+    console.log("Mounting component, loading selected items from localStorage");
     const storedItems = localStorage.getItem("selectedCompareItems");
     if (storedItems) {
       try {
@@ -49,6 +67,10 @@ const ListedProperties = ({ user }: ListedPropertiesProps) => {
         if (parsedItems.length > 0) {
           setSelectedItems(parsedItems);
           setShowCompareBar(true); // Show compare bar if items are present
+          console.log(
+            "Restored selected items from localStorage:",
+            parsedItems,
+          );
         }
       } catch (error) {
         console.error("Error parsing localStorage items:", error);
@@ -59,6 +81,7 @@ const ListedProperties = ({ user }: ListedPropertiesProps) => {
   // Update localStorage whenever selectedItems changes
   useEffect(() => {
     if (selectedItems.length > 0) {
+      console.log("Updating localStorage with selected items:", selectedItems);
       localStorage.setItem(
         "selectedCompareItems",
         JSON.stringify(selectedItems),
@@ -69,29 +92,47 @@ const ListedProperties = ({ user }: ListedPropertiesProps) => {
   // Handle selecting items for comparison
   const handleCompareClick = (item: RealEstateItem) => {
     setSelectedItems((prevSelectedItems) => {
+      console.log("Previous selected items:", prevSelectedItems);
+  
+      // Check if the item is already selected
       const isAlreadySelected = prevSelectedItems.some(
-        (selectedItem) => selectedItem.id === item.id,
+        (selectedItem) => selectedItem.id === item.id
       );
-
+  
       if (isAlreadySelected) {
+        // Remove the item from the selection
         const updatedItems = prevSelectedItems.filter(
-          (selectedItem) => selectedItem.id !== item.id,
+          (selectedItem) => selectedItem.id !== item.id
         );
+        console.log("Item removed, updated selected items:", updatedItems);
+  
         if (updatedItems.length === 0) {
           setShowCompareBar(false); // Hide compare bar if no items left
         }
+  
+        // Update localStorage
+        localStorage.setItem("selectedCompareItems", JSON.stringify(updatedItems));
+  
         return updatedItems;
+      } else {
+        // If less than 2 items are selected, add the new item
+        if (prevSelectedItems.length < 2) {
+          const newSelectedItems = [...prevSelectedItems, item];
+          console.log("Item added, new selected items:", newSelectedItems);
+  
+          // Update localStorage
+          localStorage.setItem("selectedCompareItems", JSON.stringify(newSelectedItems));
+  
+          setShowCompareBar(true); // Show compare bar
+          return newSelectedItems;
+        }
+  
+        console.log("Maximum of 2 items already selected, no changes made");
+        return prevSelectedItems; // Do not change state if already 2 items
       }
-
-      if (prevSelectedItems.length < 2) {
-        const newSelectedItems = [...prevSelectedItems, item];
-        setShowCompareBar(true); // Show compare bar
-        return newSelectedItems;
-      }
-
-      return prevSelectedItems;
     });
   };
+  
 
   const handleSelectProperty = (id: number) => {
     setSelectedProperties((prevSelected) =>

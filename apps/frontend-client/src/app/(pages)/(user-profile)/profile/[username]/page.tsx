@@ -3,6 +3,7 @@ import Layout from "../layout"; // Import the layout
 import { cookies } from "next/headers";
 import ListedProperties from "@/components/organisms/listed-properties/ListedProperties";
 import UserProfileHeader from "@/components/molecules/user-profile-header/UserProfileHeader";
+
 import axios from "axios";
 
 async function fetchUserDetails() {
@@ -17,12 +18,15 @@ async function fetchUserDetails() {
     }
 
     // Make the API call, passing cookies in the 'Cookie' header
-    const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/users/me`, {
-      headers: {
-        Cookie: `accessToken=${accessToken}; username=${username}`,
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL_GETWAY}/users/me`,
+      {
+        headers: {
+          Cookie: `accessToken=${accessToken}; username=${username}`,
+        },
+        withCredentials: true, // This is important for cookies to be sent
       },
-      withCredentials: true, // This is important for cookies to be sent
-    });
+    );
 
     return res.data;
   } catch (error) {

@@ -1,8 +1,11 @@
 import React from "react";
 import Layout from "../../layout"; // Import the layout
-import UserProfileHeader from "@/components/molecules/user-profile-header/UserProfileHeader"; // Adjust this to your file path
-import axios from "axios";
 import { cookies } from "next/headers";
+import FavoriteProperties from "@/components/organisms/saved-properties/SavedProperties";
+import UserProfileHeader from "@/components/molecules/user-profile-header/UserProfileHeader";
+
+import axios from "axios";
+import SavedProperties from "@/components/organisms/saved-properties/SavedProperties";
 
 async function fetchUserDetails() {
   try {
@@ -33,7 +36,7 @@ async function fetchUserDetails() {
   }
 }
 
-const SavedPropertiesPage = async () => {
+const page = async () => {
   const user = await fetchUserDetails();
 
   if (!user) {
@@ -42,10 +45,12 @@ const SavedPropertiesPage = async () => {
 
   return (
     <Layout>
-      <UserProfileHeader user={user} /> {/* Reusing the ProfileHeader */}
-      <div className="max-w-[1300px] mx-auto">Saved Properties</div>
+      <div className="">
+        <UserProfileHeader user={user} />
+        <SavedProperties user={user.userName}/>
+      </div>
     </Layout>
   );
 };
 
-export default SavedPropertiesPage;
+export default page;
