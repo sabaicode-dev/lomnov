@@ -15,14 +15,11 @@ import { useParams } from "next/navigation";
 //   }
 //   return res.json();
 // }
-
 async function page({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
-
 //   console.log(searchParams.category)
 //   console.log(searchParams.property)
 //   console.log(searchParams.location)
 //   const datas = await fetchProperties(searchParams);
-
   return (
     <>
       <main className="">
