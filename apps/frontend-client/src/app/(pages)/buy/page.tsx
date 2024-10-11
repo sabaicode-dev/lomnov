@@ -5,7 +5,6 @@ import SelectProperties from "@/components/molecules/select-properties/SelectPro
 import SelectPrice from "@/components/molecules/select-price/SelectPrice";
 import SelectLocations from "@/components/molecules/select-locations/SelectLocations";
 // ===================================================================
-
 function page() {
   return (
     //* New */
