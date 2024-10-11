@@ -7,7 +7,7 @@ import HeroSection from "@/components/organisms/hero-section/HeroSection";
 import Image from "next/image";
 import logSkyBar from "@/images/banner-sky-bar.jpg";
 import Slider from "@/components/molecules/slider/Slider";
-import NearLocation from "@/images/near-location.png";
+// import NearLocation from "@/images/near-location.png";
 import Link from "next/link";
 import ItemCardNearlyLocationList from "@/components/molecules/item-card-nearly-location-list/ItemCardNearlyLocationList";
 // import Link from "next/link";
@@ -21,12 +21,12 @@ export default function Home() {
       </section>
       <section className="w-full  bg-gray-500 h-[1200px] lg:h-[720px] relative ">
         <Image
-          src={NearLocation}
+          src={""}
           alt=""
           height={"400"}
           className=" absolute left-0 top-0 w-full h-full object-cover"
         />
-        
+
         <div className=" bg-[#0000002e] absolute left-0 top-0 w-full h-full ">
           <div className="w-full h-full xl:w-[1300px]  m-auto px-2 xl:px-0 flex flex-col lg:flex-row gap-10 ">
             <div className="w-full lg:w-[30%] h-full py-32 ">
