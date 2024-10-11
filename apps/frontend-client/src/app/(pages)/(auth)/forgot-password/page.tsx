@@ -73,8 +73,6 @@ const ForgotPassword: React.FC = () => {
   //     setIsLoading(false);
   //   }
   // };
-
-
   return (
     <main id="content" role="main" className="w-full max-w-md mx-auto p-6">
       {/* <div className="mt-7 bg-white rounded-xl shadow-lg">
@@ -141,6 +139,4 @@ const ForgotPassword: React.FC = () => {
     </main>
   );
 };
-
-
 export default ForgotPassword;
