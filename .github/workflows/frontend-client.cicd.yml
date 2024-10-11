@@ -49,14 +49,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --no-immutable
         working-directory: apps/frontend-client
 
       - name: Set Environment Variables
