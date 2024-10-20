@@ -1,6 +1,6 @@
 import React from "react";
 import LoginForm from "../../../../components/organisms/auth/form-login/LoginForm";
-import { Facebook, Google } from "@/icons";
+// import { Facebook, Google } from "@/icons";
 import Image from "next/image";
 import banner from "@/images/banner.png";
 
