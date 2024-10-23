@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import Image from "next/image";
 import camboFlag from "@/images/combo.jpg";
 import englishFlage from "@/images/english.jpg";
 interface Option {
   label: string;
-  imgSrc: string;
+  imgSrc: string| any;
 }
 
 interface CustomDropdownProps {
@@ -18,16 +18,14 @@ const options = [
   // Add more options as needed
 ];
 const defaultOption = { label: "English", imgSrc: englishFlage };
-
+console.log(defaultOption);
 const SelectLang: React.FC = () => {
-  const [selectedOption, setSelectedOption] = useState<Option | null>(
-    // defaultOption,
-  );
+  const [selectedOption, setSelectedOption] = useState<Option>(defaultOption);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
-  const handleOptionClick = (option: any) => {
+  const handleOptionClick = (option: SetStateAction<Option>) => {
     setSelectedOption(option);
     setIsOpen(false);
   };
@@ -48,7 +46,7 @@ const SelectLang: React.FC = () => {
             <span className="text-white">{selectedOption.label}</span>
           </div>
         ) : (
-          "Select an option"
+          ""
         )}
         <svg
           className={`w-5 h-5 ml-2 transition-transform transform text-white ${isOpen ? "rotate-180" : ""}`}
