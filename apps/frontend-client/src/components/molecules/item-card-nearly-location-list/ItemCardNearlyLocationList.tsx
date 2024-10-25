@@ -13,7 +13,7 @@ async function ItemCardNearlyLocationList() {
   const items = await fetchProperties();
   return (
     <>
-      <div className="grid  md:grid-cols-2 lg:grid-cols-1 gap-5 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5 2xl:gap-5">
+      <div className="grid md:grid-cols-2 lg:grid-cols-1 gap-5 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5 2xl:gap-5 xl:w-[450px] 2xl:w-[450px] w-auto">
         {items.map((item) => (
           <ItemCard key={item.id} item={item} flexRow={true} />
         ))}
