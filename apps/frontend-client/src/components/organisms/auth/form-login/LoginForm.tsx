@@ -2,13 +2,15 @@
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import InputField from "../../../../../../../packages/ui-components/src/components/inputfield/InputField";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Google from "../../../../icons/Google";
-import Facebook from "../../../../icons/Facebook";
-import axios from "axios";
+
 import Link from "next/link";
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import { Google, Facebook } from "@/icons";
+import InputField from "ms-ui-components/src/components/inputfield/InputField";
+import withAuthRedirect from '../withAuth';
 
 // Define the Zod schema
 const loginSchema = z.object({
@@ -16,15 +18,14 @@ const loginSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });
 
-// Type definition for form data
 type LoginData = z.infer<typeof loginSchema>;
+
 const LoginForm: React.FC = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
-  // UseForm with Zod schema for validation
   const {
     register,
     handleSubmit,
@@ -35,16 +36,16 @@ const LoginForm: React.FC = () => {
 
   const onSubmit = async (data: LoginData) => {
     try {
-      const response = await axios.post('http://3.91.40.193:4000/api/v1/auth/signin', {
+      const response = await axiosInstance.post(API_ENDPOINTS.SIGN_IN, {
         email: data.email,
         password: data.password,
-      }, { withCredentials: true });
-      if(response.data.message){
+      })
+      console.log('response', response)
+      if (response.status === 200) {
         window.location.href = "/"
       }
     } catch (error: any) {
       console.error("Login failed:", error.response?.data || error.message);
-      // Handle error (e.g., show error message to user)
     }
   };
 
@@ -108,9 +109,7 @@ const LoginForm: React.FC = () => {
 
         {/* Remember Me and Forgot Password */}
         <div className="flex justify-between items-center mb-8 mx-[45px]">
-          <label className="flex items-center">
-            <input type="checkbox" className="mr-2" /> Remember Me
-          </label>
+
           <Link href="/forgot-password" className="text-olive-green">
             Forgot Password?
           </Link>
@@ -140,4 +139,4 @@ const LoginForm: React.FC = () => {
   );
 };
 
-export default LoginForm;
+export default withAuthRedirect(LoginForm);

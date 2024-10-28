@@ -7,14 +7,12 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"ResponseSignUpUserDTO": {
+			"APIResponse": {
 				"properties": {
 					"message": {
 						"type": "string"
 					},
-					"userSub": {
-						"type": "string"
-					}
+					"data": {}
 				},
 				"required": [
 					"message"
@@ -41,43 +39,6 @@
 					"email",
 					"username",
 					"password"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"AuthenticationResult": {
-				"properties": {
-					"AccessToken": {
-						"type": "string"
-					},
-					"ExpiresIn": {
-						"type": "number",
-						"format": "double"
-					},
-					"IdToken": {
-						"type": "string"
-					},
-					"RefreshToken": {
-						"type": "string"
-					},
-					"TokenType": {
-						"type": "string"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ResponseVerifyUserDTO": {
-				"properties": {
-					"message": {
-						"type": "string"
-					},
-					"authResult": {
-						"$ref": "#/components/schemas/AuthenticationResult"
-					}
-				},
-				"required": [
-					"message"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -295,7 +256,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResponseSignUpUserDTO"
+									"$ref": "#/components/schemas/APIResponse"
 								}
 							}
 						}
@@ -327,7 +288,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResponseVerifyUserDTO"
+									"$ref": "#/components/schemas/APIResponse"
 								}
 							}
 						}
@@ -359,7 +320,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ResponseSignUpUserDTO"
+									"$ref": "#/components/schemas/APIResponse"
 								}
 							}
 						}
@@ -414,7 +375,7 @@
 				}
 			}
 		},
-		"/api/v1/auth/password-reset": {
+		"/api/v1/auth/reset-password": {
 			"post": {
 				"operationId": "InitiatePasswordReset",
 				"responses": {
@@ -478,7 +439,7 @@
 				}
 			}
 		},
-		"/api/v1/auth/refresh-token/{refresh}": {
+		"/api/v1/auth/refresh-token": {
 			"post": {
 				"operationId": "RefreshToken",
 				"responses": {
@@ -505,16 +466,7 @@
 					"Manual Registration"
 				],
 				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "refresh",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
+				"parameters": []
 			}
 		},
 		"/api/v1/auth/{cognitoSub}": {

@@ -28,8 +28,8 @@ export class AuthController extends Controller {
     console.log(`Generated state: ${state}`);
     const authorizeParams = new URLSearchParams({
       response_type: "code",
-      client_id: configs.cognitoAppCientId, // Your Cognito app client ID
-      redirect_uri: configs.redirect_uri, // Your app's callback URL
+      client_id: configs.awsCognitoClientId, // Your Cognito app client ID
+      redirect_uri: configs.awsRedirectUri, // Your app's callback URL
       state: state,
       identity_provider: "Google",
       scope: "profile email openid",
@@ -37,7 +37,7 @@ export class AuthController extends Controller {
 
     redirect(302, undefined, {
       Location: `${
-        configs.cognitoAppDomain
+        configs.awsCognitoDomain
       }/oauth2/authorize?${authorizeParams.toString()}`,
     });
   }
@@ -56,15 +56,15 @@ export class AuthController extends Controller {
       // Construct the URL for Cognito OAuth2 authorization
       const authorizeParams = new URLSearchParams({
         response_type: "code",
-        client_id: configs.cognitoAppCientId, // Replace with your Cognito app client ID
-        redirect_uri: configs.redirect_uri, // Replace with your app's callback URL
+        client_id: configs.awsCognitoClientId, // Replace with your Cognito app client ID
+        redirect_uri: configs.awsRedirectUri, // Replace with your app's callback URL
         identity_provider: "Facebook",
         scope: "profile email openid",
       });
 
       // Construct the full redirect URL
       const redirectUrl = `${
-        configs.cognitoAppDomain
+        configs.awsCognitoDomain
       }/oauth2/authorize?${authorizeParams.toString()}`;
       console.log(`Redirecting to: ${redirectUrl}`);
 
@@ -96,12 +96,9 @@ export class AuthController extends Controller {
       }
 
       await this.cognitoService.handleCallback(code, request.res);
-      return redirect(302, undefined, { Location: configs.redirectToFrontend });
+      return redirect(302, undefined, { Location: configs.clientUrl });
     } catch (error: any) {
       throw error
     }
   }
-
-
-
 }

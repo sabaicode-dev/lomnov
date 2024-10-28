@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { RouteConfig } from "@/src/utils/types/interface"; 
 import { ForbiddenError, UnauthorizedError } from "@/src/utils/error/customErrors";
-// ============================================================
+
 
 // Extend the Express Request interface
 declare module "express-serve-static-core" {

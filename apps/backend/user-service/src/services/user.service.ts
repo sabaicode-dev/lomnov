@@ -1,20 +1,12 @@
-import configs from "../config";
-import { UserRepository } from "../database/repositories/user.repository";
-import { UnauthorizedError } from "../utils/error/customErrors";
-import { Types } from "mongoose"
-import {
-  RequestUserDTO,
-  ResponseUserDTO,
-  ResponseAllUserDTO,
-  GetAllUsersQueryDTO,
-  UpdateUserDTO,
-  User,
-  DeleteProfileImageRequestDTO,
+
+import configs from "@/src/config";
+import { UserRepository } from "@/src/database/repositories/user.repository";
+import uploadFileToS3Service from "@/src/services/uploadFileToS3.service";
+import { UnauthorizedError } from "@/src/utils/error/customErrors";
+import { DeleteProfileImageRequestDTO, GetAllUsersQueryDTO, RequestUserDTO, ResponseAllUserDTO, ResponseUserDTO, UpdateUserDTO, User } from "@/src/utils/types/indext";
+import { Types } from "mongoose";
 
 
-
-} from "../utils/types/indext";
-import uploadFileToS3Service from "./uploadFileToS3.service";
 declare global {
   namespace Express {
     interface Request {
@@ -156,7 +148,7 @@ export class UserService {
     const profileUrl = existingUser.profile[profileId];
 
     // Extract the S3 key from the profile URL
-    const s3Key = profileUrl.split(`${configs.awsS3BucketName}.s3.${configs.awsRegion}.amazonaws.com/`)[1];
+    const s3Key = profileUrl.split(`${configs.awsS3BucketName}.s3.${configs.awsS3Region}.amazonaws.com/`)[1];
 
     // Delete the file from S3
     await uploadFileToS3Service.deleteFile(s3Key);
@@ -187,7 +179,7 @@ export class UserService {
       const backgroundUrl = existingUser.background[index];
 
       // Extract the S3 key from the profile URL
-      const s3Key = backgroundUrl.split(`${configs.awsS3BucketName}.s3.${configs.awsRegion}.amazonaws.com/`)[1];
+      const s3Key = backgroundUrl.split(`${configs.awsS3BucketName}.s3.${configs.awsS3Region}.amazonaws.com/`)[1];
 
       // Delete the file from S3
       await uploadFileToS3Service.deleteFile(s3Key);

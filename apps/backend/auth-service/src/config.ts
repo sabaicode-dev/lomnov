@@ -4,14 +4,16 @@ import Joi from "joi";
 
 type Config = {
   port: number;
-  cognitoAppCientId: string;
-  cognitoAppCientSecret: string;
-  cognitoAppDomain: string;
-  redirect_uri: string;
-  awsRegion: string;
-  userPoolId: string;
-  redirectToFrontend: string;
-  userServiceDomain: string
+  awsCognitoRegion: string;
+  awsCognitoUserPoolId: string;
+  awsCognitoClientId: string;
+  awsCognitoClientSecret: string;
+  awsCognitoDomain: string;
+  awsRedirectUri: string;
+  awsAccessKeyId: string;
+  awsSecretAccessKey: string;
+  clientUrl: string;
+  userServiceUrl: string;
 };
 
 // Function to load and validate environment variables
@@ -24,14 +26,16 @@ function loadConfig(): Config {
   // Define a schema for the environment variables
   const envVarsSchema = Joi.object({
     PORT: Joi.number().default(3000),
-    COGNITO_APP_CIENTID: Joi.string().required(),
-    COGNITO_APP_CIENTSECRET: Joi.string().required(),
-    REDIRECT_URI: Joi.string().required(),
-    COGNITO_APP_DOMAIN: Joi.string().required(),
-    AWSREGION: Joi.string().required(),
-    USER_POOL_ID: Joi.string().required(),
-    REDIRECT_TO_FRONTEND: Joi.string().required(),
-    USER_SERVICE_DOMAIN: Joi.string().required()
+    AWS_COGNITO_REGION: Joi.string().required(),
+    AWS_COGNITO_USER_POOL_ID: Joi.string().required(),
+    AWS_COGNITO_CLIENT_ID: Joi.string().required(),
+    AWS_COGNITO_CLIENT_SECRET: Joi.string().required(),
+    AWS_COGNITO_DOMAIN: Joi.string().required(),
+    AWS_REDIRECT_URI: Joi.string().required(),
+    AWS_ACCESS_KEY_ID: Joi.string().required(),
+    AWS_SECRET_ACCESS_KEY: Joi.string().required(),
+    CLIENT_URL: Joi.string().required(),
+    USER_SERVICE_URL: Joi.string().required(),
   })
     .unknown()
     .required();
@@ -43,19 +47,21 @@ function loadConfig(): Config {
   }
 
   return {
-
     port: envVars.PORT,
-    cognitoAppCientId: envVars.COGNITO_APP_CIENTID,
-    cognitoAppCientSecret: envVars.COGNITO_APP_CIENTSECRET,
-    cognitoAppDomain: envVars.COGNITO_APP_DOMAIN,
-    redirect_uri: envVars.REDIRECT_URI,
-    awsRegion: envVars.AWSREGION,
-    userPoolId: envVars.USER_POOL_ID,
-    redirectToFrontend: envVars.REDIRECT_TO_FRONTEND,
-    userServiceDomain: envVars.USER_SERVICE_DOMAIN
+    awsCognitoRegion: envVars.AWS_COGNITO_REGION,
+    awsCognitoUserPoolId: envVars.AWS_COGNITO_USER_POOL_ID,
+    awsCognitoClientId: envVars.AWS_COGNITO_CLIENT_ID,
+    awsCognitoClientSecret: envVars.AWS_COGNITO_CLIENT_SECRET,
+    awsCognitoDomain: envVars.AWS_COGNITO_DOMAIN,
+    awsRedirectUri: envVars.AWS_REDIRECT_URI,
+    clientUrl: envVars.CLIENT_URL,
+    userServiceUrl: envVars.USER_SERVICE_URL,
+    awsAccessKeyId: envVars.AWS_ACCESS_KEY_ID,
+    awsSecretAccessKey: envVars.AWS_SECRET_ACCESS_KEY
   };
 }
 
 // Export the loaded configuration
 const configs = loadConfig();
+
 export default configs;

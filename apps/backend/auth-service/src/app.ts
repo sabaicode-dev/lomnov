@@ -7,9 +7,9 @@ import cookieParser from "cookie-parser"
 import session from "express-session";
 import { loggingMiddleware } from "./utils/request-response-logger/logger";
 import { errorHandler } from "./utils/error/errorHanler";
-import cors from "cors"
 const { randomBytes } = require("crypto");
-// Dynamically load swagger.json
+
+// LOAD SWAAGER DOCUMENTATION JSON FILE
 const swaggerDocument = JSON.parse(
   fs.readFileSync(path.join(__dirname, "docs/swagger.json"), "utf8"),
 );
@@ -19,8 +19,12 @@ const swaggerDocument = JSON.parse(
 // Initialize App Express
 // ========================
 const app = express();
-app.use(cookieParser());
 
+
+// ========================
+// SECURITIES MIDDLEWARES
+// ========================
+app.use(cookieParser());
 app.use(
   session({
     secret: randomBytes(64).toString("hex"),
@@ -29,31 +33,21 @@ app.use(
     cookie: { secure: false }, // Set to false for local development without HTTPS
   }),
 );
-app.use(cors({
-  origin: 'http://localhost:3000', // Your frontend URL
-  credentials: true, // Allow credentials (cookies)
-}));
+
 // ========================
-// Global Middleware
+// GLOBAL COMMONS MIDDLEWARES
 // ========================
 app.use(express.json()); // Help to get the json from request body
-// ========================
-// Middleware to block unauthorized direct access
-// ========================
-// app.use(blockDirectAccess);
-
-// ========================
-// Request Response logger
-// ========================
-
 app.use(loggingMiddleware);
+
+
 // ========================
 // Global API V1
 // ========================
 RegisterRoutes(app);
 
 // ========================
-// API Documentations
+// API DOCUMENTATION
 // ========================
 app.use(
   "/api/v1/auth/api-docs",
@@ -62,8 +56,8 @@ app.use(
 );
 
 // ========================
-// ERROR Handler
+// GLOBAL ERROR HANDLER
 // ========================
-// Handle Later
 app.use(errorHandler);
+
 export default app;

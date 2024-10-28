@@ -1,18 +1,14 @@
 // import ItemCardList from "@/components/molecules/item-card-list/ItemCardList";
 import ItemCardPopularLocationList from "@/components/molecules/item-card-popular-location-list/ItemCardPopularLocationList";
-// import ServiceCardList from "@/components/molecules/service-card-list/ServiceCardList";
-import Footer from "@/components/organisms/footer/Footer";
 import bannerNearlyLocation from "@/images/banner-nearly-location.jpeg"
-// import Header from "@/components/organisms/header/Header";
 import HeroSection from "@/components/organisms/hero-section/HeroSection";
 import Image from "next/image";
 import logSkyBar from "@/images/banner-sky-bar.jpg";
 import Slider from "@/components/molecules/slider/Slider";
-// import NearLocation from "@/images/near-location.png";
 import Link from "next/link";
 import ItemCardNearlyLocationList from "@/components/molecules/item-card-nearly-location-list/ItemCardNearlyLocationList";
-// import Link from "next/link";
-// ======================================
+
+
 export default function Home() {
   return (
     <main className="w-full">

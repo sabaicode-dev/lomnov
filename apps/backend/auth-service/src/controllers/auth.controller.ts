@@ -15,16 +15,16 @@ import {
   RequestSignInDTO,
   RequestConfirmPasswordResetDTO,
   RequestVerifyDTO,
-  ResponseVerifyUserDTO,
-  ResponseSignUpUserDTO,
   RequestInitiatePasswordResetDTO,
   ResponseInitiatePasswordReset,
   ResponseConfirmPasswordResetDTO,
   ResponseChangeNewPasswordDTO,
   RequestchangePasswordDTO,
+  APIResponse,
 } from "@/src/utils/types/indext";
 import { CognitoService } from "../services/cognito.service";
 import { InternalServerError } from "../utils/error/customErrors";
+import sendResponse from "@/src/utils/sendResponse";
 // =========================================================================
 
 @Tags("Manual Registration")
@@ -41,9 +41,11 @@ export class ProductController extends Controller {
   @Post("/auth/signup")
   public async signup(
     @Body() requestBody: RequestSignUpDTO,
-  ): Promise<ResponseSignUpUserDTO> {
+  ): Promise<APIResponse> {
     try {
-      return await this.authService.authSignUp(requestBody);
+      await this.authService.authSignUp(requestBody);
+
+      return sendResponse({ message: `Sign up successful. Please check your phone or email for verification.` })
     } catch (error) {
       throw error;
     }
@@ -52,9 +54,11 @@ export class ProductController extends Controller {
   @Post("/auth/verify")
   public async verify(
     @Body() requestBody: RequestVerifyDTO,
-  ): Promise<ResponseVerifyUserDTO> {
+  ): Promise<APIResponse> {
     try {
-      return await this.authService.authVerify(requestBody);
+      await this.authService.authVerify(requestBody);
+
+      return sendResponse({ message: "You've verified successfully. Please login to continue." })
     } catch (error) {
       throw error;
     }
@@ -64,9 +68,11 @@ export class ProductController extends Controller {
   public async signIn(
     @Body() requestBody: RequestSignInDTO,
     @Request() request: ExRequest,
-  ): Promise<ResponseSignUpUserDTO> {
+  ): Promise<APIResponse> {
     try {
-      return await this.authService.authSignin(requestBody, request);
+      await this.authService.authSignin(requestBody, request);
+
+      return sendResponse({ message: "You've successfully login." })
     } catch (error) {
       throw error;
     }
@@ -84,7 +90,7 @@ export class ProductController extends Controller {
     }
   }
 
-  @Post("/auth/password-reset")
+  @Post("/auth/reset-password")
   public async initiatePasswordReset(
     @Body() requestBody: RequestInitiatePasswordResetDTO,
   ): Promise<ResponseInitiatePasswordReset> {
@@ -106,12 +112,12 @@ export class ProductController extends Controller {
     }
   }
 
-  @Post("/auth/refresh-token/{refresh}")
+  @Post("/auth/refresh-token")
   public async refreshToken(
-    @Path() refresh: string,
     @Request() request: ExRequest,
   ) {
     try {
+      const refresh = request.cookies.refreshToken;
       const username = request.cookies.username;
       const response = await this.cognitoService.refreshTokens(refresh, username);
       // Set cookies with a max age of 7 days for the access token
@@ -124,7 +130,7 @@ export class ProductController extends Controller {
         httpOnly: true,
         secure: true,
       });
-    
+
 
       return { message: response.message };
     } catch (error: any) {

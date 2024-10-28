@@ -1,4 +1,4 @@
-import { Request as ExRequest } from "express";
+import { Request as ExpressRequest } from "express";
 import {
   RequestConfirmPasswordResetDTO,
   ResponseConfirmPasswordResetDTO,
@@ -6,23 +6,16 @@ import {
   ResponseInitiatePasswordReset,
   RequestSignInDTO,
   RequestSignUpDTO,
-  ResponseSignUpUserDTO,
   RequestVerifyDTO,
-  ResponseVerifyUserDTO,
   ResponseChangeNewPasswordDTO,
   RequestchangePasswordDTO,
 } from "@/src/utils/types/indext";
 import axios from "axios";
-import configs from "../config";
-import { CognitoService } from "./cognito.service";
-import {
-  BadRequestError,
-  UnauthorizedError,
-  ValidationError,
-} from "../utils/error/customErrors";
-import setCookie from "../middlewares/cookies";
+import configs from "@/src/config";
+import setCookie from "@/src/middlewares/cookies";
+import { CognitoService } from "@/src/services/cognito.service";
+import { ValidationError, UnauthorizedError, ServiceUnavailableError } from "@/src/utils/error/customErrors";
 
-// ===================================================================
 declare global {
   namespace Express {
     interface Request {
@@ -32,52 +25,46 @@ declare global {
 }
 export class AuthService {
   private cognitoService: CognitoService;
+
   constructor() {
     this.cognitoService = new CognitoService();
   }
+
   public async authSignUp(
     requestBody: RequestSignUpDTO,
-  ): Promise<ResponseSignUpUserDTO> {
-    // let cognitoUserSub: string | undefined;
+  ): Promise<void> {
     try {
-      const { email, username, password } = requestBody;
-      const data = { email, password, username, role: "user" };
+      const { email, username, password, role } = requestBody;
+      const data = { email, password, username, role: role || "user" };
+
       const findUsernameExist = await axios.get(
-        `${configs.userServiceDomain}/api/v1/users/username/${username}`,
+        `${configs.userServiceUrl}/api/v1/users/username/${username}`,
       );
+
       if (findUsernameExist.data.usernameExist) {
         throw new ValidationError(" Username already exist");
       }
-      const response = await this.cognitoService.signUpUser(data);
-      // cognitoUserSub = response.userSub;
-      if (!response.userSub) {
-        throw new BadRequestError("Please signup again");
+
+      await this.cognitoService.signUpUser(data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.code === 'ECONNREFUSED') {
+          console.error("User service connection refused:", error.message);
+          throw new ServiceUnavailableError("User service is currently unavailable. Please try again later.");
+        }
       }
-      // const userPayload = {
-      //   cognitoSub: response.userSub, // Cognito userSub
-      //   firstName, // First name
-      //   lastName,
-      //   email: email, // Last name
-      //   userName: username, // Username (not Cognito username)
-      // };
-      // await axios.post(
-      //   `${configs.userServiceDomain}/api/v1/users`,
-      //   userPayload,
-      // );
-      return response;
-    } catch (error: any) {
       throw error
     }
   }
 
   public async authVerify(
     requestBody: RequestVerifyDTO,
-  ): Promise<ResponseVerifyUserDTO> {
+  ): Promise<void> {
     const { email, code } = requestBody;
     const data = { email, code };
+
     try {
-      const response = await this.cognitoService.verifyUser(data);
-      return response;
+      await this.cognitoService.verifyUser(data);
     } catch (error) {
       throw error;
     }
@@ -85,31 +72,18 @@ export class AuthService {
 
   public async authSignin(
     requestBody: RequestSignInDTO,
-    request: ExRequest,
-  ): Promise<{ message: string }> {
+    request: ExpressRequest,
+  ): Promise<void> {
     const { email, password } = requestBody;
     const data = { email, password };
     try {
       const response = await this.cognitoService.signInUser(data);
 
-      // Check if request.res exists before setting cookies
-      if (request.res) {
-        // Use the setCookie utility to set cookies only if the values are defined
-        if (response.authResult?.AccessToken) {
-          setCookie(request.res, "accessToken", response.authResult.AccessToken);
-        }
-        if (response.authResult?.RefreshToken) {
-          setCookie(request.res, "refreshToken", response.authResult.RefreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000 }); // 30 days
-        }
-        if (response.authResult?.IdToken) {
-          setCookie(request.res, "idToken", response.authResult.IdToken); // No maxAge, expires with session
-        }
-        if (response.username) {
-          setCookie(request.res, "username", response.username, { maxAge: 30 * 24 * 60 * 60 * 1000 }); // 30 days
-        }
-      }
+      setCookie(request.res!, "accessToken", response.authResult!.AccessToken!);
+      setCookie(request.res!, "refreshToken", response.authResult!.RefreshToken!, { maxAge: 30 * 24 * 60 * 60 * 1000 }); // 30 days
+      setCookie(request.res!, "idToken", response.authResult!.IdToken!); // No maxAge, expires with session
+      setCookie(request.res!, "username", response.sub!, { maxAge: 30 * 24 * 60 * 60 * 1000 }); // 30 days
 
-      return { message: response.message };
     } catch (error) {
       throw error;
     }
