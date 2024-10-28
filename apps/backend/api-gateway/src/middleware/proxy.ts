@@ -4,18 +4,17 @@ import ROUTE_PATHS from "@/src/routes-def";
 import express from "express";
 import createProxyOptions from "@/src/middleware/createProxyOption";
 import { ProxyConfig } from "@/src/utils/types/interface";
-// ==================================================================
 
 const proxyConfigs: ProxyConfig = {};
 
 Object.keys(ROUTE_PATHS).forEach((key) => {
   const routeConfig = ROUTE_PATHS[key];
   const proxyOption = createProxyOptions(routeConfig);
+
   proxyConfigs[routeConfig.path] = proxyOption;
   if (routeConfig.nestedRoutes) {
     routeConfig.nestedRoutes.forEach((nestedRoute) => {
       const nestedPath = `${routeConfig.path}${nestedRoute.path}`;
-      // const nestedPath = `${nestedRoute.path}`;
       proxyConfigs[nestedPath] = {
         ...proxyOption,
       };

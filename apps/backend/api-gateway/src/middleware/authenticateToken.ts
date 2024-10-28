@@ -3,7 +3,6 @@ import { CognitoJwtVerifier } from "aws-jwt-verify";
 import configs from "@/src/config";
 import { User } from "@/src/utils/types/interface";
 import { UnauthorizedError } from "../utils/error/customErrors";
-// =================================================================
 
 // Extend the Request interface to include user
 declare global {
@@ -15,9 +14,9 @@ declare global {
 }
 
 const verifier = CognitoJwtVerifier.create({
-  userPoolId: configs.userPoolId,
   tokenUse: "access",
-  clientId: configs.cognitoAppCientId,
+  userPoolId: configs.awsCognitoUserPoolId,
+  clientId: configs.awsCognitoClientId,
 });
 
 const authenticateToken = async (req: Request, _res: Response, next: NextFunction) => {

@@ -5,7 +5,7 @@ class S3Service {
   private client: S3Client;
   constructor() {
     this.client = new S3Client({
-      region: configs.awsRegion,
+      region: configs.awsS3Region,
       credentials: {
         accessKeyId: configs.awsAccessKeyId!,
         secretAccessKey: configs.awsSecretAccessKey!,

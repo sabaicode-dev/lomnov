@@ -1,9 +1,8 @@
 import { Socket } from "net";
 import { IncomingMessage, ServerResponse, ClientRequest } from "http";
-import {  Options } from "http-proxy-middleware";
+import { Options } from "http-proxy-middleware";
 import { loggingMiddleware } from "@/src/utils/logger";
 import { RouteConfig } from "@/src/utils/types/interface";
-// ==================================================================
 
 const createProxyOptions = (
   routeConfig: RouteConfig,
@@ -18,11 +17,10 @@ const createProxyOptions = (
   },
   on: {
     proxyReq: (
-      proxyReq: ClientRequest,
+      _proxyReq: ClientRequest,
       req: IncomingMessage,
       res: ServerResponse,
     ) => {
-      proxyReq.setHeader("x-api-gateway-header", "http://localhost:3000");
       const nestedPath = `${routeConfig.target}${req.url}`;
       loggingMiddleware(req, res, nestedPath, "Proxy Request");
     },
@@ -46,7 +44,6 @@ const createProxyOptions = (
       } else {
         res.destroy();
       }
-
     },
   },
 });

@@ -33,123 +33,100 @@ import {
   RequestSignInDTO,
   ResponseSignInUserDTO,
   RequestSignUpUserDTO,
-  ResponseSignUpUserDTO,
   RequestVerifyDTO,
   ResponseVerifyUserDTO,
 } from "@/src/utils/types/indext";
 import axios from "axios";
 import setCookie from "../middlewares/cookies";
-// =====================================================
+
 
 export class CognitoService {
   private cognitoClient: CognitoIdentityProviderClient;
   constructor() {
     this.cognitoClient = new CognitoIdentityProviderClient({
-      region: configs.awsRegion,
+      region: configs.awsCognitoRegion,
+      credentials: {
+        accessKeyId: configs.awsAccessKeyId,
+        secretAccessKey: configs.awsSecretAccessKey,
+      }
     });
   }
 
   private generateSecretHash(username: string | undefined): string {
     return crypto
-      .createHmac("sha256", configs.cognitoAppCientSecret)
-      .update(username + configs.cognitoAppCientId)
+      .createHmac("sha256", configs.awsCognitoClientSecret)
+      .update(username + configs.awsCognitoClientId)
       .digest("base64");
   }
 
   public async signUpUser(
     request: RequestSignUpUserDTO,
-  ): Promise<ResponseSignUpUserDTO> {
+  ): Promise<void> {
     const secretHash = this.generateSecretHash(request.email);
     const userAttributes = [
       {
         Name: "name",
         Value: request.username,
       },
-    ];
-    if (request.email) {
-      userAttributes.push({
+      {
         Name: "email",
         Value: request.email,
-      });
-    }
-
-    if (request.role) {
-      userAttributes.push({
+      },
+      {
         Name: "custom:roles",
         Value: request.role,
-      });
-    }
+      }
+    ];
 
     try {
-      // Validate that configurations and parameters are correct
-      if (!configs.cognitoAppCientId) {
-        throw new ValidationError("ClientId is missing in configuration.");
-      }
-      if (userAttributes.length === 0) {
-        throw new ValidationError("User attributes must not be empty.");
-      }
       const command = new SignUpCommand({
-        ClientId: configs.cognitoAppCientId,
+        ClientId: configs.awsCognitoClientId,
         Username: request.email,
         Password: request.password,
         SecretHash: secretHash,
         UserAttributes: userAttributes,
       });
+
       if (!command) {
         throw new InternalServerError("Failed to create the sign-up command.");
       }
 
-      const response = await this.cognitoClient.send(command);
+      await this.cognitoClient.send(command);
 
-      // Validate response
-      if (!response || !response.UserSub) {
-        throw new InternalServerError("UserSub is missing from the response.");
-      }
-      return {
-        message:
-          "Sign up successful. Please check your phone or email for verification.",
-        userSub: response.UserSub,
-      };
-    } catch (error: any) {
-      if (
-        error instanceof InternalServerError ||
-        error instanceof ValidationError
-      ) {
-        // Re-throw known (inspectable) errors
-        throw error;
-      } else {
-        // Handle uninspectable (unexpected) errors and include original error message and status
-        throw new InternalServerError(
-          `An unexpected error occurred: ${error.message}`,
-        );
-      }
+    } catch (error) {
+      throw error;
     }
   }
 
   public async verifyUser(
     requestBody: RequestVerifyDTO,
-  ): Promise<ResponseVerifyUserDTO> {
+  ): Promise<void> {
     const secretHash = this.generateSecretHash(requestBody.email);
     const confirmCommand = new ConfirmSignUpCommand({
-      ClientId: configs.cognitoAppCientId,
+      ClientId: configs.awsCognitoClientId,
       Username: requestBody.email,
       ConfirmationCode: requestBody.code,
       SecretHash: secretHash,
     });
 
     try {
+      // Send the verification command to cognito
       await this.cognitoClient.send(confirmCommand);
+      console.log('verification::: ', configs.awsCognitoUserPoolId, requestBody.email)
+
+      // Get the user attribute from cognito
       const getUserCommand = new AdminGetUserCommand({
-        UserPoolId: configs.userPoolId,
+        UserPoolId: configs.awsCognitoUserPoolId,
         Username: requestBody.email,
       });
-
       const userResponse = await this.cognitoClient.send(getUserCommand);
       if (!userResponse) {
         throw new NotFoundError(
           `User with username ${requestBody.email} not found.`,
         );
       }
+      console.log('user response::: ', userResponse)
+
       const userAttributes = userResponse.UserAttributes || [];
 
       const roleAttribute = userAttributes.find(
@@ -158,14 +135,14 @@ export class CognitoService {
       if (!roleAttribute || !roleAttribute.Value) {
         // If the "custom:roles" attribute is not found or has no value, throw an error
         throw new BadRequestError(
-          `Role attribute "custom:roles" is missing or undefined for user ${requestBody.email}.`,
+          `Role attribute "custom:roles" is missing for user ${requestBody.email}.`,
         );
       }
       const role = roleAttribute ? roleAttribute.Value : "user";
 
       const groupName = role === "admin" ? "admin" : "user";
       const addToGroupCommand = new AdminAddUserToGroupCommand({
-        UserPoolId: configs.userPoolId,
+        UserPoolId: configs.awsCognitoUserPoolId,
         Username: requestBody.email,
         GroupName: groupName,
       });
@@ -183,36 +160,24 @@ export class CognitoService {
         userName: userResponse.UserAttributes?.find(attr => attr.Name === 'name')?.Value || '',
       };
 
+      console.log('user payload::: ', userPayload)
+
       // Insert user information into the database
-      await axios.post(`${configs.userServiceDomain}/api/v1/users`, userPayload);
-      return { message: "User verified and added to group successfully." };
+      await axios.post(`${configs.userServiceUrl}/api/v1/users`, userPayload);
+
     } catch (error: any) {
-      if (
-        error instanceof InternalServerError ||
-        error instanceof NotFoundError ||
-        error instanceof BadRequestError
-      ) {
-        // Re-throw known (inspectable) errors
-        throw error;
-      } else {
-        // Handle uninspectable (unexpected) errors and include original error message and status
-        throw new InternalServerError(
-          `An unexpected error occurred: ${error.message}`,
-        );
-      }
+      console.error('error:: ', error)
+      throw error;
     }
   }
 
   public async signInUser(
     requestBody: RequestSignInDTO,
   ): Promise<ResponseSignInUserDTO> {
-    // Input validation
-    if (!requestBody.email || !requestBody.password) {
-      throw new ValidationError("Username, and password are required.");
-    }
     const secretHash = this.generateSecretHash(requestBody.email);
+
     const command = new InitiateAuthCommand({
-      ClientId: configs.cognitoAppCientId,
+      ClientId: configs.awsCognitoClientId,
       AuthFlow: "USER_PASSWORD_AUTH",
       AuthParameters: {
         USERNAME: requestBody.email,
@@ -223,28 +188,16 @@ export class CognitoService {
 
     try {
       const response = await this.cognitoClient.send(command);
-      // Check if the response and AuthenticationResult are valid
-      if (!response || !response.AuthenticationResult) {
-        throw new InternalServerError(
-          "Authentication result is missing from the response.",
-        );
-      }
       const authResult = response.AuthenticationResult;
-      const decodedToken = jwtDecode<JwtPayload>(authResult.AccessToken!);
-      const extractedUsername = decodedToken.sub;
+      const decodedToken = jwtDecode<JwtPayload>(authResult!.AccessToken!);
+      const cognitoSub = decodedToken.sub;
+
       return {
-        message: "Sign-in successful!",
         authResult,
-        username: extractedUsername,
+        sub: cognitoSub,
       };
-    } catch (error: any) {
-      if (error instanceof InternalServerError) {
-        throw error;
-      } else {
-        throw new InternalServerError(
-          `An unexpected error occurred: ${error.message}`,
-        );
-      }
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -274,7 +227,7 @@ export class CognitoService {
     if (!requestBody.email) throw new ValidationError("Username is required.");
     const secretHash = this.generateSecretHash(requestBody.email);
     const command = new ForgotPasswordCommand({
-      ClientId: configs.cognitoAppCientId,
+      ClientId: configs.awsCognitoClientId,
       Username: requestBody.email,
       SecretHash: secretHash,
     });
@@ -308,7 +261,7 @@ export class CognitoService {
     }
     const secretHash = this.generateSecretHash(requestBody.email);
     const command = new ConfirmForgotPasswordCommand({
-      ClientId: configs.cognitoAppCientId,
+      ClientId: configs.awsCognitoClientId,
       Username: requestBody.email,
       Password: requestBody.newPassword,
       ConfirmationCode: requestBody.confirmationCode,
@@ -344,7 +297,7 @@ export class CognitoService {
     try {
       const secretHash = this.generateSecretHash(username);
       const command = new InitiateAuthCommand({
-        ClientId: configs.cognitoAppCientId,
+        ClientId: configs.awsCognitoClientId,
         AuthFlow: "REFRESH_TOKEN_AUTH",
         AuthParameters: {
           REFRESH_TOKEN: refreshToken,
@@ -380,7 +333,7 @@ export class CognitoService {
 
   public async deleteUser(cognitoUserSub: string): Promise<void> {
     const params = {
-      UserPoolId: configs.userPoolId, // The user pool ID for the user pool where you want to delete the user
+      UserPoolId: configs.awsCognitoUserPoolId, // The user pool ID for the user pool where you want to delete the user
       Username: cognitoUserSub, // The username (in this case, the Cognito user sub)
     };
 
@@ -395,16 +348,16 @@ export class CognitoService {
   public async getTokens(code: string): Promise<any> {
     try {
       const authorizationHeader = `Basic ${Buffer.from(
-        `${configs.cognitoAppCientId}:${configs.cognitoAppCientSecret}`,
+        `${configs.awsCognitoClientId}:${configs.awsCognitoClientSecret}`,
       ).toString("base64")}`;
       const params = new URLSearchParams({
         grant_type: "authorization_code",
         code: code,
-        client_id: configs.cognitoAppCientId,
-        redirect_uri: configs.redirect_uri,
+        client_id: configs.awsCognitoClientId,
+        redirect_uri: configs.awsRedirectUri,
       });
       const response = await axios.post(
-        `${configs.cognitoAppDomain}/oauth2/token`,
+        `${configs.awsCognitoDomain}/oauth2/token`,
         params,
         {
           headers: {
@@ -422,9 +375,9 @@ export class CognitoService {
   public async verifyIdToken(idToken: string): Promise<any> {
     try {
       const verifier = CognitoJwtVerifier.create({
-        userPoolId: configs.userPoolId,
+        userPoolId: configs.awsCognitoUserPoolId,
         tokenUse: "id",
-        clientId: configs.cognitoAppCientId,
+        clientId: configs.awsCognitoClientId,
       });
       return await verifier.verify(idToken);
     } catch (error) {
@@ -435,7 +388,7 @@ export class CognitoService {
   public async getUserAttributes(username: string): Promise<any> {
     try {
       const getUserCommand = new AdminGetUserCommand({
-        UserPoolId: configs.userPoolId,
+        UserPoolId: configs.awsCognitoUserPoolId,
         Username: username,
       });
       return await this.cognitoClient.send(getUserCommand);
@@ -447,7 +400,7 @@ export class CognitoService {
   public async updateUserRole(username: string, role: string): Promise<void> {
     try {
       const updateCommand = new AdminUpdateUserAttributesCommand({
-        UserPoolId: configs.userPoolId,
+        UserPoolId: configs.awsCognitoUserPoolId,
         Username: username,
         UserAttributes: [
           {
@@ -468,7 +421,7 @@ export class CognitoService {
   ): Promise<void> {
     try {
       const addToGroupCommand = new AdminAddUserToGroupCommand({
-        UserPoolId: configs.userPoolId,
+        UserPoolId: configs.awsCognitoUserPoolId,
         Username: username,
         GroupName: groupName,
       });
@@ -488,9 +441,6 @@ export class CognitoService {
       setCookie(res, "accessToken", data.access_token)
       setCookie(res, "idToken", data.id_token)
       setCookie(res, "refreshToken", data.refresh_token)
-      // res.cookie("accessToken", data.access_token);
-      // res.cookie("idToken", data.id_token);
-      // res.cookie("refreshToken", data.refresh_token);
 
       // Verify and decode the ID token
       const payload = await this.verifyIdToken(data.id_token);
@@ -531,7 +481,7 @@ export class CognitoService {
       };
 
       await axios.post(
-        `${configs.userServiceDomain}/api/v1/users`,
+        `${configs.userServiceUrl}/api/v1/users`,
         userPayload
       );
 

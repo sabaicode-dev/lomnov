@@ -1,13 +1,12 @@
-// types/api/responses.ts
+export interface APIResponse<T = undefined> {
+  message: string;
+  data?: T
+}
 
 export interface ResponseSignUpUserDTO {
-  message: string;
-  userSub?: string;
+  sub: string;
 }
 
-export interface ResponseVerifyUserDTO {
-  message: string;
-}
 export interface AuthenticationResult {
   AccessToken?: string;
   ExpiresIn?: number;
@@ -15,10 +14,10 @@ export interface AuthenticationResult {
   RefreshToken?: string;
   TokenType?: string;
 }
+
 export interface ResponseSignInUserDTO {
-  message: string;
   authResult?: AuthenticationResult;
-  username: string | undefined;
+  sub: string | undefined;
 }
 
 export interface ResponseVerifyUserDTO {

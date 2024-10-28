@@ -106,8 +106,6 @@ const ROUTE_PATHS: RoutesConfig = {
         path: "/me",
         methods: { GET: { authRequired: true, roles: ["user"] } },
       },
-
-
     ],
   },
 };

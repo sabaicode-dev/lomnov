@@ -236,5 +236,4 @@ export class PropertyController extends Controller {
       throw new Error("Failed to delete property");
     }
   }
-
 }

@@ -1,15 +1,5 @@
 import { StatusCodes } from "@/src/utils/constands/satusCodes";
 
-// export class AppError extends Error {
-//   public status: number;
-//   constructor(message: string, status: number) {
-//     super(message);
-//     this.status = status;
-//     // Object.setPrototypeOf(this, new.target.prototype); // restore prototype chain
-//     // Error.captureStackTrace(this);
-//   }
-// }
-
 export class AppError extends Error {
   public status : number;
   constructor(message: string, status: number){

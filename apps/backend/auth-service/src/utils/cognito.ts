@@ -9,17 +9,16 @@ import {
 import * as crypto from "crypto";
 
 
-
 import {
   AdminGetUserCommand,
   AdminAddUserToGroupCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import configs from "../config";
-const cognitoClient = new CognitoIdentityProviderClient({ region:configs.awsRegion });
+const cognitoClient = new CognitoIdentityProviderClient({ region: configs.awsCognitoRegion });
 const generateSecretHash = (username: string) => {
   return crypto
-    .createHmac("sha256", configs.cognitoAppCientSecret)
-    .update(username + configs.cognitoAppCientId)
+    .createHmac("sha256", configs.awsCognitoClientSecret)
+    .update(username + configs.awsCognitoClientId)
     .digest("base64");
 };
 
@@ -71,7 +70,7 @@ export const signUpUser = async (
   }
 
   const command = new SignUpCommand({
-    ClientId: configs.cognitoAppCientId,
+    ClientId: configs.awsCognitoClientId,
     Username: username,
     Password: password,
     SecretHash: secretHash,
@@ -95,7 +94,7 @@ export const signUpUser = async (
 export const verifyUser = async (username: string, code: string) => {
   const secretHash = generateSecretHash(username);
   const confirmCommand = new ConfirmSignUpCommand({
-    ClientId: configs.cognitoAppCientId,
+    ClientId: configs.awsCognitoClientId,
     Username: username,
     ConfirmationCode: code,
     SecretHash: secretHash,
@@ -107,7 +106,7 @@ export const verifyUser = async (username: string, code: string) => {
 
     // Get user attributes
     const getUserCommand = new AdminGetUserCommand({
-      UserPoolId: configs.userPoolId, // Ensure you have this defined
+      UserPoolId: configs.awsCognitoUserPoolId, // Ensure you have this defined
       Username: username,
     });
 
@@ -127,7 +126,7 @@ export const verifyUser = async (username: string, code: string) => {
     const groupName = role === "admin" ? "admin" : "user"; // Replace with your actual group names
     // Add user to the appropriate group
     const addToGroupCommand = new AdminAddUserToGroupCommand({
-      UserPoolId: configs.userPoolId,
+      UserPoolId: configs.awsCognitoUserPoolId,
       Username: username,
       GroupName: groupName,
     });
@@ -145,7 +144,7 @@ export const signInUser = async (username: string, password: string) => {
   const secretHash = generateSecretHash(username);
 
   const command = new InitiateAuthCommand({
-    ClientId: configs.cognitoAppCientId,
+    ClientId: configs.awsCognitoClientId,
     AuthFlow: "USER_PASSWORD_AUTH",
     AuthParameters: {
       USERNAME: username,
@@ -179,7 +178,7 @@ export const signInUser = async (username: string, password: string) => {
 export const initiatePasswordReset = async (username: string) => {
   const secretHash = generateSecretHash(username);
   const command = new ForgotPasswordCommand({
-    ClientId: configs.cognitoAppCientId,
+    ClientId: configs.awsCognitoClientId,
     Username: username,
     SecretHash: secretHash,
   });
@@ -204,7 +203,7 @@ export const confirmPasswordReset = async (
   const secretHash = generateSecretHash(username);
 
   const command = new ConfirmForgotPasswordCommand({
-    ClientId: configs.cognitoAppCientId,
+    ClientId: configs.awsCognitoClientId,
     Username: username,
     Password: newPassword,
     ConfirmationCode: confirmationCode,

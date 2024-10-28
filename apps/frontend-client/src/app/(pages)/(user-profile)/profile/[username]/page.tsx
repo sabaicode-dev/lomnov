@@ -4,17 +4,18 @@ import React from "react";
 import Layout from "../layout"; // Import the layout
 import ListedProperties from "@/components/organisms/listed-properties/ListedProperties";
 import UserProfileHeader from "@/components/molecules/user-profile-header/UserProfileHeader";
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 
 async function fetchUserDetails(username: string) {
   try {
-    const res = await fetch(
-      `https://lomnov.onrender.com/api/v1/users?username=${username}`
-    );
-    if (!res.ok) {
+    const res = await axiosInstance.get(`${API_ENDPOINTS.USER}?username=${username}`)
+    console.log('fetchUserProfile::: ', fetchUserDetails)
+    if (res.status !== 200) {
       throw new Error("Failed to fetch user details");
     }
-    const user = await res.json();
-    return user[0]; // Adjust this based on your API response
+    ;
+    return res.data; // Adjust this based on your API response
   } catch (error) {
     console.error(error);
     return null; // Return null or a default user object
@@ -24,16 +25,14 @@ async function fetchUserDetails(username: string) {
 
 export async function generateStaticParams() {
   // You should return a list of usernames or whatever parameters you need
-  const res = await fetch(`https://lomnov.onrender.com/api/v1/users`); // Adjust endpoint as needed
-  const users = await res.json();
+  const res = await axiosInstance.get(`${API_ENDPOINTS.USER}`); // Adjust endpoint as needed
 
-  return users.map((user: { username: string }) => ({
-    username: user.username,
-  }));
+  return res.data.users[0].userName;
 }
 
-const ProfilePage = async ({ params }: { params: { username: string } }) => {
-  const user = await fetchUserDetails(params.username);
+const ProfilePage = async ({ username }: { username: string }) => {
+  const user = await fetchUserDetails(username);
+
 
   if (!user) {
     return <div>User not found</div>;
@@ -41,9 +40,9 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
 
   return (
     <Layout>
-      <div className="">
+      <div>
         <UserProfileHeader user={user} />
-        <ListedProperties user={params.username} />
+        <ListedProperties user={username} />
       </div>
     </Layout>
   );
