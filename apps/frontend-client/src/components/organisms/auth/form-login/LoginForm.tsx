@@ -191,7 +191,7 @@ const LoginForm: React.FC = () => {
         window.location.href = "/";
       }
     } catch (error: any) {
-      setErrorMessage(error.response?.data?.message || "An unexpected error occurred. Please try again.");
+      setErrorMessage(error.response?.data?.message || "Something went wrong. Please try again.");
       console.error("Login failed:", error.response?.data || error.message);
     }
   };

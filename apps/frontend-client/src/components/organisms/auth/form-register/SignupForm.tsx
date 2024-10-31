@@ -24,7 +24,7 @@ const SignupForm: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
-  
+
   const {
     register,
     handleSubmit,
@@ -64,7 +64,7 @@ const SignupForm: React.FC = () => {
         </p>
       </div>
 
-      <div className="flex items-center mb-8 mx-[45px]">
+      <div className="flex items-center mb-4 mx-[45px]">
         <div className="flex-grow h-px bg-charcoal"></div>
         <span className="px-2 text-charcoal font-helvetica text-helvetica-text">
           Welcome
@@ -73,19 +73,12 @@ const SignupForm: React.FC = () => {
       </div>
 
       {errorMessage && (
-        <p className="text-red-500 text-center">{errorMessage}</p>
+        <p className="text-red-500 text-center mb-4">{errorMessage}</p>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <fieldset>
-          <InputField
-            label="Email"
-            type="email"
-            register={register("email")}
-            error={errors.email?.message}
-            isFocused={emailFocused}
-            setIsFocused={setEmailFocused}
-          />
+
           <InputField
             label="Username"
             type="text"
@@ -93,6 +86,13 @@ const SignupForm: React.FC = () => {
             error={errors.username?.message}
             isFocused={userNameFocused}
             setIsFocused={setUserNameFocused}
+          /><InputField
+            label="Email"
+            type="email"
+            register={register("email")}
+            error={errors.email?.message}
+            isFocused={emailFocused}
+            setIsFocused={setEmailFocused}
           />
           <InputField
             label="Password"
