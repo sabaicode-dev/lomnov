@@ -104,6 +104,7 @@ export class UserService {
       const updateData: Partial<User> = { ...updateFields };
 
       if (profileFiles && profileFiles.length > 0) {
+        console.log("Profile files received:", profileFiles);
         const profileUrls = await Promise.all(
           profileFiles.map((file: any) => uploadFileToS3Service.uploadFile(file)),
         );
@@ -111,6 +112,7 @@ export class UserService {
       }
 
       if (backgroundFiles && backgroundFiles.length > 0) {
+        console.log("Background files received:", backgroundFiles);
         const backgroundUrls = await Promise.all(
           backgroundFiles.map((file: any) => uploadFileToS3Service.uploadFile(file)),
         );
@@ -125,7 +127,8 @@ export class UserService {
 
       return updatedUser;
     } catch (error) {
-
+      console.error("Error updating user:", error);
+      throw error;
     }
   }
 
