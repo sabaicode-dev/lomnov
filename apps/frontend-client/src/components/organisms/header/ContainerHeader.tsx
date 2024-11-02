@@ -93,7 +93,7 @@ function ContainerHeader({
                 onClick={toggleDropdown}
               >
                 <Image
-                  src={user?.profile[0] || "/default-profile.png"}
+                  src={user?.profile[0] || "/default-profile.jpeg"}
                   alt="User Profile"
                   width={800}
                   height={600}
@@ -107,7 +107,7 @@ function ContainerHeader({
                   <div className="w-full flex flex-row items-center justify-start gap-2">
                     <div className="overflow-hidden w-[50px] h-[50px] rounded-full border-[1px] border-blue-400">
                       <Image
-                        src={user?.profile[0] || "/default-profile.png"}
+                        src={user?.profile[0] || "/default-profile.jpeg"}
                         alt="User Profile"
                         width={800}
                         height={600}

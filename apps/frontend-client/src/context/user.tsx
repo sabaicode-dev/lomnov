@@ -71,16 +71,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         setLoading(true);
         const res = await axiosInstance.get(API_ENDPOINTS.USER_PROFILE);
-        setUser(res.data)
+        
+        // Extract the first user from the response
+        if (res.data && res.data.users && res.data.users.length > 0) {
+          setUser(res.data.users[0]); // Access the first user in the users array
+        } else {
+          setUser(null); // Handle case where no users are returned
+        }
         setIsAuthenticated(true);
       } catch (error) {
-        setIsAuthenticated(false)
+        setIsAuthenticated(false);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-
-    checkAuthStatus();
+    };
+    
   }, [])
 
   const login = async ({ email, phone_number, password }: LoginRequest) => {
@@ -162,16 +167,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     setLoading(true);
     try {
-      // send logout to api
+      await axiosInstance.post(API_ENDPOINTS.LOGOUT); // Call the logout endpoint
       setIsAuthenticated(false);
       setUser(null);
-      router.push('/login')
+      router.push('/login');
     } catch (error) {
-      console.error('Logout Failed:::', error);
+      console.error("Logout failed:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+  
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, loading, user, login, logout, signup, verify, siginWithGoogle }
