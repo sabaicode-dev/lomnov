@@ -4,6 +4,7 @@ import banner from "@/images/banner.png";
 import SelectProperties from "@/components/molecules/select-properties/SelectProperties";
 import SelectPrice from "@/components/molecules/select-price/SelectPrice";
 import SelectLocations from "@/components/molecules/select-locations/SelectLocations";
+
 // ===================================================================
 function page() {
   return (

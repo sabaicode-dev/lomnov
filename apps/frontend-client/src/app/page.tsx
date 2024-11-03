@@ -39,7 +39,7 @@ export default function Home() {
                 </p>
               </div>
               <Link
-                href={""}
+                href={"/buy"}
                 className=" px-10 py-2  border-[1px] text-white text-[26px] font-[500]"
               >
                 View ALL
