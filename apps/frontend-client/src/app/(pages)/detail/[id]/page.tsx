@@ -8,7 +8,7 @@ import UserListed from "@/components/organisms/user-listed-property/UserListed";
 // Fetch property data
 async function fetchProperty(id: string): Promise<RealEstateItem> {
   const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/properties?id=${id}`,
+    `https://lomnov.onrender.com/api/v1/properties?id=${id}`
   );
   if (!res.ok) {
     throw new Error("Failed to fetch property data");
@@ -132,7 +132,7 @@ const page = async ({ params }: { params: { id: string } }) => {
             </div> */}
             <UserListed property={property} />
           </div>
-          <Map property={property.mapurl}  />
+          <Map property={property.mapurl} />
         </div>
 
         {/* Recommend Properties */}
