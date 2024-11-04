@@ -117,7 +117,7 @@ const InputField: React.FC<InputFieldProps> = ({
         aria-label={label}
       />
       <label
-        className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-in-out 
+        className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-in-out
           ${isFocused || error ? "-translate-y-[47px] font-helvetica text-helvetica-h4 font-bold text-olive-green" : "font-helvetica text-helvetica-h4 text-charcoal"} ${error ? "font-helvetica text-helvetica-h5 text-red-500" : "font-helvetica text-helvetica-h5 text-charcoal"}`}
       >
         {label}
