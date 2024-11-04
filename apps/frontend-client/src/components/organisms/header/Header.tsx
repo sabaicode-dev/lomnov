@@ -22,6 +22,18 @@ export const menus = [
     slug: "/rent",
     lang: "eng",
   },
+  {
+    id:4,
+    name:'about us',
+    slug:"/about",
+    lang:"eng",
+  },
+  {
+    id: 5,
+    name : "contect",
+    slug: "/contect",
+    lang: "eng"
+  }
 ];
 
 const Header: React.FC = () => {

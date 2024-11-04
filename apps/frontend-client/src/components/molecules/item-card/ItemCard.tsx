@@ -77,7 +77,7 @@ const ItemCard = ({ item, flexRow }: ItemCardProps) => {
 
         {/* Price */}
         <p className="absolute bottom-[10px] left-[17px] sm:left-[10px] text-white font-helvetica font-[600] text-[16px] ">
-          ${item.price}10,00
+          ${item.price}100,00
         </p>
       </div>
       <div className={flexRow ? " flex flex-col text-[14px] gap-1 w-[50%]"

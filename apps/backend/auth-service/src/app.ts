@@ -8,12 +8,12 @@ import session from "express-session";
 import { loggingMiddleware } from "./utils/request-response-logger/logger";
 import { errorHandler } from "./utils/error/errorHanler";
 const { randomBytes } = require("crypto");
-
+import corsOptions from "./middlewares/cors";
 // LOAD SWAAGER DOCUMENTATION JSON FILE
 const swaggerDocument = JSON.parse(
   fs.readFileSync(path.join(__dirname, "docs/swagger.json"), "utf8"),
 );
-
+import cors from "cors"
 
 // ========================
 // Initialize App Express
@@ -39,7 +39,7 @@ app.use(
 // ========================
 app.use(express.json()); // Help to get the json from request body
 app.use(loggingMiddleware);
-
+app.use(cors(corsOptions))
 
 // ========================
 // Global API V1
