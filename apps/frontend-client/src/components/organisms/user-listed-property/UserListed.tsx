@@ -49,6 +49,7 @@ const UserListed = ({ property }: { property: RealEstateItem }) => {
             </Link>
           </div>
         </div>
+        
         <div className="flex-grow h-px bg-neutral mt-[15px]"></div>
         <div className="mt-0 lg:mt-[15px]  p-[10px] lg:p-0 flex w-full flex-wrap justify-between">
           <button className="flex items-center  font-helvetica text-helvetica-paragraph text-center text-charcoal">

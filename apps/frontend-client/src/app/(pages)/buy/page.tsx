@@ -4,7 +4,11 @@ import banner from "@/images/banner.png";
 import SelectProperties from "@/components/molecules/select-properties/SelectProperties";
 import SelectPrice from "@/components/molecules/select-price/SelectPrice";
 import SelectLocations from "@/components/molecules/select-locations/SelectLocations";
+<<<<<<< HEAD
 import Search from "@/components/molecules/Search/Search";
+=======
+
+>>>>>>> f110eca388ed90df091e7da2c42436345d543d58
 // ===================================================================
 function page() {
   return (
