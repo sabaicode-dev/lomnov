@@ -57,10 +57,11 @@ function HeroSection() {
   return (
     <div className="w-full h-screen relative">
       <Image
+      unoptimized
         src={"https://wallpapercave.com/wp/wp4110653.jpg"}
         alt=""
-        width="1000"
-        height="1000"
+        width="4735"
+        height="2510"
         className="w-full h-full object-cover"
         priority
       />
@@ -87,7 +88,7 @@ function HeroSection() {
                 Buy
               </button>
             </div>
-            <div className="w-full lg:w-fit bg-white rounded-r-[18px] rounded-bl-[20px] lg:flex grid grid-cols-2 lg:grid-cols-4 items-center gap-5 p-5">
+            <div className="w-full lg:w-fit bg-white rounded-r-[18px] rounded-bl-[20px] lg:flex grid grid-cols-2 lg:grid-cols-4 items-center gap-5 p-5 ">
               <SelectProperties onChange={handlePropertyChange} />
               <SelectLocations onChange={handleLocationChange} />
               <SelectPrice onChange={handlePriceChange} />

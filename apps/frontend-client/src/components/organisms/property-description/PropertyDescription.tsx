@@ -45,7 +45,7 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
     >
       <div className="w-full">
         <div className="py-[5px] text-grayish-white max-w-[340px] rounded-8xs bg-neutral flex items-center">
-          <Location props="text-olive-green w-[20px] h-[20px]" />
+          <Location className="text-olive-green w-[20px] h-[20px]" />
           <p className="pl-[5px] font-helvetica text-helvetica-paragraph">
             {property.address}
           </p>
