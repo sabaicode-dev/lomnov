@@ -12,12 +12,14 @@ async function fetchUserDetails(username: string) {
     throw new Error("Failed to fetch user details");
   }
   const user = await res.json();
-  return user[0]; // Adjust this based on your API response
+  console.log("Fetched user data:", user); // Log the response
+  return user[0]; // Ensure this is the correct structure
 }
+
 
 const ProfilePage = async ({ params }: { params: { username: string } }) => {
   const user = await fetchUserDetails(params.username);
-
+  console.log("user :: ", user); // Check what the user object looks like
   if (!user) {
     return <div>User not found</div>;
   }
@@ -30,6 +32,7 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
     </Layout>
   );
 };
+
 
 // This function gets called at build time
 export async function generateStaticParams() {
