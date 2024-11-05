@@ -1,12 +1,12 @@
-import { Controller, Get, Queries, Query, Request, Route } from "tsoa";
+import { Controller, Get, Queries, Query, Request, Route, Tags } from "tsoa";
 import SocialAuthService from "../services/social-auth.service";
 import sendResponse from "../utils/sendResponse";
 import {Response } from "express";
 import setCookie from "../middlewares/cookies";
 import { GoogleCallBackRequest } from "./types/social-auth.type";
 import configs from "../config";
-
-@Route("/v1/auth")
+@Tags("Login With Google")
+@Route("api/v1/auth")
 export class SocialAuthController extends Controller{
     private socialAuthService: SocialAuthService;
     constructor(){
@@ -14,7 +14,7 @@ export class SocialAuthController extends Controller{
         this.socialAuthService = new SocialAuthService();
     }
     @Get("/google-signin")
-    public loginWithGoogle (@Query() state: string){
+    public loginWithGoogle (@Query() state?: string){
         const cognitOAuthURL = this.socialAuthService.loginWithGoogle(state);
         return sendResponse({message: 'Login With Google Successfully!',data: cognitOAuthURL})
     }

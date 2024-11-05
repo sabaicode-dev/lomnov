@@ -186,7 +186,7 @@
 		"contact": {}
 	},
 	"paths": {
-		"/api/v1/auth/google-sign-in": {
+		"/api/v1/auth/backup/google-sign-in": {
 			"get": {
 				"operationId": "GoogleSignIn",
 				"responses": {
@@ -204,7 +204,7 @@
 				"parameters": []
 			}
 		},
-		"/api/v1/auth/facebook-sign-in": {
+		"/api/v1/auth/backup/facebook-sign-in": {
 			"get": {
 				"operationId": "FacebookSignIn",
 				"responses": {
@@ -222,7 +222,7 @@
 				"parameters": []
 			}
 		},
-		"/api/v1/auth/callback": {
+		"/api/v1/auth/backup/callback": {
 			"get": {
 				"operationId": "Callback",
 				"responses": {
@@ -262,7 +262,7 @@
 				"parameters": []
 			}
 		},
-		"/v1/auth/google-signin": {
+		"/api/v1/auth/google-signin": {
 			"get": {
 				"operationId": "LoginWithGoogle",
 				"responses": {
@@ -289,12 +289,15 @@
 						}
 					}
 				},
+				"tags": [
+					"Login With Google"
+				],
 				"security": [],
 				"parameters": [
 					{
 						"in": "query",
 						"name": "state",
-						"required": true,
+						"required": false,
 						"schema": {
 							"type": "string"
 						}
@@ -302,7 +305,7 @@
 				]
 			}
 		},
-		"/v1/auth/callback": {
+		"/api/v1/auth/callback": {
 			"get": {
 				"operationId": "OauthCallBack",
 				"responses": {
@@ -310,6 +313,9 @@
 						"description": "No content"
 					}
 				},
+				"tags": [
+					"Login With Google"
+				],
 				"security": [],
 				"parameters": [
 					{
