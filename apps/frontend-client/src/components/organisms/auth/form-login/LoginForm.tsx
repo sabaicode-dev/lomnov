@@ -145,7 +145,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -169,7 +169,27 @@ const LoginForm: React.FC = () => {
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [emailErrorMessage, setEmailErrorMessage] = useState<string | null>(
+    null,
+  )
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState<string | null>(
+    null,
+  )
+
+
+
+  const inputRefs = useRef<( HTMLImageElement | null )[]>([])
+
+  useEffect(()=>{
+    if (inputRefs.current[0]) {
+      inputRefs.current[0].focus();
+    }
+  },[]);
+
+
+
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
+
 
   const {
     register,
@@ -190,8 +210,35 @@ const LoginForm: React.FC = () => {
         window.location.href = "/";
       }
     } catch (error: any) {
-      setErrorMessage(error.response?.data?.message || "Something went wrong. Please try again.");
-      console.error("Login failed:", error.response?.data || error.message);
+      if (error.response){
+        setErrorMessage(error.response?.data?.message || "Something went wrong. Please try again.");
+        console.error("Login failed:", error.response?.data || error.message);
+
+      }else{
+        setErrorMessage("Something went wrong. Please try again.");
+      }
+
+      if(error.response){
+        const emailErrorMessage = error.response.data.message || "Email not found. Please try again.";
+        setEmailErrorMessage(emailErrorMessage);
+        inputRefs.current[0]?.focus(); // Focus on email input if incorrect
+      }else if (error.response) {
+        setEmailErrorMessage("Email not found. Please try again.");
+      }
+
+
+      if(error.response){
+        const passwordErrorMessage = error.response.data.message || "Incorrect password. Please try again.";
+        setPasswordErrorMessage(passwordErrorMessage);
+        inputRefs.current[1]?.focus(); // Focus on password input if incorrect
+      }else if (error.response) {
+        setPasswordErrorMessage("Incorrect password. Please try again.");
+      }
+
+
+
+
+
     }
   };
 
@@ -227,6 +274,13 @@ const LoginForm: React.FC = () => {
         <div className="flex-grow h-px bg-charcoal"></div>
       </div>
 
+      {/* Error Message */}
+      {errorMessage && (
+          <div className="text-red-500 text-center mx-[45px] mb-4">
+            {errorMessage}
+          </div>
+        )}
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <fieldset>
           {/* Email Input */}
@@ -234,7 +288,7 @@ const LoginForm: React.FC = () => {
             label="Email"
             type="email"
             register={register("email")}
-            error={errors.email?.message}
+            error={emailErrorMessage || errors.email?.message}
             isFocused={emailFocused}
             setIsFocused={setEmailFocused}
           />
@@ -244,7 +298,7 @@ const LoginForm: React.FC = () => {
             label="Password"
             type={passwordVisible ? "text" : "password"}
             register={register("password")}
-            error={errors.password?.message}
+            error={ passwordErrorMessage || errors.password?.message}
             isFocused={passwordFocused}
             setIsFocused={setPasswordFocused}
             hasToggleIcon={true}
@@ -253,12 +307,7 @@ const LoginForm: React.FC = () => {
           />
         </fieldset>
 
-        {/* Error Message */}
-        {errorMessage && (
-          <div className="text-red-500 text-center mx-[45px] mb-4">
-            {errorMessage}
-          </div>
-        )}
+
 
         {/* Remember Me and Forgot Password */}
         <div className="flex justify-between items-center mb-8 mx-[45px]">
@@ -291,4 +340,4 @@ const LoginForm: React.FC = () => {
   );
 };
 
-export default LoginForm;
+export default withAuthRedirect(LoginForm);
