@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "path";
 import cookieParser from "cookie-parser"
 import session from "express-session";
-import { loggingMiddleware } from "./utils/request-response-logger/logger";
+// import { loggingMiddleware } from "./utils/request-response-logger/logger";
 import { errorHandler } from "./utils/error/errorHanler";
 const { randomBytes } = require("crypto");
 import corsOptions from "./middlewares/cors";
@@ -38,7 +38,7 @@ app.use(
 // GLOBAL COMMONS MIDDLEWARES
 // ========================
 app.use(express.json()); // Help to get the json from request body
-app.use(loggingMiddleware);
+// app.use(loggingMiddleware);
 app.use(cors(corsOptions))
 
 // ========================
