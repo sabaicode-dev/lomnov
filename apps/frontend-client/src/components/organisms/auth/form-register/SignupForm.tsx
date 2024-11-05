@@ -251,26 +251,26 @@ const SignupForm: React.FC = () => {
             label="Email"
             type="email"
             register={register("email")}
-            error={errors.email?.message}
+            error={emailErrorMessage || errors.email?.message}
             isFocused={emailFocused}
             setIsFocused={setEmailFocused}
           />
-          {emailErrorMessage && (
-            <p className="text-red-500 text-left mb-4">{emailErrorMessage}</p>
-          )}
+          {/* {emailErrorMessage && (
+        <p className="text-red-500 text-center mb-4">{emailErrorMessage}</p>
+      )} */}
+
           <InputField
             label="Username"
             type="text"
             register={register("username")}
-            error={errors.username?.message}
+            error={usernameErrorMessage || errors.username?.message}
             isFocused={userNameFocused}
             setIsFocused={setUserNameFocused}
           />
-          {usernameErrorMessage && (
-            <p className="text-red-500 text-center mb-4">
-              {usernameErrorMessage}
-            </p>
-          )}
+          {/* {usernameErrorMessage && (
+        <p className="text-red-500 text-center mb-4">{usernameErrorMessage}</p>
+      )} */}
+
           <InputField
             label="Password"
             type={passwordVisible ? "text" : "password"}
@@ -287,7 +287,7 @@ const SignupForm: React.FC = () => {
         <div className="mx-[45px] mb-4">
           <button
             type="submit"
-            className="w-full h-[50px] font-helvetica text-helvetica-h5 font-bold bg-neutral hover:bg-olive-green text-white rounded-[15px]"
+            className="w-full h-[50px] font-helvetica text-helvetica-h5 font-bold bg-olive-green hover:bg-neutral text-white rounded-[15px]"
           >
             Register
           </button>
@@ -307,3 +307,4 @@ const SignupForm: React.FC = () => {
 };
 
 export default SignupForm;
+

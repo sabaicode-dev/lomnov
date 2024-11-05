@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "axios";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
@@ -14,6 +14,17 @@ const VerifyAccount: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [resendMessage, setResendMessage] = useState<string | null>(null);
+  const [isVerifiedAttempted, setIsVerifiedAttempted] = useState<boolean>(false);
+
+  // Create an array of refs for each input field
+  const inputRefs = useRef<HTMLInputElement[]>([]);
+
+  useEffect(() => {
+    // Focus on the first input field when the component mounts
+    if (inputRefs.current[0]) {
+      inputRefs.current[0].focus();
+    }
+  }, []);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -24,10 +35,11 @@ const VerifyAccount: React.FC = () => {
       const newCode = [...code];
       newCode[index] = value;
       setCode(newCode);
+      setIsVerifiedAttempted(false); // Reset verification attempt flag on code change
 
-      if (index < 5) {
-        const nextInput = document.getElementById(`digit-${index + 1}`);
-        nextInput?.focus();
+      // Move focus to the next input if it exists
+      if (index < 5 && inputRefs.current[index + 1]) {
+        inputRefs.current[index + 1].focus();
       }
     }
   };
@@ -41,24 +53,23 @@ const VerifyAccount: React.FC = () => {
       if (newCode[index]) {
         newCode[index] = "";
         setCode(newCode);
-      } else if (index > 0) {
-        const previousInput = document.getElementById(`digit-${index - 1}`);
-        previousInput?.focus();
+      } else if (index > 0 && inputRefs.current[index - 1]) {
+        inputRefs.current[index - 1].focus();
       }
-    } else if (e.key === "ArrowLeft" && index > 0) {
-      const previousInput = document.getElementById(`digit-${index - 1}`);
-      previousInput?.focus();
-    } else if (e.key === "ArrowRight" && index < 5) {
-      const nextInput = document.getElementById(`digit-${index + 1}`);
-      nextInput?.focus();
+      setIsVerifiedAttempted(false); // Reset verification attempt flag on backspace
+    } else if (e.key === "ArrowLeft" && index > 0 && inputRefs.current[index - 1]) {
+      inputRefs.current[index - 1].focus();
+    } else if (e.key === "ArrowRight" && index < 5 && inputRefs.current[index + 1]) {
+      inputRefs.current[index + 1].focus();
     }
   };
 
-  const handleSubmit = async () => {
-    if (isLoading || !email || code.some((digit) => digit === "")) return;
+  const handleSubmit = useCallback(async () => {
+    if (isLoading || !email || code.some((digit) => digit === "") || isVerifiedAttempted) return;
 
     setIsLoading(true);
     setErrorMessage(null); // Clear previous error message
+    setIsVerifiedAttempted(true); // Set the verification attempt flag
     const verificationCode = code.join("");
 
     try {
@@ -74,19 +85,32 @@ const VerifyAccount: React.FC = () => {
         setErrorMessage("Verification failed. Please try again.");
       }
     } catch (error: any) {
-      if (error.response?.status === 400) {
-        setErrorMessage("Invalid verification code. Please try again.");
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            setErrorMessage("Invalid verification code. Please try again.");
+            break;
+          case 404:
+            setErrorMessage("Account not found. Please check your email.");
+            break;
+          default:
+            setErrorMessage("Something went wrong. Please try again later.");
+        }
       } else {
-        setErrorMessage("Something went wrong. Please try again later.");
+        setErrorMessage(
+          "Network error. Please check your connection and try again.",
+        );
       }
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [code, email, isLoading, router, isVerifiedAttempted]);
 
   const handleResendCode = async () => {
     if (!email) {
-      setResendMessage("No email provided. Unable to resend verification code.");
+      setResendMessage(
+        "No email provided. Unable to resend verification code.",
+      );
       return;
     }
 
@@ -99,7 +123,7 @@ const VerifyAccount: React.FC = () => {
       setResendMessage(
         response.data.message
           ? "Verification code resent successfully."
-          : "Failed to resend code. Please try again."
+          : "Failed to resend code. Please try again.",
       );
     } catch {
       setResendMessage("Unable to resend code. Please try again later.");
@@ -108,28 +132,45 @@ const VerifyAccount: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (code.every((digit) => digit !== "") && !isVerifiedAttempted) {
+      handleSubmit();
+    }
+  }, [code, handleSubmit, isVerifiedAttempted]);
+
   return (
     <div className="w-full relative bg-gray-100 min-screen flex flex-col items-center">
       <header className="relative w-full h-[300px] md:h-[400px]">
-        <Image src={banner} alt="banner" layout="fill" objectFit="cover" className="brightness-75" />
+        <Image
+          src={banner}
+          alt="banner"
+          layout="fill"
+          objectFit="cover"
+          className="brightness-75"
+        />
         <div className="absolute left-[10%] sm:left-[73px] md:left-[155px] lg:left-[210px] xl:left-[210px] 2xl:left-[374px] bottom-[150px] font-helvetica text-helvetica-h3 md:text-helvetica-h3 lg:text-helvetica-h3 xl:text-helvetica-h2 2xl:text-helvetica-h2 font-bold text-white">
           <h1>Welcome to Lomnov!</h1>
         </div>
-        <div className="absolute left-0 bottom-[130px] w-[120px] h-px bg-white"></div>
-        <div className="absolute left-[10%] bottom-[85px] font-helvetica text-sm md:text-base lg:text-helvetica-paragraph text-white">
+        <div className="absolute left-0 bottom-[130px] w-[450px] h-px bg-white"></div>
+        <div className="absolute left-[25%] bottom-[85px] font-helvetica text-sm md:text-base lg:text-helvetica-paragraph text-white">
           <p>Please fill your code that we sent to your email.</p>
         </div>
       </header>
 
       <form className="w-full max-w-lg bg-white rounded-lg shadow-lg p-8 mt-[-50px] z-10">
         <div className="text-center mb-6 text-black">
-          <h1 className="text-xl md:text-4xl font-coolvetica mb-3">Verify Account</h1>
+          <h1 className="text-xl md:text-4xl font-coolvetica mb-3">
+            Verify Account
+          </h1>
         </div>
 
         <div className="flex justify-center gap-2 mb-6">
           {code.map((digit, index) => (
             <input
               key={index}
+              ref={(el) => {
+                if (el) inputRefs.current[index] = el; // Store each input in the ref array
+              }}
               id={`digit-${index}`}
               type="text"
               maxLength={1}
@@ -141,19 +182,25 @@ const VerifyAccount: React.FC = () => {
           ))}
         </div>
 
-        {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
-        {successMessage && <p className="text-green-600 mb-4">{successMessage}</p>}
+        {errorMessage && (
+          <p className="text-red-600 text-center mb-4">{errorMessage}</p>
+        )}
+        {successMessage && (
+          <p className="text-green-600 text-center mb-4">{successMessage}</p>
+        )}
 
         <button
           type="button"
           onClick={handleSubmit}
           disabled={isLoading || code.some((digit) => digit === "")}
-          className={`${isLoading ? "bg-gray-300" : "bg-olive-drab"} w-full py-3 rounded-lg font-semibold transition`}
+          className={`${isLoading ? "bg-gray-300" : "bg-olive-drab text-white"} w-full py-3 rounded-lg font-semibold transition`}
         >
           {isLoading ? "Verifying..." : "Verify Account"}
         </button>
 
-        {resendMessage && <p className="text-gray-500 mt-4">{resendMessage}</p>}
+        {resendMessage && (
+          <p className="text-gray-500 text-center mt-4">{resendMessage}</p>
+        )}
         <button
           type="button"
           onClick={handleResendCode}
