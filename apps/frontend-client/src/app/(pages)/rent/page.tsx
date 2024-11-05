@@ -1,9 +1,6 @@
 import ItemCardList from "@/components/molecules/item-card-list/ItemCardList";
 import Image from "next/image";
 import banner from "@/images/banner.png";
-import SelectProperties from "@/components/molecules/select-properties/SelectProperties";
-import SelectLocations from "@/components/molecules/select-locations/SelectLocations";
-import SelectPrice from "@/components/molecules/select-price/SelectPrice";
 import Search from "@/components/molecules/Search/Search";
 
 // ==============================================================

@@ -2,12 +2,12 @@ import React from "react";
 import Image from "next/image";
 import { FaRegHeart } from "react-icons/fa";
 type prop = {
-  props: string;
+  className?: string;
 };
-const HeartOutline = ({ props }: prop) => {
+const HeartOutline = ({ className }: prop) => {
   return (
     <>
-     <FaRegHeart className={props}/>
+      <FaRegHeart className={className} />
     </>
   );
 };
