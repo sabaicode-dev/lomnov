@@ -1,12 +1,12 @@
 import React from "react";
 import { LuBath } from "react-icons/lu";
 interface prop {
-  props?: string;
+  className?: string;  // Change props to className
 }
-function BathRoom({ props }: prop) {
+function BathRoom({ className }: prop) {
   return (
     <>
-      <LuBath className={props} />
+      <LuBath className={className} />
     </>
   );
 }

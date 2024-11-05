@@ -62,13 +62,13 @@ const ItemCard = ({ item, flexRow }: ItemCardProps) => {
         >
           {isLike ? (
             <HeartInline
-              props={
+            className={
                 flexRow ? "text-white text-[18px]" : "text-white text-[25px]"
               }
             />
           ) : (
             <HeartOutline
-              props={
+              className={
                 flexRow ? "text-white text-[18px]" : "text-white text-[25px]"
               }
             />
@@ -77,7 +77,7 @@ const ItemCard = ({ item, flexRow }: ItemCardProps) => {
 
         {/* Price */}
         <p className="absolute bottom-[10px] left-[17px] sm:left-[10px] text-white font-helvetica font-[600] text-[16px] ">
-          ${item.price}10,00
+          ${item.price}100,00
         </p>
       </div>
       <div className={flexRow ? " flex flex-col text-[14px] gap-1 w-[50%]"
@@ -98,7 +98,7 @@ const ItemCard = ({ item, flexRow }: ItemCardProps) => {
             >
               <div className="flex  justify-between  font-helvetica text-helvetica-paragraph  ">
                 <BathRoom
-                  props={
+                  className={
                     flexRow
                       ? "text-[18px] text-olive-drab"
                       : " text-[20px] text-olive-drab "
@@ -116,7 +116,7 @@ const ItemCard = ({ item, flexRow }: ItemCardProps) => {
               </div>
               <div className="flex  justify-between   font-helvetica text-helvetica-paragraph font-bold">
                 <BedRoom
-                  props={
+                  className={
                     flexRow
                       ? "text-olive-drab text-[18px]"
                       : " text-olive-drab  text-[20px]"
@@ -135,7 +135,7 @@ const ItemCard = ({ item, flexRow }: ItemCardProps) => {
               </div>
             </div>
             <div className="w-[40%] sm:w-[35%] flex justify-end items-center">
-              <Compare props="cursor-pointer" />
+              <Compare className="cursor-pointer" />
             </div>
           </div>
         </div>

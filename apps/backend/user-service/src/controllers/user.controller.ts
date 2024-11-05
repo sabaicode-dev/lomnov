@@ -129,6 +129,7 @@ export class ProductController extends Controller {
       };
       return await this.userService.updateUser(updateData);
     } catch (error) {
+      console.error("Update user error:", error);
       throw error;
     }
   }

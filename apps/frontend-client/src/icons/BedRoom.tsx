@@ -1,14 +1,12 @@
 import React from "react";
 import { IoBedOutline } from "react-icons/io5";
-interface prop {
-  props?: string;
+
+interface IconProps {
+  className?: string;  // Change props to className
 }
-function BedRoom({ props }: prop) {
-  return (
-    <>
-     <IoBedOutline className={props} />
-    </>
-  );
+
+function BedRoom({ className }: IconProps) {
+  return <IoBedOutline className={className} />;  // Pass className to IoBedOutline
 }
 
 export default BedRoom;

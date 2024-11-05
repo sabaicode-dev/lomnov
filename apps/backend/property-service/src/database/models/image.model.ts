@@ -1,5 +1,3 @@
-//src/database/models/image.model.ts
-
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IImage extends Document {

@@ -155,7 +155,6 @@ import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import { Google, Facebook } from "@/icons";
 import InputField from "ms-ui-components/src/components/inputfield/InputField";
-import withAuthRedirect from '../withAuth';
 
 // Define the Zod schema
 const loginSchema = z.object({
@@ -292,4 +291,4 @@ const LoginForm: React.FC = () => {
   );
 };
 
-export default withAuthRedirect(LoginForm);
+export default LoginForm;

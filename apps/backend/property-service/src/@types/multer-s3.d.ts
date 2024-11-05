@@ -1,5 +1,3 @@
-//src/@types/multer-s3.d.ts
-
 declare module 'multer-s3' {
     import { StorageEngine } from 'multer';
     import { S3 } from 'aws-sdk';
