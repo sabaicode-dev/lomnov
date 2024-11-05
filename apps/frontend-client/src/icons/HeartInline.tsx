@@ -2,12 +2,12 @@ import React from "react";
 
 import { FaHeart } from "react-icons/fa";
 type prop = {
-  props: string;
+  className?: string; 
 };
-const HeartInline = ({ props }: prop) => {
+const HeartInline = ({ className }: prop) => {
   return (
     <>
-      <FaHeart className={props} />
+      <FaHeart className={className} />
     </>
   );
 };

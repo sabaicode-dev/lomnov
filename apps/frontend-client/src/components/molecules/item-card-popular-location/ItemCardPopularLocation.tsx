@@ -14,7 +14,7 @@ interface ItemCardProps {
 }
 function ItemCardPopularLocation({ item }: ItemCardProps) {
   return (
-    <Link href={`/popularlocation?${item.id}`} className="w-full bg-white border border-neutral p-3 rounded-[15px] flex flex-col gap-3 h-[400px]  overflow-hidden animate-fadeUp hover:shadow-lg">
+    <Link href={`/popular-location`} className="w-full bg-white border border-neutral p-3 rounded-[15px] flex flex-col gap-3 h-[400px]  overflow-hidden animate-fadeUp hover:shadow-lg">
       <div className=" w-full h-[80%] rounded-[15px] overflow-hidden">
         <Image
           src={item.thumbnail}

@@ -64,7 +64,7 @@ const HeroSectionSearch: React.FC<HeroSectionSearchProps> = ({
           onChange={handleSearch}
         />
         <div className="border-[0.8px] border-solid border-black h-[20px]"></div>
-        <IconLocation props="text-blue-500 text-[18px]" />
+        <IconLocation className="text-blue-500 text-[18px]" />
       </div>
       {showResults && searchLocation.length !== 0 && (
         <HeroSectionSearchList searchLocation={searchLocation} searchRef={searchRef} />

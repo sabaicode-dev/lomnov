@@ -2,11 +2,11 @@ import React from 'react'
 import { SlLocationPin } from "react-icons/sl";
 
 interface prop {
-  props? : string
+  className?: string;  // Change props to className
 }
-function Location({props}: prop) {
+function Location({className}: prop) {
   return (
-    <>  <SlLocationPin className={props}/></>
+    <>  <SlLocationPin className={className} /></>
   )
 }
 

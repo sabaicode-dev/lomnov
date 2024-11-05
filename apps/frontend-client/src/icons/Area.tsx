@@ -4,7 +4,12 @@ import area from "@/images/Area.svg";
 
 interface Props {
   props?: string;
+  className?: string; 
 }
+
+
+
+
 const Area: React.FC<Props> = ({ props }) => {
   return (
     <Image

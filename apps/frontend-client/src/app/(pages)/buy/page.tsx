@@ -39,7 +39,6 @@ function page() {
 
            <Search/>
 
-
           </div>
         </div>
       </header>

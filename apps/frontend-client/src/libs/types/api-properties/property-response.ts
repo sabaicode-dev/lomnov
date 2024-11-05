@@ -37,5 +37,6 @@ export interface RealEstateItem {
   kitchens: string;
   area: string;
   parking: string;
-  name:string
+  name: string;
+  type: string;
 }
