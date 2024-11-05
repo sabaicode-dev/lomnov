@@ -242,6 +242,9 @@ class SocialAuthService {
             }
         }
     }
+    async refreshToken():Promise<void>{
+        
+    }
 }
 
 export default SocialAuthService;
