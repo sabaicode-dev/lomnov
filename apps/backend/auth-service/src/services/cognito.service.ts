@@ -16,7 +16,7 @@ import {
   AdminAddUserToGroupCommand,
   AdminDeleteUserCommand,
   ChangePasswordCommand,
-  AdminUpdateUserAttributesCommand,
+  AdminUpdateUserAttributesCommand
 } from "@aws-sdk/client-cognito-identity-provider";
 import configs from "@/src/config";
 import {
@@ -489,6 +489,4 @@ export class CognitoService {
       throw error;
     }
   }
-
-
 }

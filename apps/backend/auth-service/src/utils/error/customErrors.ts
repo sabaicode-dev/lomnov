@@ -214,7 +214,11 @@ export class NetworkAuthenticationRequiredError extends AppError {
     super(message, StatusCodes.NETWORK_AUTHENTICATION_REQUIRED);
   }
 }
-
+export class InvalidInputError extends AppError {
+  constructor(message:string = "Invalid input error"){
+    super(message,StatusCodes.BAD_REQUEST);
+  }
+}
 export class InternalServerError extends AppError {
   constructor(message: string = "Internal server error") {
     super(message, StatusCodes.INTERNAL_SERVER_ERROR);
