@@ -23,7 +23,7 @@ export interface MenuProp {
 function ContainerHeader({
   menu,
 }: MenuProp) {
-  const { user } = useAuth();
+  const { user ,isAuthenticated } = useAuth();
   const [isMenu, setIsMenu] = useState<boolean>(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
@@ -85,7 +85,7 @@ function ContainerHeader({
             <SelectLang />
           </div>
 
-          {user ? (
+          {isAuthenticated ? (
             // Show user profile and logout when logged in
             <div className="relative">
               <div
@@ -93,7 +93,7 @@ function ContainerHeader({
                 onClick={toggleDropdown}
               >
                 <Image
-                  src={user?.profile[0] || "/default-profile.png"}
+                  src={user?.profile[0] || "/images/default-profile.jpg"}
                   alt="User Profile"
                   width={800}
                   height={600}
@@ -107,7 +107,7 @@ function ContainerHeader({
                   <div className="w-full flex flex-row items-center justify-start gap-2">
                     <div className="overflow-hidden w-[50px] h-[50px] rounded-full border-[1px] border-blue-400">
                       <Image
-                        src={user?.profile[0] || "/default-profile.png"}
+                        src={user?.profile[0] || "/images/default-profile.jpg"}
                         alt="User Profile"
                         width={800}
                         height={600}
