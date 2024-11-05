@@ -67,7 +67,7 @@ class SocialAuthService {
                 idToken: response.data.id_token,
                 refreshToken: response.data.refresh_token,
             };
-
+            console.log(token)
             const userInfo = this.getUserInfoFromToken(token.idToken);
             console.log("USER INFO:: ",userInfo);
             
@@ -219,7 +219,7 @@ class SocialAuthService {
         await this.updateUserCongitoAttributes(existingUser.Username!, { 'custom:roles': state });
     }
 
-    async createNewUser(userInfo: any, groupName: string): Promise<string> {
+    async createNewUser(userInfo: any, _groupName: string): Promise<string> {
         try {
             const user = await axios.post(`${configs.userServiceUrl}/api/v1/users`, {
                 cognitoSub: userInfo.sub,
@@ -229,9 +229,9 @@ class SocialAuthService {
             });
 
             // Assuming the user is created in your database successfully
-            const cognitoUsername = userInfo.Username; // Ensure this is the correct identifier for Cognito
-            await this.addToGroup(cognitoUsername, groupName);
-            console.log(`User ${cognitoUsername} added to group ${groupName}`);
+            //const cognitoUsername = userInfo.sub!; // Ensure this is the correct identifier for Cognito
+           // await this.addToGroup(cognitoUsername, groupName);
+           // console.log(`User ${cognitoUsername} added to group ${groupName}`);
             return user.data._id;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response?.status === 409) {
