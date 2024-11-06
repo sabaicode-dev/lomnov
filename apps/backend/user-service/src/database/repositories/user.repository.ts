@@ -19,7 +19,7 @@ export class UserRepository {
 
   public async create(requestBody: RequestUserDTO): Promise<ResponseUserDTO> {
     try {
-      const { cognitoSub, email, userName } = requestBody;
+      const { cognitoSub, email, userName,profile } = requestBody;
       const usernameExist = await UserModel.find({ userName: userName });
       if (usernameExist.length > 0) {
         throw new ValidationError(" Username already existed");
@@ -30,7 +30,7 @@ export class UserRepository {
           " CognitoSub , firstname, lastname and username are required!",
         );
       }
-      const data = { cognitoSub, email,userName };
+      const data = { cognitoSub, email,userName,profile };
       const response = await UserModel.create(data);
       return response;
     } catch (error: any) {

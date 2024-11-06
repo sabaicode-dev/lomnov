@@ -85,7 +85,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setLoading(false);
       }
     };
-    
+    try {
+      checkAuthStatus();
+    } catch (error) {
+      console.error(error);
+      throw error;      
+    }
   }, [])
 
   const login = async ({ email, phone_number, password }: LoginRequest) => {
