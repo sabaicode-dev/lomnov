@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         setLoading(true);
         const res = await axiosInstance.get(API_ENDPOINTS.USER_PROFILE);
-        
+        console.log("User Profile ::: ",res)
         // Extract the first user from the response
         if (res.data && res.data.users && res.data.users.length > 0) {
           setUser(res.data.users[0]); // Access the first user in the users array
@@ -85,12 +85,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setLoading(false);
       }
     };
-    try {
-      checkAuthStatus();
-    } catch (error) {
-      console.error(error);
-      throw error;      
-    }
+    
   }, [])
 
   const login = async ({ email, phone_number, password }: LoginRequest) => {
@@ -104,10 +99,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Fetch the user profile data after login
       const res = await axiosInstance.get(API_ENDPOINTS.USER_PROFILE);
       setUser(res.data);
-
+      console.log(res);
       setIsAuthenticated(true);
       router.push('/');
     } catch (error) {
+      console.log("Error Athentication:: ",error)
       setIsAuthenticated(false);
       throw error;
     } finally {

@@ -12,7 +12,6 @@ import {
     ListUsersCommand,
     AdminListGroupsForUserCommand,
     UserType,
-    AdminGetUserCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 
 const client = new CognitoIdentityProviderClient({
@@ -69,8 +68,8 @@ class SocialAuthService {
             };
             console.log(token)
             const userInfo = this.getUserInfoFromToken(token.idToken);
-            console.log("USER INFO:: ",userInfo);
-            
+            console.log("USER INFO:: ", userInfo);
+
             //@ts-ignore
             const email = userInfo.email;
             const existingUser = await this.getUserByEmail(email);
@@ -82,7 +81,6 @@ class SocialAuthService {
                 userId = existingUser.Username!;
             } else {
                 // else , create store user in db 
-                console.log("UserInfo.sub:: ", userInfo.sub);
                 userId = await this.createNewUser(userInfo, state!);
             }
             return {
@@ -151,20 +149,17 @@ class SocialAuthService {
 
     async updateUserCongitoAttributes(username: string, attributes: { [key: string]: string }): Promise<void> {
         try {
-            const getUserCommand = new AdminGetUserCommand({
-                Username: username,
-                UserPoolId: configs.awsCognitoUserPoolId,
-            });
-            await client.send(getUserCommand);
-
             const params = {
                 Username: username,
                 UserPoolId: configs.awsCognitoUserPoolId,
                 UserAttributes: Object.entries(attributes).map(([key, value]) => ({ Name: key, Value: value })),
             };
+            console.log('params::: ', params)
+
             const command = new AdminUpdateUserAttributesCommand(params);
             await client.send(command);
         } catch (error) {
+            console.error('Failed updateUserCognitoAttributes::: ', error)
             //@ts-ignore
             if (error.name === 'UserNotFoundException') {
                 console.error(`User with username ${username} does not exist in Cognito.`);
@@ -196,7 +191,7 @@ class SocialAuthService {
             UserPoolId: configs.awsCognitoUserPoolId, /* required */
             Username: username /* required */
         };
-        console.log("Params Add User To Group:: ",params);
+        console.log("Params Add User To Group:: ", params);
         try {
             const command = new AdminAddUserToGroupCommand(params);
             await client.send(command);
@@ -219,7 +214,7 @@ class SocialAuthService {
         await this.updateUserCongitoAttributes(existingUser.Username!, { 'custom:roles': state });
     }
 
-    async createNewUser(userInfo: any, _groupName: string): Promise<string> {
+    async createNewUser(userInfo: any, groupName: string): Promise<string> {
         try {
             const user = await axios.post(`${configs.userServiceUrl}/api/v1/users`, {
                 cognitoSub: userInfo.sub,
@@ -227,14 +222,11 @@ class SocialAuthService {
                 userName: userInfo.name,
                 profile: userInfo.profile,
             });
-
-            // Assuming the user is created in your database successfully
-            //const cognitoUsername = userInfo.sub!; // Ensure this is the correct identifier for Cognito
-           // await this.addToGroup(cognitoUsername, groupName);
-           // console.log(`User ${cognitoUsername} added to group ${groupName}`);
+            console.log(`new user loging with google::: google_${userInfo.identities[0].userId}`)
+            await this.updateUserCongitoAttributes(`google_${userInfo.identities[0].userId}`, { 'custom:roles': groupName! });
             return user.data._id;
         } catch (error) {
-            if (axios.isAxiosError(error) && error.response?.status === 409) {
+            if (axios.isAxiosError(error) && error.response?.status === 400) {
                 const existingUserResponse = await axios.get(`${configs.userServiceUrl}/api/v1/users/${userInfo.sub}`);
                 return existingUserResponse.data._id;
             } else {
@@ -242,8 +234,8 @@ class SocialAuthService {
             }
         }
     }
-    async refreshToken():Promise<void>{
-        
+    async refreshToken(): Promise<void> {
+
     }
 }
 

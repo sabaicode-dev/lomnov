@@ -44,7 +44,7 @@ function ContainerHeader({
       console.error("Logout failed:", error);
     }
   };
-
+  console.log("Authenticated:: ",isAuthenticated);
   return (
     <>
       <div className="xl:w-[1300px] w-full lg:m-auto h-full flex flex-row items-center justify-between py-3 px-3 xl:px-0 z-20">
