@@ -55,7 +55,7 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
   return (
     <>
       <div className="relative">
-        <Banner background={user.background} /> 
+        <Banner background={Array.isArray(user.background) && user.background.length > 0 ? user.background[0] : "/images/default-banner.jpg"} /> 
         <div className="max-w-[1300px] mx-auto relative">
           {/* Edit cover photo button */}
           <div className="absolute right-[0px] bottom-[50px] flex justify-end pr-[10px] xl:pr-0">
