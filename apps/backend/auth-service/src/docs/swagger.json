@@ -7,6 +7,21 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"GoogleCallBackRequest": {
+				"properties": {
+					"code": {
+						"type": "string"
+					},
+					"state": {
+						"type": "string"
+					},
+					"error": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"APIResponse": {
 				"properties": {
 					"message": {
@@ -171,7 +186,7 @@
 		"contact": {}
 	},
 	"paths": {
-		"/api/v1/auth/google-sign-in": {
+		"/api/v1/auth/backup/google-sign-in": {
 			"get": {
 				"operationId": "GoogleSignIn",
 				"responses": {
@@ -189,7 +204,7 @@
 				"parameters": []
 			}
 		},
-		"/api/v1/auth/facebook-sign-in": {
+		"/api/v1/auth/backup/facebook-sign-in": {
 			"get": {
 				"operationId": "FacebookSignIn",
 				"responses": {
@@ -207,7 +222,7 @@
 				"parameters": []
 			}
 		},
-		"/api/v1/auth/callback": {
+		"/api/v1/auth/backup/callback": {
 			"get": {
 				"operationId": "Callback",
 				"responses": {
@@ -274,12 +289,15 @@
 						}
 					}
 				},
+				"tags": [
+					"Login With Google"
+				],
 				"security": [],
 				"parameters": [
 					{
 						"in": "query",
-						"name": "_state",
-						"required": true,
+						"name": "state",
+						"required": false,
 						"schema": {
 							"type": "string"
 						}
@@ -287,37 +305,23 @@
 				]
 			}
 		},
-		"/api/v1/auth/getcallback": {
+		"/api/v1/auth/callback": {
 			"get": {
-				"operationId": "HandleCallBack",
+				"operationId": "OauthCallBack",
 				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"data": {},
-										"message": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"data",
-										"message"
-									],
-									"type": "object"
-								}
-							}
-						}
+					"204": {
+						"description": "No content"
 					}
 				},
+				"tags": [
+					"Login With Google"
+				],
 				"security": [],
 				"parameters": [
 					{
 						"in": "query",
 						"name": "code",
-						"required": true,
+						"required": false,
 						"schema": {
 							"type": "string"
 						}
@@ -325,7 +329,15 @@
 					{
 						"in": "query",
 						"name": "state",
-						"required": true,
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "error",
+						"required": false,
 						"schema": {
 							"type": "string"
 						}

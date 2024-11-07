@@ -71,16 +71,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         setLoading(true);
         const res = await axiosInstance.get(API_ENDPOINTS.USER_PROFILE);
-        setUser(res.data)
+        //console.log("User Profile ::: ",res.data)
+        //setUser(res.data);
+        // Extract the first user from the response
+        if (res.data) {
+          //console.log("User condition is true:: ",true)
+          setUser(res.data); // Access the first user in the users array
+        } else {
+          setUser(null); // Handle case where no users are returned
+        }
         setIsAuthenticated(true);
       } catch (error) {
-        setIsAuthenticated(false)
+        setIsAuthenticated(false);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
+    };
+    try {
+      checkAuthStatus();
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
-
-    checkAuthStatus();
   }, [])
 
   const login = async ({ email, phone_number, password }: LoginRequest) => {
@@ -94,10 +106,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Fetch the user profile data after login
       const res = await axiosInstance.get(API_ENDPOINTS.USER_PROFILE);
       setUser(res.data);
-
+      console.log(res);
       setIsAuthenticated(true);
       router.push('/');
     } catch (error) {
+      console.log("Error Athentication:: ",error)
       setIsAuthenticated(false);
       throw error;
     } finally {
@@ -146,10 +159,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const siginWithGoogle = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get(`${API_ENDPOINTS.SIGN_IN_WITH_GOOGLE}?state=user`);
+      const response = await axiosInstance.get(`${API_ENDPOINTS.SIGN_IN_WITH_GOOGLE}`);
 
       setIsAuthenticated(true);
-      window.location.href = response.data;
+      // console.log(response.data)
+      window.location.href = response.data.data;
     } catch (error) {
       console.error('Signin with Google failed:', error);
       setIsAuthenticated(false);
@@ -162,16 +176,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     setLoading(true);
     try {
-      // send logout to api
+      await axiosInstance.post(API_ENDPOINTS.LOGOUT); // Call the logout endpoint
       setIsAuthenticated(false);
       setUser(null);
-      router.push('/login')
+      router.push('/login');
     } catch (error) {
-      console.error('Logout Failed:::', error);
+      console.error("Logout failed:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+  
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, loading, user, login, logout, signup, verify, siginWithGoogle }

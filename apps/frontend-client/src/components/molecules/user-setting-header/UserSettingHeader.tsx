@@ -9,7 +9,7 @@ import ShareIcon from "@/icons/ShareIcon";
 
 interface UserSettingHeaderProps {
   user: {
-    username: string;
+    userName: string;
     background: string;
     profile: string;
     firstName: string;
@@ -60,7 +60,7 @@ const UserSettingHeader = ({ user }: UserSettingHeaderProps) => {
             {/* User name */}
             <div className="absolute left-[170px] items-center text-helvetica-small font-helvetica text-olive-gray mt-[10px]">
               <span className="font-helvetica text-helvetica-h4 font-bold text-charcoal capitalize">
-                {user?.firstName} {user?.lastName}
+                {user.userName}
 
               </span>
               <span className="flex items-center mt-[10px]">
@@ -83,7 +83,7 @@ const UserSettingHeader = ({ user }: UserSettingHeaderProps) => {
         </div>
       </div>
       {/* UserProfileNavigation */}
-      <UserSettingNavigation username={"helo"} />
+      <UserSettingNavigation userName={"helo"} />
     </>
   );
 };

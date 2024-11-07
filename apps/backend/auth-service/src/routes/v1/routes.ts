@@ -1,8 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import type { TsoaRoute } from '@tsoa/runtime';
-import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
+import { TsoaRoute, fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { AuthController } from './../../controllers/social.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -16,6 +15,16 @@ import type { Request as ExRequest, Response as ExResponse, RequestHandler, Rout
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+    "GoogleCallBackRequest": {
+        "dataType": "refObject",
+        "properties": {
+            "code": {"dataType":"string"},
+            "state": {"dataType":"string"},
+            "error": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "APIResponse": {
         "dataType": "refObject",
         "properties": {
@@ -122,7 +131,7 @@ export function RegisterRoutes(app: Router) {
 
 
     
-        app.get('/api/v1/auth/google-sign-in',
+        app.get('/api/v1/auth/backup/google-sign-in',
             ...(fetchMiddlewares<RequestHandler>(AuthController)),
             ...(fetchMiddlewares<RequestHandler>(AuthController.prototype.googleSignIn)),
 
@@ -153,7 +162,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/auth/facebook-sign-in',
+        app.get('/api/v1/auth/backup/facebook-sign-in',
             ...(fetchMiddlewares<RequestHandler>(AuthController)),
             ...(fetchMiddlewares<RequestHandler>(AuthController.prototype.facebookSignIn)),
 
@@ -184,7 +193,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/auth/callback',
+        app.get('/api/v1/auth/backup/callback',
             ...(fetchMiddlewares<RequestHandler>(AuthController)),
             ...(fetchMiddlewares<RequestHandler>(AuthController.prototype.callback)),
 
@@ -222,7 +231,7 @@ export function RegisterRoutes(app: Router) {
 
             async function SocialAuthController_loginWithGoogle(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    _state: {"in":"query","name":"_state","required":true,"dataType":"string"},
+                    state: {"in":"query","name":"state","dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -246,15 +255,14 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/auth/getcallback',
+        app.get('/api/v1/auth/callback',
             ...(fetchMiddlewares<RequestHandler>(SocialAuthController)),
-            ...(fetchMiddlewares<RequestHandler>(SocialAuthController.prototype.handleCallBack)),
+            ...(fetchMiddlewares<RequestHandler>(SocialAuthController.prototype.oauthCallBack)),
 
-            async function SocialAuthController_handleCallBack(request: ExRequest, response: ExResponse, next: any) {
+            async function SocialAuthController_oauthCallBack(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
-                    code: {"in":"query","name":"code","required":true,"dataType":"string"},
-                    state: {"in":"query","name":"state","required":true,"dataType":"string"},
+                    query: {"in":"queries","name":"query","required":true,"ref":"GoogleCallBackRequest"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -266,7 +274,7 @@ export function RegisterRoutes(app: Router) {
                 const controller = new SocialAuthController();
 
               await templateService.apiHandler({
-                methodName: 'handleCallBack',
+                methodName: 'oauthCallBack',
                 controller,
                 response,
                 next,

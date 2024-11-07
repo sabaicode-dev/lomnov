@@ -1,4 +1,4 @@
-// components/molecules/profile-header/ProfileHeader.tsx
+// components/molecules/profile-header/VisitProfileHeader.tsx
 
 import React from "react";
 import Image from "next/image";
@@ -9,28 +9,26 @@ import ShareIcon from "@/icons/ShareIcon";
 
 interface VisitProfileHeaderProps {
   user: {
-    username: string;
+    username: string; // Changed to match API response
     background: string;
     profile: string;
-    fistname: string;
+    firstname: string; // Note: corrected from 'fistname'
     lastname: string;
     joinedDate: string;
   };
 }
 
 const VisitProfileHeader = ({ user }: VisitProfileHeaderProps) => {
+  console.log("userName in visitprofile::", user.username); // This should now log correctly
   return (
     <>
       <div className="relative">
-        <Banner background={user.background} />
+        <Banner background={user.background || '/default-banner.jpg'} />
         <div className="max-w-[1300px] mx-auto relative">
           {/* Edit cover photo button */}
-          <div className="absolute right-[0px] bottom-[50px]  flex justify-end pr-[10px] xl:pr-0">
+          <div className="absolute right-[0px] bottom-[50px] flex justify-end pr-[10px] xl:pr-0">
             <div className="flex items-center bg-white font-helvetica text-helvetica-paragraph text-charcoal px-[10px] py-[5px] rounded-md">
-              <label
-                htmlFor="file-input"
-                className="cursor-pointer flex items-center justify-center"
-              >
+              <label htmlFor="file-input" className="cursor-pointer flex items-center justify-center">
                 <FaCamera className="text-charcoal mx-[10px]" />
                 <span>Edit cover photo</span>
               </label>
@@ -42,12 +40,9 @@ const VisitProfileHeader = ({ user }: VisitProfileHeaderProps) => {
             {/* User profile */}
             <div className="absolute flex items-center justify-center sm:w-[135px] sm:h-[135px] w-[125px] h-[125px] rounded-full bg-grayish-white">
               <div className="sm:w-[125px] sm:h-[125px] w-[120px] h-[120px] rounded-full overflow-hidden bg-grayish-white">
-                <Image src={user.profile} alt="user" width={125} height={125} />
+                <Image src={user.profile || '/default-profile.jpg'} alt="user" width={125} height={125} />
               </div>
-              <label
-                htmlFor="profile-photo-input"
-                className="sm:ml-[100px] sm:mt-[70px] ml-[100px] mt-[70px] absolute sm:w-[37px] w-[25px] h-[25px] flex items-center justify-center sm:h-[37px] rounded-full bg-pale-gray cursor-pointer"
-              >
+              <label htmlFor="profile-photo-input" className="sm:ml-[100px] sm:mt-[70px] ml-[100px] mt-[70px] absolute sm:w-[37px] w-[25px] h-[25px] flex items-center justify-center sm:h-[37px] rounded-full bg-pale-gray cursor-pointer">
                 <FaCamera className="text-charcoal sm:w-[20px] sm:h-[20px] w-[15px] h-[15px]" />
               </label>
               <input type="file" id="profile-photo-input" className="hidden" />
@@ -55,12 +50,12 @@ const VisitProfileHeader = ({ user }: VisitProfileHeaderProps) => {
             {/* User name */}
             <div className="absolute left-[170px] items-center text-helvetica-small font-helvetica text-olive-gray mt-[10px]">
               <span className="font-helvetica text-helvetica-h4 font-bold text-charcoal capitalize">
-                {user.fistname} {user.lastname}
+                {user.username || 'Unknown'} {/* Changed to access username */}
               </span>
               <span className="flex items-center mt-[10px]">
                 Joined
                 <div className="w-[5px] h-[5px] mx-[5px] rounded-full bg-olive-gray"></div>
-                {user.joinedDate} 15 jul 2033
+                {user.joinedDate || 'Unknown date'} {/* Ensure joinedDate is set properly */}
               </span>
             </div>
           </div>
@@ -77,7 +72,7 @@ const VisitProfileHeader = ({ user }: VisitProfileHeaderProps) => {
         </div>
       </div>
       {/* UserProfileNavigation */}
-      <VisitProfileNavigation username={user.username} />
+      <VisitProfileNavigation userName={user.username} />
     </>
   );
 };
