@@ -33,7 +33,7 @@ const formatDate = (dateString?: string): string => {
 const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
   console.log("User data:", user);
   console.log("userName: ", user.userName)
-  console.log("profile: ", user.profile)
+  
 
   // File change handlers for profile and background uploads
   const handleProfileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
