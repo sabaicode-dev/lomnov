@@ -156,6 +156,7 @@ import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import { Google, Facebook } from "@/icons";
 import InputField from "ms-ui-components/src/components/inputfield/InputField";
 import withAuthRedirect from '../withAuth';
+import { useAuth } from "@/context/user";
 
 // Define the Zod schema
 const loginSchema = z.object({
@@ -176,7 +177,7 @@ const LoginForm: React.FC = () => {
 
   const emailInputRef = useRef<HTMLInputElement | null>(null); // Reference to email input
   const passwordInputRef = useRef<HTMLInputElement | null>(null); // Reference to password input
-
+  const { siginWithGoogle } = useAuth();
   const {
     register,
     handleSubmit,
@@ -255,16 +256,16 @@ const LoginForm: React.FC = () => {
 
       {/* Social Login Buttons */}
       <div className="flex justify-center mb-8 space-x-4 mx-[45px] font-helvetica text-helvetica-h4">
-      <button className="flex items-center justify-center w-1/2 h-[50px] border border-charcoal hover:scale-105 hover:border-olive-green active:border-olive-green active:scale-95 transition-transform duration-150 rounded-[15px]">
-        <Google props="w-5 h-5 mr-2" />
-        Google
-      </button>
-      <button className="flex items-center justify-center w-1/2 h-[50px] border border-charcoal hover:scale-105 hover:border-olive-green active:border-olive-green active:scale-95 transition-transform duration-150 rounded-[15px]">
-        <Facebook props="w-5 h-5 mr-2" />
-        Facebook
-      </button>
-
+        <button onClick={siginWithGoogle} className="flex items-center justify-center w-1/2 h-[50px] border border-charcoal hover:border-olive-green rounded-[15px]">
+          <Google props="w-5 h-5 mr-2" />
+          Google
+        </button>
+        <button className="flex items-center justify-center w-1/2 h-[50px] border border-charcoal hover:border-olive-green rounded-[15px]">
+          <Facebook props="w-5 h-5 mr-2" />
+          Facebook
+        </button>
       </div>
+
 
       <div className="flex items-center mb-4 mx-[45px]">
         <div className="flex-grow h-px bg-charcoal"></div>
@@ -329,13 +330,13 @@ const LoginForm: React.FC = () => {
 
         {/* Sign In Button */}
         <div className="mx-[45px] mb-4">
-        <button
-          type="submit"
-          className="w-full h-[50px] font-helvetica text-helvetica-h5 font-bold bg-olive-green hover:scale-105 hover:bg-neutral active:bg-neutral active:scale-95 ease-in-out duration-300 text-white rounded-[15px]"
-          disabled={loading} // Disable button when loading
-        >
-          {loading ? "Signing In..." : "Sign In"}
-        </button>
+          <button
+            type="submit"
+            className="w-full h-[50px] font-helvetica text-helvetica-h5 font-bold bg-olive-green hover:scale-105 hover:bg-neutral active:bg-neutral active:scale-95 ease-in-out duration-300 text-white rounded-[15px]"
+            disabled={loading} // Disable button when loading
+          >
+            {loading ? "Signing In..." : "Sign In"}
+          </button>
 
         </div>
       </form>
