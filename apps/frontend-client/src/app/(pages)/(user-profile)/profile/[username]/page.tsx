@@ -14,6 +14,7 @@ async function fetchUserDetails(username: string) {
     if (res.status !== 200) {
       throw new Error("Failed to fetch user details");
     }
+    console.log("user response:: ", res.data.users[0]);
     // Assuming the API response is structured as shown
     return res.data.users[0]; // Get the first user from the array
   } catch (error) {
@@ -23,12 +24,13 @@ async function fetchUserDetails(username: string) {
 }
 
 
-const ProfilePage = async ({ params }: any) => {
+const ProfilePage = async ({ params }: {params:{username:string}}) => {
+  console.log("Params:: ",params);
+  
   const { username } = params;
 
   const user = await fetchUserDetails(username); // Fetch user data here
-  console.log("userName: ", user)
-
+console.log("get user by name:: ",user)
   if (!user) {
     notFound(); // This will trigger a 404 page if user data is not found
   }

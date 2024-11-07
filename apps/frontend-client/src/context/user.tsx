@@ -71,10 +71,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         setLoading(true);
         const res = await axiosInstance.get(API_ENDPOINTS.USER_PROFILE);
-        console.log("User Profile ::: ",res)
+        //console.log("User Profile ::: ",res.data)
+        //setUser(res.data);
         // Extract the first user from the response
-        if (res.data && res.data.users && res.data.users.length > 0) {
-          setUser(res.data.users[0]); // Access the first user in the users array
+        if (res.data) {
+          //console.log("User condition is true:: ",true)
+          setUser(res.data); // Access the first user in the users array
         } else {
           setUser(null); // Handle case where no users are returned
         }
@@ -85,7 +87,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setLoading(false);
       }
     };
-    
+    try {
+      checkAuthStatus();
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }, [])
 
   const login = async ({ email, phone_number, password }: LoginRequest) => {

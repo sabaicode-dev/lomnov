@@ -156,12 +156,13 @@ import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import { Google, Facebook } from "@/icons";
 import InputField from "ms-ui-components/src/components/inputfield/InputField";
 import withAuthRedirect from '../withAuth';
+import axios from "axios";
 // Define the Zod schema
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });
-
+import { useAuth } from "@/context/user";
 type LoginData = z.infer<typeof loginSchema>;
 
 const LoginForm: React.FC = () => {
@@ -172,6 +173,7 @@ const LoginForm: React.FC = () => {
   const [emailErrorMessage, setEmailErrorMessage] = useState<string | null>(
     null,
   )
+  const { siginWithGoogle } = useAuth();
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string | null>(
     null,
   )
@@ -238,9 +240,19 @@ const LoginForm: React.FC = () => {
 
 
 
-
     }
   };
+ /* async function googleLogin(e:React.FormEvent){
+    e.preventDefault(); 
+    try {
+      const response = await axios.get(API_ENDPOINTS.SIGN_IN_WITH_GOOGLE);
+      if(response.status === 200){
+        window.location.href = response.data.data;
+      }
+    } catch (error) {
+      throw error;
+    }
+  }*/
 
   return (
     <div className="w-full sm:w-[500px] lg:w-[550px] mx-auto bg-white rounded-[30px] border border-neutral py-10">
@@ -256,7 +268,7 @@ const LoginForm: React.FC = () => {
 
       {/* Social Login Buttons */}
       <div className="flex justify-center mb-8 space-x-4 mx-[45px] font-helvetica text-helvetica-h4">
-        <button className="flex items-center justify-center w-1/2 h-[50px] border border-charcoal hover:border-olive-green rounded-[15px]">
+        <button onClick={siginWithGoogle} className="flex items-center justify-center w-1/2 h-[50px] border border-charcoal hover:border-olive-green rounded-[15px]">
           <Google props="w-5 h-5 mr-2" />
           Google
         </button>
