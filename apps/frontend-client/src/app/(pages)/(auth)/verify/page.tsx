@@ -79,7 +79,7 @@ const VerifyAccount: React.FC = () => {
       );
 
       if (response.data.message) {
-        setSuccessMessage("Account verified successfully!");
+        setSuccessMessage("Account verified successfully. Account created.");
         setTimeout(() => router.push("/signin"), 2000);
       } else {
         setErrorMessage("Verification failed. Please try again.");
@@ -113,6 +113,7 @@ const VerifyAccount: React.FC = () => {
       );
       return;
     }
+
 
     setIsLoading(true);
     try {
@@ -162,6 +163,7 @@ const VerifyAccount: React.FC = () => {
           <h1 className="text-xl md:text-4xl font-coolvetica mb-3">
             Verify Account
           </h1>
+          <p>Enter the 6-digit code sent to your email to verify your account.</p>
         </div>
 
         <div className="flex justify-center gap-2 mb-6">
@@ -193,10 +195,11 @@ const VerifyAccount: React.FC = () => {
           type="button"
           onClick={handleSubmit}
           disabled={isLoading || code.some((digit) => digit === "")}
-          className={`${isLoading ? "bg-gray-300" : "bg-olive-drab text-white"} w-full py-3 rounded-lg font-semibold transition`}
+          className={`${isLoading ? "bg-gray-300" : "bg-olive-drab hover:bg-natural hover:scale-105 active:bg-natural active:scale-95"} w-full py-3 rounded-lg font-semibold transition-transform duration-150`}
         >
           {isLoading ? "Verifying..." : "Verify Account"}
         </button>
+
 
         {resendMessage && (
           <p className="text-gray-500 text-center mt-4">{resendMessage}</p>

@@ -30,8 +30,8 @@ export const menus = [
   },
   {
     id: 5,
-    name : "contect",
-    slug: "/contect",
+    name : "contact",
+    slug: "/contact",
     lang: "eng"
   }
 ];

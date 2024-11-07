@@ -107,6 +107,7 @@
 //           />
 //         </fieldset>
 
+
 //         <div className="mx-[45px] mb-4">
 //           <button
 //             type="submit"
@@ -132,7 +133,7 @@
 // export default SignupForm;
 
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -142,7 +143,10 @@ import axios from "axios";
 // Define the Zod schema
 const signupSchema = z.object({
   email: z.string().email("Invalid email address"),
-  username: z.string().min(1, "Username is required"),
+  username: z
+    .string()
+    .min(1, "Username is required")
+    .regex(/^(?!\d+$)[\w]+$/, "Username cannot be only numbers"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });
 
@@ -155,12 +159,20 @@ const SignupForm: React.FC = () => {
   const [userNameFocused, setUserNameFocused] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [emailErrorMessage, setEmailErrorMessage] = useState<string | null>(
-    null,
-  );
-  const [usernameErrorMessage, setUsernameErrorMessage] = useState<
-    string | null
-  >(null);
+  const [emailErrorMessage, setEmailErrorMessage] = useState<string | null>(null);
+  const [usernameErrorMessage, setUsernameErrorMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false); // Loading state
+
+  // Refs for each input field
+  const emailInputRef = useRef<HTMLInputElement | null>(null);
+  const usernameInputRef = useRef<HTMLInputElement | null>(null);
+  const passwordInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (emailInputRef.current) {
+      emailInputRef.current.focus(); // Set focus on the email input when component mounts
+    }
+  }, []);
 
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
@@ -173,6 +185,11 @@ const SignupForm: React.FC = () => {
   });
 
   const onSubmit = async (data: SignupData) => {
+    setLoading(true); // Set loading to true on form submission
+    setEmailErrorMessage(null);
+    setUsernameErrorMessage(null);
+    setErrorMessage(null);
+
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL_AUTH}/auth/signup`,
@@ -180,44 +197,52 @@ const SignupForm: React.FC = () => {
           email: data.email,
           username: data.username,
           password: data.password,
-        },
+        }
       );
 
       if (response.status === 200) {
         window.location.href = `/verify?email=${encodeURIComponent(data.email)}`;
       }
     } catch (error: any) {
-      if (error.response) {
-        // Custom error handling based on server response
-        const errorMessage =
-          error.response.data.message || "Signup failed. Please try again.";
-          setErrorMessage(errorMessage);
-        // Check for specific messages from the server
+      if (error.response && error.response.data) {
+        const { message } = error.response.data;
 
+        // Check if message is defined before accessing
+        if (typeof message === 'string') {
+          // Set error messages based on server response or error type
+          if (message.includes("email")) {
+            setEmailErrorMessage(
+              message.includes("already registered")
+                ? "This email is already in use."
+                : "Invalid email address format."
+            );
+          }
+
+          if (message.includes("username")) {
+            setUsernameErrorMessage(
+              message.includes("already taken")
+                ? "This username is already taken."
+                : "Username cannot contain only numbers."
+            );
+          }
+
+          setErrorMessage(message);
+        } else {
+          setErrorMessage("Signup failed. Please try again.");
+        }
       } else {
         setErrorMessage("Signup failed. Please try again.");
       }
+    } finally {
+      setLoading(false); // Reset loading to false after the request completes
+    }
+  };
 
-      if (error.response) {
-        // Custom error handling based on server response
-        const emailErrorMessage =
-          error.response.data.message || "Email already registered. Please try again.";
-          setEmailErrorMessage(emailErrorMessage);
-        // Check for specific messages from the server
-
-      } else {
-        setEmailErrorMessage("Email already registered. Please try again.");
-      }
-
-      if(error.response) {
-        const usernameErrorMessage =
-          error.response.data.message || "Username already taken. Please try again.";
-          setUsernameErrorMessage(usernameErrorMessage);
-        // Check for specific messages from the server
-      }else{
-        setUsernameErrorMessage("Username already taken. Please try again.");
-      }
-
+  // Move to the next field when Enter is pressed
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, nextFieldRef: React.RefObject<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      nextFieldRef.current?.focus();
     }
   };
 
@@ -234,15 +259,15 @@ const SignupForm: React.FC = () => {
       </div>
 
       <div className="flex items-center mb-2 mx-[45px]">
-        <div className="flex-grow h-px bg-charcoal"></div>
+        <div className="flex-grow h-px bg-charcoal mb-4"></div>
         <span className="px-2 text-charcoal font-helvetica text-helvetica-text mb-5">
           Welcome
         </span>
-        <div className="flex-grow h-px bg-charcoal"></div>
+        <div className="flex-grow h-px bg-charcoal mb-4"></div>
       </div>
 
       {errorMessage && (
-        <p className="text-red-500 text-center mb-4">{errorMessage}</p>
+        <p className="text-red-500 text-center mb-8">{errorMessage}</p>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -250,31 +275,45 @@ const SignupForm: React.FC = () => {
           <InputField
             label="Email"
             type="email"
-            register={register("email")}
+            register={{
+              ...register("email"),
+              ref: (e: HTMLInputElement | null) => {
+                register("email").ref(e); // Register ref with react-hook-form
+                emailInputRef.current = e; // Attach to local ref
+              },
+              onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => handleKeyDown(e, usernameInputRef),
+            }}
             error={emailErrorMessage || errors.email?.message}
             isFocused={emailFocused}
             setIsFocused={setEmailFocused}
           />
-          {/* {emailErrorMessage && (
-        <p className="text-red-500 text-center mb-4">{emailErrorMessage}</p>
-      )} */}
 
           <InputField
             label="Username"
             type="text"
-            register={register("username")}
+            register={{
+              ...register("username"),
+              ref: (e: HTMLInputElement | null) => {
+                register("username").ref(e); // Register ref with react-hook-form
+                usernameInputRef.current = e; // Attach to local ref
+              },
+              onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => handleKeyDown(e, passwordInputRef),
+            }}
             error={usernameErrorMessage || errors.username?.message}
             isFocused={userNameFocused}
             setIsFocused={setUserNameFocused}
           />
-          {/* {usernameErrorMessage && (
-        <p className="text-red-500 text-center mb-4">{usernameErrorMessage}</p>
-      )} */}
 
           <InputField
             label="Password"
             type={passwordVisible ? "text" : "password"}
-            register={register("password")}
+            register={{
+              ...register("password"),
+              ref: (e: HTMLInputElement | null) => {
+                register("password").ref(e); // Register ref with react-hook-form
+                passwordInputRef.current = e; // Attach to local ref
+              },
+            }}
             error={errors.password?.message}
             isFocused={focusedField === "password"}
             setIsFocused={() => setFocusedField("password")}
@@ -285,12 +324,15 @@ const SignupForm: React.FC = () => {
         </fieldset>
 
         <div className="mx-[45px] mb-4">
+
           <button
             type="submit"
-            className="w-full h-[50px] font-helvetica text-helvetica-h5 font-bold bg-olive-green hover:bg-neutral text-white rounded-[15px]"
+            className="w-full h-[50px] font-helvetica text-helvetica-h5 font-bold bg-olive-green hover:scale-105 hover:bg-neutral active:bg-neutral active:scale-95 ease-in-out duration-150 text-white rounded-[15px]"
+            disabled={loading} // Disable button when loading
           >
-            Register
+            {loading ? "Registering..." : "Register"}
           </button>
+
         </div>
       </form>
 
@@ -307,4 +349,5 @@ const SignupForm: React.FC = () => {
 };
 
 export default SignupForm;
+
 
