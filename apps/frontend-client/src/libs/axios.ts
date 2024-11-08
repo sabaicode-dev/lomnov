@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-
+import { API_ENDPOINTS } from './const/api-endpoints';
 interface FailedRequests {
   resolve: (value: AxiosResponse) => void;
   reject: (value: AxiosError) => void;
@@ -16,6 +16,8 @@ const isServer = typeof window === 'undefined';
 async function getServerCookies(): Promise<string | undefined> {
   if (isServer) {
     const { cookies } = (await import("next/headers"));
+    console.log(cookies);
+
     const cookieStore = cookies();
     return cookieStore.getAll().map(cookie => `${cookie.name}=${cookie.value}`).join('; ');
   }
@@ -27,15 +29,13 @@ async function refreshToken(): Promise<{ accessToken: string; idToken: string }>
     const headers = isServer ? { Cookie: await getServerCookies() } : {};
 
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/refresh-token`,
-      null,
-      {
-        withCredentials: true,
-        headers,
-      }
+      `${API_ENDPOINTS.REFRESH_TOKEN}`,null, {
+      withCredentials: true,
+      headers,
+    }
     );
 
-    console.log('response::: ', response)
+    console.log('response::: ', response.data)
 
     const { accessToken, idToken } = extractTokensFromResponse(response);
     return { accessToken, idToken };
@@ -45,7 +45,8 @@ async function refreshToken(): Promise<{ accessToken: string; idToken: string }>
     throw error;
   }
 }
-
+refreshToken().then((res)=> console.log(res)).catch(er=> console.error(er)
+)
 function extractTokensFromResponse(response: AxiosResponse): { accessToken: string; idToken: string } {
   let accessToken = '';
   let idToken = '';

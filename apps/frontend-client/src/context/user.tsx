@@ -4,46 +4,10 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import { LoginRequest, SignupRequest, VerifyUserRequest } from "./user";
+import { User } from "aws-cdk-lib/aws-iam";
 
-export interface User {
-  _id: string;
-  cognitoSub: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  age: number | null;
-  background: string[];
-  createdAt: string;
-  dateOfBirth: string;
-  favorite: string[];
-  gender: string;
-  location: string;
-  phoneNumber: string;
-  profile: string[];
-  role: string;
-  updatedAt: string;
-  userName: string;
-}
 
-interface LoginRequest {
-  email?: string,
-  phone_number?: string,
-  password: string
-}
-
-interface SignupRequest {
-  username: string,
-  email?: string,
-  phone_number?: string
-  password: string
-}
-
-interface VerifyUserRequest {
-  email?: string,
-  phone_number?: string
-  code: string
-}
 
 
 interface AuthContextType {
