@@ -36,3 +36,8 @@ export interface ResponseConfirmPasswordResetDTO {
 export interface ResponseChangeNewPasswordDTO {
   message: string;
 }
+export interface IRefreshTokenResponseDTO{
+  idToken?:string;
+  accessToken?:string;
+  message?:string;
+}

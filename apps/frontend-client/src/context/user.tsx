@@ -4,46 +4,10 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import { LoginRequest, SignupRequest, VerifyUserRequest } from "./user.type";
+import { User } from "aws-cdk-lib/aws-iam";
 
-export interface User {
-  _id: string;
-  cognitoSub: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  age: number | null;
-  background: string[];
-  createdAt: string;
-  dateOfBirth: string;
-  favorite: string[];
-  gender: string;
-  location: string;
-  phoneNumber: string;
-  profile: string[];
-  role: string;
-  updatedAt: string;
-  userName: string;
-}
 
-interface LoginRequest {
-  email?: string,
-  phone_number?: string,
-  password: string
-}
-
-interface SignupRequest {
-  username: string,
-  email?: string,
-  phone_number?: string
-  password: string
-}
-
-interface VerifyUserRequest {
-  email?: string,
-  phone_number?: string
-  code: string
-}
 
 
 interface AuthContextType {
@@ -103,11 +67,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         password
       })
 
+      setIsAuthenticated(true);
       // Fetch the user profile data after login
       const res = await axiosInstance.get(API_ENDPOINTS.USER_PROFILE);
       setUser(res.data);
       console.log(res);
-      setIsAuthenticated(true);
       router.push('/');
     } catch (error) {
       console.log("Error Athentication:: ",error)
