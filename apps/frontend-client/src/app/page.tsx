@@ -14,19 +14,9 @@ export default function Home() {
   return (
     <main className="w-full">
       <HeroSection />
-      <LocationAccess />
       <section className="w-full xl:w-[1300px] m-auto py-10 px-2 xl:px-0 flex flex-col justify-center items-center">
-        <ItemCardPopularLocationList />
 
-        <Link
-          href={"/popular-location"}
-          className="w-[300px] px-10 py-2 border-[1px] rounded-md border-white text-white bg-olive-green text-[26px] font-[500]
-            flex flex-col justify-center items-center transition-all duration-150 ease-in-out
-            hover:bg-olive-green hover:text-white hover:scale-105
-            active:scale-95 active:bg-gray-500 active:text-white"
-        >
-          View ALL
-        </Link>
+        <ItemCardPopularLocationList />
 
       </section>
       <section className="w-full  bg-gray-500 h-[1200px] lg:h-[720px] relative ">
@@ -56,7 +46,7 @@ export default function Home() {
                 className="px-10 py-2 rounded-md border-[1px] border-white text-white text-[26px] font-[500]
                   transition-all duration-150 ease-in-out
                   bg-transparent  hover:text-white hover:border-white hover:scale-105
-                  active:scale-95 active:bg-olive-green active:text-white"
+                  active:scale-95  active:text-white"
               >
                 View ALL
               </Link>
