@@ -4,7 +4,8 @@ import axios from "axios";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import banner from "@/images/banner.png";
-
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 const VerifyAccount: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -73,8 +74,8 @@ const VerifyAccount: React.FC = () => {
     const verificationCode = code.join("");
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL_AUTH}/auth/verify`,
+      const response = await axiosInstance.post(
+        `${API_ENDPOINTS.VERIFY}`,
         { email, code: verificationCode },
       );
 
@@ -117,8 +118,8 @@ const VerifyAccount: React.FC = () => {
 
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL_AUTH}/auth/resend-code`,
+      const response = await axiosInstance.post(
+        `${API_ENDPOINTS.RESEND_CODE}`,
         { email },
       );
       setResendMessage(

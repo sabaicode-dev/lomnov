@@ -295,7 +295,7 @@ export class CognitoService {
     console.log(username);
 
     if (!refreshToken || !username) {
-      throw new AuthenticationError("Request faild");
+      throw new AuthenticationError("Refresh token or username missing");
     }
     const params = {
       AuthFlow: AuthFlowType.REFRESH_TOKEN_AUTH,
@@ -315,7 +315,8 @@ export class CognitoService {
       }
     } catch (error) {
       console.error("AuthService refreshToken() method error:", error);
-      throw error;
+      //@ts-ignore
+      throw new Error("Failed to refresh token: ", error.message);
     }
   }
   public async deleteUser(cognitoUserSub: string): Promise<void> {

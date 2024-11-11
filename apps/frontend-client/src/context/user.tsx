@@ -4,7 +4,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
-import { LoginRequest, SignupRequest, VerifyUserRequest } from "./user";
+import { LoginRequest, SignupRequest, VerifyUserRequest } from "./user.type";
 import { User } from "aws-cdk-lib/aws-iam";
 
 
@@ -67,11 +67,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         password
       })
 
+      setIsAuthenticated(true);
       // Fetch the user profile data after login
       const res = await axiosInstance.get(API_ENDPOINTS.USER_PROFILE);
       setUser(res.data);
       console.log(res);
-      setIsAuthenticated(true);
       router.push('/');
     } catch (error) {
       console.log("Error Athentication:: ",error)

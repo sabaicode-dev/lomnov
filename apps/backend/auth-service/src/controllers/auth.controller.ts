@@ -119,12 +119,23 @@ export class ProductController extends Controller {
     try {
       const refreshToken = request.cookies['refreshToken'];
       const username = request.cookies['username'];
-      const result = await this.cognitoService.refreshTokens({ refreshToken: body.refreshToken || refreshToken, username: body.username || username });
-      setCookie(request.res!, 'idToken', result.idToken);
-      setCookie(request.res!, 'accessToken', result.accessToken);
-      return sendResponse({ message: "Token refresh succussfully"})
+      if (refreshToken && username) {
+        const result = await this.cognitoService.refreshTokens({
+          refreshToken: body.refreshToken || refreshToken,
+          username: body.username || username
+        });
+        setCookie(request.res!, 'idToken', result.idToken, { httpOnly: true, secure: true, sameSite: 'lax' });
+        setCookie(request.res!, 'accessToken', result.accessToken, { httpOnly: true, secure: true, sameSite: 'lax' });
+        return sendResponse({ message: "Token refresh succussfully",data: result })
+
+      }else{
+        return sendResponse({ message: "Missing refresh token or username" ,data:{
+          statusCode: 400
+        }})
+      }
     } catch (error) {
-      throw error;
+      //@ts-ignore
+      throw new Error("Token refresh failed: " + error.message);
     }
   }
   @Delete("/auth/{cognitoSub}")

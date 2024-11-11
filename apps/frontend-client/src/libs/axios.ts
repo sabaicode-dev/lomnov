@@ -6,10 +6,13 @@ interface FailedRequests {
   config: AxiosRequestConfig;
   error: AxiosError;
 }
-
 // A flag indicating if the token is being refreshed
 let isTokenRefreshing = false;
 let failedRequestsQueue: FailedRequests[] = [];
+const axiosInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL, // http://localhost:4000
+  withCredentials: true, // Include cookies in the request
+});
 
 const isServer = typeof window === 'undefined';
 
@@ -28,8 +31,8 @@ async function refreshToken(): Promise<{ accessToken: string; idToken: string }>
   try {
     const headers = isServer ? { Cookie: await getServerCookies() } : {};
 
-    const response = await axios.post(
-      `${API_ENDPOINTS.REFRESH_TOKEN}`,null, {
+    const response = await axiosInstance.post(
+      `${API_ENDPOINTS.REFRESH_TOKEN}`, null, {
       withCredentials: true,
       headers,
     }
@@ -45,8 +48,6 @@ async function refreshToken(): Promise<{ accessToken: string; idToken: string }>
     throw error;
   }
 }
-refreshToken().then((res)=> console.log(res)).catch(er=> console.error(er)
-)
 function extractTokensFromResponse(response: AxiosResponse): { accessToken: string; idToken: string } {
   let accessToken = '';
   let idToken = '';
@@ -66,10 +67,6 @@ function extractTokensFromResponse(response: AxiosResponse): { accessToken: stri
   return { accessToken, idToken };
 }
 
-const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  withCredentials: true, // Include cookies in the request
-});
 
 // TODO: handle axios interceptors for refresh token
 // STEP 1: Intercept the response and check if 401, the request hasn't been retried yet, handle the refresh token
