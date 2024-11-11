@@ -224,3 +224,8 @@ export class InternalServerError extends AppError {
     super(message, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 }
+export class AuthenticationError extends AppError{
+  constructor(message:string = ""){
+    super(message,StatusCodes.UNAUTHORIZED);
+  }
+}

@@ -49,3 +49,7 @@ export interface JwtPayload {
   sub: string | undefined;
   // add other properties if needed
 }
+export interface IRefreshTokenRequestDTO{
+  username?:string;
+  refreshToken?:string;
+}

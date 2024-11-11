@@ -21,10 +21,12 @@ import {
   ResponseChangeNewPasswordDTO,
   RequestchangePasswordDTO,
   APIResponse,
+  IRefreshTokenRequestDTO,
+  IRefreshTokenResponseDTO,
 } from "@/src/utils/types/indext";
 import { CognitoService } from "../services/cognito.service";
-import { InternalServerError } from "../utils/error/customErrors";
 import sendResponse from "@/src/utils/sendResponse";
+import setCookie from "../middlewares/cookies";
 // =========================================================================
 
 @Tags("Manual Registration")
@@ -113,32 +115,29 @@ export class ProductController extends Controller {
   }
 
   @Post("/auth/refresh-token")
-  public async refreshToken(
-    @Request() request: ExRequest,
-  ) {
+  public async refreshToken(@Request() request: ExRequest, @Body() body: IRefreshTokenRequestDTO): Promise<IRefreshTokenResponseDTO> {
     try {
-      const refresh = request.cookies.refreshToken;
-      const username = request.cookies.username;
-      const response = await this.cognitoService.refreshTokens(refresh, username);
-      // Set cookies with a max age of 7 days for the access token
-      request.res?.cookie("accessToken", response.authResult?.AccessToken, {
-        httpOnly: true,
-        secure: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      });
-      request.res?.cookie("idToken", response.authResult?.IdToken, {
-        httpOnly: true,
-        secure: true,
-      });
+      const refreshToken = request.cookies['refreshToken'];
+      const username = request.cookies['username'];
+      if (refreshToken && username) {
+        const result = await this.cognitoService.refreshTokens({
+          refreshToken: body.refreshToken || refreshToken,
+          username: body.username || username
+        });
+        setCookie(request.res!, 'idToken', result.idToken, { httpOnly: true, secure: true, sameSite: 'lax' });
+        setCookie(request.res!, 'accessToken', result.accessToken, { httpOnly: true, secure: true, sameSite: 'lax' });
+        return sendResponse({ message: "Token refresh succussfully",data: result })
 
-
-      return { message: response.message };
-    } catch (error: any) {
-
-      throw new InternalServerError(`An error occurred: ${error.message}`);
+      }else{
+        return sendResponse({ message: "Missing refresh token or username" ,data:{
+          statusCode: 400
+        }})
+      }
+    } catch (error) {
+      //@ts-ignore
+      throw new Error("Token refresh failed: " + error.message);
     }
   }
-
   @Delete("/auth/{cognitoSub}")
   public async deleteUser(@Path() cognitoSub: string) {
     try {

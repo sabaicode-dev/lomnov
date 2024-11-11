@@ -139,7 +139,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import InputField from "../../../../../../../packages/ui-components/src/components/inputfield/InputField";
 import axios from "axios";
-
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import axiosInstance from "@/libs/axios";
 // Define the Zod schema
 const signupSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -191,8 +192,8 @@ const SignupForm: React.FC = () => {
     setErrorMessage(null);
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL_AUTH}/auth/signup`,
+      const response = await axiosInstance.post(
+        `${API_ENDPOINTS.SIGN_UP}`,
         {
           email: data.email,
           username: data.username,
