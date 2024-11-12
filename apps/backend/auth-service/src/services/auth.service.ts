@@ -15,7 +15,7 @@ import configs from "@/src/config";
 import setCookie from "@/src/middlewares/cookies";
 import { CognitoService } from "@/src/services/cognito.service";
 import { ValidationError, UnauthorizedError, ServiceUnavailableError } from "@/src/utils/error/customErrors";
-
+import { GlobalSignOutCommandInput } from "@aws-sdk/client-cognito-identity-provider";
 declare global {
   namespace Express {
     interface Request {
@@ -128,6 +128,17 @@ export class AuthService {
     const data = { email, newPassword, confirmationCode };
     try {
       return await this.cognitoService.confirmPasswordReset(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+  public async signOutUser(accessToken: string):Promise<string | undefined>{
+    const params:GlobalSignOutCommandInput = {
+      AccessToken: accessToken,
+    }
+    try {
+      const result = await this.cognitoService.signout(params);
+      return result ? "Sign out user success" : undefined;
     } catch (error) {
       throw error;
     }
