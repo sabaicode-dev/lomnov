@@ -13,7 +13,7 @@ async function fetchUserDetails() {
       throw new Error("Required cookies not found");
     }
 
-    const res = await axios.get(`http://localhost:4000/api/v1/users/me`, {
+    const res = await axios.get(`http://localhost:4002/api/v1/users/me`, {
       headers: {
         Authorization: `Bearer ${accessToken}`, // Add the authorization header
       },

@@ -2,7 +2,7 @@
 import React from "react";
 
 interface PropertyActionsProps {
-  selectedProperties: number[];
+  selectedProperties: string[];
   onPost: () => void;
   onUpdate: () => void;
   onDelete: () => void;

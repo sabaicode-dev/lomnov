@@ -6,6 +6,7 @@ import ListedProperties from "@/components/organisms/listed-properties/ListedPro
 import UserProfileHeader from "@/components/molecules/user-profile-header/UserProfileHeader";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import { PropertyProvider } from "@/context/property";
 import { notFound } from "next/navigation"; // Import notFound to handle user not found
 
 async function fetchUserDetails(username: string) {
@@ -39,7 +40,10 @@ console.log("get user by name:: ",user)
     <Layout>
       <div>
         <UserProfileHeader user={user} />
-        <ListedProperties user={username} />
+       <PropertyProvider>
+          <ListedProperties  />
+       </PropertyProvider>
+        
       </div>
     </Layout>
   );
