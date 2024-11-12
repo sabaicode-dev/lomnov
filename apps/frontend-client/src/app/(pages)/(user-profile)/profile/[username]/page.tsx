@@ -5,7 +5,7 @@ import Layout from "../layout";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import ProfilePageClient from "@/components/molecules/profile-page-client/ProfilePageClient"; // Import client component
-import { User } from "@/context/user";
+import { User } from "@/context/user.type";
 
 async function fetchUserDetails(username: string): Promise<User | null> {
   try {
