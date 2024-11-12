@@ -17,7 +17,10 @@ import {
   AdminDeleteUserCommand,
   ChangePasswordCommand,
   AdminUpdateUserAttributesCommand,
-  AuthFlowType
+  AuthFlowType,
+  GlobalSignOutCommand,
+  GlobalSignOutCommandInput,
+  GlobalSignOutCommandOutput
 } from "@aws-sdk/client-cognito-identity-provider";
 import configs from "@/src/config";
 import {
@@ -474,6 +477,16 @@ export class CognitoService {
       );
 
     } catch (error) {
+      throw error;
+    }
+  }
+  public async signout(params: GlobalSignOutCommandInput):Promise<GlobalSignOutCommandOutput> {
+    try {
+      const command = new GlobalSignOutCommand(params);
+      const result: GlobalSignOutCommandOutput = await this.cognitoClient.send(command);
+      return result;
+    } catch (error) {
+      console.error("Error during signout in AuthService:", error);
       throw error;
     }
   }

@@ -8,7 +8,7 @@ import {
   Delete,
   Path,
 } from "tsoa";
-import { Request as ExRequest } from "express";
+import { Request as ExRequest, Response } from "express";
 import { AuthService } from "@/src/services/auth.service";
 import {
   RequestSignUpDTO,
@@ -79,7 +79,30 @@ export class ProductController extends Controller {
       throw error;
     }
   }
-
+  @Post("/auth/logout")
+  public async logout(@Request() reqeust: Express.Request){
+    try { 
+      //@ts-ignore
+        const tokens = reqeust.cookies;
+        const response = (reqeust as any).res as Response;
+        const clearCookie = (name: string) => {
+          response.cookie(name, "", {
+            expires: new Date(0), // Expire immediately
+            httpOnly: true, // Optional: set to true for security
+            // secure: process.env.NODE_ENV === "production", // Secure in production
+            // path: "/", // Apply to all paths
+          });
+        };
+        await this.authService.signOutUser(tokens['accessToken']);
+        let clearToken;
+        for (const token in tokens) {
+          clearToken= clearCookie(token);
+        }
+        return sendResponse({ message: "Signout successfully",data: clearToken });
+    } catch (error) {
+      throw error;
+    }
+  }
   @Post("/auth/change-password")
   public async changeNewPassword(
     @Request() request: Express.Request,

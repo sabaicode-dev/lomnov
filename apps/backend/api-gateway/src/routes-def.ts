@@ -24,6 +24,10 @@ const ROUTE_PATHS: RoutesConfig = {
         methods: { POST: { authRequired: false, roles: [] } },
       },
       {
+        path:"/logout",
+        methods: {POST: {authRequired: false, roles:[]}}
+      },
+      {
         path: "/verify",
         methods: { POST: { authRequired: false, roles: [] } },
       },

@@ -218,3 +218,4 @@ export const confirmPasswordReset = async (
     throw new Error(`Failed to reset password: ${error.message}`);
   }
 };
+
