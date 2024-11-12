@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import { LoginRequest, SignupRequest, VerifyUserRequest } from "./user.type";
-import { User } from "aws-cdk-lib/aws-iam";
+import { User } from "./user.type";
 
 
 
