@@ -66,7 +66,7 @@ const routeConfigMiddleware = (req: Request, _res: Response, next: NextFunction)
   let routeConfig = null;
   for (const key in ROUTE_PATHS) {
     routeConfig = findRouteConfig(path, ROUTE_PATHS[key]);
-    console.log('routeConfig', routeConfig)
+    // console.log('routeConfig', routeConfig)
     if (routeConfig) break;
   }
 

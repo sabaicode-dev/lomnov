@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       checkAuthStatus();
     } catch (error) {
-      console.log(error);
+   //   console.log(error);
       throw error;
     }
   }, [])
@@ -71,10 +71,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Fetch the user profile data after login
       const res = await axiosInstance.get(API_ENDPOINTS.USER_PROFILE);
       setUser(res.data);
-      console.log(res);
+     // console.log(res);
       router.push('/');
     } catch (error) {
-      console.log("Error Athentication:: ",error)
+     // console.log("Error Athentication:: ",error)
       setIsAuthenticated(false);
       throw error;
     } finally {
@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // TODO: redirect to verify page with contact and method (email or phone_number)
       router.push(`/verify?contact=${email || phone_number}&method=${email ? 'email' : 'phone_number'}`);
     } catch (error) {
-      console.log('This error: ', error)
+    //  console.log('This error: ', error)
       setIsAuthenticated(false);
       throw error;
     } finally {
@@ -143,7 +143,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await axiosInstance.post(API_ENDPOINTS.LOGOUT); // Call the logout endpoint
       setIsAuthenticated(false);
       setUser(null);
-      router.push('/login');
+      router.push('/');
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {
