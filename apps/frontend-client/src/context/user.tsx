@@ -21,6 +21,38 @@ interface AuthContextType {
   siginWithGoogle: () => Promise<void>;
 }
 
+
+export interface RealEstateDetail {
+  bedrooms: string;
+  bathrooms: string;
+  size: string;
+  fireplace?: string;
+  garden?: string;
+  patio?: string; // Add other relevant fields as necessary
+}
+
+
+export interface RealEstateItem {
+  _id: string; // This must match your API response structure
+  cognitoSub: string;
+  title: { content: string; language: string }[];
+  description: { content: string; language: string }[];
+  thumbnail: string;
+  images: string[];
+  urlmap: string;
+  address: { content: string; language: string }[];
+  location: { content: string; language: string }[];
+  price: number;
+  category: { content: string; language: string }[];
+  transition: { content: string; language: string }[];
+  detail: { language: string; content: RealEstateDetail }[];
+  status: boolean;
+  createdAt: string; // Include this if necessary
+  updatedAt: string; // Include this if necessary
+  __v: number; // Include this if necessary
+}
+
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -101,6 +133,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     }
   }
+
 
   const verify = async ({ email, phone_number, code }: VerifyUserRequest) => {
     setLoading(true);

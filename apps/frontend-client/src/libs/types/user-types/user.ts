@@ -1,4 +1,6 @@
 export interface User {
+  _id: string // or maybe propertyId
+  user: string;
   [x: string]: string;
   username: string;
   firstname: string;
@@ -7,4 +9,5 @@ export interface User {
   location: string;
   address: string;
   phone: string;
+  
 }

@@ -12,5 +12,8 @@ export const API_ENDPOINTS = {
   REFRESH_TOKEN:`${process.env.NEXT_PUBLIC_AUTH_ENDPOINT}/refresh-token`,
   // USER SERVICE
   USER_PROFILE: `${process.env.NEXT_PUBLIC_USER_ENDPOINT}/me`,
-  USER: `${process.env.NEXT_PUBLIC_USER_ENDPOINT}`
-}
+  USER: `${process.env.NEXT_PUBLIC_USER_ENDPOINT}`,
+  ADD_PROPERTY: `${process.env.NEXT_PUBLIC_USER_ENDPOINT}/favorite`,
+  // PROPERTIES SERVICES
+  PROPERTIES: `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}`,
+};
