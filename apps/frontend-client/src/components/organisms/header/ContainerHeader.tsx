@@ -120,20 +120,20 @@ function ContainerHeader({
                   <div className="flex flex-col items-start justify-start mt-3 border-y-[1px] border-y-blue-500 w-full py-3">
                     <Link
                       href={`/profile/${user?.userName}`}
-                      className="hover:bg-blue-500 hover:text-white w-full rounded-[10px] p-2 flex items-center gap-2"
+                      className="hover:bg-blue-500 hover:text-white w-full rounded-[10px] p-2 flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform duration-150"
                     >
                       <User props="text-olive-green hover:text-white" /> Profile
                     </Link>
                     <Link
                       href={`/setting/${user?.userName}`}
-                      className="hover:bg-blue-500 hover:text-white w-full rounded-[10px] p-2 flex items-center gap-2"
+                      className="hover:bg-blue-500 hover:text-white w-full rounded-[10px] p-2 flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform duration-150"
                     >
                       <Setting props="text-olive-green hover:text-white" /> Settings
                     </Link>
                   </div>
 
                   <button
-                    className="mt-2 p-2 w-full rounded-[10px] font-[500] flex items-center hover:bg-red-500 hover:text-white"
+                    className="mt-2 p-2 w-full rounded-[10px] font-[500] flex items-center hover:scale-105 active:scale-95 transition-transform duration-150 hover:bg-red-500 hover:text-white"
                     onClick={() => {
                       handleLogout();
                     }}
