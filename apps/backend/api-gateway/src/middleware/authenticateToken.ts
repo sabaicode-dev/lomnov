@@ -25,7 +25,7 @@ const authenticateToken = async (req: Request, _res: Response, next: NextFunctio
     return next();
   }
   const token = req.cookies?.["accessToken"];
-  console.log(token)
+  // console.log(token)
   if (!token) {
     return next(new UnauthorizedError());
   }

@@ -4,46 +4,10 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import { LoginRequest, SignupRequest, VerifyUserRequest } from "./user.type";
+import { User } from "./user.type";
 
-export interface User {
-  _id: string;
-  cognitoSub: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  age: number | null;
-  background: string[];
-  createdAt: string;
-  dateOfBirth: string;
-  favorite: string[];
-  gender: string;
-  location: string;
-  phoneNumber: string;
-  profile: string[];
-  role: string;
-  updatedAt: string;
-  userName: string;
-}
 
-interface LoginRequest {
-  email?: string,
-  phone_number?: string,
-  password: string
-}
-
-interface SignupRequest {
-  username: string,
-  email?: string,
-  phone_number?: string
-  password: string
-}
-
-interface VerifyUserRequest {
-  email?: string,
-  phone_number?: string
-  code: string
-}
 
 
 interface AuthContextType {
@@ -122,7 +86,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       checkAuthStatus();
     } catch (error) {
-      console.log(error);
+   //   console.log(error);
       throw error;
     }
   }, [])
@@ -135,14 +99,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         password
       })
 
+      setIsAuthenticated(true);
       // Fetch the user profile data after login
       const res = await axiosInstance.get(API_ENDPOINTS.USER_PROFILE);
       setUser(res.data);
-      console.log(res);
-      setIsAuthenticated(true);
+     // console.log(res);
       router.push('/');
     } catch (error) {
-      console.log("Error Athentication:: ",error)
+     // console.log("Error Athentication:: ",error)
       setIsAuthenticated(false);
       throw error;
     } finally {
@@ -162,7 +126,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // TODO: redirect to verify page with contact and method (email or phone_number)
       router.push(`/verify?contact=${email || phone_number}&method=${email ? 'email' : 'phone_number'}`);
     } catch (error) {
-      console.log('This error: ', error)
+    //  console.log('This error: ', error)
       setIsAuthenticated(false);
       throw error;
     } finally {
@@ -212,7 +176,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await axiosInstance.post(API_ENDPOINTS.LOGOUT); // Call the logout endpoint
       setIsAuthenticated(false);
       setUser(null);
-      router.push('/login');
+      router.push('/');
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {

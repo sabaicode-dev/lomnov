@@ -23,11 +23,11 @@ export interface MenuProp {
 function ContainerHeader({
   menu,
 }: MenuProp) {
-  const { user ,isAuthenticated } = useAuth();
+  const { user ,isAuthenticated, logout } = useAuth();
   const [isMenu, setIsMenu] = useState<boolean>(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
-  console.log('res:: ', user)
+//  console.log('res:: ', user)
 
   const handleClickMenu = () => {
     setIsMenu((isMenu) => !isMenu);
@@ -39,12 +39,13 @@ function ContainerHeader({
 
   const handleLogout = async () => {
     try {
-      window.location.href = "/"
+      await logout();
+    //  console.log("logout resp:: ",response)
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
-  console.log("Authenticated:: ",isAuthenticated);
+//  console.log("Authenticated:: ",isAuthenticated);
   return (
     <>
       <div className="xl:w-[1300px] w-full lg:m-auto h-full flex flex-row items-center justify-between py-3 px-3 xl:px-0 z-20">
@@ -120,23 +121,21 @@ function ContainerHeader({
                   <div className="flex flex-col items-start justify-start mt-3 border-y-[1px] border-y-blue-500 w-full py-3">
                     <Link
                       href={`/profile/${user?.userName}`}
-                      className="hover:bg-blue-500 hover:text-white w-full rounded-lg p-2 flex items-center gap-2"
+                      className="hover:bg-blue-500 hover:text-white w-full rounded-[10px] p-2 flex items-center gap-2"
                     >
-                      <User props="text-olive-green" /> Profile
+                      <User props="text-olive-green hover:text-white" /> Profile
                     </Link>
                     <Link
                       href={`/setting/${user?.userName}`}
-                      className="hover:bg-blue-500 hover:text-white w-full rounded-lg p-2 flex items-center gap-2"
+                      className="hover:bg-blue-500 hover:text-white w-full rounded-[10px] p-2 flex items-center gap-2"
                     >
-                      <Setting props="text-olive-green" /> Settings
+                      <Setting props="text-olive-green hover:text-white" /> Settings
                     </Link>
                   </div>
 
                   <button
-                    className="mt-2 p-2 w-full rounded-[25px] font-[500] flex items-center hover:bg-red-500 hover:text-white"
-                    onClick={() => {
-                      handleLogout();
-                    }}
+                    className="mt-2 p-2 w-full rounded-[10px] font-[500] flex items-center hover:bg-red-500 hover:text-white"
+                    onClick={async () => { await handleLogout();}}
                   >
                     <SignOut /> Logout
                   </button>
@@ -147,10 +146,13 @@ function ContainerHeader({
             // Show login button if not logged in
             <Link
               href="/signin"
-              className="md:py-[5px] md:px-5 py-[5px] px-4 border-[1px] md:border-[2px] border-[#E5D2B0] rounded-[8px] md:text-[18px] text-white md:font-[600] font-[500] hover:border-white"
+              className="md:py-[5px] md:px-5 py-[5px] px-4 border-[1px] md:border-[2px] border-[#E5D2B0] rounded-[8px] md:text-[18px] text-white md:font-[600] font-[500] hover:border-white
+                hover:scale-105 active:border-white active:scale-95  transition-transform duration-150"
             >
               Login
             </Link>
+
+
           )}
         </div>
 

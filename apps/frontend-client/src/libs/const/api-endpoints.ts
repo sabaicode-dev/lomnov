@@ -9,6 +9,7 @@ export const API_ENDPOINTS = {
   CONFIRM_PASSWORD: `${process.env.NEXT_PUBLIC_AUTH_ENDPOINT}/confirm-password`,
   SIGN_IN_WITH_GOOGLE: `${process.env.NEXT_PUBLIC_AUTH_ENDPOINT}/google-signin`,
   LOGOUT: `${process.env.NEXT_PUBLIC_AUTH_ENDPOINT}/logout`,
+  REFRESH_TOKEN:`${process.env.NEXT_PUBLIC_AUTH_ENDPOINT}/refresh-token`,
   // USER SERVICE
   USER_PROFILE: `${process.env.NEXT_PUBLIC_USER_ENDPOINT}/me`,
   USER: `${process.env.NEXT_PUBLIC_USER_ENDPOINT}`,

@@ -1,39 +1,33 @@
-// profile/[username]/page.tsx
+// app/profile/[username]/page.tsx
 
 import React from "react";
 import Layout from "../layout";
-import ListedProperties from "@/components/organisms/listed-properties/ListedProperties";
-import UserProfileHeader from "@/components/molecules/user-profile-header/UserProfileHeader";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import { PropertyProvider } from "@/context/property";
-import { notFound } from "next/navigation"; // Import notFound to handle user not found
+import ProfilePageClient from "@/components/molecules/profile-page-client/ProfilePageClient"; // Import client component
+import { User } from "@/context/user.type";
+import UserProfileHeader from "@/components/molecules/user-profile-header/UserProfileHeader";
+import ListedProperties from "@/components/organisms/listed-properties/ListedProperties";
 
-async function fetchUserDetails(username: string) {
+async function fetchUserDetails(username: string): Promise<User | null> {
   try {
-    const res = await axiosInstance.get(`${API_ENDPOINTS.USER}?username=${username}`);
-    if (res.status !== 200) {
-      throw new Error("Failed to fetch user details");
-    }
-    console.log("user response:: ", res.data.users[0]);
-    // Assuming the API response is structured as shown
-    return res.data.users[0]; // Get the first user from the array
-  } catch (error) {
-    console.error(error);
+    const res = await axiosInstance.get(`${API_ENDPOINTS.USER}?username=${encodeURIComponent(username)}`);
+    return res.data.users[0] || null;
+  } catch {
     return null;
   }
 }
 
-
-const ProfilePage = async ({ params }: {params:{username:string}}) => {
-  console.log("Params:: ",params);
-  
+const ProfilePage = async ({ params }: { params: { username: string } }) => {
   const { username } = params;
-
-  const user = await fetchUserDetails(username); // Fetch user data here
-console.log("get user by name:: ",user)
+  console.log(username);
+  
+  const user = await fetchUserDetails(username);
+  console.log("User Profiles:::: ,",user);
+  
   if (!user) {
-    notFound(); // This will trigger a 404 page if user data is not found
+    return <div>User not found</div>; // Render a message if user data is not found
   }
 
   return (

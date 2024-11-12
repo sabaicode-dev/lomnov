@@ -109,7 +109,7 @@ const InputField: React.FC<InputFieldProps> = ({
 
 }) => {
   return (
-    <div className="relative mb-10 mx-[45px]">
+    <div className="relative mb-12  mx-[45px]">
       <input
         type={type}
         {...register}

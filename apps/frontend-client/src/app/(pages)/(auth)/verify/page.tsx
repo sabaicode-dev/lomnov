@@ -4,7 +4,8 @@ import axios from "axios";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import banner from "@/images/banner.png";
-
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 const VerifyAccount: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -73,13 +74,13 @@ const VerifyAccount: React.FC = () => {
     const verificationCode = code.join("");
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL_AUTH}/auth/verify`,
+      const response = await axiosInstance.post(
+        `${API_ENDPOINTS.VERIFY}`,
         { email, code: verificationCode },
       );
 
       if (response.data.message) {
-        setSuccessMessage("Account verified successfully!");
+        setSuccessMessage("Account verified successfully. Account created.");
         setTimeout(() => router.push("/signin"), 2000);
       } else {
         setErrorMessage("Verification failed. Please try again.");
@@ -114,10 +115,11 @@ const VerifyAccount: React.FC = () => {
       return;
     }
 
+
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL_AUTH}/auth/resend-code`,
+      const response = await axiosInstance.post(
+        `${API_ENDPOINTS.RESEND_CODE}`,
         { email },
       );
       setResendMessage(
@@ -162,6 +164,7 @@ const VerifyAccount: React.FC = () => {
           <h1 className="text-xl md:text-4xl font-coolvetica mb-3">
             Verify Account
           </h1>
+          <p>Enter the 6-digit code sent to your email to verify your account.</p>
         </div>
 
         <div className="flex justify-center gap-2 mb-6">
@@ -193,10 +196,11 @@ const VerifyAccount: React.FC = () => {
           type="button"
           onClick={handleSubmit}
           disabled={isLoading || code.some((digit) => digit === "")}
-          className={`${isLoading ? "bg-gray-300" : "bg-olive-drab text-white"} w-full py-3 rounded-lg font-semibold transition`}
+          className={`${isLoading ? "bg-gray-300" : "bg-olive-drab hover:bg-natural hover:scale-105 active:bg-natural active:scale-95"} w-full py-3 rounded-lg font-semibold transition-transform duration-150`}
         >
           {isLoading ? "Verifying..." : "Verify Account"}
         </button>
+
 
         {resendMessage && (
           <p className="text-gray-500 text-center mt-4">{resendMessage}</p>

@@ -16,10 +16,15 @@ import {
   AdminAddUserToGroupCommand,
   AdminDeleteUserCommand,
   ChangePasswordCommand,
-  AdminUpdateUserAttributesCommand
+  AdminUpdateUserAttributesCommand,
+  AuthFlowType,
+  GlobalSignOutCommand,
+  GlobalSignOutCommandInput,
+  GlobalSignOutCommandOutput
 } from "@aws-sdk/client-cognito-identity-provider";
 import configs from "@/src/config";
 import {
+  AuthenticationError,
   BadRequestError,
   InternalServerError,
   NotFoundError,
@@ -34,7 +39,7 @@ import {
   ResponseSignInUserDTO,
   RequestSignUpUserDTO,
   RequestVerifyDTO,
-  ResponseVerifyUserDTO,
+  IRefreshTokenRequestDTO
 } from "@/src/utils/types/indext";
 import axios from "axios";
 import setCookie from "../middlewares/cookies";
@@ -289,48 +294,34 @@ export class CognitoService {
       }
     }
   }
+  async refreshTokens({ refreshToken, username }: IRefreshTokenRequestDTO) {
+    console.log(username);
 
-  public async refreshTokens(
-    refreshToken: string,
-    username: string,
-  ): Promise<ResponseVerifyUserDTO> {
-    try {
-      const secretHash = this.generateSecretHash(username);
-      const command = new InitiateAuthCommand({
-        ClientId: configs.awsCognitoClientId,
-        AuthFlow: "REFRESH_TOKEN_AUTH",
-        AuthParameters: {
-          REFRESH_TOKEN: refreshToken,
-          SECRET_HASH: secretHash,
-        },
-      });
-      const response = await this.cognitoClient.send(command);
-
-      // Check if the response and AuthenticationResult are valid
-      if (!response?.AuthenticationResult) {
-        throw new InternalServerError(
-          "Authentication result is missing from the response.",
-        );
-      }
-
-      const authResult = response.AuthenticationResult;
-
-      return {
-        message: "Token refresh successful!",
-        authResult,
-
-      };
-    } catch (error: any) {
-      if (error instanceof InternalServerError) {
-        throw error;
-      } else {
-        throw new InternalServerError(
-          `An unexpected error occurred: ${error.message}`,
-        );
+    if (!refreshToken || !username) {
+      throw new AuthenticationError("Refresh token or username missing");
+    }
+    const params = {
+      AuthFlow: AuthFlowType.REFRESH_TOKEN_AUTH,
+      ClientId: configs.awsCognitoClientId,
+      AuthParameters: {
+        REFRESH_TOKEN: refreshToken,
+        SECRET_HASH: this.generateSecretHash(username)
       }
     }
+    try {
+      const command = new InitiateAuthCommand(params);
+      const result = await this.cognitoClient.send(command);
+      return {
+        accessToken: result.AuthenticationResult?.AccessToken!,
+        idToken: result.AuthenticationResult?.IdToken!,
+        refreshToken: result.AuthenticationResult?.RefreshToken! || refreshToken
+      }
+    } catch (error) {
+      console.error("AuthService refreshToken() method error:", error);
+      //@ts-ignore
+      throw new Error("Failed to refresh token: ", error.message);
+    }
   }
-
   public async deleteUser(cognitoUserSub: string): Promise<void> {
     const params = {
       UserPoolId: configs.awsCognitoUserPoolId, // The user pool ID for the user pool where you want to delete the user
@@ -486,6 +477,16 @@ export class CognitoService {
       );
 
     } catch (error) {
+      throw error;
+    }
+  }
+  public async signout(params: GlobalSignOutCommandInput):Promise<GlobalSignOutCommandOutput> {
+    try {
+      const command = new GlobalSignOutCommand(params);
+      const result: GlobalSignOutCommandOutput = await this.cognitoClient.send(command);
+      return result;
+    } catch (error) {
+      console.error("Error during signout in AuthService:", error);
       throw error;
     }
   }

@@ -6,7 +6,7 @@ import LoginForm from "@/components/organisms/auth/form-login/LoginForm";
 const SignInPage = () => {
   return (
     <div className="w-full">
-      <div className="w-full relative mb-[800px]">
+      <div className="w-full relative mb-[580px]">
         {/* Banner */}
         <header className="relative w-full h-[400px]">
           <Image
@@ -33,7 +33,6 @@ const SignInPage = () => {
             </p>
           </div>
         </header>
-
         <div className="w-full absolute mx-auto top-[330px] px-5">
           <LoginForm />
         </div>
