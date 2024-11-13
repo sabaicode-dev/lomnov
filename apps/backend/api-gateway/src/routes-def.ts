@@ -44,7 +44,7 @@ const ROUTE_PATHS: RoutesConfig = {
         methods: { POST: { authRequired: false, roles: [] } },
       },
       {
-        path: "/google-sign-in",
+        path: "/google-signin",
         methods: { GET: { authRequired: false, roles: [] } },
       },
       {
