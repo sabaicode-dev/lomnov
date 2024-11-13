@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/organisms/header/Header";
 import Footer from "@/components/organisms/footer/Footer";
 import { AuthProvider } from "@/context/user";
+import LocationAccess from "@/components/organisms/location-access/LocationAccess";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           <Header />
+          <LocationAccess />
           {children}
           <Footer />
         </AuthProvider>

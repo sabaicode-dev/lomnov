@@ -1,11 +1,19 @@
+"use client";
 import React from "react";
-import { string } from "zod";
-// import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 
 interface prop {
   property: string;
 }
+
 const Map = ({ property }: prop) => {
+  // Log the map URL to check if it's correct
+  console.log("Map URL:", property);
+
+  // If the property URL is missing or invalid, show a fallback message
+  if (!property) {
+    return <p>No map URL available or failed to load the map.</p>;
+  }
+
   return (
     <div className="max-w-[1300px] h-[400px] mx-auto mt-[50px] px-[10px]">
       <div className="w-full h-full">

@@ -66,8 +66,8 @@ const Search = () => {
               <SelectLocations onChange={handleLocationChange} />
               <SelectPrice onChange={handlePriceChange} />
               <button
-                className="bg-neutral text-white font-[600] px-5 py-2 rounded-md lg:w-[120px]
-                  hover:bg-olive-green hover:scale-105 active:bg-gray-600 active:scale-95 transition-transform duration-150"
+                className="bg-olive-green text-white font-[600] px-5 py-2 rounded-md lg:w-[120px]
+                  hover:bg-olive-green hover:scale-105 active:bg-olive-green active:scale-95 transition-transform duration-150"
                 onClick={handleSearch}
               >
                 Search
