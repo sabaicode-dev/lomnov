@@ -6,15 +6,17 @@ import LocationAccess from "@/components/organisms/location-access/LocationAcces
 import RecommendedProperties from "@/components/molecules/RecommendedProperties/RecommendedProperties";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import Map from "../../../components/molecules/map/Map";
+import axios from "axios";
 
 // Function to fetch property data based on the provided id
 async function fetchProperty(id: string): Promise<RealEstateItem | null> {
   try {
-    const res = await fetch(`https://lomnov.onrender.com/api/v1/properties?id=${1}`);
-    if (!res.ok) {
+    const res = await axios.get(`https://lomnov.onrender.com/api/v1/properties?id=${1}`);
+    console.log("Nearly location page:: ",res)
+    if (res.status !== 200) {
       throw new Error("Failed to fetch property data");
     }
-    const data = await res.json();
+    const data = await res.data
     return data[0] || null;  // Ensure it returns null if no data found
   } catch (error) {
     console.error("Error fetching property:", error);
@@ -65,7 +67,8 @@ const page = async ({ params }: { params: { id: string } }) => {
       </div>
 
       <div className="w-full lg:w-[1300px] m-auto mt-10 px-2 lg:px-0">
-        <ItemCardList />
+
+          <ItemCardList />
       </div>
 
       {/* Line */}
@@ -80,7 +83,7 @@ const page = async ({ params }: { params: { id: string } }) => {
         {property ? (
           <div className="w-full h-full">
             {/* Pass map URL to the Map component */}
-            <Map property={property.mapurl || ""} />
+            <Map property={property.urlmap || ""} />
           </div>
         ) : (
           <p className="text-center">Loading map or property data...</p>
@@ -90,8 +93,8 @@ const page = async ({ params }: { params: { id: string } }) => {
       <div className="w-full lg:w-[1300px] m-auto mt-10 px-2 lg:px-0">
         {property ? (
           <RecommendedProperties
-            category={property.category} // Provide a default value
-            address={property.address} // Provide a default value
+            category={property.category[0].content} // Provide a default value
+            address={property.address[0].content} // Provide a default value
           />
         ) : (
           <p className="text-center">Loading recommended properties...</p>

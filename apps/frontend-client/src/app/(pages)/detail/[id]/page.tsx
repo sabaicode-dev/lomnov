@@ -28,7 +28,7 @@ const page = async ({ params }: { params: { id: string } }) => {
           <Image
             className="top-0 left-0 w-full h-full object-cover"
             src={property.thumbnail}
-            alt={property.title}
+            alt={property.title[0].content}
             objectFit="cover"
             layout="fill"
           />
@@ -70,14 +70,14 @@ const page = async ({ params }: { params: { id: string } }) => {
        
             <UserListed property={property} />
           </div>
-          <Map property={property.mapurl} />
+          <Map property={property.urlmap} />
         </div>
 
         {/* Recommend Properties */}
         <div className="w-full mt-[50px]">
           <RecommendedProperties
-            category={property.category}
-            address={property.address}
+            category={property.category[0].content}
+            address={property.address[0].content}
           />
         </div>
       </div>

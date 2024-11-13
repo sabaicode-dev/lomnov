@@ -22,6 +22,7 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     setError(null);
     try {
+
       const response = await axios.get("http://localhost:4003/api/v1/properties");
       console.log("API Response:", response.data); // Log the API response
       setProperties(response.data.properties); // Correctly access 'properties'
