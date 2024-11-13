@@ -25,6 +25,7 @@ import {
 } from "@/src/utils/types/indext";
 import { UserService } from "@/src/services/user.service";
 
+
 // =========================================================
 
 @Tags(" User service")
@@ -168,6 +169,8 @@ export class ProductController extends Controller {
     }
   }
 
+
+
   @Put("/favorite/{propertyId}")
   public async toggleFavorite(
     @Path() propertyId: Types.ObjectId,
@@ -183,4 +186,50 @@ export class ProductController extends Controller {
       throw error;
     }
   }
+
+  // @Post("me/favorite")
+  // public async addFavorite(
+  //   @Request() request: Express.Request,
+  //   @Body() body: {propertyId: string}
+  // ): Promise<FavoriteResponseDTO>{
+  //    try {
+  //       const userId = request.cookies['user_id'];
+  //       const {propertyId} = body;
+
+  //       const  response = await UserService.addFavorite(userId,propertyId);
+
+  //       return sendRespone<IUser>({
+  //          message: "Favarite added successfully",
+  //          data: response,
+  //       });
+  //    } catch (error) {
+  //       console.error(
+  //          `UserController - addFavorite() method error`,
+  //          prettyObject(error as {})
+  //       );
+  //       throw error;
+      
+  //    }
+  // }
+
+  // @Delete("/me/favorite")
+  // public async getFavorite(
+  //   @Request() request: ExpressRequest
+  // ): Promise<{message: String; data: string[]}>{
+  //    try {
+  //     const userId = request.cookies["user_id"];
+  //     const favorites await UserService.getUserFavorite(userId);
+
+  //     return sendRespone<string[]>({message: "Successs", data : favarite});
+      
+  //    } catch (error) {
+  //       console.error(
+  //         `UserController - getFavorite() method error` ,
+  //         prettyObject(error as {})
+  //       );
+  //       throw error;
+      
+  //    }
+  // }
+ 
 }

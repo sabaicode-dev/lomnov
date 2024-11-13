@@ -23,11 +23,11 @@ export interface MenuProp {
 function ContainerHeader({
   menu,
 }: MenuProp) {
-  const { user ,isAuthenticated } = useAuth();
+  const { user ,isAuthenticated, logout } = useAuth();
   const [isMenu, setIsMenu] = useState<boolean>(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
-  console.log('res:: ', user)
+//  console.log('res:: ', user)
 
   const handleClickMenu = () => {
     setIsMenu((isMenu) => !isMenu);
@@ -39,12 +39,13 @@ function ContainerHeader({
 
   const handleLogout = async () => {
     try {
-      window.location.href = "/"
+      await logout();
+    //  console.log("logout resp:: ",response)
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
-  console.log("Authenticated:: ",isAuthenticated);
+//  console.log("Authenticated:: ",isAuthenticated);
   return (
     <>
       <div className="xl:w-[1300px] w-full lg:m-auto h-full flex flex-row items-center justify-between py-3 px-3 xl:px-0 z-20">
@@ -133,10 +134,8 @@ function ContainerHeader({
                   </div>
 
                   <button
-                    className="mt-2 p-2 w-full rounded-[10px] font-[500] flex items-center hover:scale-105 active:scale-95 transition-transform duration-150 hover:bg-red-500 hover:text-white"
-                    onClick={() => {
-                      handleLogout();
-                    }}
+                    className="mt-2 p-2 w-full rounded-[10px] font-[500] flex items-center hover:bg-red-500 hover:text-white"
+                    onClick={async () => { await handleLogout();}}
                   >
                     <SignOut /> Logout
                   </button>

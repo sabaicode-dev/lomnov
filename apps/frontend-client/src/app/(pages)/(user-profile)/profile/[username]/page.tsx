@@ -4,8 +4,11 @@ import React from "react";
 import Layout from "../layout";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import { PropertyProvider } from "@/context/property";
 import ProfilePageClient from "@/components/molecules/profile-page-client/ProfilePageClient"; // Import client component
 import { User } from "@/context/user.type";
+import UserProfileHeader from "@/components/molecules/user-profile-header/UserProfileHeader";
+import ListedProperties from "@/components/organisms/listed-properties/ListedProperties";
 
 async function fetchUserDetails(username: string): Promise<User | null> {
   try {
@@ -29,7 +32,13 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
 
   return (
     <Layout>
-      <ProfilePageClient user={user} usernameParam={username} /> {/* Pass data to client component */}
+      <div>
+        <UserProfileHeader user={user} />
+       <PropertyProvider>
+          <ListedProperties  />
+       </PropertyProvider>
+        
+      </div>
     </Layout>
   );
 };

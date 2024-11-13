@@ -2,7 +2,8 @@ import ItemCardList from "@/components/molecules/item-card-list/ItemCardList";
 import Image from "next/image";
 import banner from "@/images/banner.png";
 import Search from "@/components/molecules/Search/Search";
-
+import { PropertyProvider } from "@/context/property";
+import PropertyList from "@/components/molecules/item-card-list/ItemCardList";
 // ==============================================================
 
 function page() {
@@ -39,7 +40,9 @@ function page() {
       </header>
 
       <div className="w-full lg:w-[1300px] m-auto  mt-32 px-2 lg:px-0">
-        <ItemCardList />
+        <PropertyProvider>
+           <PropertyList/>
+        </PropertyProvider>
       </div>
     </main>
   );

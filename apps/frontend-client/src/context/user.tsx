@@ -21,6 +21,38 @@ interface AuthContextType {
   siginWithGoogle: () => Promise<void>;
 }
 
+
+export interface RealEstateDetail {
+  bedrooms: string;
+  bathrooms: string;
+  size: string;
+  fireplace?: string;
+  garden?: string;
+  patio?: string; // Add other relevant fields as necessary
+}
+
+
+export interface RealEstateItem {
+  _id: string; // This must match your API response structure
+  cognitoSub: string;
+  title: { content: string; language: string }[];
+  description: { content: string; language: string }[];
+  thumbnail: string;
+  images: string[];
+  urlmap: string;
+  address: { content: string; language: string }[];
+  location: { content: string; language: string }[];
+  price: number;
+  category: { content: string; language: string }[];
+  transition: { content: string; language: string }[];
+  detail: { language: string; content: RealEstateDetail }[];
+  status: boolean;
+  createdAt: string; // Include this if necessary
+  updatedAt: string; // Include this if necessary
+  __v: number; // Include this if necessary
+}
+
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -54,7 +86,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       checkAuthStatus();
     } catch (error) {
-      console.log(error);
+   //   console.log(error);
       throw error;
     }
   }, [])
@@ -71,10 +103,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Fetch the user profile data after login
       const res = await axiosInstance.get(API_ENDPOINTS.USER_PROFILE);
       setUser(res.data);
-      console.log(res);
+     // console.log(res);
       router.push('/');
     } catch (error) {
-      console.log("Error Athentication:: ",error)
+     // console.log("Error Athentication:: ",error)
       setIsAuthenticated(false);
       throw error;
     } finally {
@@ -94,13 +126,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // TODO: redirect to verify page with contact and method (email or phone_number)
       router.push(`/verify?contact=${email || phone_number}&method=${email ? 'email' : 'phone_number'}`);
     } catch (error) {
-      console.log('This error: ', error)
+    //  console.log('This error: ', error)
       setIsAuthenticated(false);
       throw error;
     } finally {
       setLoading(false);
     }
   }
+
 
   const verify = async ({ email, phone_number, code }: VerifyUserRequest) => {
     setLoading(true);
@@ -143,7 +176,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await axiosInstance.post(API_ENDPOINTS.LOGOUT); // Call the logout endpoint
       setIsAuthenticated(false);
       setUser(null);
-      router.push('/login');
+      router.push('/');
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {

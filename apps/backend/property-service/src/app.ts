@@ -7,6 +7,8 @@ import { loggingMiddleware } from './utils/request-response-logger/logger';
 import { errorHandler } from './utils/error/errorHanler';
 import cookieParser from 'cookie-parser';
 
+import cors from "cors";
+
 // Dynamically load swagger.json
 const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, 'docs/swagger.json'), 'utf8'));
 
@@ -14,6 +16,9 @@ const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, 'docs/sw
 // Initialize App Express
 // ========================
 const app = express();
+
+app.use(cors({ origin: "http://localhost:3000" }));
+
 app.use(cookieParser());
 
 // ========================
