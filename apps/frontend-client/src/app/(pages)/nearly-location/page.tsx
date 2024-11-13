@@ -10,7 +10,7 @@ import Map from "../../../components/molecules/map/Map";
 // Function to fetch property data based on the provided id
 async function fetchProperty(id: string): Promise<RealEstateItem | null> {
   try {
-    const res = await fetch(`https://lomnov.onrender.com/api/v1/properties?id=${id}`);
+    const res = await fetch(`https://lomnov.onrender.com/api/v1/properties?id=${1}`);
     if (!res.ok) {
       throw new Error("Failed to fetch property data");
     }

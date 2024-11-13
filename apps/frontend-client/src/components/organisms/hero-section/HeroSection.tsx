@@ -95,7 +95,7 @@ function HeroSection() {
 
               <button
                 className="bg-olive-green text-white font-[600] px-5 py-2 rounded-md lg:w-[120px]
-                  hover:bg-neutral hover:scale-105 active:bg-olive-green active:scale-95 transition-transform duration-150"
+                     hover:scale-105 active:bg-olive-green active:scale-95 transition-transform duration-150"
                 onClick={handleSearch}
               >
                 Search
