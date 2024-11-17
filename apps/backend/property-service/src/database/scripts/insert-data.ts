@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 // Sample user data
 const properties = [
   {
-    cognitoSub: "74b8c408-c0d1-706e-e4d3-3a4061d4d0e3",
+    cognitoSub: "5027dd7b-5dce-4fc7-92ee-9192ba937748",
     title: [
       { content: "Modern Apartment", language: "en" },
       { content: "អាផាតមិនទំនើប", language: "kh" },

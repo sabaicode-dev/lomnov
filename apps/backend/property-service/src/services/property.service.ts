@@ -8,7 +8,8 @@ import {
   ResponseFPropertiesByLanguageDTO,
   ResponseUpdatePropertyDTO,
   RequestQueryPropertyMeDTO,
-  ResponseAllPropertyMeDTO
+  ResponseAllPropertyMeDTO,
+  ResponsePropertyDTO
 } from "@/src/utils/types/indext";
 import { PropertyRepository } from "../database/repositories/property.repository";
 import { UnauthorizedError } from "../utils/error/customErrors";
@@ -221,5 +222,11 @@ export class PropertyService {
     }
   }
 
-
+  public async getPropertyByID(id:string):Promise<ResponsePropertyDTO>{
+    try {
+      return await this.propertyRepository.findPropertyByID(id);
+    } catch (error) {
+      throw error;
+    }
+  }
 }

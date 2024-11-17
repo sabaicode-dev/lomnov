@@ -153,6 +153,85 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ResponsePropertyDTO": {
+				"properties": {
+					"_id": {
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
+					"cognitoSub": {
+						"type": "string"
+					},
+					"title": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"description": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"thumbnail": {
+						"type": "string"
+					},
+					"images": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"urlmap": {
+						"type": "string"
+					},
+					"address": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"location": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"category": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"transition": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"detail": {
+						"$ref": "#/components/schemas/Record_string.any_"
+					},
+					"status": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"_id",
+					"cognitoSub",
+					"thumbnail",
+					"images",
+					"location",
+					"category",
+					"transition"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ResponseUpdatePropertyDTO": {
 				"properties": {
 					"_id": {
@@ -449,6 +528,37 @@
 							"default": 10,
 							"format": "double",
 							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/properties/get/{propertyId}": {
+			"get": {
+				"operationId": "FetchPropertyByID",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponsePropertyDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "propertyId",
+						"required": true,
+						"schema": {
+							"type": "string"
 						}
 					}
 				]

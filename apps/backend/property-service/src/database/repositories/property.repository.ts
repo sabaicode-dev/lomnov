@@ -7,6 +7,7 @@ import {
   RequestUpdatePropertyDTO,
   ResponseCreatePropertyDTO,
   ResponseFindPropertyDTO,
+  ResponsePropertyDTO,
   ResponseUpdatePropertyDTO,
 
 } from "@/src/utils/types/indext";
@@ -120,6 +121,19 @@ export class PropertyRepository {
       throw error
     }
   }
+// Property Repository Method
+public async findPropertyByID(id: string): Promise<ResponsePropertyDTO> {
+  try {
+    const result = await PropertyModel.findById(id);
+    if (!result) {
+      throw new NotFoundError("Property not found");
+    }
+    return result;
+  } catch (error) {
+    
+    throw error;
+  }
+}
 
   public async delete(propertyId: string, cognitoSub: string | undefined): Promise<boolean> {
     try {
