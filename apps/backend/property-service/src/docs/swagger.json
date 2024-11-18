@@ -686,6 +686,14 @@
 							"format": "double",
 							"type": "number"
 						}
+					},
+					{
+						"in": "query",
+						"name": "fav_me",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
 					}
 				]
 			}

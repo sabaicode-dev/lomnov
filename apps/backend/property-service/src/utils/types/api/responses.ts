@@ -75,7 +75,7 @@ export interface ResponseGetPropertyMeDTO {
   transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
-
+  faveMe?: ResponsePropertyDTO[]
 }
 
 export interface ResponseFindPropertyDTO {
@@ -124,5 +124,6 @@ export interface ResponseAllPropertyDTO {
 
 export interface ResponseAllPropertyMeDTO {
   properties: ResponseCreatePropertyDTO[];
+  favoritesMe:ResponsePropertyDTO[],
   pagination: Pagination;
 }

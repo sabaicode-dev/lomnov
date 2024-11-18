@@ -20,6 +20,15 @@ export class PropertyRepository {
     files: { thumbnail: Express.Multer.File; images: Express.Multer.File[] },
   ): Promise<ResponseCreatePropertyDTO> {
     try {
+      // Validate files
+      if (!files?.thumbnail) {
+        throw new Error("Thumbnail file is missing");
+      }
+
+      if (!files?.images || !Array.isArray(files.images) || files.images.length === 0) {
+        throw new Error("Image files are missing");
+      }
+
       // Upload the thumbnail and images to S3
       const thumbnailUrl = await uploadFileToS3Service.uploadFile(
         files.thumbnail,
@@ -121,19 +130,19 @@ export class PropertyRepository {
       throw error
     }
   }
-// Property Repository Method
-public async findPropertyByID(id: string): Promise<ResponsePropertyDTO> {
-  try {
-    const result = await PropertyModel.findById(id);
-    if (!result) {
-      throw new NotFoundError("Property not found");
+  // Property Repository Method
+  public async findPropertyByID(id: string): Promise<ResponsePropertyDTO> {
+    try {
+      const result = await PropertyModel.findById(id);
+      if (!result) {
+        throw new NotFoundError("Property not found");
+      }
+      return result;
+    } catch (error) {
+
+      throw error;
     }
-    return result;
-  } catch (error) {
-    
-    throw error;
   }
-}
 
   public async delete(propertyId: string, cognitoSub: string | undefined): Promise<boolean> {
     try {
@@ -175,5 +184,12 @@ public async findPropertyByID(id: string): Promise<ResponsePropertyDTO> {
       throw error
     }
   }
-
+  public async findFavouritePropertyMe(propertyId:string|undefined):Promise<ResponsePropertyDTO[]>{
+    try {
+      const splitIdFavMe = propertyId?.split(",");
+      return await PropertyModel.find({_id:{$in:splitIdFavMe}});
+    } catch (error) {
+      throw error; 
+    }
+  }
 }

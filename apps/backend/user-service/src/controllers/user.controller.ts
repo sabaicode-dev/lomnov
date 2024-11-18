@@ -24,13 +24,14 @@ import {
   ResponseUsernameExist,
 } from "@/src/utils/types/indext";
 import { UserService } from "@/src/services/user.service";
+import { UnauthorizedError } from "../utils/error/customErrors";
 
 
 // =========================================================
 
 @Tags(" User service")
 @Route("api/v1/users")
-export class ProductController extends Controller {
+export class UserController extends Controller {
   private userService: UserService;
   constructor() {
     super();
@@ -186,6 +187,25 @@ export class ProductController extends Controller {
       throw error;
     }
   }
+  @Get("/me/favorites")
+  public async getUserFavorites(@Request() request: Express.Request): Promise<any> {
+    try {
+
+      const cognitoSub = request?.cookies.username!
+      if(!cognitoSub){
+        throw new UnauthorizedError();
+      }
+      const favoritesId = await this.userService.getUserFavoritesID(request);
+
+      return {
+        message: "Favorite properties retrieved successfully",
+        favoritesId: favoritesId
+      };
+    } catch (error) {
+      console.error("Error fetching user's favorite properties:", error);
+      throw error;
+    }
+  }
 
   // @Post("me/favorite")
   // public async addFavorite(
@@ -208,7 +228,7 @@ export class ProductController extends Controller {
   //          prettyObject(error as {})
   //       );
   //       throw error;
-      
+
   //    }
   // }
 
@@ -221,15 +241,15 @@ export class ProductController extends Controller {
   //     const favorites await UserService.getUserFavorite(userId);
 
   //     return sendRespone<string[]>({message: "Successs", data : favarite});
-      
+
   //    } catch (error) {
   //       console.error(
   //         `UserController - getFavorite() method error` ,
   //         prettyObject(error as {})
   //       );
   //       throw error;
-      
+
   //    }
   // }
- 
+
 }

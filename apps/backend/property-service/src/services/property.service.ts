@@ -66,15 +66,20 @@ export class PropertyService {
   public async getPropertiesMe(
     queries : RequestQueryPropertyMeDTO,
   ): Promise<ResponseAllPropertyMeDTO> {
-    const { cognitoSub, language, page = 1, limit = 10 } = queries;
+    const { cognitoSub, language, page = 1, limit = 10 , fav_me} = queries;
     if(!cognitoSub){
       throw new UnauthorizedError()
     }
+    /*
+      THIS METHOD IS GO QUERY THE FAV PROPERTY OF THE USER
+    */
+    const propertyFavouriteMe = await this.propertyRepository.findFavouritePropertyMe(fav_me);
+    
     // Pagination parameters
     const skip = (page - 1) * limit;
     // Build filters
     const filters = this.buildFilters(queries);
-    console.log("helo"+{...filters, cognitoSub})
+   // console.log("helo"+{...filters, cognitoSub})
     // Fetch data and count total properties
     const [properties, totalProperty] = await Promise.all([
       this.propertyRepository.findPropertiesMe({...filters, cognitoSub}, skip, limit),
@@ -89,6 +94,7 @@ export class PropertyService {
 
     return {
       properties: filteredProperties,
+      favoritesMe: propertyFavouriteMe,
       pagination: {
         currentPage: page,
         totalPages,
