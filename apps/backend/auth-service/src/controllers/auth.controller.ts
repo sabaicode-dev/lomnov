@@ -31,7 +31,7 @@ import setCookie from "../middlewares/cookies";
 
 @Tags("Manual Registration")
 @Route("api/v1")
-export class ProductController extends Controller {
+export class AuthControllerII extends Controller {
   private authService: AuthService;
   private cognitoService: CognitoService;
   constructor() {

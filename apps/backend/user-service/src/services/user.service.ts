@@ -5,6 +5,7 @@ import uploadFileToS3Service from "@/src/services/uploadFileToS3.service";
 import { UnauthorizedError } from "@/src/utils/error/customErrors";
 import { DeleteProfileImageRequestDTO, GetAllUsersQueryDTO, RequestUserDTO, ResponseAllUserDTO, ResponseUserDTO, UpdateUserDTO, User } from "@/src/utils/types/indext";
 import { Types } from "mongoose";
+// import { HttpPropertyServiceClient } from "./httpPropertyServiceClient";
 
 
 declare global {
@@ -81,9 +82,9 @@ export class UserService {
   }
 
   public async usernameExsit(username: string): Promise<ResponseUserDTO | {}> {
-    try{
+    try {
       return await this.userRepository.findUsername(username);
-    }catch(error){
+    } catch (error) {
       throw error
     }
   }
@@ -231,6 +232,21 @@ export class UserService {
       throw error;
     }
   }
-
-
+  public async getUserFavoritesID(request: Express.Request): Promise<string[]> {
+    try {
+      const cognitoSub = request.cookies?.username;
+      if (!cognitoSub) {
+        throw new UnauthorizedError("User is not logged in.");
+      }
+      const favorites = await this.userRepository.findUserFavorites(cognitoSub);
+      if (favorites.length === 0) {
+        return []; // No favorites found
+      }
+      const favoritesId = favorites.map(favId => favId._id);
+      return favoritesId;
+    } catch (error) {
+      console.error("Error retrieving user favorites:", error);
+      throw error;
+    }
+  } 
 }

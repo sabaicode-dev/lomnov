@@ -598,6 +598,26 @@
 					}
 				]
 			}
+		},
+		"/api/v1/users/me/favorites": {
+			"get": {
+				"operationId": "GetUserFavorites",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					" User service"
+				],
+				"security": [],
+				"parameters": []
+			}
 		}
 	},
 	"servers": [
