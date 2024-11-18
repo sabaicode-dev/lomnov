@@ -15,5 +15,5 @@ export const API_ENDPOINTS = {
   USER: `${process.env.NEXT_PUBLIC_USER_ENDPOINT}`,
   ADD_PROPERTY: `${process.env.NEXT_PUBLIC_USER_ENDPOINT}/favorite`,
   // PROPERTIES SERVICES
-  PROPERTIES: `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}`,
+  PROPERTIES: `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}/properties`,
 };

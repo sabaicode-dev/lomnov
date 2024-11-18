@@ -3,7 +3,7 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response"; // Import from your types file
-
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 interface PropertyContextType {
   properties: RealEstateItem[] | null;
   loading: boolean;
@@ -22,7 +22,7 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get("http://localhost:4003/api/v1/properties");
+      const response = await axios.get(`${API_ENDPOINTS.PROPERTIES}`);
       console.log("API Response:", response.data); // Log the API response
       setProperties(response.data.properties); // Correctly access 'properties'
     } catch (error) {
