@@ -92,23 +92,7 @@ const ListedProperties = () => {
         onUpdate={handleUpdate}
         onDelete={handleDelete}
       />
-      {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        {listedProperties.length > 0 ? (
-          listedProperties.map((property: RealEstateItem) => (
-            <div key={property._id} className="flex items-start flex-col">
-              <input
-                type="checkbox"
-                checked={selectedProperties.includes(property._id)}
-                onChange={() => handleSelectProperty(property._id)}
-                className="appearance-none w-5 h-5 border border-olive-green rounded-[5px] checked:bg-olive-green checked:border-olive-green focus:outline-none"
-              />
-              <ItemCard item={property} />
-            </div>
-          ))
-        ) : (
-          <p>No listed properties found.</p>
-        )}
-      </div> */}
+
        <div className="grid mt-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5 2xl:gap-5">
           {items.map((item) => (
             <ItemCard key={item._id} item={item}  /> // Ensure item._id exists and is of the correct type

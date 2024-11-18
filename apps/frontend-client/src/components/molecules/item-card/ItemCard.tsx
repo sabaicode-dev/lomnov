@@ -13,9 +13,10 @@ import Compare from "@/icons/Compare";
 export interface ItemCardProps {
   item: RealEstateItem;
   flexRow?: boolean;
+  favourited?: boolean;
 }
 
-const ItemCard = ({ item, flexRow  }: ItemCardProps) => {
+const ItemCard = ({ item, flexRow, favourited }: ItemCardProps) => {
   const [isLike, setIsLike] = useState(false);
   const toggleIsLike = () => {
     setIsLike((prev) => !prev);
@@ -47,7 +48,11 @@ const ItemCard = ({ item, flexRow  }: ItemCardProps) => {
 
         {/* Favorite Icon */}
         <div className="absolute top-[10px] right-[17px] cursor-pointer" onClick={toggleIsLike}>
-          {isLike ? <HeartInline className="text-white text-[25px]" /> : <HeartOutline className="text-white text-[25px]" />}
+          {favourited ? <HeartInline className="text-white text-[25px]" /> : (
+
+            isLike ? <HeartInline className="text-white text-[25px]" /> : <HeartOutline className="text-white text-[25px]" />
+          )
+          }
         </div>
 
         {/* Price */}
