@@ -73,6 +73,27 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResponsePropertyDTO": {
+        "dataType": "refObject",
+        "properties": {
+            "_id": {"ref":"mongoose.Types.ObjectId","required":true},
+            "cognitoSub": {"dataType":"string","required":true},
+            "title": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"}},
+            "description": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"}},
+            "thumbnail": {"dataType":"string","required":true},
+            "images": {"dataType":"array","array":{"dataType":"string"},"required":true},
+            "urlmap": {"dataType":"string"},
+            "address": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"}},
+            "location": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"},"required":true},
+            "price": {"dataType":"double"},
+            "category": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"},"required":true},
+            "transition": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"},"required":true},
+            "detail": {"ref":"Record_string.any_"},
+            "status": {"dataType":"boolean"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ResponseUpdatePropertyDTO": {
         "dataType": "refObject",
         "properties": {
@@ -204,6 +225,37 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/api/v1/properties/get/:propertyId',
+            ...(fetchMiddlewares<RequestHandler>(PropertyController)),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.fetchPropertyByID)),
+
+            async function PropertyController_fetchPropertyByID(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+                    propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new PropertyController();
+
+              await templateService.apiHandler({
+                methodName: 'fetchPropertyByID',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/v1/properties/me',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.getPropertyMe)),
@@ -222,6 +274,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                     price_lte: {"in":"query","name":"price_lte","dataType":"double"},
                     page: {"default":1,"in":"query","name":"page","dataType":"double"},
                     limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
+                    fav_me: {"in":"query","name":"fav_me","dataType":"string"},
                     request: {"in":"request","name":"request","dataType":"object"},
             };
 

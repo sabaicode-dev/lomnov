@@ -53,7 +53,7 @@ const RecommendedProperties = ({
   });
 
   const transitions = useTransition(relatedProperties.slice(0, visibleItems), {
-    keys: (item) => item.id,
+    keys: (item) => item._id,
     from: { opacity: 0, transform: "translateY(20px)" },
     enter: { opacity: 1, transform: "translateY(0px)" },
     leave: { opacity: 0, transform: "translateY(20px)" },
@@ -87,7 +87,7 @@ const RecommendedProperties = ({
       </h2>
       <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
         {transitions((style, item) => (
-          <animated.div key={item.id} style={style}>
+          <animated.div key={item._id} style={style}>
             <ItemCard item={item} />
           </animated.div>
         ))}

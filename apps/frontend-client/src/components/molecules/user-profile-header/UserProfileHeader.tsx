@@ -7,16 +7,10 @@ import Image from "next/image";
 import Banner from "@/components/molecules/banner/Banner";
 import { FaCamera } from "react-icons/fa";
 import UserProfileNavigation from "../user-profile-navigation/UserProfileNavigation";
+import { User } from "@/context/user.type";
 
 interface UserProfileHeaderProps {
-  user: {
-    userName: string;
-    background: string;
-    profile: string;
-    firstname: string; 
-    lastname: string;
-    joinedDate?: string;
-  };
+  user: User
 }
 
 // Helper function to format joinedDate
@@ -31,8 +25,6 @@ const formatDate = (dateString?: string): string => {
 };
 
 const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
-  console.log("User data:", user);
-  console.log("userName: ", user.userName);
   
   // File change handlers for profile and background uploads
   const handleProfileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +46,7 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
   return (
     <>
       <div className="relative">
-        <Banner background={user.background || "/images/default-banner.jpg"} />
+        <Banner background={Array.isArray(user.background) && user.background.length > 0 ? user.background[0] : "/images/default-banner.jpg"} />
         <div className="max-w-[1300px] mx-auto relative">
           {/* Edit cover photo button */}
           <div className="absolute right-[0px] bottom-[50px] flex justify-end pr-[10px] xl:pr-0">
@@ -71,7 +63,7 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
             {/* User profile */}
             <div className="absolute flex items-center justify-center sm:w-[135px] sm:h-[135px] w-[125px] h-[125px] rounded-full bg-grayish-white">
               <div className="sm:w-[125px] sm:h-[125px] w-[120px] h-[120px] rounded-full overflow-hidden bg-grayish-white">
-                <Image src={user.profile || '/images/default-profile.jpg'} alt="user" width={125} height={125} />
+                <Image src={ Array.isArray(user.profile) && user.profile.length > 0 ? user.profile[0] : '/images/default-profile.jpg'} alt="user" width={125} height={125} />
               </div>
               <label htmlFor="profile-photo-input" className="sm:ml-[100px] sm:mt-[70px] ml-[100px] mt-[70px] absolute sm:w-[37px] w-[25px] h-[25px] flex items-center justify-center sm:h-[37px] rounded-full bg-pale-gray cursor-pointer">
                 <FaCamera className="text-charcoal sm:w-[20px] sm:h-[20px] w-[15px] h-[15px]" />
@@ -86,7 +78,7 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
               <span className="flex items-center mt-[10px]">
                 Joined
                 <div className="w-[5px] h-[5px] mx-[5px] rounded-full bg-olive-gray"></div>
-                {formatDate(user.joinedDate)}
+                {formatDate(user.createdAt)}
               </span>
             </div>
           </div>

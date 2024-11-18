@@ -11,10 +11,10 @@ import {
   Put,
   Path,
   Tags,
-  Request
+  Request,
 } from "tsoa";
 import { PropertyService } from "@/src/services/property.service";
-import { RequestPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
+import { RequestPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponsePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
 import { Request as Express } from "express";
 import { UnauthorizedError } from "../utils/error/customErrors";
 // ====================================================================
@@ -119,7 +119,20 @@ export class PropertyController extends Controller {
       throw error
     }
   }
-
+  // Controller get single
+  @Get("/properties/get/{propertyId}")
+  public async fetchPropertyByID(@Request()request:Express.Request, @Path() propertyId: string): Promise<ResponsePropertyDTO> {
+    try {
+      const cognitoSub = request.cookies?.username;
+      if(!cognitoSub){
+        throw new UnauthorizedError();
+      }
+      return await this.propertyService.getPropertyByID(propertyId);
+    } catch (error) {
+      console.log(error)
+      throw error;
+    }
+  }
   @Get("/properties/me")
   public async getPropertyMe(
     @Query() title?: string,
@@ -134,6 +147,7 @@ export class PropertyController extends Controller {
     @Query() price_lte?: number,
     @Query() page: number = 1,
     @Query() limit: number = 10,
+    @Query() fav_me?:string,
     @Request() request?: Express.Request,
   ): Promise<ResponseAllPropertyDTO> {
     try {
@@ -155,6 +169,7 @@ export class PropertyController extends Controller {
         price_lte,
         page,
         limit,
+        fav_me
       };
 
       return await this.propertyService.getPropertiesMe(queries);

@@ -1,5 +1,5 @@
 import { User } from "@/src/utils/types/indext";
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 // ==================================================================
 // Define the PropertyDocument interface that includes timestamps
 interface UserDocument {
@@ -8,9 +8,10 @@ interface UserDocument {
 }
 
 const FavoriteSchema = new Schema({
-  propertyId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
-  addedAt: { type: Date, default: Date.now }, // Optional: tracks when the product was favorited
+  propertyId: { type: mongoose.Schema.Types.ObjectId, ref: "Property", required: true }, // Must match the registered model name
+  addedAt: { type: Date, default: Date.now },
 });
+
 
 const UserSchema = new Schema<User>(
   {
