@@ -5,20 +5,23 @@ import PropertyDescription from "../../../../components/organisms/property-descr
 import Map from "../../../../components/molecules/map/Map";
 import RecommendedProperties from "@/components/molecules/RecommendedProperties/RecommendedProperties";
 import UserListed from "@/components/organisms/user-listed-property/UserListed";
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 // Fetch property data
 async function fetchProperty(id: string): Promise<RealEstateItem> {
-  const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/properties?id=${id}`
-  );
-  if (!res.ok) {
-    throw new Error("Failed to fetch property data");
+  try {
+    const res = await axiosInstance.get(`${API_ENDPOINTS.GET_PROPERTY_BY_ID}/${id}`);
+    console.log(res.data);
+    
+    return res.data;
+  } catch (error) {
+    throw error;
   }
-  const data = await res.json();
-  return data[0]; // Adjust this to match your API response
 }
 
 // Server component to fetch property data
 const page = async ({ params }: { params: { id: string } }) => {
+  console.log(params.id);
   const property = await fetchProperty(params.id);
 
   return (
@@ -28,7 +31,7 @@ const page = async ({ params }: { params: { id: string } }) => {
           <Image
             className="top-0 left-0 w-full h-full object-cover"
             src={property.thumbnail}
-            alt={property.title[0].content}
+            alt={property.title?.[0].content}
             objectFit="cover"
             layout="fill"
           />
@@ -65,20 +68,20 @@ const page = async ({ params }: { params: { id: string } }) => {
 
         <div className="w-full mt-[200px] sm:mt-[190px] md:mt-[220px] lg:mt-[170px] xl:mt-[100px]">
           <div className="max-w-[1300px] mx-auto flex justify-between">
-            {/* Property description */}
+            Property description
             <PropertyDescription property={property} />
-       
-            <UserListed property={property} />
+
+            {/* <UserListed property={property} /> */}
           </div>
-          <Map property={property.urlmap} />
+          {/* <Map property={property.mapurl} /> */}
         </div>
 
         {/* Recommend Properties */}
         <div className="w-full mt-[50px]">
-          <RecommendedProperties
-            category={property.category[0].content}
-            address={property.address[0].content}
-          />
+          {/* <RecommendedProperties
+            category={property?.category[0]?.content}
+            address={property?.address[0]?.content}
+          /> */}
         </div>
       </div>
     </>

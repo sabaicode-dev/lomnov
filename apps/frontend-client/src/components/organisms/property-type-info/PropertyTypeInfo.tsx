@@ -3,7 +3,7 @@ import { Home2, BathRoom2, BedRoom2, Area, Kitchen, Parking } from "@/icons";
 
 const PropertyTypeInfo = ({ property }: { property: RealEstateItem }) => {
   
-  switch (property.category.toLowerCase()) {
+  switch (property?.category[0]?.content) {
     case "villa":
       return (
         <>
