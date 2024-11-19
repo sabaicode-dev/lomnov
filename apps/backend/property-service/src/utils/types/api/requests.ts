@@ -48,6 +48,7 @@ export interface RequestQueryPropertyMeDTO {
   price_lte?: number | undefined;
   page?: number | undefined;
   limit?: number | undefined;
+  fav_me?: string
 }
 
 export interface RequestUpdatePropertyDTO {

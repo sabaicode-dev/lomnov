@@ -105,7 +105,7 @@ export class UserRepository {
   //     throw error;
   //   }
   // }
-  
+
   public async updateUserByCognitoSub(
     cognitoSub: string,
     updateData: Partial<User>,
@@ -120,5 +120,17 @@ export class UserRepository {
       throw error;
     }
   }
-
+  public async findUserFavorites(cognitoSub: string): Promise<any[]> {
+    try {
+      const user = await UserModel.findOne({ cognitoSub }).select("favorite").lean();
+      if (!user || !user.favorite) {
+        return [];
+      }
+      return user.favorite;
+    } catch (error) {
+      console.error("Error fetching user favorites:", error);
+      throw error;
+    }
+  }
+  
 }
