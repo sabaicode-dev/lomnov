@@ -8,7 +8,7 @@ const ROUTE_PATHS: RoutesConfig = {
     target: configs.authServiceUrl, // Should be http://localhost:4001
     methods: {
       POST: { authRequired: false, roles: [] },
-      DELETE: {authRequired: true, roles: ["admin"]}
+      DELETE: { authRequired: true, roles: ["admin"] }
     },
     nestedRoutes: [
       {
@@ -24,8 +24,8 @@ const ROUTE_PATHS: RoutesConfig = {
         methods: { POST: { authRequired: false, roles: [] } },
       },
       {
-        path:"/logout",
-        methods: {POST: {authRequired: false, roles:[]}}
+        path: "/logout",
+        methods: { POST: { authRequired: false, roles: [] } }
       },
       {
         path: "/verify",
@@ -61,7 +61,7 @@ const ROUTE_PATHS: RoutesConfig = {
     path: "/api/v1/users",
     target: configs.userServiceUrl, // Should be http://localhost:4002
     methods: {
-      POST: { authRequired: true, roles: ["admin","user"] },
+      POST: { authRequired: true, roles: ["admin", "user"] },
       GET: { authRequired: false, roles: [] }
     },
     nestedRoutes: [
@@ -90,8 +90,12 @@ const ROUTE_PATHS: RoutesConfig = {
       },
       {
         path: "/favorite",
-        methods: { PUT: { authRequired: true, roles: [""] } },
+        methods: { PUT: { authRequired: true, roles: ["user"] } },
       },
+      {
+        path: "/me/favorites",
+        methods: { GET: { authRequired: true, roles: ['user'] } }
+      }
     ],
   },
   PROPERTY_SERVICE: {
@@ -99,7 +103,7 @@ const ROUTE_PATHS: RoutesConfig = {
     target: configs.propertyServiceUrl, // Should be http://localhost:4003
     methods: {
       GET: { authRequired: false, roles: [] },
-      POST: { authRequired: false, roles: ["admin","user"] },
+      POST: { authRequired: false, roles: ["admin", "user"] },
     },
     nestedRoutes: [
       {
@@ -111,8 +115,8 @@ const ROUTE_PATHS: RoutesConfig = {
         methods: { GET: { authRequired: true, roles: ["user"] } },
       },
       {
-        path:"/get",
-        methods: {GET: {authRequired: false, roles:[]}}
+        path: "/get",
+        methods: { GET: { authRequired: true, roles: ["user"] } }
       }
     ],
   },

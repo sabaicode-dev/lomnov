@@ -9,16 +9,27 @@ import HeartInline from "@/icons/HeartInline";
 import BathRoom from "@/icons/BathRoom";
 import BedRoom from "@/icons/BedRoom";
 import Compare from "@/icons/Compare";
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 
 export interface ItemCardProps {
   item: RealEstateItem;
   flexRow?: boolean;
+  favourited?: boolean;
 }
 
-const ItemCard = ({ item, flexRow  }: ItemCardProps) => {
+const ItemCard = ({ item, flexRow, favourited }: ItemCardProps) => {
   const [isLike, setIsLike] = useState(false);
-  const toggleIsLike = () => {
-    setIsLike((prev) => !prev);
+  const toggleIsLike = async (id: string) => {
+    try {
+      const response = await axiosInstance.put(`${API_ENDPOINTS.TOGGLE_FAVOURITE_PROPERTY}/${id}`);
+      if (response.status === 200) {
+        setIsLike((prev) => !prev);
+      }
+    } catch (error) {
+      throw error;
+    }
+    console.log(id);
 
   };
 
@@ -46,8 +57,12 @@ const ItemCard = ({ item, flexRow  }: ItemCardProps) => {
         </p>
 
         {/* Favorite Icon */}
-        <div className="absolute top-[10px] right-[17px] cursor-pointer" onClick={toggleIsLike}>
-          {isLike ? <HeartInline className="text-white text-[25px]" /> : <HeartOutline className="text-white text-[25px]" />}
+        <div className="absolute top-[10px] right-[17px] cursor-pointer" onClick={async () => await toggleIsLike(item._id)}>
+          {favourited ? <HeartInline className="text-white text-[25px]" /> : (
+
+            isLike ? <HeartInline className="text-white text-[25px]" /> : <HeartOutline className="text-white text-[25px]" />
+          )
+          }
         </div>
 
         {/* Price */}
