@@ -15,7 +15,7 @@ async function fetchUserDetails(username: string) {
     if (res.status !== 200) {
       throw new Error("Failed to fetch user details");
     }
-    console.log("user response:: ", res.data.users[0]);
+    //console.log("user response:: ", res.data.users[0]);
     // Assuming the API response is structured as shown
     return res.data.users[0]; // Get the first user from the array
   } catch (error) {
@@ -36,7 +36,7 @@ const SavedPropertiesPage = async ({ params }: { params: { username: string } })
     <Layout>
       <UserProfileHeader user={user} /> {/* Reusing the ProfileHeader */}
       {/* This is list property */}
-      <SavedProperties userId={user._id}/>
+      <SavedProperties />
     </Layout>
   );
 };

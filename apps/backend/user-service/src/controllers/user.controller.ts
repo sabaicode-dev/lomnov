@@ -196,7 +196,8 @@ export class UserController extends Controller {
         throw new UnauthorizedError();
       }
       const favoritesId = await this.userService.getUserFavoritesID(request);
-
+      console.log(favoritesId);
+      
       return {
         message: "Favorite properties retrieved successfully",
         favoritesId: favoritesId

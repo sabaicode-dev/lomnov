@@ -232,17 +232,19 @@ export class UserService {
       throw error;
     }
   }
-  public async getUserFavoritesID(request: Express.Request): Promise<string[]> {
+  public async getUserFavoritesID(request: Express.Request): Promise<string[]| null> {
     try {
       const cognitoSub = request.cookies?.username;
       if (!cognitoSub) {
         throw new UnauthorizedError("User is not logged in.");
       }
       const favorites = await this.userRepository.findUserFavorites(cognitoSub);
+      console.log(favorites);
+      
       if (favorites.length === 0) {
         return []; // No favorites found
       }
-      const favoritesId = favorites.map(favId => favId._id);
+      const favoritesId = favorites.map(favId => favId.propertyId);
       return favoritesId;
     } catch (error) {
       console.error("Error retrieving user favorites:", error);

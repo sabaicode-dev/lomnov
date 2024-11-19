@@ -269,8 +269,8 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                     name: "backgroundFiles",
                 }
             ]),
-            ...(fetchMiddlewares<RequestHandler>(ProductController)),
-            ...(fetchMiddlewares<RequestHandler>(ProductController.prototype.updateMe)),
+            ...(fetchMiddlewares<RequestHandler>(UserController)),
+            ...(fetchMiddlewares<RequestHandler>(UserController.prototype.updateMe)),
 
             async function UserController_updateMe(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
