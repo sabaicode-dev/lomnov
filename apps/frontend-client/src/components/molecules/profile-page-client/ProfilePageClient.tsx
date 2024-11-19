@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import UserProfileHeader from "@/components/molecules/user-profile-header/UserProfileHeader";
 import ListedProperties from "@/components/organisms/listed-properties/ListedProperties";
-import { User } from "@/context/user";
+import { User } from "@/context/user.type";
 
 interface ProfilePageClientProps {
   user: User;
@@ -41,7 +41,7 @@ const ProfilePageClient = ({ user, usernameParam }: ProfilePageClientProps) => {
 
   return (
     <>
-      <UserProfileHeader user={userProfileHeaderData} />
+      <UserProfileHeader user={ user } />
       <ListedProperties user={user.userName} />
     </>
   );
