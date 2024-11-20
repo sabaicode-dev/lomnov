@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import React from "react";
 
 interface PropertyActionsProps {
@@ -16,12 +17,13 @@ const PropertyActions: React.FC<PropertyActionsProps> = ({
 }) => {
   return (
     <div className="flex justify-end space-x-[10px] items-center font-helvetica text-helvetica-paragraph text-charcoal font-bold">
-      <button
-        className="py-[5px] px-[25px] rounded-[8px] bg-neutral"
-        onClick={onPost}
+      <Link
+        className="py-[5px] px-[25px] rounded-[10px] bg-green-500 hover:bg-green-500 transition-all duration-150 ease-in-out hover:scale-105 active:scale-95  "
+        href={"/post-property"}
+        // onClick={onPost}
       >
         Post
-      </button>
+      </Link>
       <button
         className="py-[5px] px-[25px] rounded-[8px] bg-neutral"
         onClick={onUpdate}
