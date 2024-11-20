@@ -6,19 +6,20 @@ import { useInView } from "react-intersection-observer";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import ItemCard from "../item-card/ItemCard";
 import { ArrowDown, ArrowUp } from "@/icons";
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 
 // Optimized function to fetch filtered properties directly from the API
 async function fetchRelatedProperties(
   category: string,
   address: string,
 ): Promise<RealEstateItem[]> {
-  const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/properties?category=${category}&address=${address}`,
-  );
-  if (!res.ok) {
+  try {
+    const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?category=${category}&address=${address}`,);
+    return res.data.properties;
+  } catch (error) {
     throw new Error("Failed to fetch related properties");
   }
-  return res.json();
 }
 
 const RecommendedProperties = ({

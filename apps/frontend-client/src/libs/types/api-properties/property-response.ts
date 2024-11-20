@@ -64,7 +64,7 @@ export interface RealEstateItem {
   description: { content: string; language: string }[];
   thumbnail: string;
   images: string[];
-  mapurl: string;
+  urlmap: string;
   address: { content: string; language: string }[];
   location: { content: string; language: string }[];
   price: number;

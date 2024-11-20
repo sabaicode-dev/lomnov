@@ -23,7 +23,7 @@ async function fetchProperty(id: string): Promise<RealEstateItem> {
 const page = async ({ params }: { params: { id: string } }) => {
   // console.log(params.id);
   const property = await fetchProperty(params.id);
-
+  console.log(property.urlmap)
   return (
     <>
       <div className="w-full mb-[50px]  mx-auto relative">
@@ -70,12 +70,12 @@ const page = async ({ params }: { params: { id: string } }) => {
 
         <div className="w-full mt-[200px] sm:mt-[190px] md:mt-[220px] lg:mt-[170px] xl:mt-[100px]">
           <div className="max-w-[1300px] mx-auto flex justify-between">
-            Property description
+           
             <PropertyDescription property={property} />
 
             {/* <UserListed property={property} /> */}
           </div>
-          <Map property={property.mapurl} />
+          <Map property={property.urlmap} />
         </div>
 
         {/* Recommend Properties */}
