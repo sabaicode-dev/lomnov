@@ -94,7 +94,7 @@ export class PropertyController extends Controller {
     @Query() price_gte?: number,
     @Query() price_lte?: number,
     @Query() page: number = 1,
-    @Query() limit: number = 10,
+    @Query() limit: number = 12,
     // @Request() request?: Express.Request
   ): Promise<ResponseAllPropertyDTO> {
     try {
@@ -142,7 +142,7 @@ export class PropertyController extends Controller {
     @Query() price_gte?: number,
     @Query() price_lte?: number,
     @Query() page: number = 1,
-    @Query() limit: number = 10,
+    @Query() limit: number = 12,
     @Query() fav_me?:string,
     @Request() request?: Express.Request,
   ): Promise<ResponseAllPropertyDTO> {

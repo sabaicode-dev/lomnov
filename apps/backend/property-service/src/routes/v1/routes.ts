@@ -192,7 +192,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                     price_gte: {"in":"query","name":"price_gte","dataType":"double"},
                     price_lte: {"in":"query","name":"price_lte","dataType":"double"},
                     page: {"default":1,"in":"query","name":"page","dataType":"double"},
-                    limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
+                    limit: {"default":12,"in":"query","name":"limit","dataType":"double"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -263,7 +263,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                     price_gte: {"in":"query","name":"price_gte","dataType":"double"},
                     price_lte: {"in":"query","name":"price_lte","dataType":"double"},
                     page: {"default":1,"in":"query","name":"page","dataType":"double"},
-                    limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
+                    limit: {"default":12,"in":"query","name":"limit","dataType":"double"},
                     fav_me: {"in":"query","name":"fav_me","dataType":"string"},
                     request: {"in":"request","name":"request","dataType":"object"},
             };
