@@ -1,5 +1,6 @@
-import { RealEstateItem } from '@/context/user';
+
 import { Home2 } from '@/icons'
+import { RealEstateItem } from '@/libs/types/api-properties/property-response'
 import React from 'react'
 const PropertyTypeCategory = ({ property }:{property:RealEstateItem}) => {
     return (
