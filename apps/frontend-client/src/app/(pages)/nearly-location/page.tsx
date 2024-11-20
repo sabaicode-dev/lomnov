@@ -83,7 +83,7 @@ const page = async ({ params }: { params: { id: string } }) => {
         {property ? (
           <div className="w-full h-full">
             {/* Pass map URL to the Map component */}
-            <Map property={property.urlmap || ""} />
+            <Map property={property.mapurl || ""} />
           </div>
         ) : (
           <p className="text-center">Loading map or property data...</p>

@@ -43,7 +43,7 @@ const ExclusiveHomesSlider = ({ items }: { items: RealEstateItem[] }) => {
         }}
       >
         {items.map((item) => (
-          <SwiperSlide key={item.id}>
+          <SwiperSlide key={item._id}>
             <ItemCard item={item} />
           </SwiperSlide>
         ))}

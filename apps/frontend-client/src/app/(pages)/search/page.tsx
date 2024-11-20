@@ -4,13 +4,13 @@ import ItemCard from "@/components/molecules/item-card/ItemCard";
 import banner from "@/images/banner.png";
 import Image from "next/image";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
-import axios from "axios";
 import Search from "@/components/molecules/Search/Search";
 import NotFound from "@/components/molecules/notFound/NotFound";
+import axiosInstance from "@/libs/axios";
 
 async function fetchProperties(searchParams: { [key: string]: string | string[] | undefined }): Promise<RealEstateItem[]> {
   const queryString = new URLSearchParams(searchParams as Record<string, string>).toString();
-  const res = await axios.get(`${API_ENDPOINTS.PROPERTIES}?${queryString}`);
+  const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?${queryString}`);
   
   if (res.status!==200) {
     throw new Error("Failed to fetch properties");
