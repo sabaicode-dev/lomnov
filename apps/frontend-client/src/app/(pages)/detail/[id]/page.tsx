@@ -11,7 +11,7 @@ import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 async function fetchProperty(id: string): Promise<RealEstateItem> {
   try {
     const res = await axiosInstance.get(`${API_ENDPOINTS.GET_PROPERTY_BY_ID}/${id}`);
-    console.log(res.data);
+    // console.log(res.data);
     
     return res.data;
   } catch (error) {
@@ -73,15 +73,15 @@ const page = async ({ params }: { params: { id: string } }) => {
 
             {/* <UserListed property={property} /> */}
           </div>
-          {/* <Map property={property.mapurl} /> */}
+          <Map property={property.mapurl} />
         </div>
 
         {/* Recommend Properties */}
         <div className="w-full mt-[50px]">
-          {/* <RecommendedProperties
+          <RecommendedProperties
             category={property?.category[0]?.content}
             address={property?.address[0]?.content}
-          /> */}
+          />
         </div>
       </div>
     </>

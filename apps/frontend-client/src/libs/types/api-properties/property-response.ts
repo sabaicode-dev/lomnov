@@ -50,6 +50,9 @@ export interface RealEstateDetail {
   fireplace?: string;
   garden?: string;
   patio?: string; // Add other relevant fields as necessary
+  kitchen?:string;
+  land_size?:string;
+  parking?:string;
 }
 
 

@@ -1,6 +1,6 @@
 // components/molecules/user-profile-navigation/UserProfileNavigation.tsx
 
-"use client"; // Enable client-side rendering for this component
+"use client"; 
 import React from "react";
 import { usePathname } from "next/navigation"; // Hook to get the current path
 import Link from "next/link";

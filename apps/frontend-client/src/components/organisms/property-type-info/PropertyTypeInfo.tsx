@@ -16,11 +16,11 @@ const PropertyTypeInfo = ({ property }: { property: RealEstateItem }) => {
                 PROPERTY TYPE
               </div>
               <div className="font-helvetica text-helvetica-paragraph2 font-black lg:text-helvetica-h3 uppercase text-charcoal">
-                {property.category}
+                {property.category[0]?.content}
               </div>
             </div>
           )}
-          {property.detail.bed_room && (
+          {property.detail[0]?.content.bathrooms && (
             <div className=" text-center rounded-[10px]">
               <div className="flex items-center justify-center mb-[7px]">
                 <BedRoom2 props="text-olive-green w-[20px] h-[20px] md:w-[30px] md:h-[30px] lg:w-[35px] lg:h-[30px] xl:w-[30px] xl:h-[30px]" />
@@ -29,11 +29,11 @@ const PropertyTypeInfo = ({ property }: { property: RealEstateItem }) => {
                 bedrooms
               </div>
               <div className="font-helvetica text-helvetica-paragraph2 font-black lg:text-helvetica-h3 uppercase text-charcoal">
-                {property.detail.bed_room}
+                {property.detail[0].content.bedrooms}
               </div>
             </div>
           )}
-          {property.detail.bath_room && (
+          {property.detail[0].content && (
             <div className=" text-center  rounded-[10px]">
               <div className="flex items-center justify-center mb-[7px]">
                 <BathRoom2 props="text-olive-green w-[20px] h-[20px] md:w-[30px] md:h-[30px] lg:w-[35px] lg:h-[30px] xl:w-[30px] xl:h-[30px]" />
@@ -42,11 +42,11 @@ const PropertyTypeInfo = ({ property }: { property: RealEstateItem }) => {
                 bathrooms
               </div>
               <div className="font-helvetica text-helvetica-paragraph2 font-black lg:text-helvetica-h3 uppercase text-charcoal">
-                {property.detail.bath_room}
+                {property.detail[0]?.content.bathrooms}
               </div>
             </div>
           )}
-          {property.detail.kitchen && (
+          {property.detail[0]?.content?.kitchen && (
             <div className=" text-center  rounded-[10px]">
               <div className="flex items-center justify-center mb-[7px]">
                 <Kitchen props="text-olive-green w-[20px] h-[20px] md:w-[30px] md:h-[30px] lg:w-[35px] lg:h-[30px] xl:w-[30px] xl:h-[30px]" />
@@ -55,11 +55,11 @@ const PropertyTypeInfo = ({ property }: { property: RealEstateItem }) => {
                 kitchens
               </div>
               <div className="font-helvetica text-helvetica-paragraph2 font-black lg:text-helvetica-h3 uppercase text-charcoal">
-                <p>{property.detail.kitchen}</p>
+                <p>{property.detail[0].content?.kitchen}</p>
               </div>
             </div>
           )}
-          {property.detail.land_size && (
+          {property.detail[0]?.content?.land_size && (
             <div className=" text-center  rounded-[10px]">
               <div className="flex items-center justify-center mb-[7px]">
                 <Area props="text-olive-green w-[20px] h-[20px] md:w-[30px] md:h-[30px] lg:w-[35px] lg:h-[30px] xl:w-[30px] xl:h-[30px]" />
@@ -68,11 +68,11 @@ const PropertyTypeInfo = ({ property }: { property: RealEstateItem }) => {
                 spacious life
               </div>
               <div className="font-helvetica text-helvetica-paragraph2 font-black lg:text-helvetica-h3 uppercase text-charcoal">
-                {property.detail.land_size}
+                {property.detail[0]?.content?.land_size}
               </div>
             </div>
           )}
-          {property.detail.parking && (
+          {property.detail[0].content.parking && (
             <div className=" text-center  rounded-[10px]">
               <div className="flex items-center justify-center mb-[7px]">
                 <Parking props="text-olive-green w-[20px] h-[20px] md:w-[30px] md:h-[30px] lg:w-[35px] lg:h-[30px] xl:w-[30px] xl:h-[30px]" />
@@ -81,13 +81,13 @@ const PropertyTypeInfo = ({ property }: { property: RealEstateItem }) => {
                 parking
               </div>
               <div className="font-helvetica text-helvetica-paragraph2 font-black lg:text-helvetica-h3 uppercase text-charcoal">
-                {property.detail.parking}
+                {property.detail[0].content.parking}
               </div>
             </div>
           )}
         </>
       );
-    case "shop":
+   /* case "shop":
       return (
         <>
           {property.detail.land_size && (
@@ -118,8 +118,8 @@ const PropertyTypeInfo = ({ property }: { property: RealEstateItem }) => {
             </div>
           )}
         </>
-      );
-    case "land":
+      );*/
+  /*  case "land":
       return (
         <>
           {property.detail.land_size && (
@@ -149,7 +149,7 @@ const PropertyTypeInfo = ({ property }: { property: RealEstateItem }) => {
             </div>
           )}
         </>
-      );
+      );*/
     default:
       return null;
   }
