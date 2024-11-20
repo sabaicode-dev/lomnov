@@ -121,12 +121,8 @@ export class PropertyController extends Controller {
   }
   // Controller get single
   @Get("/properties/get/{propertyId}")
-  public async fetchPropertyByID(@Request()request:Express.Request, @Path() propertyId: string): Promise<ResponsePropertyDTO> {
+  public async fetchPropertyByID(@Path() propertyId: string): Promise<ResponsePropertyDTO> {
     try {
-      const cognitoSub = request.cookies?.username;
-      if(!cognitoSub){
-        throw new UnauthorizedError();
-      }
       return await this.propertyService.getPropertyByID(propertyId);
     } catch (error) {
       console.log(error)

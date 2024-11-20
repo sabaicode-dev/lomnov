@@ -116,7 +116,7 @@ const ROUTE_PATHS: RoutesConfig = {
       },
       {
         path: "/get",
-        methods: { GET: { authRequired: true, roles: ["user"] } }
+        methods: { GET: { authRequired: false, roles: ["user"] } }
       }
     ],
   },
