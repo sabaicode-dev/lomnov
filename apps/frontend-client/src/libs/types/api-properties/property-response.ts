@@ -53,6 +53,7 @@ export interface RealEstateDetail {
   kitchen?:string;
   land_size?:string;
   parking?:string;
+  road_size?:string;
 }
 
 
