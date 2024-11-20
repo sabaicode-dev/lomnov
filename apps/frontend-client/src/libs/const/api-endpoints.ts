@@ -21,4 +21,6 @@ export const API_ENDPOINTS = {
   GET_PROPERTY_BY_ID: `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}/get`,
   MY_PROPERTY: `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}/me`,
   
+  //UPLOAD FILE
+  FILE_UPLOAD: `${process.env.NEXT_PUBLIC_USER_ENDPOINT}/upload`,
 };

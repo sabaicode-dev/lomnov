@@ -18,23 +18,21 @@ class UploadFileToS3Service {
   }
 
   public async uploadFile(file: Express.Multer.File): Promise<string> {
+    const params = {
+      Bucket: this.bucketName,
+      Key: `${Date.now()}-${file.originalname}`,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+    };
+  
     try {
-      const params = {
-        Bucket: this.bucketName,
-        Key: `${Date.now()}-${file.originalname}`,
-        Body: file.buffer,
-        ContentType: file.mimetype,
-      };
-
-      const command = new PutObjectCommand(params);
-      await this.client.send(command);
-
-      return `https://${params.Bucket}.s3.${this.region}.amazonaws.com/${params.Key}`;
+      await this.client.send(new PutObjectCommand(params));
+      return `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${params.Key}`;
     } catch (error) {
-      console.error("Error uploading file to S3:", error);
-      throw new Error("Error uploading file to S3: " + error);
+      console.error("S3 Upload Error:", error);
+      throw new Error("Failed to upload file to S3");
     }
-  }
+  }  
 
   public async deleteFile(key: string): Promise<void> {
     try {
