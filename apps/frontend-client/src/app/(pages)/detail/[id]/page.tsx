@@ -21,13 +21,14 @@ async function fetchProperty(id: string): Promise<RealEstateItem> {
 
 // Server component to fetch property data
 const page = async ({ params }: { params: { id: string } }) => {
-  console.log(params.id);
+  // console.log(params.id);
   const property = await fetchProperty(params.id);
 
   return (
     <>
       <div className="w-full mb-[50px]  mx-auto relative">
         <div className="w-full relative bg-grayish-white h-[300px] sm:h-[400px] md:h-[450px] lg:h-[600px] xl:h-[700px] 2xl:h-[850px] overflow-hidden text-olive-green">
+          {/** IMAGE THUMBNAIL */}
           <Image
             className="top-0 left-0 w-full h-full object-cover"
             src={property.thumbnail}
@@ -36,9 +37,9 @@ const page = async ({ params }: { params: { id: string } }) => {
             layout="fill"
           />
         </div>
-
         <div className="absolute top-[290px] sm:top-[385px] md:top-[435px] lg:top-[575px] xl:top-[628px] 2xl:top-[778px]  w-full flex justify-center items-center">
           <div className="relative w-full xl:w-[1300px]">
+            {/** VECTOR SVG LEFT*/}
             <Image
               className="absolute hidden xl:block -left-5 bottom-[75px] transform translate-y-1/2 w-5 h-5"
               alt="vector5"
@@ -56,6 +57,7 @@ const page = async ({ params }: { params: { id: string } }) => {
                 </div>
               </div>
             </div>
+            {/** VECTOR SVG RIGHT*/}
             <Image
               className="absolute hidden xl:block -right-5 bottom-[75px] transform translate-y-1/2 w-5 h-5"
               alt="vector4"

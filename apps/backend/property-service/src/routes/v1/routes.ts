@@ -1,8 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import type { TsoaRoute } from '@tsoa/runtime';
-import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
+import { TsoaRoute, fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { PropertyController } from './../../controllers/property.controller';
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
@@ -134,15 +133,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
     
         app.post('/api/v1/properties',
-            upload.fields([
-                {
-                    name: "thumbnail",
-                    maxCount: 1
-                },
-                {
-                    name: "images",
-                }
-            ]),
+            upload.fields([{"name":"thumbnail","maxCount":1,"multiple":false},{"name":"images","multiple":true}]),
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.createProperty)),
 
@@ -231,7 +222,6 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
             async function PropertyController_fetchPropertyByID(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
             };
 
@@ -300,15 +290,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/v1/properties/me/:propertyId',
-            upload.fields([
-                {
-                    name: "thumbnail",
-                    maxCount: 1
-                },
-                {
-                    name: "images",
-                }
-            ]),
+            upload.fields([{"name":"thumbnail","maxCount":1,"multiple":false},{"name":"images","multiple":true}]),
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.updateProperty)),
 
