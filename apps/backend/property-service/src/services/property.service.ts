@@ -36,7 +36,7 @@ export class PropertyService {
   public async getProperties(
     queries: RequestQueryPropertyDTO,
   ): Promise<ResponseAllPropertyDTO> {
-    const { language, page = 1, limit = 10 } = queries;
+    const { language, page = 1, limit = 12 } = queries;
     // Pagination parameters
     const skip = (page - 1) * limit;
     // Build filters
@@ -66,7 +66,7 @@ export class PropertyService {
   public async getPropertiesMe(
     queries : RequestQueryPropertyMeDTO,
   ): Promise<ResponseAllPropertyMeDTO> {
-    const { cognitoSub, language, page = 1, limit = 10 , fav_me} = queries;
+    const { cognitoSub, language, page = 1, limit = 12 , fav_me} = queries;
     if(!cognitoSub){
       throw new UnauthorizedError()
     }

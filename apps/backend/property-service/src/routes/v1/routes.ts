@@ -1,7 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { TsoaRoute, fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
+import type { TsoaRoute } from '@tsoa/runtime';
+import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { PropertyController } from './../../controllers/property.controller';
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
@@ -133,7 +134,15 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
     
         app.post('/api/v1/properties',
-            upload.fields([{"name":"thumbnail","maxCount":1,"multiple":false},{"name":"images","multiple":true}]),
+            upload.fields([
+                {
+                    name: "thumbnail",
+                    maxCount: 1
+                },
+                {
+                    name: "images",
+                }
+            ]),
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.createProperty)),
 
@@ -192,7 +201,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                     price_gte: {"in":"query","name":"price_gte","dataType":"double"},
                     price_lte: {"in":"query","name":"price_lte","dataType":"double"},
                     page: {"default":1,"in":"query","name":"page","dataType":"double"},
-                    limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
+                    limit: {"default":12,"in":"query","name":"limit","dataType":"double"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -264,7 +273,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                     price_gte: {"in":"query","name":"price_gte","dataType":"double"},
                     price_lte: {"in":"query","name":"price_lte","dataType":"double"},
                     page: {"default":1,"in":"query","name":"page","dataType":"double"},
-                    limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
+                    limit: {"default":12,"in":"query","name":"limit","dataType":"double"},
                     fav_me: {"in":"query","name":"fav_me","dataType":"string"},
                     request: {"in":"request","name":"request","dataType":"object"},
             };
@@ -291,7 +300,15 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/v1/properties/me/:propertyId',
-            upload.fields([{"name":"thumbnail","maxCount":1,"multiple":false},{"name":"images","multiple":true}]),
+            upload.fields([
+                {
+                    name: "thumbnail",
+                    maxCount: 1
+                },
+                {
+                    name: "images",
+                }
+            ]),
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.updateProperty)),
 
