@@ -1,5 +1,3 @@
-// /libs/cropImage.ts
-
 import { Area } from 'react-easy-crop';
 
 export default async function getCroppedImg(imageSrc: string, crop: Area): Promise<Blob> {
@@ -11,32 +9,32 @@ export default async function getCroppedImg(imageSrc: string, crop: Area): Promi
     throw new Error('Failed to get 2D context');
   }
 
-  // Set canvas dimensions to cropped area dimensions
+  // Set canvas dimensions to the cropped area dimensions
   canvas.width = crop.width;
   canvas.height = crop.height;
 
-  // Draw the cropped image on the canvas
+  // Draw the cropped image onto the canvas
   ctx.drawImage(
     image,
-    crop.x, // Start x-coordinate of the crop
-    crop.y, // Start y-coordinate of the crop
-    crop.width, // Width of the crop
-    crop.height, // Height of the crop
-    0, // Place it at the top-left of the canvas
-    0,
-    crop.width, // Fit the cropped width
-    crop.height // Fit the cropped height
+    crop.x, // Crop start x
+    crop.y, // Crop start y
+    crop.width, // Crop width
+    crop.height, // Crop height
+    0, // Draw on canvas starting at x = 0
+    0, // Draw on canvas starting at y = 0
+    crop.width, // Fit to canvas width
+    crop.height // Fit to canvas height
   );
 
-  // Convert canvas to a Blob
+  // Convert the canvas output to a Blob
   return new Promise((resolve, reject) => {
     canvas.toBlob(
       (blob) => {
         if (blob) resolve(blob);
         else reject(new Error('Canvas is empty'));
       },
-      'image/jpeg', // Image format
-      1 // Quality level (1 is max)
+      'image/jpeg', // Output format
+      0.9 // Compression quality (0.9 for high-quality images)
     );
   });
 }
@@ -45,7 +43,7 @@ function createImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const image = new Image();
     image.src = url;
-    image.crossOrigin = 'anonymous'; // Required for cross-origin images
+    image.crossOrigin = 'anonymous'; // Handles cross-origin images properly
     image.onload = () => resolve(image);
     image.onerror = (error) => reject(error);
   });
