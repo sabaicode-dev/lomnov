@@ -3,8 +3,11 @@ import configs from "@/src/config";
 import { UserRepository } from "@/src/database/repositories/user.repository";
 import uploadFileToS3Service from "@/src/services/uploadFileToS3.service";
 import { UnauthorizedError } from "@/src/utils/error/customErrors";
-import { DeleteProfileImageRequestDTO, GetAllUsersQueryDTO, RequestUserDTO, ResponseAllUserDTO, ResponseUserDTO, UpdateUserDTO, User } from "@/src/utils/types/indext";
+import { DeleteProfileImageRequestDTO, GetAllUsersQueryDTO, RequestUserDTO, ResponseAllUserDTO, ResponseUserDTO, ResponseViewUserProfileDTO, UpdateUserDTO, User } from "@/src/utils/types/indext";
+
 import { Types } from "mongoose";
+import { HttpPropertyServiceClient } from "./httpPropertyServiceClient";
+import { RequestPropertyClientQuery } from "../utils/types/api/property_client";
 // import { HttpPropertyServiceClient } from "./httpPropertyServiceClient";
 
 
@@ -18,8 +21,10 @@ declare global {
 
 export class UserService {
   private userRepository: UserRepository;
+  private httpPropertiesServiceClient: HttpPropertyServiceClient;
   constructor() {
     this.userRepository = new UserRepository();
+    this.httpPropertiesServiceClient = new HttpPropertyServiceClient(configs.apiGateWayUrl, configs.propertyServiceEndPiont)
   }
 
   public async createUser(
@@ -232,7 +237,7 @@ export class UserService {
       throw error;
     }
   }
-  public async getUserFavoritesID(request: Express.Request): Promise<string[]| null> {
+  public async getUserFavoritesID(request: Express.Request): Promise<string[] | null> {
     try {
       const cognitoSub = request.cookies?.username;
       if (!cognitoSub) {
@@ -240,7 +245,7 @@ export class UserService {
       }
       const favorites = await this.userRepository.findUserFavorites(cognitoSub);
       console.log(favorites);
-      
+
       if (favorites.length === 0) {
         return []; // No favorites found
       }
@@ -250,5 +255,24 @@ export class UserService {
       console.error("Error retrieving user favorites:", error);
       throw error;
     }
-  } 
+  }
+  public async getViewUserProfile(congnitoSub: string, queries: RequestPropertyClientQuery)
+    : Promise<ResponseViewUserProfileDTO | any> {
+    try {
+      const existingUser = await this.userRepository.findByCognitoSub(congnitoSub);
+      if (!existingUser)
+        throw new Error("User not found!");
+      const response = {} as ResponseViewUserProfileDTO;
+      const profile = await this.userRepository.findViewProfileOfUser(congnitoSub);
+      const propertiesResponses = await this.httpPropertiesServiceClient.getPropertyUser(congnitoSub, queries);
+      const { properties, totalProperties, totalPages } = propertiesResponses ;
+      response.properties = properties;
+      response.totalProperties=totalProperties!;
+      response.totalPages=totalPages!;
+      response.user = profile;
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

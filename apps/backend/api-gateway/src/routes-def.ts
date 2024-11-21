@@ -95,6 +95,10 @@ const ROUTE_PATHS: RoutesConfig = {
       {
         path: "/me/favorites",
         methods: { GET: { authRequired: true, roles: ['user'] } }
+      },
+      {
+        path: "/profile-user",
+        methods: { GET: { authRequired: false, roles: [] } }
       }
     ],
   },
@@ -117,7 +121,8 @@ const ROUTE_PATHS: RoutesConfig = {
       {
         path: "/get",
         methods: { GET: { authRequired: false, roles: ["user"] } }
-      }
+      },
+      { path: "/user", methods: { GET: { authRequired: false, roles: [] } } }
     ],
   },
 };

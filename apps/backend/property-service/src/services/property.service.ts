@@ -12,7 +12,7 @@ import {
   ResponsePropertyDTO
 } from "@/src/utils/types/indext";
 import { PropertyRepository } from "../database/repositories/property.repository";
-import { UnauthorizedError } from "../utils/error/customErrors";
+import { NotFoundError, UnauthorizedError } from "../utils/error/customErrors";
 // ===============================================================================
 
 export class PropertyService {
@@ -64,26 +64,26 @@ export class PropertyService {
   }
 
   public async getPropertiesMe(
-    queries : RequestQueryPropertyMeDTO,
+    queries: RequestQueryPropertyMeDTO,
   ): Promise<ResponseAllPropertyMeDTO> {
-    const { cognitoSub, language, page = 1, limit = 12 , fav_me} = queries;
-    if(!cognitoSub){
+    const { cognitoSub, language, page = 1, limit = 12, fav_me } = queries;
+    if (!cognitoSub) {
       throw new UnauthorizedError()
     }
     /*
       THIS METHOD IS GO QUERY THE FAV PROPERTY OF THE USER
     */
     const propertyFavouriteMe = await this.propertyRepository.findFavouritePropertyMe(fav_me);
-    
+
     // Pagination parameters
     const skip = (page - 1) * limit;
     // Build filters
     const filters = this.buildFilters(queries);
-   // console.log("helo"+{...filters, cognitoSub})
+    // console.log("helo"+{...filters, cognitoSub})
     // Fetch data and count total properties
     const [properties, totalProperty] = await Promise.all([
-      this.propertyRepository.findPropertiesMe({...filters, cognitoSub}, skip, limit),
-      this.propertyRepository.countPropertiesMe({...filters, cognitoSub}),
+      this.propertyRepository.findPropertiesMe({ ...filters, cognitoSub }, skip, limit),
+      this.propertyRepository.countPropertiesMe({ ...filters, cognitoSub }),
     ]);
     // Apply language-specific filtering if necessary
     const filteredProperties = language
@@ -104,7 +104,7 @@ export class PropertyService {
   }
 
   private buildFilters(queries: RequestQueryPropertyDTO): Promise<ResponseAllPropertyDTO> {
-    try{
+    try {
       const {
         cognitoSub,
         title,
@@ -165,7 +165,7 @@ export class PropertyService {
         };
       }
       return filters;
-    }catch(error){
+    } catch (error) {
       throw error
     }
 
@@ -176,7 +176,7 @@ export class PropertyService {
     language: string,
   ): ResponseFPropertiesByLanguageDTO[] {
 
-    try{
+    try {
       return properties.map((property) => ({
         ...property,
         title: property.title?.filter((t: any) => t.language === language) || [],
@@ -193,7 +193,7 @@ export class PropertyService {
             (detail: any) => detail.language === language,
           ) || [],
       }));
-    }catch(error){
+    } catch (error) {
       throw error
     }
   }
@@ -218,7 +218,7 @@ export class PropertyService {
     }
   }
 
-  public async deleteProperty(propertyId: string, cognitoSub: string| undefined ): Promise<boolean> {
+  public async deleteProperty(propertyId: string, cognitoSub: string | undefined): Promise<boolean> {
     try {
       // Delegate the delete operation to the repository
       return await this.propertyRepository.delete(propertyId, cognitoSub);
@@ -228,10 +228,62 @@ export class PropertyService {
     }
   }
 
-  public async getPropertyByID(id:string):Promise<ResponsePropertyDTO>{
+  public async getPropertyByID(id: string): Promise<ResponsePropertyDTO> {
     try {
       return await this.propertyRepository.findPropertyByID(id);
     } catch (error) {
+      throw error;
+    }
+  }
+  public async getPropertyUser(
+    cognitoSub: string,
+    queries: RequestQueryPropertyDTO
+  ): Promise<{ properties: ResponsePropertyDTO[]; totalPages: number; totalProperties: number }> {
+    try {
+      console.log(cognitoSub);
+      console.log(queries);
+      
+      // Retrieve user properties by cognitoSub
+      const propertiesUser = await this.propertyRepository.findPropertyUserByCognitoSub(cognitoSub);
+  
+      if (!propertiesUser) {
+        throw new NotFoundError(`No properties found for user with cognitoSub: ${cognitoSub}`);
+      }
+  
+      // Extract pagination and filtering parameters
+      const { language, page = 1, limit = 10 } = queries;
+      const skip = (page - 1) * limit;
+  
+      const filters = {
+        cognitoSub, // Restrict to the specific user
+        ...this.buildFilters(queries), // Add other filters from the query
+      };
+      // Fetch paginated results and count total properties
+      const [properties, totalProperties] = await Promise.all([
+        this.propertyRepository.findPropertiesMe(filters, skip, limit),
+        this.propertyRepository.countPropertiesMe(filters),
+      ]);
+  
+      if (!properties.length) {
+        throw new NotFoundError("No properties found matching the provided criteria.");
+      }
+  
+      // Apply language-specific filtering if necessary
+      const filteredProperties = language
+        ? this.filterPropertiesByLanguage(properties, language)
+        : properties;
+  
+      // Calculate total pages
+      const totalPages = Math.ceil(totalProperties / limit);
+  
+      // Return the paginated result
+      return {
+        properties: filteredProperties,
+        totalPages,
+        totalProperties,
+      };
+    } catch (error) {
+      console.error(`Error retrieving properties for user with cognitoSub: ${cognitoSub}`, error);
       throw error;
     }
   }

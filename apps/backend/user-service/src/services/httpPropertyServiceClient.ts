@@ -1,33 +1,32 @@
 import axios from "axios";
-
+import { ReponsePaginationProperyDTO, RequestPropertyClientQuery} from "../utils/types/api/property_client";
 export class HttpPropertyServiceClient {
-  private propertyServiceBaseUrl: string;
-
-  constructor() {
-    this.propertyServiceBaseUrl = process.env.PROPERTY_SERVICE_URL || "http://localhost:4003"; // Property service URL
+  private gateWayBaseUrl: string;
+  private propertyServiceEndPoint:string;
+  constructor(gateWayBaseUrl:string,propertyServiceEndPoint:string) {
+    this.gateWayBaseUrl = gateWayBaseUrl
+    this.propertyServiceEndPoint = propertyServiceEndPoint;
   }
-  /**
-   * getAllProperty
-   */
-  public async getAllProperty() {
-    
-  }
-  public async getPropertiesByIds(propertyIds: string[]): Promise<any[]> {
-    if(!propertyIds){
-        console.log("Undefind Id..")
-    }
+  public async getPropertyUser(
+    cognitoSub:string,
+    queries: RequestPropertyClientQuery):
+      Promise<ReponsePaginationProperyDTO>{
     try {
-      const propertyFetchPromises = propertyIds.map((id) =>
-        axios.get(`${this.propertyServiceBaseUrl}/api/v1/properties/get/${id}`)
-      );
-
-      const responses = await Promise.all(propertyFetchPromises);
-
-      // Extract and return the property data from each response
-      return responses.map((response) => response.data);
+        const {page,limit} = queries;
+        const response = await axios.get(`${this.gateWayBaseUrl}/${this.propertyServiceEndPoint}/user/${cognitoSub}`,{params:{page,limit}})
+        return response.data! as ReponsePaginationProperyDTO;
     } catch (error) {
-      console.error("Error fetching properties from Property Service:", error);
-      throw error;
+       // Handle Axios errors
+       if (axios.isAxiosError(error)) {
+        console.error("Axios error:", {
+          message: error.message,
+          response: error.response?.data,
+        });
+        throw new Error(`Failed to fetch property user data: ${error.message}`);
+      } else {
+        // Re-throw other errors
+        throw error;
+      }
     }
   }
 }

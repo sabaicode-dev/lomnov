@@ -12,6 +12,7 @@ import {
   Delete,
   Path,
   Tags,
+  Queries,
 } from "tsoa";
 import { Types } from "mongoose";
 import {
@@ -25,6 +26,7 @@ import {
 } from "@/src/utils/types/indext";
 import { UserService } from "@/src/services/user.service";
 import { UnauthorizedError } from "../utils/error/customErrors";
+import { RequestPropertyClientQuery } from "../utils/types/api/property_client";
 
 
 // =========================================================
@@ -207,7 +209,17 @@ export class UserController extends Controller {
       throw error;
     }
   }
-
+  /**
+   * 
+   */
+  @Get("/profile-user/{cognitoSub}")
+  public async getProfileUser(@Path() cognitoSub:string,@Queries() queries: RequestPropertyClientQuery):Promise<ResponseUserDTO |  null>{
+    try {
+      return await this.userService.getViewUserProfile(cognitoSub,queries);
+    } catch (error) {
+      throw error;
+    }
+  }
   // @Post("me/favorite")
   // public async addFavorite(
   //   @Request() request: Express.Request,

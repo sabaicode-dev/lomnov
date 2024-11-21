@@ -245,6 +245,22 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"RequestPropertyClientQuery": {
+				"properties": {
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"limit": {
+						"type": "string"
+					},
+					"language": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -617,6 +633,67 @@
 				],
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/api/v1/users/profile-user/{cognitoSub}": {
+			"get": {
+				"operationId": "GetProfileUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"allOf": [
+										{
+											"$ref": "#/components/schemas/ResponseUserDTO"
+										}
+									],
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					" User service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "cognitoSub",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "language",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		}
 	},
