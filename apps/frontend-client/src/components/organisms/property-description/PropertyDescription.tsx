@@ -47,7 +47,7 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
         <div className="py-[5px] text-grayish-white max-w-[340px] rounded-8xs bg-neutral flex items-center">
           <Location className="text-olive-green w-[20px] h-[20px]" />
           <p className="pl-[5px] font-helvetica text-helvetica-paragraph">
-            {property.address}
+            {property.address[0]?.content}
           </p>
         </div>
       </div>
@@ -55,10 +55,10 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
         {/* Property Details */}
         <div className="w-full lg:w-1/2">
           <h1 className="font-coolvetica text-coolvetica-h2 text-olive-drab mb-4">
-            {property.name} Warehouse
+            {property.title[0]?.content} Warehouse
           </h1>
           <p className="font-helvertica text-helvetica-paragraph text-charcoal">
-            {property.description}
+            {property.description[0]?.content}
           </p>
         </div>
 

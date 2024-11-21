@@ -50,6 +50,10 @@ export interface RealEstateDetail {
   fireplace?: string;
   garden?: string;
   patio?: string; // Add other relevant fields as necessary
+  kitchen?:string;
+  land_size?:string;
+  parking?:string;
+  road_size?:string;
 }
 
 
@@ -60,7 +64,7 @@ export interface RealEstateItem {
   description: { content: string; language: string }[];
   thumbnail: string;
   images: string[];
-  mapurl: string;
+  urlmap: string;
   address: { content: string; language: string }[];
   location: { content: string; language: string }[];
   price: number;

@@ -1,45 +1,62 @@
+
+
 'use client';
 
-import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import axios from "axios";
+import React, { createContext, ReactNode, useContext, useEffect, useState, useCallback } from "react";
+import axiosInstance from "@/libs/axios";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response"; // Import from your types file
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
-import axiosInstance from "@/libs/axios";
+
+interface PaginationData {
+  currentPage: number;
+  totalPages: number;
+  totalProperty: number;
+}
+
 interface PropertyContextType {
   properties: RealEstateItem[] | null;
   loading: boolean;
   error: string | null;
-  fetchProperties: () => Promise<void>;
+  pagination: PaginationData | null;
+  fetchProperties: (params?: { page?: number; limit?: number }) => Promise<void>;
 }
 
 const PropertyContext = createContext<PropertyContextType | undefined>(undefined);
 
 export const PropertyProvider = ({ children }: { children: ReactNode }) => {
   const [properties, setProperties] = useState<RealEstateItem[] | null>(null);
+  const [pagination, setPagination] = useState<PaginationData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchProperties = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}`);
-      //console.log("API Response:", response.data); // Log the API response
-      setProperties(response.data.properties); // Correctly access 'properties'
-    } catch (error) {
-      console.error("Error fetching properties:", error);
-      setError("Failed to load properties.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // UseCallback to stabilize fetchProperties function
+  const fetchProperties = useCallback(
+    async (params: { page?: number; limit?: number } = { page: 1, limit: 12 }) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const queryString = new URLSearchParams(params as Record<string, string>).toString();
+        const response = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?${queryString}`);
+        
+        setProperties(response.data.properties); // Update properties
+        setPagination(response.data.pagination); // Update pagination metadata
+      } catch (err) {
+        console.error("Error fetching properties:", err);
+        setError("Failed to load properties.");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [] // Empty dependency array ensures fetchProperties is stable
+  );
 
+  // Initial fetch effect
   useEffect(() => {
-    fetchProperties();
-  }, []);
+    fetchProperties(); // Fetch properties on initial load
+  }, [fetchProperties]);
 
   return (
-    <PropertyContext.Provider value={{ properties, loading, error, fetchProperties }}>
+    <PropertyContext.Provider value={{ properties, loading, error, pagination, fetchProperties }}>
       {children}
     </PropertyContext.Provider>
   );
