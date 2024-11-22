@@ -236,11 +236,11 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
       {/* Modal for cropping */}
       {isCropModalOpen && imageSrc && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-md">
-            <h3 className="text-lg font-semibold mb-4">
-              Crop Your {isProfileCrop ? 'Profile Picture' : 'Background Image'}
+          <div className="bg-white py-6 px-[200px] rounded-md">
+            <h3 className="text-xl font-semibold mb-4">
+            Customize Your {isProfileCrop ? 'Profile Picture' : 'Background Image'}
             </h3>
-            <div className="relative w-[300px] h-[300px]">
+            <div className="relative w-[450px] h-[450px]">
               <Cropper
                 image={imageSrc}
                 crop={crop}
@@ -254,14 +254,14 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
             {error && <p className="text-red-500 mt-2">{error}</p>} {/* Error Message */}
             <div className="flex justify-between mt-4">
               <button
-                className="bg-gray-300 px-4 py-2 rounded-md"
+                className="bg-gray-300 px-12 py-2 font-bold rounded-lg"
                 onClick={() => setIsCropModalOpen(false)}
                 disabled={loading}
               >
                 Cancel
               </button>
               <button
-                className="bg-blue-500 text-white px-8 py-2 rounded-md"
+                className="bg-olive-drab text-white px-12 font-bold py-2 rounded-lg"
                 onClick={handleCropComplete}
                 disabled={loading}
               >
