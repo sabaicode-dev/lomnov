@@ -2,7 +2,7 @@
 import configs from "@/src/config";
 import { UserRepository } from "@/src/database/repositories/user.repository";
 import uploadFileToS3Service from "@/src/services/uploadFileToS3.service";
-import { UnauthorizedError } from "@/src/utils/error/customErrors";
+import { NotFoundError, UnauthorizedError } from "@/src/utils/error/customErrors";
 import { DeleteProfileImageRequestDTO, GetAllUsersQueryDTO, RequestUserDTO, ResponseAllUserDTO, ResponseUserDTO, ResponseViewUserProfileDTO, UpdateUserDTO, User } from "@/src/utils/types/indext";
 
 import { Types } from "mongoose";
@@ -260,8 +260,9 @@ export class UserService {
     : Promise<ResponseViewUserProfileDTO | any> {
     try {
       const existingUser = await this.userRepository.findByCognitoSub(congnitoSub);
+
       if (!existingUser)
-        throw new Error("User not found!");
+        return new NotFoundError("User not found!")
       const response = {} as ResponseViewUserProfileDTO;
       const profile = await this.userRepository.findViewProfileOfUser(congnitoSub);
       const propertiesResponses = await this.httpPropertiesServiceClient.getPropertyUser(congnitoSub, queries);

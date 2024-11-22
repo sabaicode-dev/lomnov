@@ -120,7 +120,7 @@ export interface LocalizedContent {
   language: string;
 }
 
-interface ViewUserPropertiesDTO {
+export interface ViewUserPropertiesDTO {
   cognitoSub: string,
   title?: LocalizedContent[];
   description?: LocalizedContent[];

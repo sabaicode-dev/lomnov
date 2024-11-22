@@ -215,8 +215,13 @@ export class UserController extends Controller {
   @Get("/profile-user/{cognitoSub}")
   public async getProfileUser(@Path() cognitoSub:string,@Queries() queries: RequestPropertyClientQuery):Promise<ResponseUserDTO |  null>{
     try {
-      return await this.userService.getViewUserProfile(cognitoSub,queries);
+      const responses = await this.userService.getViewUserProfile(cognitoSub,queries);
+      console.log(responses);
+      
+      return responses
     } catch (error) {
+      console.log(error);
+      
       throw error;
     }
   }

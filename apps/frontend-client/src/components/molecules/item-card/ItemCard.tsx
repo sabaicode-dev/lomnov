@@ -53,7 +53,7 @@ const ItemCard = ({ item, flexRow, favourited }: ItemCardProps) => {
 
         {/* Item Type */}
         <p className="absolute py-[3px] px-4 top-[10px] left-[17px] bg-olive-green text-white rounded-[13px] font-[600] z-2">
-          {item.category[0].content}
+          {item.category[0]?.content || ""}
         </p>
 
         {/* Favorite Icon */}
