@@ -32,9 +32,9 @@ function PropertyOwner({cognitosub,propertyOwner}:PropertyOwnerProps) {
 
             {/* Contact Button Section */}
             <div className='mt-4 border px-[25px] py-[5px] border-[#7D7757] z-10 rounded-[5px]'>
-                <button className='w-full leading-[24px] text-[#252728] font-[700] rounded-lg focus:outline-none'>
+                <Link href={`/view-profile/contact/${cognitosub}`} className='w-full leading-[24px] text-[#252728] font-[700] rounded-lg focus:outline-none'>
                     Contact {propertyOwner.userName}
-                </button>
+                </Link>
             </div>
         </section>
     )

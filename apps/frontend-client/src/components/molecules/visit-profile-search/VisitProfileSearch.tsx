@@ -17,7 +17,7 @@ const VisitProfileSearch = () => {
                     <SelectLocations backGroundColor='bg-white' onChange={handleLocationChange} />
                     <SelectPrice backGroundColor='bg-white' onChange={handlePriceChange} />
                     <button className="bg-[#B5B49E] text-charcoal text-helvetica-paragraph px-5 py-2 rounded-md lg:w-[120px]
-                hover:bg-olive-green hover:scale-105 active:bg-olive-green active:scale-95 transition-transform duration-150"
+                hover:bg-olive-green hover:scale-105 active:bg-olive-green active:scale-95 transition-transform duration-150 hover:text-white"
                         onClick={handleSearch}
                     >
                         Search
