@@ -99,7 +99,8 @@ const ROUTE_PATHS: RoutesConfig = {
       {
         path: "/profile-user",
         methods: { GET: { authRequired: false, roles: [] } }
-      }
+      },
+      { path: "/profile-info", methods: { GET: { authRequired: false, roles: [] } } }
     ],
   },
   PROPERTY_SERVICE: {

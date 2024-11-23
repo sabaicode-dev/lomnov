@@ -16,7 +16,9 @@ function PropertyTypeInfoVilla({property}:{property:RealEstateItem}) {
         {property.detail[0] && (<PropertyBathroom property={property}/>)}
         {property.detail[0] && (<PropertyLandSize property={property}/>)}
         {property.detail[0] && (<PropertyParking property={property}/>)}
-        <PropertyOwner cognitosub={property.cognitoSub}/>
+        <PropertyOwner propertyOwner={
+          //@ts-ignore
+          property.propertyOwner} cognitosub={property.cognitoSub}/>
     </>
   )
 }

@@ -261,6 +261,63 @@
 				},
 				"type": "object",
 				"additionalProperties": false
+			},
+			"ViewUserProfileDTO": {
+				"properties": {
+					"_id": {
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
+					"email": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"userName": {
+						"type": "string"
+					},
+					"phoneNumber": {
+						"type": "string"
+					},
+					"location": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"age": {
+						"type": "number",
+						"format": "double"
+					},
+					"gender": {
+						"type": "string"
+					},
+					"dateOfBirth": {
+						"type": "string"
+					},
+					"profile": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"background": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"_id",
+					"email",
+					"userName"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -689,6 +746,37 @@
 						"in": "query",
 						"name": "language",
 						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/users/profile-info/{cognitoSub}": {
+			"get": {
+				"operationId": "GetPropertyOwnerInfo",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ViewUserProfileDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					" User service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "cognitoSub",
+						"required": true,
 						"schema": {
 							"type": "string"
 						}

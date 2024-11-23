@@ -11,7 +11,7 @@ import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 async function fetchProperty(id: string): Promise<RealEstateItem> {
   try {
     const res = await axiosInstance.get(`${API_ENDPOINTS.GET_PROPERTY_BY_ID}/${id}`);
-    // console.log(res.data);
+    console.log(res.data);
     
     return res.data;
   } catch (error) {

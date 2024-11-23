@@ -9,16 +9,20 @@ import {
   ResponseUpdatePropertyDTO,
   RequestQueryPropertyMeDTO,
   ResponseAllPropertyMeDTO,
-  ResponsePropertyDTO
+  ResponsePropertyDTO,
+  ResponsePropertyByID
 } from "@/src/utils/types/indext";
 import { PropertyRepository } from "../database/repositories/property.repository";
 import { NotFoundError, UnauthorizedError } from "../utils/error/customErrors";
+import { UserServiceClient } from "./userServiceClient";
 // ===============================================================================
 
 export class PropertyService {
   private propertyRepository: PropertyRepository;
+  private userServiceClient: UserServiceClient;
   constructor() {
     this.propertyRepository = new PropertyRepository();
+    this.userServiceClient = new UserServiceClient();
   }
 
   public async createProperty(
@@ -228,13 +232,37 @@ export class PropertyService {
     }
   }
 
-  public async getPropertyByID(id: string): Promise<ResponsePropertyDTO> {
+  public async getPropertyByID(id: string): Promise<ResponsePropertyByID> {
     try {
-      return await this.propertyRepository.findPropertyByID(id);
+      // Fetch property details
+      const property = await this.propertyRepository.findPropertyByID(id) as ResponsePropertyDTO;
+      //@ts-ignore
+      //console.log({...property._doc});
+      
+      if (!property) {
+        throw new Error(`Property with ID ${id} not found.`);
+      }
+  
+      // Fetch property owner details
+      const propertyOwner = await this.userServiceClient.propertyOwnerInfo(property.cognitoSub as string);
+      
+      if (!propertyOwner) {
+        throw new Error(`Property owner with cognitoSub ${property.cognitoSub} not found.`);
+      }
+  
+      // Construct the response object
+      const responses: ResponsePropertyByID = {
+        //@ts-ignore
+        ...property._doc,
+        propertyOwner
+      };
+      return responses;
     } catch (error) {
-      throw error;
+      console.error(`Error fetching property by ID ${id}:`, error);
+      throw new Error(`Failed to fetch property with ID ${id}`);
     }
   }
+  
   public async getPropertyUser(
     cognitoSub: string,
     queries: RequestQueryPropertyDTO
@@ -242,18 +270,18 @@ export class PropertyService {
     try {
       console.log(cognitoSub);
       console.log(queries);
-      
+
       // Retrieve user properties by cognitoSub
       const propertiesUser = await this.propertyRepository.findPropertyUserByCognitoSub(cognitoSub);
-  
+
       if (!propertiesUser) {
         throw new NotFoundError(`No properties found for user with cognitoSub: ${cognitoSub}`);
       }
-  
+
       // Extract pagination and filtering parameters
       const { language, page = 1, limit = 10 } = queries;
       const skip = (page - 1) * limit;
-  
+
       const filters = {
         cognitoSub, // Restrict to the specific user
         ...this.buildFilters(queries), // Add other filters from the query
@@ -263,19 +291,19 @@ export class PropertyService {
         this.propertyRepository.findPropertiesMe(filters, skip, limit),
         this.propertyRepository.countPropertiesMe(filters),
       ]);
-  
+
       if (!properties.length) {
         throw new NotFoundError("No properties found matching the provided criteria.");
       }
-  
+
       // Apply language-specific filtering if necessary
       const filteredProperties = language
         ? this.filterPropertiesByLanguage(properties, language)
         : properties;
-  
+
       // Calculate total pages
       const totalPages = Math.ceil(totalProperties / limit);
-  
+
       // Return the paginated result
       return {
         properties: filteredProperties,

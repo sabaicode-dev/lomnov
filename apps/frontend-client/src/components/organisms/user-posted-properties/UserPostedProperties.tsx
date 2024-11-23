@@ -1,9 +1,8 @@
-'use client'
+
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import ItemCard from "@/components/molecules/item-card/ItemCard";
-import SelectProperties from "@/components/molecules/select-properties/SelectProperties";
-import SelectLocations from "@/components/molecules/select-locations/SelectLocations";
-import SelectPrice from "@/components/molecules/select-price/SelectPrice";
+
+import VisitProfileSearch from "@/components/molecules/visit-profile-search/VisitProfileSearch";
 export default async function UserPostedProperties({ property }: { property: RealEstateItem[] }) {
   const handlePriceChange = () => { }
   const handlePropertyChange = () => { }
@@ -11,12 +10,12 @@ export default async function UserPostedProperties({ property }: { property: Rea
   const handleSearch = () => { }
   return (
     <section>
-      <div className="w-full h-full ">
-        <div className="flex z-10 flex-col gap-3   -translate-y-[65%] w-full xl:w-[1300px] lg:m-auto">
-
-            <div className="w-full lg:w-fit rounded-r-[18px] rounded-bl-[20px] lg:flex grid grid-cols-2 lg:grid-cols-4 items-center gap-5 p-5 ">
+      {/* <div className="w-full h-full ">
+        <div className="flex z-10 flex-col gap-3 items-center">
+            <div className="w-full flex flex-col lg:flex-row gap-4 p-5 mt-3">
+              {'use client'}
               <SelectProperties onChange={handlePropertyChange} />
-              <SelectLocations onChange={handleLocationChange} />
+              <SelectLocations onChange={handleLocationChange} bodyColor="bg-white" />
               <SelectPrice onChange={handlePriceChange} />
 
               <button
@@ -30,8 +29,9 @@ export default async function UserPostedProperties({ property }: { property: Rea
 
             </div>
           </div>
-      </div>
-      <article className="grid mt-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5 2xl:gap-5">
+      </div> */}
+      <VisitProfileSearch/>
+      <article className="grid mt-5 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5 2xl:gap-5">
         {property.length > 0 ? (
           property.map((properties) => (
             <ItemCard key={properties._id} item={properties} />

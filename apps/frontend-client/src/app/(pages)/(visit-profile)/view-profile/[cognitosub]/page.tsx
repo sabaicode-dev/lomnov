@@ -1,12 +1,10 @@
 // profile/[username]/page.tsx
-
 import React from "react";
 import Layout from "../layout"; // Import the layout
 import VisitProfileHeader from "@/components/molecules/visit-profile-header/VisitProfileHeader";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import { VisitProfileHeaderProps } from "@/libs/types/user-types/user";
-import NotFound from "@/components/molecules/notFound/NotFound";
 import UserPostedProperties from "@/components/organisms/user-posted-properties/UserPostedProperties";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 
