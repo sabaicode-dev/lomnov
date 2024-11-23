@@ -109,6 +109,7 @@ const ROUTE_PATHS: RoutesConfig = {
     methods: {
       GET: { authRequired: false, roles: [] },
       POST: { authRequired: false, roles: ["admin", "user"] },
+      DELETE: { authRequired: false, roles: ['admin', 'user'] }
     },
     nestedRoutes: [
       {
@@ -117,7 +118,10 @@ const ROUTE_PATHS: RoutesConfig = {
       },
       {
         path: "/me",
-        methods: { GET: { authRequired: true, roles: ["user"] } },
+        methods: {
+          GET: { authRequired: true, roles: ["user"] },
+          DELETE: { authRequired: true,roles:['user','admin']}
+        },
       },
       {
         path: "/get",

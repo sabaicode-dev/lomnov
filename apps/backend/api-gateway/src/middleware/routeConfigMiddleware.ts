@@ -61,12 +61,13 @@ const findRouteConfig = (
 // Step 3: Attach the route configuration and method config to the request object
 const routeConfigMiddleware = (req: Request, _res: Response, next: NextFunction) => {
   const { path, method } = req;
-
+  console.log(method);
+  
   // Step 1
   let routeConfig = null;
   for (const key in ROUTE_PATHS) {
     routeConfig = findRouteConfig(path, ROUTE_PATHS[key]);
-    // console.log('routeConfig', routeConfig)
+    console.log('routeConfig', routeConfig)
     if (routeConfig) break;
   }
 
