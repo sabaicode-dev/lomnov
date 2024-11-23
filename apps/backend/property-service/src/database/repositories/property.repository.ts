@@ -181,6 +181,8 @@ export class PropertyRepository {
       await PropertyModel.findByIdAndDelete(propertyId);
       return true;
     } catch (error) {
+      console.log(error);
+      
       throw error
     }
   }
