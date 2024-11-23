@@ -10,6 +10,7 @@ import {
   ResponseUpdateUserDTO,
   ResponseUserDTO,
   User,
+  ViewUserProfileDTO,
 } from "@/src/utils/types/indext";
 import { UserModel } from "../models/user.model";
 // =========================================================================
@@ -132,5 +133,14 @@ export class UserRepository {
       throw error;
     }
   }
-  
+  public async findViewProfileOfUser(cognitoSub: string): Promise<ViewUserProfileDTO>{
+    try {
+      const user = await UserModel.findOne({cognitoSub:cognitoSub}).select('-favorite -role');
+      if(!user)
+        throw new NotFoundError("Users not found");
+      return user!;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

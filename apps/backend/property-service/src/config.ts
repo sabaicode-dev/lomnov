@@ -10,6 +10,7 @@ type Config = {
   awsRegion: string;
   awsS3BucketName: string;
   clientUrl: string;
+  userServiceUrl:string;
 };
 
 // Function to load and validate environment variables
@@ -28,6 +29,7 @@ function loadConfig(): Config {
     AWS_S3_REGION: Joi.string().required(),
     AWS_S3_BUCKET_NAME: Joi.string().required(),
     CLIENT_URL: Joi.string().required(),
+    USER_SERVICE_URL:Joi.string().required()
   }).unknown().required();
 
   // Validate the environment variables
@@ -43,7 +45,8 @@ function loadConfig(): Config {
     awsSecretAccessKey: envVars.AWS_SECRET_ACCESS_KEY,
     awsRegion: envVars.AWS_S3_REGION,
     awsS3BucketName: envVars.AWS_S3_BUCKET_NAME,
-    clientUrl: envVars.CLIENT_URL
+    clientUrl: envVars.CLIENT_URL,
+    userServiceUrl: envVars.USER_SERVICE_URL
   };
 }
 

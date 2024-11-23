@@ -13,7 +13,7 @@ const app = express();
 // ===============================
 // SECURITIES MIDDLEWARES
 // ===============================
-app.use(cookieParser());
+app.use(cookieParser() as express.Handler);
 app.use(cors(corsOptions));
 
 // ===============================

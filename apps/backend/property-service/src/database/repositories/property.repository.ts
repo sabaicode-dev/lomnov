@@ -192,4 +192,11 @@ export class PropertyRepository {
       throw error; 
     }
   }
+  public async findPropertyUserByCognitoSub(cognitoSub: string): Promise<ResponsePropertyDTO[]>{
+    try {
+      return await PropertyModel.find({cognitoSub:cognitoSub});
+    } catch (error) {
+      throw error;
+    }
+  }
 }
