@@ -181,6 +181,8 @@ export class PropertyRepository {
       await PropertyModel.findByIdAndDelete(propertyId);
       return true;
     } catch (error) {
+      console.log(error);
+      
       throw error
     }
   }
@@ -190,6 +192,13 @@ export class PropertyRepository {
       return await PropertyModel.find({_id:{$in:splitIdFavMe}});
     } catch (error) {
       throw error; 
+    }
+  }
+  public async findPropertyUserByCognitoSub(cognitoSub: string): Promise<ResponsePropertyDTO[]>{
+    try {
+      return await PropertyModel.find({cognitoSub:cognitoSub});
+    } catch (error) {
+      throw error;
     }
   }
 }

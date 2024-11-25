@@ -1,20 +1,25 @@
-'use client'
+'use client';
 
-import React, { useState } from "react";
-import Image from "next/image";
-import Banner from "@/components/molecules/banner/Banner";
-import { FaCamera } from "react-icons/fa";
-import UserProfileNavigation from "../user-profile-navigation/UserProfileNavigation";
-import { User } from "@/context/user.type";
-import axiosInstance from "@/libs/axios";
-import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import Cropper from 'react-easy-crop'; // Cropper library
+import Banner from '@/components/molecules/banner/Banner';
+import { FaCamera } from 'react-icons/fa';
+import UserProfileNavigation from '../user-profile-navigation/UserProfileNavigation';
+import { User } from '@/context/user.type';
+import axiosInstance from '@/libs/axios';
+import { API_ENDPOINTS } from '@/libs/const/api-endpoints';
+import getCroppedImg from '@/libs/cropImage';
 
 interface UserProfileHeaderProps {
   user: User;
+  userName: String;
+  createdAt: String;
 }
 
+// Helper function to format joinedDate
 const formatDate = (dateString?: string): string => {
-  if (!dateString) return "Unknown date";
+  if (!dateString) return "Unknown date"; // Fallback for undefined
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", {
     year: "numeric",
@@ -23,70 +28,138 @@ const formatDate = (dateString?: string): string => {
   });
 };
 
+const MAX_FILE_SIZE_MB = 5; // Max file size allowed
+const MAX_WIDTH = 1920; // Max width for resizing
+const MAX_HEIGHT = 1080; // Max height for resizing
+
 const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
-  const [userState, setUserState] = useState<User>(user);
+  const [userState, setUserState] = useState<User>(user); // Manage user state
+  const [imageSrc, setImageSrc] = useState<string | null>(null); // Image source for cropping
+  const [crop, setCrop] = useState({ x: 0, y: 0 }); // Crop position
+  const [zoom, setZoom] = useState(1); // Zoom level
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null); // Cropped area in pixels
+  const [isCropModalOpen, setIsCropModalOpen] = useState(false); // Modal state for cropping
+  const [isProfileCrop, setIsProfileCrop] = useState(false); // Distinguish between profile and background crops
+  const [loading, setLoading] = useState(false); // Upload progress indicator
+  const [error, setError] = useState<string | null>(null); // Error message
 
-  const handleProfileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  console.log('user:: ', user)
+
+  // Handle file change for uploading (background or profile)
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, isProfile: boolean) => {
     const file = event.target.files?.[0];
     if (!file) {
-      console.log("No file selected");
+      console.log('No file selected');
       return;
     }
 
-    const formData = new FormData();
-    formData.append("profileFiles", file);
-
-    try {
-      const response = await axiosInstance.put(API_ENDPOINTS.USER_PROFILE, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      if (response?.data) {
-        console.log("Profile photo uploaded successfully:", response.data);
-        setUserState((prevUser: User) => ({
-          ...prevUser,
-          profile: response.data.profile, // Update profile array from the backend response
-        }));
-      } else {
-        console.log("Something went wrong with the profile upload");
-      }
-    } catch (error) {
-      console.error("Error uploading profile photo:", error);
-    }
-  };
-
-  const handleBackgroundChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) {
-      console.log("No file selected");
+    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+      alert(`File size exceeds ${MAX_FILE_SIZE_MB}MB. Please upload a smaller image.`);
       return;
     }
 
-    const formData = new FormData();
-    formData.append("backgroundFiles", file);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImageSrc(reader.result as string);
+      setIsCropModalOpen(true);
+      setIsProfileCrop(isProfile); // Set crop type (profile or background)
+    };
+    reader.readAsDataURL(file);
+  };
 
+  // Resize image using a canvas to reduce file size
+  const resizeImage = async (image: HTMLImageElement): Promise<Blob> => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d')!;
+    const aspectRatio = image.width / image.height;
+
+    // Resize based on max dimensions
+    if (image.width > MAX_WIDTH || image.height > MAX_HEIGHT) {
+      if (aspectRatio > 1) {
+        canvas.width = MAX_WIDTH;
+        canvas.height = MAX_WIDTH / aspectRatio;
+      } else {
+        canvas.height = MAX_HEIGHT;
+        canvas.width = MAX_HEIGHT * aspectRatio;
+      }
+    } else {
+      canvas.width = image.width;
+      canvas.height = image.height;
+    }
+
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        resolve(blob!);
+      }, 'image/jpeg', 0.8); // Reduce quality to compress
+    });
+  };
+
+  // Handle crop and upload logic
+  const handleCropComplete = async () => {
     try {
+      if (!croppedAreaPixels || !imageSrc) {
+        alert('Cropping is not completed.');
+        return;
+      }
+  
+      setLoading(true); // Show loading indicator
+      setError(null); // Reset error state
+  
+      // Generate cropped image as a Blob
+      const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
+  
+      if (!croppedImage) {
+        throw new Error('Failed to generate cropped image.');
+      }
+  
+      // Convert the cropped Blob into an HTMLImageElement for resizing
+      const createImageElement = async (blob: Blob): Promise<HTMLImageElement> => {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(blob);
+  
+        return new Promise((resolve, reject) => {
+          img.onload = () => resolve(img);
+          img.onerror = (error) => reject(error);
+        });
+      };
+  
+      const imageElement = await createImageElement(croppedImage);
+  
+      // Resize the image if needed
+      const resizedImage = await resizeImage(imageElement);
+  
+      const formData = new FormData();
+      const endpoint = isProfileCrop ? 'profileFiles' : 'backgroundFiles';
+      formData.append(endpoint, resizedImage);
+  
+      // Send the image to the server
       const response = await axiosInstance.put(API_ENDPOINTS.USER_PROFILE, formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
       });
-
+  
       if (response?.data) {
-        console.log("Background photo uploaded successfully:", response.data);
-        setUserState((prevUser: User) => ({
+        // Update the user state for either profile or background image
+        setUserState((prevUser) => ({
           ...prevUser,
-          background: response.data.background, // Update background array from the backend response
+          [isProfileCrop ? 'profile' : 'background']: response.data[isProfileCrop ? 'profile' : 'background'],
         }));
+        console.log(`${isProfileCrop ? 'Profile' : 'Background'} photo uploaded successfully.`);
+        setIsCropModalOpen(false); // Close the modal after successful upload
       } else {
-        console.log("Something went wrong with the background upload");
+        throw new Error('Unexpected response from the server.');
       }
     } catch (error) {
-      console.error("Error uploading background photo:", error);
+      console.error('Error cropping and uploading image:', error);
+      setError('Failed to upload image. Please try again.');
+    } finally {
+      setLoading(false); // Hide loading indicator
     }
   };
+  
 
   return (
     <>
@@ -94,7 +167,7 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
         {/* Background Image */}
         <Banner
           background={
-            userState.background?.[userState.background.length - 1] || "/images/default-banner.jpg"
+            userState.background?.[userState.background.length - 1] || '/images/default-banner.jpg'
           }
         />
         <div className="max-w-[1300px] mx-auto relative">
@@ -102,13 +175,18 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
           <div className="absolute right-[0px] bottom-[50px] flex justify-end pr-[10px] xl:pr-0">
             <div className="flex items-center bg-white font-helvetica text-helvetica-paragraph text-charcoal px-[10px] py-[5px] rounded-md">
               <label
-                htmlFor="file-input"
+                htmlFor="background-input"
                 className="cursor-pointer flex items-center justify-center"
               >
                 <FaCamera className="text-charcoal mx-[10px]" />
                 <span>Edit cover photo</span>
               </label>
-              <input type="file" id="file-input" className="hidden" onChange={handleBackgroundChange} />
+              <input
+                type="file"
+                id="background-input"
+                className="hidden"
+                onChange={(e) => handleFileChange(e, false)} // Handle background crop
+              />
             </div>
           </div>
 
@@ -120,7 +198,7 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
                   src={
                     userState.profile?.[userState.profile.length - 1]
                       ? `${userState.profile[userState.profile.length - 1]}?t=${new Date().getTime()}`
-                      : "/images/default-profile.jpg"
+                      : '/images/default-profile.jpg'
                   }
                   alt="user"
                   width={125}
@@ -133,22 +211,67 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
               >
                 <FaCamera className="text-charcoal sm:w-[20px] sm:h-[20px] w-[15px] h-[15px]" />
               </label>
-              <input type="file" id="profile-photo-input" className="hidden" onChange={handleProfileChange} />
+              <input
+                type="file"
+                id="profile-photo-input"
+                className="hidden"
+                onChange={(e) => handleFileChange(e, true)} // Handle profile crop
+              />
             </div>
-            {/* User Info */}
+            {/* User name */}
             <div className="absolute left-[170px] items-center text-helvetica-small font-helvetica text-olive-gray mt-[10px]">
               <span className="font-helvetica text-helvetica-h4 font-bold text-charcoal capitalize">
-                {userState.userName || "Unknown"}
+                { user.userName || 'Unknown'}
               </span>
               <span className="flex items-center mt-[10px]">
                 Joined
                 <div className="w-[5px] h-[5px] mx-[5px] rounded-full bg-olive-gray"></div>
-                {formatDate(userState.createdAt)}
-              </span>
+                {formatDate(user.createdAt)} {/* Formatted joined date */}
+                </span>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Modal for cropping */}
+      {isCropModalOpen && imageSrc && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white py-6 px-[200px] rounded-md">
+            <h3 className="text-xl font-semibold mb-4">
+            Customize Your {isProfileCrop ? 'Profile Picture' : 'Background Image'}
+            </h3>
+            <div className="relative w-[450px] h-[450px]">
+              <Cropper
+                image={imageSrc}
+                crop={crop}
+                zoom={zoom}
+                aspect={isProfileCrop ? 1 : 21 / 9} // Dynamically adjust aspect ratio
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={(_, croppedAreaPixels) => setCroppedAreaPixels(croppedAreaPixels)}
+              />
+            </div>
+            {error && <p className="text-red-500 mt-2">{error}</p>} {/* Error Message */}
+            <div className="flex justify-between mt-4">
+              <button
+                className="bg-gray-300 px-12 py-2 font-bold rounded-lg"
+                onClick={() => setIsCropModalOpen(false)}
+                disabled={loading}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-olive-drab text-white px-12 font-bold py-2 rounded-lg"
+                onClick={handleCropComplete}
+                disabled={loading}
+              >
+                {loading ? 'Uploading...' : 'Save'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* UserProfileNavigation */}
       <UserProfileNavigation userName={userState.userName} />
     </>

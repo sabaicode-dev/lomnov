@@ -12,9 +12,10 @@ import {
   Path,
   Tags,
   Request,
+  Queries,
 } from "tsoa";
 import { PropertyService } from "@/src/services/property.service";
-import { RequestPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponsePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
+import { RequestPropertyDTO, RequestQueryPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponsePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
 import { Request as Express } from "express";
 import { UnauthorizedError } from "../utils/error/customErrors";
 // ====================================================================
@@ -94,7 +95,7 @@ export class PropertyController extends Controller {
     @Query() price_gte?: number,
     @Query() price_lte?: number,
     @Query() page: number = 1,
-    @Query() limit: number = 10,
+    @Query() limit: number = 12,
     // @Request() request?: Express.Request
   ): Promise<ResponseAllPropertyDTO> {
     try {
@@ -121,12 +122,8 @@ export class PropertyController extends Controller {
   }
   // Controller get single
   @Get("/properties/get/{propertyId}")
-  public async fetchPropertyByID(@Request()request:Express.Request, @Path() propertyId: string): Promise<ResponsePropertyDTO> {
+  public async fetchPropertyByID(@Path() propertyId: string): Promise<ResponsePropertyDTO> {
     try {
-      const cognitoSub = request.cookies?.username;
-      if(!cognitoSub){
-        throw new UnauthorizedError();
-      }
       return await this.propertyService.getPropertyByID(propertyId);
     } catch (error) {
       console.log(error)
@@ -146,8 +143,8 @@ export class PropertyController extends Controller {
     @Query() price_gte?: number,
     @Query() price_lte?: number,
     @Query() page: number = 1,
-    @Query() limit: number = 10,
-    @Query() fav_me?:string,
+    @Query() limit: number = 12,
+    @Query() fav_me?: string,
     @Request() request?: Express.Request,
   ): Promise<ResponseAllPropertyDTO> {
     try {
@@ -243,12 +240,20 @@ export class PropertyController extends Controller {
   ): Promise<{ message: string }> {
     try {
       const cognitoSub = request?.cookies.username;
-      const result = await this.propertyService.deleteProperty(propertyId, cognitoSub );
+      const result = await this.propertyService.deleteProperty(propertyId, cognitoSub);
       return { message: result ? "Delete successfully" : "Property not found" };
     } catch (error) {
       console.error("Error in deleteProperty:", error);
       this.setStatus(500);
       throw new Error("Failed to delete property");
+    }
+  }
+  @Get("/properties/user/{cognitoSub}")
+  public async getPropertyUser(@Path() cognitoSub: string, @Queries() queries: RequestQueryPropertyDTO): Promise<{ properties: ResponsePropertyDTO[]; totalPages: number; totalProperties: number }> {
+    try {
+      return await this.propertyService.getPropertyUser(cognitoSub, queries);
+    } catch (error) {
+      throw error;
     }
   }
 }

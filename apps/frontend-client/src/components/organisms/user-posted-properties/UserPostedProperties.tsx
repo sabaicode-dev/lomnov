@@ -1,28 +1,23 @@
+
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import ItemCard from "@/components/molecules/item-card/ItemCard";
 
-async function fetchPostedProperties(user: string): Promise<RealEstateItem[]> {
-  const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/properties?user=${user}`,
-  );
-  if (!res.ok) {
-    throw new Error("Failed to fetch posted properties");
-  }
-  return res.json();
-}
-
-export default async function UserPostedProperties({ user }: { user: string }) {
-  const postedProperties = await fetchPostedProperties(user);
+import VisitProfileSearch from "@/components/molecules/visit-profile-search/VisitProfileSearch";
+export default async function UserPostedProperties({ property }: { property: RealEstateItem[] }) {
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      {postedProperties.length > 0 ? (
-        postedProperties.map((property) => (
-          <ItemCard key={property.id} item={property} />
-        ))
-      ) : (
-        <p>No properties found.</p>
-      )}
-    </div>
+    <section>
+
+      <VisitProfileSearch/>
+      <article className="grid mt-5 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5 2xl:gap-5">
+        {property.length > 0 ? (
+          property.map((properties) => (
+            <ItemCard key={properties._id} item={properties} />
+          ))
+        ) : (
+          <p>No properties found.</p>
+        )}
+      </article>
+    </section>
   );
 }

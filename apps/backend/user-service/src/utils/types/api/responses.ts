@@ -1,7 +1,8 @@
 import { Types } from "mongoose";
 import { FavoriteItem } from "../indext";
+import {ResponsePropertyDTO } from "./property_client";
 export interface ResponseUserDTO {
-  _id: Types.ObjectId ;
+  _id: Types.ObjectId;
   cognitoSub: string;
   email: string;
   firstName?: string;
@@ -20,7 +21,7 @@ export interface ResponseUserDTO {
 }
 
 export interface ResponseFindUserBySubDTO {
-  _id: Types.ObjectId ;
+  _id: Types.ObjectId;
   cognitoSub: string;
   email: string;
   firstName?: string;
@@ -39,7 +40,7 @@ export interface ResponseFindUserBySubDTO {
 }
 
 export interface ResponseUpdateUserDTO {
-  _id: Types.ObjectId ;
+  _id: Types.ObjectId;
   cognitoSub: string;
   email: string;
   firstName?: string;
@@ -53,7 +54,7 @@ export interface ResponseUpdateUserDTO {
   dateOfBirth?: string;
   profile?: string[];
   background?: string[];
-  favorite?:FavoriteItem[];
+  favorite?: FavoriteItem[];
   role?: string;
 }
 
@@ -98,4 +99,45 @@ export interface FavoriteResponseDTO {
 
 export interface ResponseUsernameExist {
   usernameExist: boolean;
+}
+export interface ViewUserProfileDTO {
+  _id: Types.ObjectId;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  userName: string;
+  phoneNumber?: string;
+  location?: string;
+  address?: string;
+  age?: number;
+  gender?: string;
+  dateOfBirth?: string;
+  profile?: string[];
+  background?: string[];
+}
+export interface LocalizedContent {
+  content: string;
+  language: string;
+}
+
+export interface ViewUserPropertiesDTO {
+  cognitoSub: string,
+  title?: LocalizedContent[];
+  description?: LocalizedContent[];
+  thumbnail: string;
+  images: string[];
+  urlmap?: string;
+  address?: LocalizedContent[];
+  location: LocalizedContent[],
+  price?: number;
+  category: LocalizedContent[],
+  transition: LocalizedContent[],
+  detail?: Record<string, any>;  // Flexible key-value pairs
+  status?: boolean;
+}
+export interface ResponseViewUserProfileDTO {
+  user: ViewUserProfileDTO;
+  properties: ResponsePropertyDTO[]; 
+  totalPages: number; 
+  totalProperties: number 
 }

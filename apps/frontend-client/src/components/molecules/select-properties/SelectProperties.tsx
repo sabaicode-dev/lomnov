@@ -104,6 +104,7 @@ export interface Option {
 
 interface SelectPropertiesProps {
   onChange: (option: Option) => void;
+  backGroundColor?:"bg-white" | "bg-grayish-white";
 }
 
 const properties = [
@@ -115,7 +116,7 @@ const properties = [
 ];
 const defaultOption = { name: "Properties" };
 
-const SelectProperties: React.FC<SelectPropertiesProps> = ({ onChange }) => {
+const SelectProperties: React.FC<SelectPropertiesProps> = ({ onChange,backGroundColor="bg-grayish-white" }) => {
   const [selectedOption, setSelectedOption] = useState<Option | null>(
     defaultOption,
   );
@@ -129,7 +130,7 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ onChange }) => {
   };
 
   return (
-    <div className="relative inline-block bg-grayish-white rounded-lg">
+    <div className={`relative inline-block border border-[#7D7775] rounded-lg ${backGroundColor}`}>
       <button
         className="flex items-center justify-between w-full px-4 py-2"
         onClick={toggleDropdown}
@@ -161,7 +162,7 @@ const SelectProperties: React.FC<SelectPropertiesProps> = ({ onChange }) => {
       </button>
       {isOpen && (
         <div
-          className={` rounded-md absolute left-0 right-0  mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-screen opacity-100 overflow-hidden p-2  " : "max-h-0 opacity-0 "}`}
+          className={` rounded-md z-10 absolute left-0 right-0  mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-screen opacity-100 overflow-hidden p-2  " : "max-h-0 opacity-0 "}`}
         >
           {properties.map((option, index) => (
             <div

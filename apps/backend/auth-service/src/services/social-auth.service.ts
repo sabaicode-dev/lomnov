@@ -58,7 +58,7 @@ class SocialAuthService {
                 code: code,
             });
 
-            // Get the token from Cognito
+            //Step 1:: Get the token from Cognito
             const cognitoDomain = this.awsCognitoDomain(`/oauth2/token`);
             const response = await axios.post(cognitoDomain, params.toString(), { headers });
             const token = {
@@ -66,29 +66,71 @@ class SocialAuthService {
                 idToken: response.data.id_token,
                 refreshToken: response.data.refresh_token,
             };
-            console.log(token)
+            // console.log(token)
+            //Step 2:: Get the user info from token
             const userInfo = this.getUserInfoFromToken(token.idToken);
-            console.log("USER INFO:: ", userInfo);
-
+             console.log("USER INFO:: ", userInfo);
             //@ts-ignore
             const email = userInfo.email;
             const existingUser = await this.getUserByEmail(email);
             let userId: string;
             console.log("Existing USER::: ", existingUser);
-            // if user exist and user signin with manual 
+            // Step 3: Case User is already signin with Email | Phone Number / Password, but they try to signin with Google | Facebook
             if (existingUser && existingUser.UserStatus !== 'EXTERNAL_PROVIDER') {
                 await this.linkOrSyncUser(existingUser, userInfo, state!);
                 userId = existingUser.Username!;
             } else {
-                // else , create store user in db 
-                userId = await this.createNewUser(userInfo, state!);
+                // Step 4: Case User is never signin with Google | Facebook
+                /**
+                 * SKIP
+                 * else , create store user in db 
+                 * userId = await this.createNewUser(userInfo, state!);
+                 */
+                try {
+                    const user = await axios.post(`${configs.userServiceUrl}/api/v1/users`, {
+                        cognitoSub: existingUser?.Username!,
+                        email: email,
+                        //@ts-ignore
+                        userName: userInfo.name,
+                        // @ts-ignore
+                        profile: userInfo.profile,
+                        role: state!
+                    });
+                    console.log("Step 4:: ", user.data);
+                    //console.log(userInfo);
+                    
+                    //@ts-ignore
+                    //await this.updateUserCongitoAttributes(`${existingUser?.Username!}`, { 'custom:roles': state! });
+                    // Step 4.1: Update user info in Cognito
+                   const res = await this.updateUserCongitoAttributes(existingUser?.Username!, { 'custom:roles': state! });
+                   //! TODO
+                  console.log("Step 4.1:: ", res);
+                    userId = user.data._id;
+                } catch (error) {
+                    if (axios.isAxiosError(error) && error.response?.status === 400) {
+                        console.log('User already exists in user service, retrieving existing user info.');
+
+                        //@ts-ignore
+                        const existingUserResponse = await axios.get(`${configs.userServiceUrl}/api/v1/users?userName=${userInfo.name}`);
+                        console.log(existingUserResponse.data);
+                        console.log("UserId::: ", existingUserResponse.data.users[0]._id);
+
+                        userId = existingUserResponse.data.users[0]._id
+                    } else { throw error }
+                }
+            }
+            // Step 5: Check if the user is already in the group before adding
+            const groupExist = await this.checkUserInGroup(userInfo.sub!, state!);
+            if (!groupExist) {
+                await this.addToGroup(existingUser?.Username!, state!);
+                console.log(`User ${userInfo.sub} added to group ${state}`);
             }
             return {
                 accessToken: token.accessToken,
                 idToken: token.idToken,
                 refreshToken: token.refreshToken,
-                username: userInfo.sub,
-                userId: userId,
+                username: existingUser?.Username,
+                userId,
             };
         } catch (error) {
             console.error("Get OAuth Token Error::: ", error);
@@ -176,10 +218,21 @@ class SocialAuthService {
                 Username: username,
                 UserPoolId: configs.awsCognitoUserPoolId,
             };
+            console.log("Params::: ", params);
+            
             const command = new AdminListGroupsForUserCommand(params);
+            console.log("checking user in group...");
+            
             const response = await client.send(command);
+            console.log("Response:: ",response);
+            
             return response.Groups?.some(group => group.GroupName === groupName) || false;
         } catch (error) {
+            //@ts-ignore
+            if(error.__type === 'UserNotFoundException'){
+                console.log("user not found...!")
+                return false;
+            }
             console.error(`Error checking if user ${username} is in group ${groupName}:`, error);
             throw error;
         }
@@ -197,7 +250,8 @@ class SocialAuthService {
             await client.send(command);
             console.log(`AuthService: User ${username} added to ${groupName} group`);
         } catch (error) {
-            console.error(`Error adding user ${username} to group ${groupName}:`, error);
+            
+            console.error(`Error adding user ${username} to group ${groupName}:\n`, error);
             throw error;
         }
     }
@@ -216,19 +270,26 @@ class SocialAuthService {
 
     async createNewUser(userInfo: any, groupName: string): Promise<string> {
         try {
+            // insert user to user service!
+            console.log('post user....');
+
             const user = await axios.post(`${configs.userServiceUrl}/api/v1/users`, {
                 cognitoSub: userInfo.sub,
                 email: userInfo.email,
                 userName: userInfo.name,
                 profile: userInfo.profile,
             });
+            console.log('posted user....');
+
             console.log(`new user loging with google::: google_${userInfo.identities[0].userId}`)
             await this.updateUserCongitoAttributes(`google_${userInfo.identities[0].userId}`, { 'custom:roles': groupName! });
             return user.data._id;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response?.status === 400) {
-                const existingUserResponse = await axios.get(`${configs.userServiceUrl}/api/v1/users/${userInfo.sub}`);
-                return existingUserResponse.data._id;
+                const existingUserResponse = await axios.get(`${configs.userServiceUrl}/api/v1/users?userName=${userInfo.name}`);
+                console.log(existingUserResponse.data);
+
+                return existingUserResponse.data.users[0]._id;
             } else {
                 throw error;
             }

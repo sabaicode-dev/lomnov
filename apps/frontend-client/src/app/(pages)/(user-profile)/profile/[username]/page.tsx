@@ -20,10 +20,10 @@ async function fetchUserDetails(username: string): Promise<User | null> {
 
 const ProfilePage = async ({ params }: { params: { username: string } }) => {
   const { username } = params;
-  console.log(username);
+  //console.log(username);
   
   const user = await fetchUserDetails(username);
-  console.log("User Profiles:::: ,",user);
+  //console.log("User Profiles:::: ,",user);
   
   if (!user) {
     return <div>User not found</div>; // Render a message if user data is not found

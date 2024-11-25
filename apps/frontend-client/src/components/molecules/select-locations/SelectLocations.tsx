@@ -14,6 +14,7 @@ interface CustomDropdownProps {
 
 interface SelectPropertiesProps {
   onChange: (option: Option) => void;
+  backGroundColor?:"bg-white" | "bg-grayish-white";
 }
 
 const locations = [
@@ -45,7 +46,7 @@ const locations = [
 
 const defaultLocation = { name: "Locations" };
 
-const SelectLocations: React.FC<SelectPropertiesProps> = ({ onChange }) => {
+const SelectLocations: React.FC<SelectPropertiesProps> = ({ onChange ,backGroundColor='bg-grayish-white'}) => {
   const [selectedOption, setSelectedOption] = useState<Option | null>(
     defaultLocation,
   );
@@ -60,14 +61,14 @@ const SelectLocations: React.FC<SelectPropertiesProps> = ({ onChange }) => {
   };
 
   return (
-    <div className="relative inline-block bg-grayish-white rounded-lg">
+    <div className={`relative inline-block border border-[#7D7775] rounded-lg ${backGroundColor}`}>
       <button
         className="flex items-center justify-between w-full px-4 py-2  "
         onClick={toggleDropdown}
       >
         {selectedOption ? (
           <div className="flex items-center">
-            <IconLocation props="mr-3 text-olive-green" />
+            <IconLocation className="mr-3 text-olive-green" />
             <span className="text-black text-[14px] lg:mr-20">
               {selectedOption.name}
             </span>
