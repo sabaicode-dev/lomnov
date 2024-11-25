@@ -84,6 +84,8 @@ export class AuthControllerII extends Controller {
     try { 
       //@ts-ignore
         const tokens = reqeust.cookies;
+        console.log(tokens);
+        
         const response = (reqeust as any).res as Response;
         const clearCookie = (name: string) => {
           response.cookie(name, "", {
@@ -93,7 +95,7 @@ export class AuthControllerII extends Controller {
             // path: "/", // Apply to all paths
           });
         };
-        await this.authService.signOutUser(tokens['accessToken']);
+        await this.authService.signOutUser(tokens.accessToken);
         let clearToken;
         for (const token in tokens) {
           clearToken= clearCookie(token);

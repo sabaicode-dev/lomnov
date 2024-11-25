@@ -19,18 +19,18 @@ app.use(cors(corsOptions));
 // ===============================
 // CHECKING ROUTE REQUEST
 // ===============================
-console.log('sslfjslfjslf');
+// console.log('sslfjslfjslf');
 
 app.use(routeConfigMiddleware);
-console.log('routes middleware.....');
+// console.log('routes middleware.....');
 
 // ===============================
 // AUTHENTICATION & AUTHORIZATION ROLE
 // ===============================
 app.use(authenticateToken);
-console.log('authorize token.....');
+// console.log('authorize token.....');
 app.use(authorizeRole);
-console.log('authorize roles.....');
+// console.log('authorize roles.....');
 
 
 //================================

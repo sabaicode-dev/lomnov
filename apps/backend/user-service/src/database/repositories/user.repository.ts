@@ -20,18 +20,18 @@ export class UserRepository {
 
   public async create(requestBody: RequestUserDTO): Promise<ResponseUserDTO> {
     try {
-      const { cognitoSub, email, userName,profile } = requestBody;
+      const { cognitoSub, email, userName,profile,role } = requestBody;
       const usernameExist = await UserModel.find({ userName: userName });
       if (usernameExist.length > 0) {
         throw new ValidationError(" Username already existed");
       }
       // console.log("the best result" + req.user);
-      if (!cognitoSub ||  !email || !userName) {
+      if (!cognitoSub ||  !email || !userName|| !role) {
         throw new ValidationError(
           " CognitoSub , firstname, lastname and username are required!",
         );
       }
-      const data = { cognitoSub, email,userName,profile };
+      const data = { cognitoSub, email,userName,profile,role };
       const response = await UserModel.create(data);
       return response;
     } catch (error: any) {

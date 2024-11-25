@@ -61,14 +61,14 @@ const SelectLocations: React.FC<SelectPropertiesProps> = ({ onChange ,backGround
   };
 
   return (
-    <div className={`relative inline-block rounded-lg ${backGroundColor}`}>
+    <div className={`relative inline-block border border-[#7D7775] rounded-lg ${backGroundColor}`}>
       <button
         className="flex items-center justify-between w-full px-4 py-2  "
         onClick={toggleDropdown}
       >
         {selectedOption ? (
           <div className="flex items-center">
-            <IconLocation props="mr-3 text-olive-green" />
+            <IconLocation className="mr-3 text-olive-green" />
             <span className="text-black text-[14px] lg:mr-20">
               {selectedOption.name}
             </span>

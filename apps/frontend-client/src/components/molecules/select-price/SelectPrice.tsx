@@ -49,7 +49,7 @@ const SelectPrice: React.FC<SelectPropertiesProps> = ({ onChange,backGroundColor
   };
 
   return (
-    <div className={`relative inline-block rounded-lg ${backGroundColor}`}>
+    <div className={`relative inline-block border border-[#7D7775] rounded-lg ${backGroundColor}`}>
       <button
         className="flex items-center justify-between w-full px-4 py-2  "
         onClick={toggleDropdown}
