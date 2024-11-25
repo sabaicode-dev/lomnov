@@ -1,15 +1,15 @@
 import React from "react";
 import { LuDollarSign } from "react-icons/lu";
-interface prop {
-  props?: string;
-}
-
-function Dollar({ props }: prop) {
+type prop = {
+  className?: string;
+};
+function Dollar({ className }: prop) {
   return (
     <>
-      <LuDollarSign className={props} />
+      <LuDollarSign className={className} />
     </>
   );
 }
 
 export default Dollar;
+

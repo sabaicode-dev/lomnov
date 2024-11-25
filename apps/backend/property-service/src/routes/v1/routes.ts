@@ -401,6 +401,66 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/api/v1/properties/:propertyId/views',
+            ...(fetchMiddlewares<RequestHandler>(PropertyController)),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.incrementPropertyViews)),
+
+            async function PropertyController_incrementPropertyViews(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new PropertyController();
+
+              await templateService.apiHandler({
+                methodName: 'incrementPropertyViews',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/api/v1/properties/:propertyId/views',
+            ...(fetchMiddlewares<RequestHandler>(PropertyController)),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.getPropertyViews)),
+
+            async function PropertyController_getPropertyViews(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new PropertyController();
+
+              await templateService.apiHandler({
+                methodName: 'getPropertyViews',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/api/v1/properties/user/:cognitoSub',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.getPropertyUser)),

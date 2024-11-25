@@ -7,12 +7,14 @@ import RecommendedProperties from "@/components/molecules/RecommendedProperties/
 import UserListed from "@/components/organisms/user-listed-property/UserListed";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+
 // Fetch property data
 async function fetchProperty(id: string): Promise<RealEstateItem> {
   try {
-    const res = await axiosInstance.get(`${API_ENDPOINTS.GET_PROPERTY_BY_ID}/${id}`);
-    console.log(res.data);
+    // Increment view count
+    await axiosInstance.put(`${API_ENDPOINTS.PROPERTIES}/${id}/views`);
     
+    const res = await axiosInstance.get(`${API_ENDPOINTS.GET_PROPERTY_BY_ID}/${id}`);
     return res.data;
   } catch (error) {
     throw error;
@@ -21,14 +23,14 @@ async function fetchProperty(id: string): Promise<RealEstateItem> {
 
 // Server component to fetch property data
 const page = async ({ params }: { params: { id: string } }) => {
-  // console.log(params.id);
+  // Fetch the property details
   const property = await fetchProperty(params.id);
-  console.log(property.urlmap)
+
   return (
     <>
-      <div className="w-full mb-[50px]  mx-auto relative">
+      <div className="w-full mb-[50px] mx-auto relative">
         <div className="w-full relative bg-grayish-white h-[300px] sm:h-[400px] md:h-[450px] lg:h-[600px] xl:h-[700px] 2xl:h-[850px] overflow-hidden text-olive-green">
-          {/** IMAGE THUMBNAIL */}
+          {/* IMAGE THUMBNAIL */}
           <Image
             className="top-0 left-0 w-full h-full object-cover"
             src={property.thumbnail}
@@ -37,9 +39,9 @@ const page = async ({ params }: { params: { id: string } }) => {
             layout="fill"
           />
         </div>
-        <div className="absolute top-[290px] sm:top-[385px] md:top-[435px] lg:top-[575px] xl:top-[628px] 2xl:top-[778px]  w-full flex justify-center items-center">
+        <div className="absolute top-[290px] sm:top-[385px] md:top-[435px] lg:top-[575px] xl:top-[628px] 2xl:top-[778px] w-full flex justify-center items-center">
           <div className="relative w-full xl:w-[1300px]">
-            {/** VECTOR SVG LEFT*/}
+            {/* VECTOR SVG LEFT */}
             <Image
               className="absolute hidden xl:block -left-5 bottom-[75px] transform translate-y-1/2 w-5 h-5"
               alt="vector5"
@@ -47,7 +49,7 @@ const page = async ({ params }: { params: { id: string } }) => {
               width={5}
               height={5}
             />
-            <div className="rounded-[10px] sm:rounded-[15px] md:rounded-xl  lg:rounded-11xl bg-grayish-white overflow-hidden flex flex-col items-start justify-start py-[10px] px-[10px] box-border">
+            <div className="rounded-[10px] sm:rounded-[15px] md:rounded-xl lg:rounded-[25px] bg-grayish-white overflow-hidden flex flex-col items-start justify-start py-[10px] px-[10px] box-border">
               <div className="self-stretch rounded-[10px] sm:rounded-[15px] md:rounded-xl lg:rounded-[25px] bg-neutral overflow-hidden flex flex-col items-center justify-center py-[10px] px-[10px]">
                 <div className="flex justify-evenly w-full mx-auto">
                   {/* Properties Listing */}
@@ -57,7 +59,7 @@ const page = async ({ params }: { params: { id: string } }) => {
                 </div>
               </div>
             </div>
-            {/** VECTOR SVG RIGHT*/}
+            {/* VECTOR SVG RIGHT */}
             <Image
               className="absolute hidden xl:block -right-5 bottom-[75px] transform translate-y-1/2 w-5 h-5"
               alt="vector4"
@@ -70,9 +72,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
         <div className="w-full mt-[200px] sm:mt-[190px] md:mt-[220px] lg:mt-[170px] xl:mt-[100px]">
           <div className="max-w-[1300px] mx-auto flex justify-between">
-           
             <PropertyDescription property={property} />
-
             {/* <UserListed property={property} /> */}
           </div>
           <Map property={property.urlmap} />
@@ -92,11 +92,11 @@ const page = async ({ params }: { params: { id: string } }) => {
 
 // This function gets called at build time
 export async function generateStaticParams() {
-  // Replace this with the actual logic to get the list of usernames
-  const id = ["1", "2", "3"]; // Example usernames
+  const id = ["1", "2", "3"]; // Example IDs
   return id.map((id) => ({
     id,
   }));
 }
 
 export default page;
+

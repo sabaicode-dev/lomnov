@@ -2,7 +2,8 @@ import ItemCardList from "@/components/molecules/item-card-list/ItemCardList";
 import Image from "next/image";
 import banner from "@/images/banner.png";
 import Search from "@/components/molecules/Search/Search";
-import PropertyList from "@/components/molecules/item-card-list/ItemCardList";
+import BuyProperty from "@/components/molecules/buy-property/Buy";
+
 // ===================================================================
 function page() {
   return (
@@ -40,7 +41,8 @@ function page() {
 
       <div className="w-full lg:w-[1300px] m-auto  mt-32 px-2 lg:px-0">
 
-        <PropertyList /> {/* Any component that uses useProperties */}
+        {/* <PropertyList /> */}
+        <BuyProperty/>
 
       </div>
     </main>

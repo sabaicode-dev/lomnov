@@ -18,7 +18,7 @@ interface PropertyContextType {
   loading: boolean;
   error: string | null;
   pagination: PaginationData | null;
-  fetchProperties: (params?: { page?: number; limit?: number }) => Promise<void>;
+  fetchProperties: (params?: { page?: number; limit?: number ; address?: string}) => Promise<void>;
 }
 
 const PropertyContext = createContext<PropertyContextType | undefined>(undefined);
