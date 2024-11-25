@@ -72,7 +72,7 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
   if(loading){
     return <div><img src="https://www.superiorlawncareusa.com/wp-content/uploads/2020/05/loading-gif-png-5.gif" alt="" className="w-[200px] m-auto "/></div>;
   }else if(datas.length === 0 ){
-    return <NotFound />;
+    return <p>property not found!</p>
   }else{
      <div>{error}</div>
   }

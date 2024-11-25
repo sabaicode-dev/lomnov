@@ -29,7 +29,6 @@ const ListedProperties = () => {
           throw new Error("Failed to fetch properties");
         }
         const properties = res.data.properties
-
         setItems(properties);
       } catch (error) {
         console.error(error);
@@ -40,7 +39,7 @@ const ListedProperties = () => {
 
     fetchProperties();
   }, [user]);
-
+  
   useEffect(() => {
     // Fetch properties only if the user is authenticated and has a valid ID
     if (isAuthenticated && user?._id) {

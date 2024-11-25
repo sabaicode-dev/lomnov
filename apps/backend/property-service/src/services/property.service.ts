@@ -308,14 +308,13 @@ export class PropertyService {
   public async getPropertiesMe(
     queries: RequestQueryPropertyMeDTO
   ): Promise<ResponseAllPropertyMeDTO> {
-    const { cognitoSub, language, page = 1, limit = 12, fav_me = "" } = queries;
+    const { cognitoSub, language, page = 1, limit = 12, fav_me} = queries;
 
     if (!cognitoSub) {
       throw new UnauthorizedError();
     }
 
-    const propertyFavouriteMe =
-      await this.propertyRepository.findFavouritePropertyMe(fav_me);
+    const propertyFavouriteMe = await this.propertyRepository.findFavouritePropertyMe(fav_me);
 
     const skip = (page - 1) * limit;
     const filters = this.buildFilters(queries);
@@ -513,7 +512,7 @@ export class PropertyService {
       // Construct the response object
       const responses: ResponsePropertyByID = {
         //@ts-ignore
-        ...property._doc,
+        ...property,
         propertyOwner,
       };
       return responses;

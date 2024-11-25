@@ -435,10 +435,12 @@ export class PropertyRepository {
   /**
    * Find favorite properties for a user
    */
-  public async findFavouritePropertyMe(propertyIds: string): Promise<ResponsePropertyDTO[]> {
+  public async findFavouritePropertyMe(propertyIds: string | undefined): Promise<ResponsePropertyDTO[]> {
     try {
-      const propertyIdArray = propertyIds.split(",");
-      return await PropertyModel.find({ _id: { $in: propertyIdArray } }).lean();
+
+        const propertyIdArray = propertyIds?.split(",");
+        return await PropertyModel.find({ _id: { $in: propertyIdArray } }).lean();
+      
     } catch (error) {
       throw error;
     }
