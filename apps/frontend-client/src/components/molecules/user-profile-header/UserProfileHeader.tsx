@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import Cropper from 'react-easy-crop'; // Cropper library
+import Cropper from 'react-easy-crop';
 import Banner from '@/components/molecules/banner/Banner';
 import { FaCamera } from 'react-icons/fa';
 import UserProfileNavigation from '../user-profile-navigation/UserProfileNavigation';
@@ -19,7 +19,7 @@ interface UserProfileHeaderProps {
 
 // Helper function to format joinedDate
 const formatDate = (dateString?: string): string => {
-  if (!dateString) return "Unknown date"; // Fallback for undefined
+  if (!dateString) return "Unknown date"; 
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", {
     year: "numeric",
@@ -28,20 +28,20 @@ const formatDate = (dateString?: string): string => {
   });
 };
 
-const MAX_FILE_SIZE_MB = 5; // Max file size allowed
-const MAX_WIDTH = 1920; // Max width for resizing
-const MAX_HEIGHT = 1080; // Max height for resizing
+const MAX_FILE_SIZE_MB = 5; 
+const MAX_WIDTH = 1920; 
+const MAX_HEIGHT = 1080;
 
 const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
-  const [userState, setUserState] = useState<User>(user); // Manage user state
-  const [imageSrc, setImageSrc] = useState<string | null>(null); // Image source for cropping
-  const [crop, setCrop] = useState({ x: 0, y: 0 }); // Crop position
-  const [zoom, setZoom] = useState(1); // Zoom level
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null); // Cropped area in pixels
-  const [isCropModalOpen, setIsCropModalOpen] = useState(false); // Modal state for cropping
-  const [isProfileCrop, setIsProfileCrop] = useState(false); // Distinguish between profile and background crops
-  const [loading, setLoading] = useState(false); // Upload progress indicator
-  const [error, setError] = useState<string | null>(null); // Error message
+  const [userState, setUserState] = useState<User>(user);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 }); 
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null); 
+  const [isCropModalOpen, setIsCropModalOpen] = useState(false);
+  const [isProfileCrop, setIsProfileCrop] = useState(false);
+  const [loading, setLoading] = useState(false); 
+  const [error, setError] = useState<string | null>(null); 
 
   console.log('user:: ', user)
 
@@ -62,7 +62,7 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
     reader.onload = () => {
       setImageSrc(reader.result as string);
       setIsCropModalOpen(true);
-      setIsProfileCrop(isProfile); // Set crop type (profile or background)
+      setIsProfileCrop(isProfile); 
     };
     reader.readAsDataURL(file);
   };
@@ -92,7 +92,7 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
     return new Promise((resolve) => {
       canvas.toBlob((blob) => {
         resolve(blob!);
-      }, 'image/jpeg', 0.8); // Reduce quality to compress
+      }, 'image/jpeg', 0.8); 
     });
   };
 
@@ -104,8 +104,8 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
         return;
       }
   
-      setLoading(true); // Show loading indicator
-      setError(null); // Reset error state
+      setLoading(true); 
+      setError(null); 
   
       // Generate cropped image as a Blob
       const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
