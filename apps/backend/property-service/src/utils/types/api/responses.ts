@@ -157,5 +157,5 @@ export interface ResponsePropertyByID{
   transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
-  propertyOwner: ResponsePropertyOwner;
+  propertyOwner: ResponsePropertyOwner | [];
 }

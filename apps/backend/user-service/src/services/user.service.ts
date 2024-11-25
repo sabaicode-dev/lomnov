@@ -276,11 +276,11 @@ export class UserService {
       throw error;
     }
   }
-  public async getProperyOwnerInfo(cognitoSub: string): Promise<ViewUserProfileDTO> {
+  public async getProperyOwnerInfo(cognitoSub: string): Promise<ViewUserProfileDTO | []> {
     try {
       const existingUser = await this.userRepository.findByCognitoSub(cognitoSub);
       if (!existingUser){
-        throw new NotFoundError("User not found!");
+        return [];
       }
       return await this.userRepository.findViewProfileOfUser(cognitoSub);
     } catch (error) {
