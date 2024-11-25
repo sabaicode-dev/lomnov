@@ -74,5 +74,6 @@ export interface RealEstateItem {
   status: boolean;
   createdAt: string; // Include this if necessary
   updatedAt: string; // Include this if necessary
+  views: number;
   __v: number; // Include this if necessary
 }

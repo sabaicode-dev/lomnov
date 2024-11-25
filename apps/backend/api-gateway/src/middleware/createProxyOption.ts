@@ -1,15 +1,15 @@
 import { Socket } from "net";
 import { IncomingMessage, ServerResponse, ClientRequest } from "http";
-import { Options } from "http-proxy-middleware";
+// import { Options } from "http-proxy-middleware";
 import { loggingMiddleware } from "@/src/utils/logger";
 import { RouteConfig } from "@/src/utils/types/interface";
 
 const createProxyOptions = (
   routeConfig: RouteConfig,
-): Options<IncomingMessage, ServerResponse> => ({
+) => ({
   target: routeConfig.target,
   changeOrigin: true,
-  pathRewrite: (path, _req) => {
+  pathRewrite: (path: any, _req: any) => {
     // Extract the dynamic part of the path
     const dynamicPath = path.replace(routeConfig.path, ""); // Remove the base path
     console.log(dynamicPath);
@@ -47,6 +47,5 @@ const createProxyOptions = (
     },
   },
 });
-
 
 export default createProxyOptions;
