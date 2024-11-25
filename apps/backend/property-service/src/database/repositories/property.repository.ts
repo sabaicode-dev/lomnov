@@ -428,13 +428,7 @@ export class PropertyRepository {
       await PropertyModel.findByIdAndDelete(propertyId);
       return true;
     } catch (error) {
-<<<<<<< HEAD
       throw error;
-=======
-      console.log(error);
-      
-      throw error
->>>>>>> 27dbc12ada5741fc26a35f160897ea32ccf4ac48
     }
   }
 

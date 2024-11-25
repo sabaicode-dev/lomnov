@@ -874,7 +874,6 @@
 				]
 			}
 		},
-<<<<<<< HEAD
 		"/api/v1/properties/{propertyId}/views": {
 			"put": {
 				"operationId": "IncrementPropertyViews",
@@ -907,11 +906,6 @@
 			},
 			"get": {
 				"operationId": "GetPropertyViews",
-=======
-		"/api/v1/properties/user/{cognitoSub}": {
-			"get": {
-				"operationId": "GetPropertyUser",
->>>>>>> 27dbc12ada5741fc26a35f160897ea32ccf4ac48
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -919,7 +913,6 @@
 							"application/json": {
 								"schema": {
 									"properties": {
-<<<<<<< HEAD
 										"views": {
 											"type": "number",
 											"format": "double"
@@ -927,7 +920,39 @@
 									},
 									"required": [
 										"views"
-=======
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "propertyId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/properties/user/{cognitoSub}": {
+			"get": {
+				"operationId": "GetPropertyUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
 										"totalProperties": {
 											"type": "number",
 											"format": "double"
@@ -947,7 +972,6 @@
 										"totalProperties",
 										"totalPages",
 										"properties"
->>>>>>> 27dbc12ada5741fc26a35f160897ea32ccf4ac48
 									],
 									"type": "object"
 								}
@@ -962,17 +986,11 @@
 				"parameters": [
 					{
 						"in": "path",
-<<<<<<< HEAD
-						"name": "propertyId",
-=======
 						"name": "cognitoSub",
->>>>>>> 27dbc12ada5741fc26a35f160897ea32ccf4ac48
 						"required": true,
 						"schema": {
 							"type": "string"
 						}
-<<<<<<< HEAD
-=======
 					},
 					{
 						"in": "query",
@@ -1082,7 +1100,6 @@
 							"format": "double",
 							"type": "number"
 						}
->>>>>>> 27dbc12ada5741fc26a35f160897ea32ccf4ac48
 					}
 				]
 			}
