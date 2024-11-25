@@ -19,4 +19,6 @@ export interface Property {
   transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
+  sortBy?: string;       // Add sortBy
+  sortOrder?: 'asc' | 'desc'; // Add sortOrder
 }

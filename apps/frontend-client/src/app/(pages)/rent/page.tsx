@@ -2,8 +2,9 @@ import ItemCardList from "@/components/molecules/item-card-list/ItemCardList";
 import Image from "next/image";
 import banner from "@/images/banner.png";
 import Search from "@/components/molecules/Search/Search";
+import RentPropertyList from "@/components/molecules/rent-property/Rent";
 
-import PropertyList from "@/components/molecules/item-card-list/ItemCardList";
+
 // ==============================================================
 
 function page() {
@@ -41,7 +42,7 @@ function page() {
 
       <div className="w-full lg:w-[1300px] m-auto  mt-32 px-2 lg:px-0">
        
-           <PropertyList/>
+       <RentPropertyList/>
       
       </div>
     </main>
@@ -49,42 +50,3 @@ function page() {
 }
 
 export default page;
-
-// <div className="flex flex-row gap-5 w-full mb-20">
-//   <div className="w-[50%]  rounded-md overflow-hidden flex flex-row items-center gap-5 border-[1px] border-black  ">
-//     <input
-//       type="text"
-//       className="h-full outline-none px-5 py-3 w-[90%] bg-transparent"
-//       placeholder="Enter an address..."
-//     />
-//     <div className="border-[0.8px] border-solid  border-black h-[20px] "></div>
-//     <Location props="text-blue-500 text-[18px]" />
-//   </div>
-//   <div className="w-[16.66%]">
-//     <select
-//       name=""
-//       id=""
-//       className=" border-[1px] border-black rounded-lg w-full px-5 py-3 "
-//     >
-//       <option value=""> Price </option>
-//     </select>
-//   </div>
-//   <div className="w-[16.6%]">
-//     <select
-//       name=""
-//       id=""
-//       className=" border-[1px] border-black rounded-lg  w-full px-5 py-3"
-//     >
-//       <option value=""> Property type </option>
-//     </select>
-//   </div>
-//   <div className="w-[16.6%]">
-//     <select
-//       name=""
-//       id=""
-//       className=" border-[1px] border-black rounded-lg px-5 py-3 w-full "
-//     >
-//       <option value=""> Room </option>
-//     </select>
-//   </div>
-// </div>

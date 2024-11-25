@@ -17,7 +17,7 @@ interface SelectPropertiesProps {
   backGroundColor?:"bg-white" | "bg-grayish-white";
 }
 
-const locations = [
+const address = [
   { name: "banteay meanchey" },
   { name: "battambang" },
   { name: "kampong cham" },
@@ -26,18 +26,18 @@ const locations = [
   { name: "kampong thom" },
   { name: "kampot" },
   { name: "kandal" },
-  { name: "kep" },
+  { name: "Kep" },
   { name: "koh kong" },
   { name: "kratié" },
   { name: "mondulkiri" },
   { name: "Oddar Meanchey" },
   { name: "pailin" },
-  { name: "phnom penh" },
-  { name: "preah Sihanouk" },
+  { name: "Phnom Penh" },
+  { name: "Preah Sihanouk" },
   { name: "preah Vihear" },
   { name: "prey Veng" },
   { name: "pursat" },
-  { name: "siem reap" },
+  { name: "Siem Reap" },
   { name: "stung treng" },
   { name: "svay rieng" },
   { name: "takéo" },
@@ -95,7 +95,7 @@ const SelectLocations: React.FC<SelectPropertiesProps> = ({ onChange ,backGround
         <div
           className={` rounded-md absolute left-0 right-0 z-20 mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-[190px] overflow-auto opacity-100 p-2" : "max-h-0 opacity-0"}`}
         >
-          {locations.map((option, index) => (
+          {address.map((option, index) => (
             <div
               key={index}
               className="flex items-center px-4 py-2 cursor-pointer hover:bg-olive-green overflow-auto rounded-md "

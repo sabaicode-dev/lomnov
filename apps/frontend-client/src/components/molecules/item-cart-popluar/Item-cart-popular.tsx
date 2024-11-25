@@ -1,146 +1,128 @@
-import React, { useState } from "react";
-import { useInView } from "react-intersection-observer";
+//PropertyCardWithModal
+
+//================ code fetch ti 3=========================
+
+"use client";
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useSpring, animated } from "@react-spring/web";
-import Modal from "react-modal";
 import Link from "next/link";
-import Location from "@/icons/Location";
+import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import HeartOutline from "@/icons/HeartOutline";
 import HeartInline from "@/icons/HeartInline";
 import BathRoom from "@/icons/BathRoom";
 import BedRoom from "@/icons/BedRoom";
 import Compare from "@/icons/Compare";
-import { RealEstateItem } from "@/libs/types/api-properties/property-response";
+import Eye from "@/icons/EyeICon";
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+//==========================================================
 
 export interface ItemCardProps {
   item: RealEstateItem;
+  flexRow?: boolean;
+  favourited?: boolean;
 }
 
-const PropertyCardWithModal = ({ property, item }: { property: RealEstateItem; item: RealEstateItem }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+const PropertyCardWithModal = ({ item, flexRow, favourited }: ItemCardProps) => {
   const [isLike, setIsLike] = useState(false);
+  const [viewCount, setViewCount] = useState(0);
 
-  const openModal = (image: string) => {
-    setSelectedImage(image);
-    setIsOpen(true);
+  // Function to toggle the favorite status
+  const toggleIsLike = async (id: string) => {
+    try {
+      const response = await axiosInstance.put(`${API_ENDPOINTS.TOGGLE_FAVOURITE_PROPERTY}/${id}`);
+      if (response.status === 200) {
+        setIsLike((prev) => !prev);
+      }
+    } catch (error) {
+      throw error;
+    }
+    console.log(id);
   };
 
-  const closeModal = () => {
-    setIsOpen(false);
-    setSelectedImage(null);
+  // Fetch the current view count for the property
+  const fetchViewCount = async (id: string) => {
+    try {
+      const response = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}/${id}/views`);
+      if (response.status === 200) {
+        setViewCount(response.data.views); // Assuming response.data.views holds the view count
+      }
+    } catch (error) {
+      console.error("Error fetching view count", error);
+    }
   };
+  // incrementViewCount(item._id);
+  // Trigger incrementViewCount when the user navigates to the detail page
+  useEffect(() => {
+  
+    fetchViewCount(item._id);
+  }, [item._id]);
 
-  const toggleIsLike = () => {
-    setIsLike((isLike) => !isLike);
-  };
-
-  const { ref, entry } = useInView({
-    triggerOnce: false,
-    threshold: 0.1,
-  });
-
-  const fadeIn = useSpring({
-    opacity: entry?.isIntersecting ? 1 : 0,
-    transform: entry?.isIntersecting ? "translateY(0)" : "translateY(50px)",
-  });
-
-  const animationProps = useSpring({
-    opacity: isOpen ? 1 : 0,
-    transform: isOpen ? "scale(1)" : "scale(0.8)",
-  });
+  const title = item.title[0]?.content || "Untitled";
+  const description = item.description[0]?.content || "No description available.";
+  const address = item.address[0]?.content || "No address available.";
 
   return (
-    <animated.div
-      ref={ref}
-      style={fadeIn}
-      className="flex w-100% justify-between w-full h-auto gap-3 rounded-[20px] overflow-hidden shadow-md bg-[#EFF0EA] p-4 border-[1px] border-[#E0E0E0]"
-    >
-      <div className="flex justify-between w-[50%] overflow-hidden rounded-[15px]">
-        <div onClick={() => openModal(property.thumbnail)} className="cursor-pointer">
+    <div className={flexRow ? "flex w-full h-[150px] gap-3 rounded-[20px] overflow-hidden shadow-md bg-white border-[1px] border-neutral p-4" : "w-full h-[380px] rounded-[20px] overflow-hidden shadow-md flex flex-col gap-5 bg-white border-[1px] border-neutral p-4"}>
+      <div className={flexRow ? "bg-olive-green w-[50%] relative overflow-hidden rounded-[15px] hover:transition-all duration-1000 ease-out" : "w-full h-[65%] relative overflow-hidden bg-olive-green rounded-[15px] hover:transition-all duration-1000 ease-out"}>
+        <Link href={`/detail/${item._id}`} className="absolute w-full h-full rounded-[10px] overflow-hidden transition-transform duration-300 transform hover:scale-110">
+          <div className="group absolute left-0 top-0 w-full h-full hover:bg-[#00000033] z-2 transition duration-300"></div>
           <Image
-            src={property.thumbnail}
-            alt={property.title}
-            width={500}
-            height={500}
-            className="w-[100%] h-full object-cover rounded-[15px]"
+            src={item.thumbnail} 
+            alt={title}
+            width={500} 
+            height={500} 
+            className="w-full h-full"
           />
-        </div>
-        <div className="w-[20%] ml-3 justify-between grid grid-cols-1 gap-2">
-          {property.images.slice(0, 4).map((image, index) => (
-            <Image
-              key={index}
-              className="w-[100px] h-[100px] object-cover rounded-[10px] cursor-pointer"
-              alt={`property-thumbnail-${index}`}
-              src={image}
-              width={300}
-              height={300}
-              onClick={() => openModal(image)}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="w-[60%] flex flex-col justify-between pl-4">
-        <div className="flex justify-between">
-          <h1 className="font-coolvetica text-coolvetica-h2 text-[#6A6A31] mb-2">
-            {property.name}Phnom Penh
-          </h1>
-          <p className="font-bold text-[20px] text-[#6A6A31]">${property.price}250,000/m²</p>
-        </div>
+        </Link>
 
-        <div className="flex items-center gap-2 mb-4">
-          <Location className="text-[#6A6A31] w-[20px] h-[20px]" />
-          <span className="font-helvetica text-neutral-500">{property.address}</span>
-        </div>
+        {/* Item Type */}
+        <p className="absolute py-[3px] px-4 top-[10px] left-[17px] bg-olive-green text-white rounded-[13px] font-[600] z-2">
+          {item.category[0].content}
+        </p>
 
-        <div className="flex items-center gap-2 mb-4">
-          <BedRoom className="text-[#6A6A31] text-[20px]" />
-          <span className="font-bold text-[14px]">{property.detail.bed_room} Beds</span>
-        </div>
-
-        <div className="flex items-center gap-2 mb-4">
-          <BathRoom className="text-[#6A6A31] text-[20px]" />
-          <span className="font-bold text-[14px]">{property.detail.bath_room} Baths</span>
-        </div>
-
-        <div className="flex justify-end mt-auto">
-  {item?.id ? (
-    <Link href={`/detail/${item.id}`}>
-      <button className="bg-[#C2C2AA] text-white px-5 py-2 rounded-full font-bold text-sm hover:bg-[#a8a896] transition-all">
-        View Detail
-      </button>
-    </Link>
-  ) : (
-    <p className="text-gray-500">No details available</p>
-  )}
-</div>
-      </div>
-
-      <Modal
-        isOpen={isOpen}
-        onRequestClose={closeModal}
-        shouldCloseOnOverlayClick={true}
-        className="fixed inset-0 flex items-center justify-center"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
-        ariaHideApp={false}
-      >
-        <animated.div
-          style={animationProps}
-          className="max-w-[95%] max-h-[70%] flex items-center justify-center"
-        >
-          {selectedImage && (
-            <Image
-              src={selectedImage}
-              alt="Selected Property"
-              layout="responsive"
-              width={100}
-              height={60}
-              className="object-contain w-full h-full"
-            />
+        {/* Favorite Icon */}
+        <div className="absolute top-[10px] right-[17px] cursor-pointer" onClick={async () => await toggleIsLike(item._id)}>
+          {favourited ? <HeartInline className="text-white text-[25px]" /> : (
+            isLike ? <HeartInline className="text-white text-[25px]" /> : <HeartOutline className="text-white text-[25px]" />
           )}
-        </animated.div>
-      </Modal>
-    </animated.div>
+        </div>
+
+        {/* Price */}
+        <p className="absolute bottom-[10px] left-[17px] text-white font-helvetica font-[600] text-[16px]">
+          ${item.price}
+        </p>
+      </div>
+
+      <div className={flexRow ? "flex flex-col text-[18px] gap-1 w-[50%]" : "flex flex-col gap-1 py-2"}>
+        <p className="capitalize font-[600] text-olive-drab text-[18px]">{title}</p>
+        <p className={flexRow ? "mb-5" : ""}>{address}</p>
+        <div className="bottom-0 w-full">
+          <div className="flex items-center">
+            <div className={flexRow ? "w-[60%] flex gap-3 items-center" : "w-[50%] gap-7 flex items-center"}>
+              <div className="flex justify-between font-helvetica text-helvetica-paragraph">
+                <BathRoom className="text-olive-drab text-[20px] gap-1" />
+                <span className="font-[600] text-[12px] font-helvetica ">{item.detail[0]?.content.bathrooms} Bath</span>
+              </div>
+              <div className="flex justify-between font-helvetica text-helvetica-paragraph font-bold">
+                <BedRoom className="text-olive-drab text-[20px]" />
+                <span className="font-[600] text-[12px] font-helvetica">{item.detail[0]?.content.bedrooms} Bed</span>
+              </div>
+            </div>
+            <div className="w-[40%] flex justify-end items-center">
+              <Compare className="cursor-pointer" />
+            </div>
+          </div>
+
+          {/* View Count */}
+          <div className="flex items-center justify-start gap-2 mt-2">
+            <Eye className="text-olive-drab text-[20px]" />
+            <span className="text-[14px] text-neutral-600">{viewCount} views</span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
