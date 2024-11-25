@@ -77,6 +77,8 @@ function extractTokensFromResponse(response: AxiosResponse): { accessToken: stri
 axiosInstance.interceptors.response.use(
   (response) => response,
   async function (error) {
+    console.log(error);
+    
     const { response, config: originalRequest } = error;
     console.log('2.:::', response)
     const status = response?.status;

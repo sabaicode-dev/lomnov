@@ -428,7 +428,13 @@ export class PropertyRepository {
       await PropertyModel.findByIdAndDelete(propertyId);
       return true;
     } catch (error) {
+<<<<<<< HEAD
       throw error;
+=======
+      console.log(error);
+      
+      throw error
+>>>>>>> 27dbc12ada5741fc26a35f160897ea32ccf4ac48
     }
   }
 
@@ -439,6 +445,13 @@ export class PropertyRepository {
     try {
       const propertyIdArray = propertyIds.split(",");
       return await PropertyModel.find({ _id: { $in: propertyIdArray } }).lean();
+    } catch (error) {
+      throw error;
+    }
+  }
+  public async findPropertyUserByCognitoSub(cognitoSub: string): Promise<ResponsePropertyDTO[]>{
+    try {
+      return await PropertyModel.find({cognitoSub:cognitoSub});
     } catch (error) {
       throw error;
     }

@@ -3,59 +3,38 @@
 import React from "react";
 import Image from "next/image";
 import Banner from "@/components/molecules/banner/Banner";
-import { FaCamera } from "react-icons/fa";
+//import { FaCamera } from "react-icons/fa";
 import VisitProfileNavigation from "../visit-profile-navigation/VisitProfileNavigation";
 import ShareIcon from "@/icons/ShareIcon";
+import { VisitProfileHeaderProps } from "@/libs/types/user-types/user";
+import { formatDate } from "@/libs/const/formatDate";
 
-interface VisitProfileHeaderProps {
-  user: {
-    username: string; // Changed to match API response
-    background: string;
-    profile: string;
-    firstname: string; // Note: corrected from 'fistname'
-    lastname: string;
-    joinedDate: string;
-  };
-}
-
-const VisitProfileHeader = ({ user }: VisitProfileHeaderProps) => {
-  console.log("userName in visitprofile::", user.username); // This should now log correctly
+const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
+  console.log("userName in visitprofile::", user); // This should now log correctly
+  const cognitosub = user?.user?.cognitoSub;
   return (
     <>
       <div className="relative">
-        <Banner background={user.background || '/default-banner.jpg'} />
+        <Banner background={user?.user?.background ? user?.user.background[user?.user.background?.length - 1] : '/default-banner.jpeg'} />
         <div className="max-w-[1300px] mx-auto relative">
           {/* Edit cover photo button */}
-          <div className="absolute right-[0px] bottom-[50px] flex justify-end pr-[10px] xl:pr-0">
-            <div className="flex items-center bg-white font-helvetica text-helvetica-paragraph text-charcoal px-[10px] py-[5px] rounded-md">
-              <label htmlFor="file-input" className="cursor-pointer flex items-center justify-center">
-                <FaCamera className="text-charcoal mx-[10px]" />
-                <span>Edit cover photo</span>
-              </label>
-              <input type="file" id="file-input" className="hidden" />
-            </div>
-          </div>
 
           <div className="flex items-center pl-[10px] xl:pl-0 mt-[30px]">
             {/* User profile */}
             <div className="absolute flex items-center justify-center sm:w-[135px] sm:h-[135px] w-[125px] h-[125px] rounded-full bg-grayish-white">
               <div className="sm:w-[125px] sm:h-[125px] w-[120px] h-[120px] rounded-full overflow-hidden bg-grayish-white">
-                <Image src={user.profile || '/default-profile.jpg'} alt="user" width={125} height={125} />
+                <Image src={user?.user?.profile?.length ? user.user.profile[user?.user.profile.length - 1] : '/default-profile.jpeg'} alt="user" width={125} height={125} />
               </div>
-              <label htmlFor="profile-photo-input" className="sm:ml-[100px] sm:mt-[70px] ml-[100px] mt-[70px] absolute sm:w-[37px] w-[25px] h-[25px] flex items-center justify-center sm:h-[37px] rounded-full bg-pale-gray cursor-pointer">
-                <FaCamera className="text-charcoal sm:w-[20px] sm:h-[20px] w-[15px] h-[15px]" />
-              </label>
-              <input type="file" id="profile-photo-input" className="hidden" />
             </div>
             {/* User name */}
             <div className="absolute left-[170px] items-center text-helvetica-small font-helvetica text-olive-gray mt-[10px]">
               <span className="font-helvetica text-helvetica-h4 font-bold text-charcoal capitalize">
-                {user.username || 'Unknown'} {/* Changed to access username */}
+                {user?.user?.userName || "Unknow"} {/* Changed to access username */}
               </span>
               <span className="flex items-center mt-[10px]">
                 Joined
                 <div className="w-[5px] h-[5px] mx-[5px] rounded-full bg-olive-gray"></div>
-                {user.joinedDate || 'Unknown date'} {/* Ensure joinedDate is set properly */}
+                {user?.user?.createdAt ? formatDate(user?.user?.createdAt) : 'Unknown date'} {/* Ensure joinedDate is set properly */}
               </span>
             </div>
           </div>
@@ -72,7 +51,7 @@ const VisitProfileHeader = ({ user }: VisitProfileHeaderProps) => {
         </div>
       </div>
       {/* UserProfileNavigation */}
-      <VisitProfileNavigation userName={user.username} />
+      <VisitProfileNavigation cognitosub={cognitosub!} />
     </>
   );
 };

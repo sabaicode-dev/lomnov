@@ -13,19 +13,24 @@ const app = express();
 // ===============================
 // SECURITIES MIDDLEWARES
 // ===============================
-app.use(cookieParser());
+app.use(cookieParser() as express.Handler);
 app.use(cors(corsOptions));
 
 // ===============================
 // CHECKING ROUTE REQUEST
 // ===============================
+// console.log('sslfjslfjslf');
+
 app.use(routeConfigMiddleware);
+// console.log('routes middleware.....');
 
 // ===============================
 // AUTHENTICATION & AUTHORIZATION ROLE
 // ===============================
 app.use(authenticateToken);
+// console.log('authorize token.....');
 app.use(authorizeRole);
+// console.log('authorize roles.....');
 
 
 //================================

@@ -12,9 +12,10 @@ import {
   Path,
   Tags,
   Request,
+  Queries,
 } from "tsoa";
 import { PropertyService } from "@/src/services/property.service";
-import { RequestPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponsePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
+import { RequestPropertyDTO, RequestQueryPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponsePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
 import { Request as Express } from "express";
 
 import { NotFoundError, UnauthorizedError } from "@/src/utils/error/customErrors";
@@ -144,7 +145,7 @@ export class PropertyController extends Controller {
     @Query() price_lte?: number,
     @Query() page: number = 1,
     @Query() limit: number = 12,
-    @Query() fav_me?:string,
+    @Query() fav_me?: string,
     @Request() request?: Express.Request,
   ): Promise<ResponseAllPropertyDTO> {
     try {
@@ -240,7 +241,7 @@ export class PropertyController extends Controller {
   ): Promise<{ message: string }> {
     try {
       const cognitoSub = request?.cookies.username;
-      const result = await this.propertyService.deleteProperty(propertyId, cognitoSub );
+      const result = await this.propertyService.deleteProperty(propertyId, cognitoSub);
       return { message: result ? "Delete successfully" : "Property not found" };
     } catch (error) {
       console.error("Error in deleteProperty:", error);
@@ -284,4 +285,12 @@ export class PropertyController extends Controller {
     }
   }
 
+  @Get("/properties/user/{cognitoSub}")
+  public async getPropertyUser(@Path() cognitoSub: string, @Queries() queries: RequestQueryPropertyDTO): Promise<{ properties: ResponsePropertyDTO[]; totalPages: number; totalProperties: number }> {
+    try {
+      return await this.propertyService.getPropertyUser(cognitoSub, queries);
+    } catch (error) {
+      throw error;
+    }
+  }
 }

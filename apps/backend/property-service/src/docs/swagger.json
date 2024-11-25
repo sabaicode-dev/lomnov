@@ -310,6 +310,56 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"RequestQueryPropertyDTO": {
+				"properties": {
+					"cognitoSub": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"location": {
+						"type": "string"
+					},
+					"category": {
+						"type": "string"
+					},
+					"transition": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"language": {
+						"type": "string"
+					},
+					"price_gte": {
+						"type": "number",
+						"format": "double"
+					},
+					"price_lte": {
+						"type": "number",
+						"format": "double"
+					},
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"limit": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -824,6 +874,7 @@
 				]
 			}
 		},
+<<<<<<< HEAD
 		"/api/v1/properties/{propertyId}/views": {
 			"put": {
 				"operationId": "IncrementPropertyViews",
@@ -856,6 +907,11 @@
 			},
 			"get": {
 				"operationId": "GetPropertyViews",
+=======
+		"/api/v1/properties/user/{cognitoSub}": {
+			"get": {
+				"operationId": "GetPropertyUser",
+>>>>>>> 27dbc12ada5741fc26a35f160897ea32ccf4ac48
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -863,6 +919,7 @@
 							"application/json": {
 								"schema": {
 									"properties": {
+<<<<<<< HEAD
 										"views": {
 											"type": "number",
 											"format": "double"
@@ -870,6 +927,27 @@
 									},
 									"required": [
 										"views"
+=======
+										"totalProperties": {
+											"type": "number",
+											"format": "double"
+										},
+										"totalPages": {
+											"type": "number",
+											"format": "double"
+										},
+										"properties": {
+											"items": {
+												"$ref": "#/components/schemas/ResponsePropertyDTO"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"totalProperties",
+										"totalPages",
+										"properties"
+>>>>>>> 27dbc12ada5741fc26a35f160897ea32ccf4ac48
 									],
 									"type": "object"
 								}
@@ -884,11 +962,127 @@
 				"parameters": [
 					{
 						"in": "path",
+<<<<<<< HEAD
 						"name": "propertyId",
+=======
+						"name": "cognitoSub",
+>>>>>>> 27dbc12ada5741fc26a35f160897ea32ccf4ac48
 						"required": true,
 						"schema": {
 							"type": "string"
 						}
+<<<<<<< HEAD
+=======
+					},
+					{
+						"in": "query",
+						"name": "cognitoSub",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "title",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "description",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "address",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "location",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "category",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "transition",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "price",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "language",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "price_gte",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "price_lte",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+>>>>>>> 27dbc12ada5741fc26a35f160897ea32ccf4ac48
 					}
 				]
 			}

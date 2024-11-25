@@ -75,7 +75,7 @@
 //       THIS METHOD IS GO QUERY THE FAV PROPERTY OF THE USER
 //     */
 //     const propertyFavouriteMe = await this.propertyRepository.findFavouritePropertyMe(fav_me);
-    
+
 //     // Pagination parameters
 //     const skip = (page - 1) * limit;
 //     // Build filters
@@ -252,21 +252,24 @@ import {
   RequestQueryPropertyMeDTO,
   ResponseAllPropertyMeDTO,
   ResponsePropertyDTO,
+  ResponsePropertyByID,
 } from "@/src/utils/types/indext";
 import { PropertyRepository } from "../database/repositories/property.repository";
-
-import { NotFoundError, UnauthorizedError } from "@/src/utils/error/customErrors";
+import { NotFoundError, UnauthorizedError } from "../utils/error/customErrors";
+import { UserServiceClient } from "./userServiceClient";
+// ===============================================================================
 
 export class PropertyService {
   private propertyRepository: PropertyRepository;
-
+  private userServiceClient: UserServiceClient;
   constructor() {
     this.propertyRepository = new PropertyRepository();
+    this.userServiceClient = new UserServiceClient();
   }
 
   public async createProperty(
     propertyData: RequestPropertyDTO,
-    files: { thumbnail: Express.Multer.File; images: Express.Multer.File[] },
+    files: { thumbnail: Express.Multer.File; images: Express.Multer.File[] }
   ): Promise<ResponseCreatePropertyDTO> {
     try {
       return await this.propertyRepository.create(propertyData, files);
@@ -276,7 +279,7 @@ export class PropertyService {
   }
 
   public async getProperties(
-    queries: RequestQueryPropertyDTO,
+    queries: RequestQueryPropertyDTO
   ): Promise<ResponseAllPropertyDTO> {
     const { language, page = 1, limit = 12 } = queries;
     const skip = (page - 1) * limit;
@@ -303,9 +306,9 @@ export class PropertyService {
   }
 
   public async getPropertiesMe(
-    queries: RequestQueryPropertyMeDTO,
+    queries: RequestQueryPropertyMeDTO
   ): Promise<ResponseAllPropertyMeDTO> {
-    const { cognitoSub, language, page = 1, limit = 12, fav_me=""  } = queries;
+    const { cognitoSub, language, page = 1, limit = 12, fav_me = "" } = queries;
 
     if (!cognitoSub) {
       throw new UnauthorizedError();
@@ -316,12 +319,13 @@ export class PropertyService {
 
     const skip = (page - 1) * limit;
     const filters = this.buildFilters(queries);
-
+    // console.log("helo"+{...filters, cognitoSub})
+    // Fetch data and count total properties
     const [properties, totalProperty] = await Promise.all([
       this.propertyRepository.findPropertiesMe(
         { ...filters, cognitoSub },
         skip,
-        limit,
+        limit
       ),
       this.propertyRepository.countPropertiesMe({ ...filters, cognitoSub }),
     ]);
@@ -342,9 +346,9 @@ export class PropertyService {
     };
   }
 
-
-
-  private buildFilters(queries: RequestQueryPropertyDTO): Promise<ResponseAllPropertyDTO> {
+  private buildFilters(
+    queries: RequestQueryPropertyDTO
+  ): Promise<ResponseAllPropertyDTO> {
     try {
       const {
         cognitoSub,
@@ -377,7 +381,10 @@ export class PropertyService {
           filters["title.content"] = { $regex: title, $options: "i" };
         }
         if (typeof description === "string") {
-          filters["description.content"] = { $regex: description, $options: "i" };
+          filters["description.content"] = {
+            $regex: description,
+            $options: "i",
+          };
         }
         if (typeof address === "string") {
           filters["address.content"] = { $regex: address, $options: "i" };
@@ -421,14 +428,16 @@ export class PropertyService {
 
   private filterPropertiesByLanguage(
     properties: RequestFPropertiesByLanguageDTO[],
-    language: string,
+    language: string
   ): ResponseFPropertiesByLanguageDTO[] {
     try {
       return properties.map((property) => ({
         ...property,
-        title: property.title?.filter((t: any) => t.language === language) || [],
+        title:
+          property.title?.filter((t: any) => t.language === language) || [],
         description:
-          property.description?.filter((d: any) => d.language === language) || [],
+          property.description?.filter((d: any) => d.language === language) ||
+          [],
         address:
           property.address?.filter((a: any) => a.language === language) || [],
         location:
@@ -437,7 +446,7 @@ export class PropertyService {
           property.category?.filter((a: any) => a.language === language) || [],
         detail:
           property.detail?.filter(
-            (detail: any) => detail.language === language,
+            (detail: any) => detail.language === language
           ) || [],
       }));
     } catch (error) {
@@ -449,14 +458,14 @@ export class PropertyService {
     propertyId: string,
     propertyData: Partial<RequestUpdatePropertyDTO>,
     files: { thumbnail?: Express.Multer.File; images?: Express.Multer.File[] },
-    cognitoSub: string,
+    cognitoSub: string
   ): Promise<ResponseUpdatePropertyDTO | null> {
     try {
       const updatedProperty = await this.propertyRepository.update(
         propertyId,
         propertyData,
         files,
-        cognitoSub,
+        cognitoSub
       );
       return updatedProperty;
     } catch (error) {
@@ -465,8 +474,10 @@ export class PropertyService {
     }
   }
 
-
-  public async deleteProperty(propertyId: string, cognitoSub: string | undefined): Promise<boolean> {
+  public async deleteProperty(
+    propertyId: string,
+    cognitoSub: string | undefined
+  ): Promise<boolean> {
     try {
       return await this.propertyRepository.delete(propertyId, cognitoSub || "");
     } catch (error) {
@@ -474,23 +485,119 @@ export class PropertyService {
       throw new Error("Failed to delete property");
     }
   }
-  
 
-  public async getPropertyByID(id: string): Promise<ResponsePropertyDTO> {
+  public async getPropertyByID(id: string): Promise<ResponsePropertyByID> {
     try {
-      return await this.propertyRepository.findPropertyByID(id);
+      // Fetch property details
+      const property = (await this.propertyRepository.findPropertyByID(
+        id
+      )) as ResponsePropertyDTO;
+      //@ts-ignore
+      //console.log({...property._doc});
+
+      if (!property) {
+        throw new Error(`Property with ID ${id} not found.`);
+      }
+
+      // Fetch property owner details
+      const propertyOwner = await this.userServiceClient.propertyOwnerInfo(
+        property.cognitoSub as string
+      );
+
+      if (!propertyOwner) {
+        throw new Error(
+          `Property owner with cognitoSub ${property.cognitoSub} not found.`
+        );
+      }
+
+      // Construct the response object
+      const responses: ResponsePropertyByID = {
+        //@ts-ignore
+        ...property._doc,
+        propertyOwner,
+      };
+      return responses;
     } catch (error) {
+      console.error(`Error fetching property by ID ${id}:`, error);
+      throw new Error(`Failed to fetch property with ID ${id}`);
+    }
+  }
+
+  public async getPropertyUser(
+    cognitoSub: string,
+    queries: RequestQueryPropertyDTO
+  ): Promise<{
+    properties: ResponsePropertyDTO[];
+    totalPages: number;
+    totalProperties: number;
+  }> {
+    try {
+      console.log(cognitoSub);
+      console.log(queries);
+
+      // Retrieve user properties by cognitoSub
+      const propertiesUser =
+        await this.propertyRepository.findPropertyUserByCognitoSub(cognitoSub);
+
+      if (!propertiesUser) {
+        throw new NotFoundError(
+          `No properties found for user with cognitoSub: ${cognitoSub}`
+        );
+      }
+
+      // Extract pagination and filtering parameters
+      const { language, page = 1, limit = 10 } = queries;
+      const skip = (page - 1) * limit;
+
+      const filters = {
+        cognitoSub, // Restrict to the specific user
+        ...this.buildFilters(queries), // Add other filters from the query
+      };
+      // Fetch paginated results and count total properties
+      const [properties, totalProperties] = await Promise.all([
+        this.propertyRepository.findPropertiesMe(filters, skip, limit),
+        this.propertyRepository.countPropertiesMe(filters),
+      ]);
+
+      if (!properties.length) {
+        throw new NotFoundError(
+          "No properties found matching the provided criteria."
+        );
+      }
+
+      // Apply language-specific filtering if necessary
+      const filteredProperties = language
+        ? this.filterPropertiesByLanguage(properties, language)
+        : properties;
+
+      // Calculate total pages
+      const totalPages = Math.ceil(totalProperties / limit);
+
+      // Return the paginated result
+      return {
+        properties: filteredProperties,
+        totalPages,
+        totalProperties,
+      };
+    } catch (error) {
+      console.error(
+        `Error retrieving properties for user with cognitoSub: ${cognitoSub}`,
+        error
+      );
       throw error;
     }
   }
 
   //==========this is get view==================
 
-   // Method to increment the views of a property
-   public async incrementPropertyViews(propertyId: string): Promise<ResponsePropertyDTO> {
+  // Method to increment the views of a property
+  public async incrementPropertyViews(
+    propertyId: string
+  ): Promise<ResponsePropertyDTO> {
     try {
       // Call repository method to increment views
-      const updatedProperty = await this.propertyRepository.incrementPropertyViews(propertyId);
+      const updatedProperty =
+        await this.propertyRepository.incrementPropertyViews(propertyId);
 
       return updatedProperty;
     } catch (error) {

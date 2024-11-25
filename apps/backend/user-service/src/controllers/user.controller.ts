@@ -12,6 +12,7 @@ import {
   Delete,
   Path,
   Tags,
+  Queries,
 } from "tsoa";
 import { Types } from "mongoose";
 import {
@@ -25,6 +26,7 @@ import {
 } from "@/src/utils/types/indext";
 import { UserService } from "@/src/services/user.service";
 import { UnauthorizedError } from "../utils/error/customErrors";
+import { RequestPropertyClientQuery } from "../utils/types/api/property_client";
 
 
 // =========================================================
@@ -113,7 +115,7 @@ export class UserController extends Controller {
     @FormField() address?: string,
     @FormField() gender?: string,
     @FormField() dateOfBirth?: string,
-    @FormField() location? : string,
+    @FormField() location?: string,
   ): Promise<ResponseUserDTO | undefined> {
     try {
       const updateData = {
@@ -192,12 +194,12 @@ export class UserController extends Controller {
     try {
 
       const cognitoSub = request?.cookies.username!
-      if(!cognitoSub){
+      if (!cognitoSub) {
         throw new UnauthorizedError();
       }
       const favoritesId = await this.userService.getUserFavoritesID(request);
       console.log(favoritesId);
-      
+
       return {
         message: "Favorite properties retrieved successfully",
         favoritesId: favoritesId
@@ -207,7 +209,30 @@ export class UserController extends Controller {
       throw error;
     }
   }
+  /**
+   * 
+   */
+  @Get("/profile-user/{cognitoSub}")
+  public async getProfileUser(@Path() cognitoSub: string, @Queries() queries: RequestPropertyClientQuery): Promise<ResponseUserDTO | null> {
+    try {
+      const responses = await this.userService.getProperyOwnerProfile(cognitoSub, queries);
+      console.log(responses);
 
+      return responses
+    } catch (error) {
+      console.log(error);
+
+      throw error;
+    }
+  }
+  @Get("/profile-info/{cognitoSub}")
+  public async getPropertyOwnerInfo(@Path() cognitoSub: string) {
+    try {
+      return await this.userService.getProperyOwnerInfo(cognitoSub);
+    } catch (error) {
+      throw error;
+    }
+  }
   // @Post("me/favorite")
   // public async addFavorite(
   //   @Request() request: Express.Request,

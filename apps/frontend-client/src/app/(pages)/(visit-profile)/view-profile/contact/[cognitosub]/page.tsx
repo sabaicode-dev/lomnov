@@ -7,24 +7,24 @@ import Email from "@/icons/Email";
 import Phone from "@/icons/Phone";
 import Location from "@/icons/Location";
 import Address from "@/icons/Home";
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 
-async function fetchUserDetails(username: string) {
-  const res = await fetch(
-    `https://lomnov.onrender.com/api/v1/users?username=${username}`
-  );
-  if (!res.ok) {
+async function fetchUserDetails(cognitosub: string) {
+  try {
+    const res = await axiosInstance.get(`${API_ENDPOINTS.GET_PROFILE_USER}/${cognitosub}`);
+    return res.data;
+  } catch (error) {
     throw new Error("Failed to fetch user details");
   }
-  const user = await res.json();
-  return user[0]; // Adjust this based on your API response
 }
 
 const SavedPropertiesPage = async ({
   params,
 }: {
-  params: { username: string };
+  params: { cognitosub: string };
 }) => {
-  const user = await fetchUserDetails(params.username);
+  const user = await fetchUserDetails(params.cognitosub);
 
   if (!user) {
     return <div>User not found</div>;
@@ -42,7 +42,7 @@ const SavedPropertiesPage = async ({
               <Email props="w-[23px] h-[20px] text-olive-green" />
               <label className="font-bold text-base">Email</label>
               <span className="text-sm sm:text-base font-medium text-gray-800">
-                {user.email}
+                {user.user.email}
               </span>
             </div>
 
@@ -51,7 +51,7 @@ const SavedPropertiesPage = async ({
               <Phone props="w-[23px] h-[20px] text-olive-green" />
               <label className="font-bold text-base">Phone number</label>
               <span className="text-sm sm:text-base font-medium text-gray-800">
-                {user.phonenumber}
+                {user.user.phoneNumber}
               </span>
             </div>
 
@@ -60,7 +60,7 @@ const SavedPropertiesPage = async ({
               <Location props="w-[23px] h-[20px] text-olive-green" />
               <label className="font-bold text-base">Location</label>
               <span className="text-sm sm:text-base font-medium text-gray-800">
-                {user.location}
+                {user.user.location}
               </span>
             </div>
 
@@ -69,7 +69,7 @@ const SavedPropertiesPage = async ({
               <Address props="w-[23px] h-[20px] text-olive-green" />
               <label className="font-bold text-base">Address</label>
               <span className="text-sm sm:text-base font-medium text-gray-800">
-                {user.address}
+                {user.user.address}
               </span>
             </div>
           </div>

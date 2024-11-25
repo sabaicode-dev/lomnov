@@ -115,6 +115,26 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "RequestQueryPropertyDTO": {
+        "dataType": "refObject",
+        "properties": {
+            "cognitoSub": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}],"required":true},
+            "title": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            "description": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            "address": {"dataType":"string"},
+            "location": {"dataType":"string"},
+            "category": {"dataType":"string"},
+            "transition": {"dataType":"string"},
+            "price": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"undefined"}]},
+            "language": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            "price_gte": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"undefined"}]},
+            "price_lte": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"undefined"}]},
+            "page": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"undefined"}]},
+            "limit": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"undefined"}]},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
 const templateService = new ExpressTemplateService(models, {"noImplicitAdditionalProperties":"throw-on-extras","bodyCoercion":true});
 
@@ -381,6 +401,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+<<<<<<< HEAD
         app.put('/api/v1/properties/:propertyId/views',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.incrementPropertyViews)),
@@ -388,6 +409,16 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             async function PropertyController_incrementPropertyViews(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
+=======
+        app.get('/api/v1/properties/user/:cognitoSub',
+            ...(fetchMiddlewares<RequestHandler>(PropertyController)),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.getPropertyUser)),
+
+            async function PropertyController_getPropertyUser(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    cognitoSub: {"in":"path","name":"cognitoSub","required":true,"dataType":"string"},
+                    queries: {"in":"queries","name":"queries","required":true,"ref":"RequestQueryPropertyDTO"},
+>>>>>>> 27dbc12ada5741fc26a35f160897ea32ccf4ac48
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -399,6 +430,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                 const controller = new PropertyController();
 
               await templateService.apiHandler({
+<<<<<<< HEAD
                 methodName: 'incrementPropertyViews',
                 controller,
                 response,
@@ -430,6 +462,9 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'getPropertyViews',
+=======
+                methodName: 'getPropertyUser',
+>>>>>>> 27dbc12ada5741fc26a35f160897ea32ccf4ac48
                 controller,
                 response,
                 next,
