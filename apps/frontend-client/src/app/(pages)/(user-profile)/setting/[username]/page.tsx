@@ -1,53 +1,47 @@
-import axios from "axios";
-import { cookies } from "next/headers";
+// app/sitting/[username]/page.tsx
+
+import React from "react";
 import Layout from "../layout";
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import UserSettingHeader from "@/components/molecules/user-setting-header/UserSettingHeader";
+import { User } from "@/context/user.type";
 import GeneralInfoForm from "@/components/organisms/general-info-form/GeneralInfoForm";
 
-async function fetchUserDetails() {
+async function fetchUserDetails(username: string): Promise<User | null> {
   try {
-    const accessToken = cookies().get("accessToken")?.value;
-    const username = cookies().get("username")?.value;
-
-    if (!accessToken || !username) {
-      throw new Error("Required cookies not found");
-    }
-
-    const res = await axios.get(`http://localhost:4002/api/v1/users/me`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`, // Add the authorization header
-      },
-      withCredentials: true, // Cookies will be sent automatically
-    });
-
-    return res.data;
+    const res = await axiosInstance.get(`${API_ENDPOINTS.USER}?username=${encodeURIComponent(username)}`);
+    return res.data.users[0] || null;
   } catch (error: any) {
     console.error("Error fetching user details:", error);
-    // Return an error message or code if needed
-    return { error: error.message || "An unknown error occurred" };
+    return null;
   }
 }
 
-const GeneralPage = async () => {
-  const userDetails = await fetchUserDetails();
+const SettingsPage = async ({ params }: { params: { username: string } }) => {
+  const { username } = params;
 
-  console.log(userDetails);
-  if (!userDetails || userDetails.error) {
-    return <div>User not found or error fetching details</div>;
+  // Fetch user details
+  const user = await fetchUserDetails(username);
+
+  if (!user) {
+    return <div>User not found</div>; // Render a message if user data is not found
   }
 
   return (
     <Layout>
       <div>
-        <UserSettingHeader user={userDetails} />
+        {/* Render the Header */}
+        <UserSettingHeader user={user} />
+
+        {/* Pass the `user` prop to GeneralInfoForm */}
         <div className="max-w-[1300px] mx-auto">
-          <GeneralInfoForm user={userDetails} />
+
+        <GeneralInfoForm user={user} />
         </div>
       </div>
     </Layout>
   );
 };
 
-
-
-export default GeneralPage;
+export default SettingsPage;
