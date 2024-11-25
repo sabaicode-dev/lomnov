@@ -16,7 +16,8 @@ import {
 import { PropertyService } from "@/src/services/property.service";
 import { RequestPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponsePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
 import { Request as Express } from "express";
-import { UnauthorizedError } from "../utils/error/customErrors";
+
+import { NotFoundError, UnauthorizedError } from "@/src/utils/error/customErrors";
 // ====================================================================
 
 declare global {
@@ -247,4 +248,40 @@ export class PropertyController extends Controller {
       throw new Error("Failed to delete property");
     }
   }
+
+  //this method for post view user 
+
+  @Put("/properties/{propertyId}/views")
+  public async incrementPropertyViews(@Path() propertyId: string): Promise<ResponsePropertyDTO> {
+    console.log("Incrementing views for property ID:", propertyId); // Debugging line
+    try {
+      return await this.propertyService.incrementPropertyViews(propertyId);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        this.setStatus(404);
+      } else {
+        this.setStatus(500);
+      }
+      throw error;
+    }
+  }
+  
+
+  @Get("/properties/{propertyId}/views")
+  public async getPropertyViews(
+    @Path() propertyId: string
+  ): Promise<{ views: number }> {
+    try {
+      const views = await this.propertyService.getPropertyViews(propertyId);
+      return { views };
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        this.setStatus(404);
+      } else {
+        this.setStatus(500);
+      }
+      throw error;
+    }
+  }
+
 }

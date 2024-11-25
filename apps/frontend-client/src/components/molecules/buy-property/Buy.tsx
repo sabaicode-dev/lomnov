@@ -5,22 +5,22 @@
 'use client';
 
 import React, { useEffect, useState } from "react";
-import ItemCard from "../item-card/ItemCard"; // Component to display property details
+import ItemCard from "../item-card/ItemCard";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import { useProperties } from "@/context/property"; // Updated context
 import ArrowLeftCycle from "@/icons/Arrow";
 import ArrowRightCycle from "@/icons/Arrowup";
 
-const PropertyList = () => {
+const BuyProperty = () => {
   const { properties, loading, error, fetchProperties, pagination } = useProperties();
   const [currentPage, setCurrentPage] = useState(1);
   const [items, setItems] = useState<RealEstateItem[]>([]);
 
-  // Debounce effect to prevent multiple rapid fetches
+  // Fetch properties with debounce to avoid multiple requests
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      fetchProperties({ page: currentPage }); // Fetch data for the current page
-    }, 1000); // 1000ms debounce
+      fetchProperties({ page: currentPage, limit: 24 }); // Ensure the limit matches your backend setup
+    }, 500); // Reduced debounce to make it more responsive
 
     return () => clearTimeout(delayDebounce); // Cleanup timeout
   }, [currentPage, fetchProperties]);
@@ -38,6 +38,10 @@ const PropertyList = () => {
     }
   };
 
+    //   const filteredProvinces = provinces.filter((province) => province.name === "Kep");
+  const filterPropertyBuy = items.filter((data) => 
+    data.transition.some((t) => t.content === "For Sale")
+  );
   
 
 
@@ -47,9 +51,9 @@ const PropertyList = () => {
     <div>
       {loading && <p>Loading properties...</p>}
       {error && <p>{error}</p>}
-      {!loading && items.length > 0 ? (
+      {!loading && filterPropertyBuy.length > 0 ? (
         <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
-          {items.map((item) => (
+          {filterPropertyBuy.map((item) => (
             <ItemCard key={item._id} item={item} />
           ))}
         </div>
@@ -93,4 +97,4 @@ const PropertyList = () => {
   );
 };
 
-export default PropertyList;
+export default BuyProperty;

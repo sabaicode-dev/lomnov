@@ -31,7 +31,7 @@ export default function Home() {
             <div className="w-full lg:w-[30%] h-full py-32 ">
               <ItemCardNearlyLocationList />
             </div>
-            <div className=" lg:w-[30%] h-full  py-10 flex flex-col items-center">
+            <div className=" lg:w-[30%] h-full  py-10 flex flex-col items-center ">
               <div className=" flex flex-col items-center justify-center mb-40">
                 <h1 className=" text-white font-[600]  text-[30px]">
                   Nearly Location
