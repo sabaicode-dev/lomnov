@@ -97,40 +97,42 @@ export class UserService {
 
   public async updateUser(data: UpdateUserDTO): Promise<ResponseUserDTO | undefined> {
     try {
-      const { request, profileFiles, backgroundFiles, ...updateFields } = data;
-      const cognitosub = request.cookies?.username
-      if (!cognitosub) {
-        throw new UnauthorizedError();
+      const { request, profileFiles = [], backgroundFiles = [], ...updateFields } = data;
+      const cognitoSub = request.cookies?.username;
+  
+      if (!cognitoSub) {
+        throw new UnauthorizedError("User is not authenticated.");
       }
-      const existingUser = await this.userRepository.findByCognitoSub(cognitosub);
+  
+      const existingUser = await this.userRepository.findByCognitoSub(cognitoSub);
       if (!existingUser) {
-        throw new Error("User not found");
+        throw new Error("User not found.");
       }
-
+  
       const updateData: Partial<User> = { ...updateFields };
-
-      if (profileFiles && profileFiles.length > 0) {
+  
+      if (profileFiles.length > 0) {
         console.log("Profile files received:", profileFiles);
         const profileUrls = await Promise.all(
           profileFiles.map((file: any) => uploadFileToS3Service.uploadFile(file)),
         );
         updateData.profile = [...new Set([...(existingUser.profile || []), ...profileUrls])];
       }
-
-      if (backgroundFiles && backgroundFiles.length > 0) {
+  
+      if (backgroundFiles.length > 0) {
         console.log("Background files received:", backgroundFiles);
         const backgroundUrls = await Promise.all(
           backgroundFiles.map((file: any) => uploadFileToS3Service.uploadFile(file)),
         );
         updateData.background = [...new Set([...(existingUser.background || []), ...backgroundUrls])];
       }
-
-      const updatedUser = await this.userRepository.updateUserByCognitoSub(cognitosub, updateData);
-
+  
+      const updatedUser = await this.userRepository.updateUserByCognitoSub(cognitoSub, updateData);
+  
       if (!updatedUser) {
-        throw new Error("Error updating user");
+        throw new Error("Error updating user.");
       }
-
+  
       return updatedUser;
     } catch (error) {
       console.error("Error updating user:", error);
