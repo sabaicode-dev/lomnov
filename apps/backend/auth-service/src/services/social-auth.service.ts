@@ -60,6 +60,7 @@ class SocialAuthService {
 
             //Step 1:: Get the token from Cognito
             const cognitoDomain = this.awsCognitoDomain(`/oauth2/token`);
+            // Sent http request to cognito to get the token and user data if the request success
             const response = await axios.post(cognitoDomain, params.toString(), { headers });
             const token = {
                 accessToken: response.data.access_token,
@@ -69,7 +70,7 @@ class SocialAuthService {
             // console.log(token)
             //Step 2:: Get the user info from token
             const userInfo = this.getUserInfoFromToken(token.idToken);
-             console.log("USER INFO:: ", userInfo);
+            console.log("USER INFO:: ", userInfo);
             //@ts-ignore
             const email = userInfo.email;
             const existingUser = await this.getUserByEmail(email);
@@ -98,14 +99,14 @@ class SocialAuthService {
                     });
                     console.log("Step 4:: ", user.data);
                     //console.log(userInfo);
-                    
+
                     //@ts-ignore
                     //await this.updateUserCongitoAttributes(`${existingUser?.Username!}`, { 'custom:roles': state! });
                     // Step 4.1: Update user info in Cognito
-                   const res = await this.updateUserCongitoAttributes(existingUser?.Username!, { 'custom:roles': state! });
-                   //! TODO
-                  console.log("Step 4.1:: ", res);
                     userId = user.data._id;
+                    const res = await this.updateUserCongitoAttributes(existingUser?.Username!, { 'custom:roles': state! });
+                    //! TODO
+                    console.log("Step 4.1:: ", res);
                 } catch (error) {
                     if (axios.isAxiosError(error) && error.response?.status === 400) {
                         console.log('User already exists in user service, retrieving existing user info.');
@@ -120,17 +121,18 @@ class SocialAuthService {
                 }
             }
             // Step 5: Check if the user is already in the group before adding
-            const groupExist = await this.checkUserInGroup(userInfo.sub!, state!);
+            const groupExist = await this.checkUserInGroup(existingUser?.Username!, state!);
             if (!groupExist) {
                 await this.addToGroup(existingUser?.Username!, state!);
                 console.log(`User ${userInfo.sub} added to group ${state}`);
             }
+
             return {
                 accessToken: token.accessToken,
                 idToken: token.idToken,
                 refreshToken: token.refreshToken,
                 username: existingUser?.Username,
-                userId,
+                userId: userId,
             };
         } catch (error) {
             console.error("Get OAuth Token Error::: ", error);
@@ -219,17 +221,19 @@ class SocialAuthService {
                 UserPoolId: configs.awsCognitoUserPoolId,
             };
             console.log("Params::: ", params);
-            
+
             const command = new AdminListGroupsForUserCommand(params);
             console.log("checking user in group...");
-            
+
             const response = await client.send(command);
-            console.log("Response:: ",response);
-            
+            console.log("Response:: ", response);
+            const filterGroupName = response.Groups?.some(group => group.GroupName === groupName) || false;
+            console.log("filterGroupName::: ", filterGroupName);
+
             return response.Groups?.some(group => group.GroupName === groupName) || false;
         } catch (error) {
             //@ts-ignore
-            if(error.__type === 'UserNotFoundException'){
+            if (error.__type === 'UserNotFoundException') {
                 console.log("user not found...!")
                 return false;
             }
@@ -250,7 +254,7 @@ class SocialAuthService {
             await client.send(command);
             console.log(`AuthService: User ${username} added to ${groupName} group`);
         } catch (error) {
-            
+
             console.error(`Error adding user ${username} to group ${groupName}:\n`, error);
             throw error;
         }

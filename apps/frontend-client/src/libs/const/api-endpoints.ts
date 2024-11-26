@@ -7,7 +7,7 @@ export const API_ENDPOINTS = {
   CHANGE_PASSWORD: `${process.env.NEXT_PUBLIC_AUTH_ENDPOINT}/change-password`,
   RESET_PASSWORD: `${process.env.NEXT_PUBLIC_AUTH_ENDPOINT}/reset-password`,
   CONFIRM_PASSWORD: `${process.env.NEXT_PUBLIC_AUTH_ENDPOINT}/confirm-password`,
-  SIGN_IN_WITH_GOOGLE: `${process.env.NEXT_PUBLIC_AUTH_ENDPOINT}/google-signin`,
+  SIGN_IN_WITH_GOOGLE: `${process.env.NEXT_PUBLIC_AUTH_ENDPOINT}/google-signin?state=user`,
   LOGOUT: `${process.env.NEXT_PUBLIC_AUTH_ENDPOINT}/logout`,
   REFRESH_TOKEN:`${process.env.NEXT_PUBLIC_AUTH_ENDPOINT}/refresh-token`,
   // USER SERVICE
