@@ -2,26 +2,33 @@
 
 import React, { useState, useEffect } from "react";
 import { User } from "@/libs/types/user-types/user";
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 
 const GeneralInfoForm = ({ user }: { user: User }) => {
   const initialFormData = {
-    username: user.userName,
-    firstname: user.firstName,
-    lastname: user.lastName,
+    userName: user.userName,
+    firstName: user.firstName,
+    lastName: user.lastName,
     email: user.email,
     location: user.location,
     address: user.address,
-    phone: user.phoneNumber,
+    phoneNumber: user.phoneNumber,
   };
 
   const [formData, setFormData] = useState(initialFormData);
+  const [originalFormData, setOriginalFormData] = useState(initialFormData); // Store the original form data to track changes
   const [isChanged, setIsChanged] = useState(false);
-  const [isSaving, setIsSaving] = useState(false); // Add loading state
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
+  // Track changes in the form
   useEffect(() => {
-    setIsChanged(JSON.stringify(formData) !== JSON.stringify(initialFormData));
-  }, [formData]);
+    setIsChanged(JSON.stringify(formData) !== JSON.stringify(originalFormData));
+  }, [formData, originalFormData]);
 
+  // Handle form field changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -30,19 +37,60 @@ const GeneralInfoForm = ({ user }: { user: User }) => {
     }));
   };
 
+  // Cancel and reset form
   const handleCancel = () => {
-    setFormData(initialFormData);
+    setFormData(originalFormData); // Reset form data to the original values
+    setError(null);
+    setSuccess(null);
   };
 
+  // Submit the updated user info
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSaving(true); // Start loading
-    console.log("Form submitted:", formData);
+    setIsSaving(true);
+    setError(null);
+    setSuccess(null);
 
-    // Simulate saving process
-    await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulates a 2-second delay
+    console.log("Submitting form data:", formData);
 
-    setIsSaving(false); // End loading
+    try {
+      // Using a FormData instance to handle compatibility with multipart/form-data
+      const payload = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        payload.append(key, value as string);
+      });
+
+      // Sending the PUT request to the backend
+      const response = await axiosInstance.put(API_ENDPOINTS.USER_PROFILE, payload, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Ensure compatibility with file uploads
+        },
+      });
+
+      console.log("User updated successfully:", response.data);
+
+      // Update form data and original form data with the response
+      const updatedData = {
+        userName: response.data.userName,
+        firstName: response.data.firstName,
+        lastName: response.data.lastName,
+        email: response.data.email,
+        location: response.data.location,
+        address: response.data.address,
+        phoneNumber: response.data.phoneNumber,
+      };
+
+      setFormData(updatedData);
+      setOriginalFormData(updatedData); // Update the original data to match the new data
+      setIsSaving(false);
+      setSuccess("User information updated successfully!");
+    } catch (err: any) {
+      setIsSaving(false);
+      setError(
+        err.response?.data?.error_message || "Error updating user information. Please try again."
+      );
+      console.error("Error updating user info:", err.response || err);
+    }
   };
 
   return (
@@ -84,9 +132,11 @@ const GeneralInfoForm = ({ user }: { user: User }) => {
           }`}
           disabled={!isChanged || isSaving}
         >
-          {isSaving ? "Saving..." : "Save Changes"} {/* Update button text */}
+          {isSaving ? "Saving..." : "Save Changes"}
         </button>
       </div>
+      {error && <p className="text-red-500 text-center">{error}</p>}
+      {success && <p className="text-green-500 text-center">{success}</p>}
     </form>
   );
 };
