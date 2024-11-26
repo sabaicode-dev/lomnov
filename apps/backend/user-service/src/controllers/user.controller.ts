@@ -105,39 +105,53 @@ export class UserController extends Controller {
   }
 
   @Put("/me")
-  public async updateMe(
-    @Request() request: Express.Request,
-    @UploadedFiles() profileFiles?: Express.Multer.File[], // Files for profile
-    @UploadedFiles() backgroundFiles?: Express.Multer.File[], // Files for background
-    @FormField() firstName?: string,
-    @FormField() lastName?: string,
-    @FormField() userName?: string,
-    @FormField() phoneNumber?: string,
-    @FormField() address?: string,
-    @FormField() gender?: string,
-    @FormField() dateOfBirth?: string,
-    @FormField() location?: string,
-  ): Promise<ResponseUserDTO | undefined> {
-    try {
-      const updateData = {
-        firstName,
-        lastName,
-        userName,
-        phoneNumber,
-        address,
-        location,
-        gender,
-        dateOfBirth,
-        request,
-        profileFiles,
-        backgroundFiles,
-      };
-      return await this.userService.updateUser(updateData);
-    } catch (error) {
-      console.error("Update user error:", error);
-      throw error;
-    }
+public async updateMe(
+  @Request() request: Express.Request,
+  @UploadedFiles() profileFiles?: Express.Multer.File[],
+  @UploadedFiles() backgroundFiles?: Express.Multer.File[], 
+  @FormField() firstName?: string,
+  @FormField() lastName?: string,
+  @FormField() userName?: string,
+  @FormField() phoneNumber?: string,
+  @FormField() address?: string,
+  @FormField() gender?: string,
+  @FormField() dateOfBirth?: string,
+  @FormField() location?: string,
+): Promise<ResponseUserDTO | undefined> {
+  try {
+    console.log("Request payload received in updateMe:", {
+      firstName,
+      lastName,
+      userName,
+      phoneNumber,
+      address,
+      gender,
+      dateOfBirth,
+      location,
+    });
+
+    const updateData = {
+      firstName,
+      lastName,
+      userName,
+      phoneNumber,
+      address,
+      location,
+      gender,
+      dateOfBirth,
+      request,
+      profileFiles: profileFiles || [],
+      backgroundFiles: backgroundFiles || [],
+    };
+
+    console.log("Data being sent to updateUser service:", updateData);
+
+    return await this.userService.updateUser(updateData);
+  } catch (error) {
+    console.error("Error in updateMe controller:", error);
+    throw error;
   }
+}
 
   @Delete("/my-profile/{profileId}")
   public async deleteMyProfile(
