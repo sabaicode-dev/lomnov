@@ -502,13 +502,6 @@ export class PropertyService {
       const propertyOwner = await this.userServiceClient.propertyOwnerInfo(
         property.cognitoSub as string
       );
-
-      if (!propertyOwner) {
-        throw new Error(
-          `Property owner with cognitoSub ${property.cognitoSub} not found.`
-        );
-      }
-
       // Construct the response object
       const responses: ResponsePropertyByID = {
         //@ts-ignore

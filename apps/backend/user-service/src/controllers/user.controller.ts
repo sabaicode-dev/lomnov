@@ -23,6 +23,7 @@ import {
   DeleteProfileImageResponseDTO,
   FavoriteResponseDTO,
   ResponseUsernameExist,
+  ViewUserProfileDTO,
 } from "@/src/utils/types/indext";
 import { UserService } from "@/src/services/user.service";
 import { UnauthorizedError } from "../utils/error/customErrors";
@@ -226,9 +227,15 @@ export class UserController extends Controller {
     }
   }
   @Get("/profile-info/{cognitoSub}")
-  public async getPropertyOwnerInfo(@Path() cognitoSub: string) {
+  public async getPropertyOwnerInfo(@Path() cognitoSub: string): Promise<ViewUserProfileDTO | null> {
     try {
-      return await this.userService.getProperyOwnerInfo(cognitoSub);
+      const res = await this.userService.getProperyOwnerInfo(cognitoSub);
+
+      if (!res) {
+        console.log("controller: ", res);
+        return null;
+      }
+      return res;
     } catch (error) {
       throw error;
     }
