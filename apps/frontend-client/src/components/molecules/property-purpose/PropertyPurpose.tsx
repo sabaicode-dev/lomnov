@@ -1,23 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useImperativeHandle, forwardRef } from "react";
 
-function PropertyPurpose() {
-  const [selected, setSelected] = useState<string | null>(null); // Track the selected button
+const PropertyPurpose = forwardRef((props: any, ref) => {
+  const [selected, setSelected] = useState<string | null>(null); // Track the selected value
   const [error, setError] = useState<string>(""); // Track error message
 
-  // Handle button click to change the selected state
-  const handleButtonClick = (value: string) => {
-    setSelected(value);
+  // Handle radio button change
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelected(event.target.value);
     setError(""); // Clear the error when an option is selected
   };
 
-  // Handle validation
+  // Validation function
   const validateSelection = () => {
     if (!selected) {
       setError("Please select a property purpose (Sale, Rent, or Both)!!");
+      return false;
     } else {
       console.log("Selected purpose:", selected);
+      return true;
     }
   };
+
+  // Expose the `validateSelection` method to the parent via `ref`
+  useImperativeHandle(ref, () => ({
+    validateSelection,
+    getSelected: () => selected,
+  }));
 
   return (
     <div>
@@ -43,49 +51,59 @@ function PropertyPurpose() {
         <span className="text-lg font-bold text-gray-900">Property For</span>
       </div>
 
-      <div className="flex justify-center items-center font-medium mt-5">
-        <button
-          onClick={() => handleButtonClick("Sale")}
-          className={`text-gray-600 border-[2px] border-gray-400 w-[290px] h-[50px] hover:scale-105 active:scale-100 transition-transform duration-100 rounded-s-lg ${
-            selected === "Sale" ? "bg-yellow-600 scale-105 text-white" : "bg-white"
-          }`}
-        >
-          Sale
-        </button>
-        <button
-          onClick={() => handleButtonClick("Rent")}
-          className={`text-gray-600 border-[2px] border-gray-400 w-[290px] h-[50px] hover:scale-105 active:scale-100 transition-transform duration-100 ${
-            selected === "Rent" ? "bg-yellow-600 scale-105 text-white" : "bg-white"
-          }`}
-        >
-          Rent
-        </button>
-        <button
-          onClick={() => handleButtonClick("Both")}
-          className={`text-gray-600 border-[2px] border-gray-400 w-[290px] h-[50px] hover:scale-105 active:scale-100 transition-transform duration-100 rounded-e-lg ${
-            selected === "Both" ? "bg-yellow-600 scale-105 text-white" : "bg-white"
-          }`}
-        >
-          Both
-        </button>
+      <div className="flex justify-center items-center font-medium mt-5 space-x-32">
+        <div>
+          <input
+            type="radio"
+            id="sale"
+            name="propertyPurpose"
+            value="Sale"
+            checked={selected === "Sale"}
+            onChange={handleRadioChange}
+            className="pe-1"
+          />
+          <label htmlFor="Sale" className="ps-2">
+            Sale
+          </label>
+        </div>
+
+        <div>
+          <input
+            type="radio"
+            id="rent"
+            name="propertyPurpose"
+            value="Rent"
+            checked={selected === "Rent"}
+            onChange={handleRadioChange}
+            // className="hidden"
+          />
+          <label htmlFor="Rent" className="ps-2">
+            Rent
+          </label>
+        </div>
+
+        <div>
+          <input
+            type="radio"
+            id="both"
+            name="propertyPurpose"
+            value="Both"
+            checked={selected === "Both"}
+            onChange={handleRadioChange}
+            // className="hidden"
+          />
+          <label htmlFor="Both" className="ps-2">
+            Both
+          </label>
+        </div>
       </div>
 
       {error && (
-          <p className="mt-2 text-red-500 text-sm flex justify-center">{error}</p>
-
+        <p className="mt-2 text-red-500 text-sm flex justify-center">{error}</p>
       )}
-
-      {/* Validate Button */}
-      <div className="flex justify-end mt-5">
-        {/* <button
-          onClick={validateSelection}
-          className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700"
-        >
-          Validate Selection
-        </button> */}
-      </div>
     </div>
   );
-}
+});
 
+PropertyPurpose.displayName = "PropertyPurpose"; // Required for forwardRef components
 export default PropertyPurpose;
