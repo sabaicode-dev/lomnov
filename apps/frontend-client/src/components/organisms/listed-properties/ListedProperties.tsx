@@ -8,6 +8,7 @@ import { useAuth } from "@/context/user";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import Loading from "@/components/atoms/loading/Loading";
 
 const ListedProperties = () => {
   const { user, isAuthenticated } = useAuth(); // Access user and auth status from context
@@ -39,7 +40,7 @@ const ListedProperties = () => {
 
     fetchProperties();
   }, [user]);
-  
+
   useEffect(() => {
     // Fetch properties only if the user is authenticated and has a valid ID
     if (isAuthenticated && user?._id) {
@@ -80,7 +81,7 @@ const ListedProperties = () => {
     }
   };
 
-  if (loading) return <p className="text-center">Loading properties...</p>;
+
   if (error) return <p>{error}</p>;
 
   return (
@@ -93,7 +94,9 @@ const ListedProperties = () => {
       />
 
       <div className="grid mt-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5 2xl:gap-5">
-        {items.map((item) => (
+        {loading ? (<div className="w-[1300px] flex items-center justify-center">
+          <Loading />
+        </div>) : items.map((item) => (
           <ItemCard key={item._id} item={item} /> // Ensure item._id exists and is of the correct type
         ))}
       </div>
