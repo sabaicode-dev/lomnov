@@ -253,6 +253,7 @@ import {
   ResponseAllPropertyMeDTO,
   ResponsePropertyDTO,
   ResponsePropertyByID,
+  ResponseCategoriesDTO,
 } from "@/src/utils/types/indext";
 import { PropertyRepository } from "../database/repositories/property.repository";
 import { NotFoundError, UnauthorizedError } from "../utils/error/customErrors";
@@ -613,6 +614,13 @@ export class PropertyService {
       if (error instanceof NotFoundError) {
         throw new NotFoundError("Property not found");
       }
+      throw error;
+    }
+  }
+  public async getCategories(): Promise <ResponseCategoriesDTO[]>{
+    try {
+      return await this.propertyRepository.getCategories();
+    } catch (error) {
       throw error;
     }
   }

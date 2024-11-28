@@ -21,5 +21,6 @@ export const API_ENDPOINTS = {
   PROPERTIES: `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}`,
   GET_PROPERTY_BY_ID: `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}/get`,
   MY_PROPERTY: `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}/me`,
+  CATEGORIES: `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}/category`
 };
             
