@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState } from "react";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
@@ -9,6 +8,7 @@ import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import Search from "@/components/molecules/Search/Search";
 import NotFound from "@/components/molecules/notFound/NotFound";
 import axiosInstance from "@/libs/axios";
+import Loading from "@/components/atoms/loading/Loading";
 
 async function fetchProperties(searchParams: { [key: string]: string | string[] | undefined }): Promise<{
   properties: RealEstateItem[];
@@ -16,7 +16,7 @@ async function fetchProperties(searchParams: { [key: string]: string | string[] 
 }> {
   const queryString = new URLSearchParams(searchParams as Record<string, string>).toString();
   const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?${queryString}`);
-  
+
   if (res.status !== 200) {
     throw new Error("Failed to fetch properties");
   }
@@ -46,7 +46,11 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
 
     try {
       const result = await fetchProperties({ ...searchParams, page: String(page) });
-      setDatas(result.properties);
+      if (result.properties.length === 0) {
+        setDatas([]);  // explicitly set to empty if no properties are found
+      } else {
+        setDatas(result.properties);
+      }
       setPagination(result.pagination);
     } catch (err: any) {
       console.error("Error fetching properties:", err);
@@ -67,16 +71,6 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
     }
   };
 
-
-
-  if(loading){
-    return <div><img src="https://www.superiorlawncareusa.com/wp-content/uploads/2020/05/loading-gif-png-5.gif" alt="" className="w-[200px] m-auto "/></div>;
-  }else if(datas.length === 0 ){
-    return <p>property not found!</p>
-  }else{
-     <div>{error}</div>
-  }
-
   return (
     <main>
       {/* Banner */}
@@ -89,22 +83,35 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
           className="brightness-75 left-0"
         />
         <div className="absolute left-0 top-0 w-full h-full bg-[#0000004e]"></div>
-        <div className="absolute left-[10%] bottom-[150px] font-helvetica text-helvetica-h2 font-bold text-white">
+        <div className="absolute left-[24%] bottom-[150px] font-helvetica text-helvetica-h2 font-bold text-white">
           <h1>Find Your Perfect Property</h1>
         </div>
-        <div className="absolute left-0 bottom-[130px] w-[120px] h-px bg-white"></div>
-        <div className="absolute w-full bottom-[-60px] px-2">
+        <div className="absolute left-0 sm:left-0 md:left-0 lg:left-0 xl:left-0 bottom-[130px] w-[120px] sm:w-[150px] md:w-[235px] lg:w-[290px] xl:w-[300px] 2xl:w-[550px] h-px bg-white"></div>
+        <div className="absolute left-[13rem] flex items-center justify-center w-full bottom-[-37px] px-2  ">
           <div className="z-10 m-auto lg:w-fit bg-white rounded-[18px] p-5">
-            <Search />
+            <Search disabled={loading} />
           </div>
         </div>
       </header>
 
       {/* Properties */}
       <div className="w-[1300px] m-auto grid grid-cols-4 gap-5 mt-[100px] z-0">
-        {datas.map((item) => (
-          <ItemCard key={item._id} item={item} flexRow={false} />
-        ))}
+        {
+          loading ? (
+            <div className="w-[1300px] flex items-center justify-center">
+              <Loading />
+            </div>
+          ) : datas.length === 0 && !loading && !error ? (
+            // Ensure NotFound is only shown when there's no data and not during loading
+            <div className="w-[1300px] flex items-center justify-center -mt-32">
+              <NotFound />
+            </div>
+          ) : (
+            datas.map((item) => (
+              <ItemCard key={item._id} item={item} flexRow={false} />
+            ))
+          )
+        }
       </div>
 
       {/* Pagination Controls */}
@@ -121,9 +128,8 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
             <button
               key={page}
               onClick={() => handlePageChange(page)}
-              className={`px-3 py-1 border rounded-full ${
-                page === pagination.currentPage ? "bg-olive-drab text-white" : "bg-white text-olive-drab"
-              }`}
+              className={`px-3 py-1 border rounded-full ${page === pagination.currentPage ? "bg-olive-drab text-white" : "bg-white text-olive-drab"
+                }`}
             >
               {page}
             </button>

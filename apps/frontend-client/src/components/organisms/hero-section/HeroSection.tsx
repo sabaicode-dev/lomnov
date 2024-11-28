@@ -6,6 +6,7 @@ import SelectProperties from "@/components/molecules/select-properties/SelectPro
 import SelectLocations from "@/components/molecules/select-locations/SelectLocations";
 import SelectPrice from "@/components/molecules/select-price/SelectPrice";
 import { Option } from "@/components/molecules/select-properties/SelectProperties";
+import { useRouter } from "next/navigation";
 // ========================================================================
 
 function HeroSection() {
@@ -15,7 +16,7 @@ function HeroSection() {
   const [address, setAddress] = useState<Option | null>(null);
   const [price, setPrice] = useState<Option | null>(null);
   const [isMounted, setIsMounted] = useState(false);
-
+  const router = useRouter();
   // Handle changes for each filter
 
   const handleTransitionChange = (selectedTrainsition : string) => {
@@ -60,7 +61,7 @@ function HeroSection() {
     }
 
     // Redirect to the search page with the query string
-    window.location.href = `/search?${params.toString()}`;
+    router.push(`/search?${params.toString()}`)
   };
 
   return (

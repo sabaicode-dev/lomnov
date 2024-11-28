@@ -1,28 +1,13 @@
 import React from "react";
-
-import banner from "@/images/banner.png";
+import iconSVg from "@/images/icon-svg.png"
 import Image from "next/image";
-
-
-const  NotFound = ()=> {
-
-
+import _404 from "@/images/404.png"
+const NotFound = () => {
   return (
-    <main className="">
-      {/* Banner */}
-      <header className="relative w-full h-[100px]">
-        <Image
-          src={banner}
-          alt="banner"
-          layout="fill"
-          objectFit="cover"
-          className="brightness-75 left-0"
-        />
-
-      </header>
-      <img src="https://th.bing.com/th/id/R.3aac8b9e32201e276bc125396615fb6e?rik=s6m1BLQC7RKu3A&pid=ImgRaw&r=0" alt=""  className="w-[1000px] m-auto"/>
-
-     
+    <main className="w-full">
+      <Image src={iconSVg} alt="" className="w-[1200px] m-auto" />
+      <Image src={_404} alt="" className="w-[500px] m-auto -mt-32" />
+      <h1 className="font-helvetica text-helvetica-h3 font-bold text-olive-green flex items-center justify-center">Property Not Found!</h1>
     </main>
   );
 }
