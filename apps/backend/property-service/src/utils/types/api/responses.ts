@@ -1,4 +1,4 @@
-import { LocalizedContent } from "../indext";
+import { LocalizedContent , IProperty  } from "../indext";
 import { Types } from "mongoose";
 
 export interface Pagination {
@@ -6,22 +6,29 @@ export interface Pagination {
   totalPages: number;
   totalProperty: number;
 }
+
+
+
+
 export interface ResponsePropertyDTO {
-  _id: Types.ObjectId
-  cognitoSub: string
+  _id: Types.ObjectId;
+  cognitoSub: string;
   title?: LocalizedContent[];
   description?: LocalizedContent[];
   thumbnail: string;
   images: string[];
   urlmap?: string;
   address?: LocalizedContent[];
-  location: LocalizedContent[],
+  location: LocalizedContent[];
   price?: number;
-  category: LocalizedContent[],
-  transition: LocalizedContent[],
+  category: LocalizedContent[];
+  transition: LocalizedContent[];
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
+  condanate?: IProperty[];
 }
+
+
 
 export interface ResponseFPropertiesByLanguageDTO {
   _id: Types.ObjectId
@@ -57,7 +64,7 @@ export interface ResponseCreatePropertyDTO {
   transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
-
+  condanate?: IProperty[];
 }
 
 export interface ResponseGetPropertyMeDTO {
@@ -159,3 +166,4 @@ export interface ResponsePropertyByID{
   status?: boolean;
   propertyOwner: ResponsePropertyOwner;
 }
+

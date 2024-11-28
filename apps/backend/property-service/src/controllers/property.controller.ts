@@ -8,12 +8,14 @@ import {
   FormField,
   Get,
   Query,
+  Body,
   Put,
   Path,
   Tags,
   Request,
   Queries,
 } from "tsoa";
+import { IProperty } from "@/src/utils/types/indext";
 import { PropertyService } from "@/src/services/property.service";
 import { RequestPropertyDTO, RequestQueryPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponsePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
 import { Request as Express } from "express";
@@ -293,4 +295,75 @@ export class PropertyController extends Controller {
       throw error;
     }
   }
+
+  //endpoint for find nearly location
+  @Post("/properties/{propertyId}/coordinates")
+  public async addCoordinatesToProperty(
+    @Path() propertyId: string,
+    @Body() coordinates: { lat: number; lng: number }
+  ): Promise<ResponsePropertyDTO> {
+    try {
+      const updatedProperty = await this.propertyService.addCoordinatesToProperty(
+        propertyId,
+        coordinates
+      );
+
+      if (!updatedProperty) {
+        throw new NotFoundError("Property not found");
+      }
+
+      return updatedProperty;
+    } catch (error) {
+      console.error("Error adding coordinates to property:", error);
+      throw error;
+    }
+  }
+
+
+
+@Get("/properties/nearby")
+public async findNearbyProperties(
+  @Query() lat: number = 0,
+  @Query() lng: number = 0,
+  @Query() maxDistance: number = 1000, // Default 1km
+  @Query() limit: number = 10 // Default limit
+): Promise<ResponsePropertyDTO[]> {
+  try {
+    if (lat === 0 || lng === 0) {
+      throw new Error("Invalid latitude or longitude. Both 'lat' and 'lng' must be provided.");
+    }
+
+    const nearbyProperties: IProperty[] = await this.propertyService.findNearbyProperties(
+      { lat, lng },
+      maxDistance,
+      limit
+    );
+
+    console.log("Raw Nearby Properties:", nearbyProperties);
+
+    const responseProperties: ResponsePropertyDTO[] = nearbyProperties.map((property) => ({
+      _id: property._id,
+      cognitoSub: property.cognitoSub || "",
+      title: property.title || [],
+      description: property.description || [],
+      thumbnail: property.thumbnail || "",
+      images: property.images || [],
+      urlmap: property.urlmap || "",
+      address: property.address || [],
+      location: property.location || [],
+      price: property.price,
+      category: property.category || [],
+      transition: property.transition || [],
+      detail: property.detail || {},
+      status: property.status,
+    
+    }));
+
+    return responseProperties;
+  } catch (error) {
+    console.error("Error finding nearby properties:");
+    throw new Error("Failed to fetch nearby properties. Please try again.");
+  }
+}
+
 }

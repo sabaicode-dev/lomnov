@@ -5,8 +5,9 @@ import Search from "@/components/molecules/Search/Search";
 import LocationAccess from "@/components/organisms/location-access/LocationAccess";
 import RecommendedProperties from "@/components/molecules/RecommendedProperties/RecommendedProperties";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
-import Map from "../../../components/molecules/map/Map";
 import axios from "axios";
+import LocationPage from "@/components/molecules/Cart-allowLoaction/CardAllow";
+
 
 // Function to fetch property data based on the provided id
 async function fetchProperty(id: string): Promise<RealEstateItem | null> {
@@ -29,6 +30,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="w-full">
+   
       {/* Banner */}
       <header className="relative w-full h-[400px]">
         <Image
@@ -77,13 +79,14 @@ const page = async ({ params }: { params: { id: string } }) => {
       <div className="w-full lg:w-[1300px] m-auto mt-20 px-2 lg:px-0 text-center text-3xl mb-2 text-[26px] font-[600] text-olive-drab">
         Here is your Location
       </div>
+      <LocationPage/>
 
       {/* Check if property data is available before rendering Map */}
       <div className="w-full max-w-[1300px] mx-auto mt-10">
         {property ? (
           <div className="w-full h-full">
             {/* Pass map URL to the Map component */}
-            <Map property={property.mapurl || ""} />
+            
           </div>
         ) : (
           <p className="text-center">Loading map or property data...</p>
