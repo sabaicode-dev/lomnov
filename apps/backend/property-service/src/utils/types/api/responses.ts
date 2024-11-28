@@ -22,7 +22,9 @@ export interface ResponsePropertyDTO {
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
 }
-
+export interface ResponseCategoriesDTO{
+  category:LocalizedContent[]
+}
 export interface ResponseFPropertiesByLanguageDTO {
   _id: Types.ObjectId
   cognitoSub: string
@@ -157,5 +159,5 @@ export interface ResponsePropertyByID{
   transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
-  propertyOwner: ResponsePropertyOwner;
+  propertyOwner: ResponsePropertyOwner | null;
 }

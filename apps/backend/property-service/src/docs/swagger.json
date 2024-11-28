@@ -360,6 +360,21 @@
 				},
 				"type": "object",
 				"additionalProperties": false
+			},
+			"ResponseCategoriesDTO": {
+				"properties": {
+					"category": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"category"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -1102,6 +1117,32 @@
 						}
 					}
 				]
+			}
+		},
+		"/api/v1/properties/category": {
+			"get": {
+				"operationId": "GetCategories",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResponseCategoriesDTO"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "This method use for responses only category",
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": []
 			}
 		}
 	},

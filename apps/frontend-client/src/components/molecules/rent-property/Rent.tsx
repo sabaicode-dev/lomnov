@@ -41,8 +41,8 @@
 //   const filterPropertyBuy = items.filter((data) => 
 //     data.transition.some((t) => t.content === "For Rent")
 //   );
-  
-  
+
+
 
 
 //   //create stitch
@@ -58,7 +58,7 @@
 //           ))}
 //         </div>
 //       ) : (
-      
+
 //         <img src="https://www.superiorlawncareusa.com/wp-content/uploads/2020/05/loading-gif-png-5.gif" alt="" className="w-[100px] m-auto" />
 //       )}
 
@@ -88,7 +88,7 @@
 //             disabled={currentPage === pagination.totalPages}
 //             className="disabled:opacity-50"
 //           >
-           
+
 //              <ArrowRightCycle clasName="size-8	 text-olive-drab rotate-180"/>
 //           </button>
 //         </div>
@@ -107,6 +107,7 @@ import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import { useProperties } from "@/context/property"; // Updated context
 import ArrowLeftCycle from "@/icons/Arrow";
 import ArrowRightCycle from "@/icons/Arrowup";
+import Loading from "@/components/atoms/loading/Loading";
 
 const RentPropertyList = () => {
   const { properties, loading, error, fetchProperties, pagination } = useProperties();
@@ -148,9 +149,7 @@ const RentPropertyList = () => {
 
   return (
     <div>
-      {loading && <p>Loading properties...</p>}
       {error && <p>{error}</p>}
-
       {!loading && filterPropertyBuy.length > 0 ? (
         <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
           {filterPropertyBuy.map((item) => (
@@ -158,11 +157,9 @@ const RentPropertyList = () => {
           ))}
         </div>
       ) : (
-        <img
-          src="https://www.superiorlawncareusa.com/wp-content/uploads/2020/05/loading-gif-png-5.gif"
-          alt="Loading"
-          className="w-[100px] m-auto"
-        />
+        <div className="w-[1300px] flex items-center justify-center">
+          <Loading />
+        </div>
       )}
 
       {/* Pagination Controls */}
@@ -179,11 +176,10 @@ const RentPropertyList = () => {
             <button
               key={page}
               onClick={() => handlePageChange(page)}
-              className={`px-3 py-1 border rounded-full ${
-                page === currentPage
+              className={`px-3 py-1 border rounded-full ${page === currentPage
                   ? "bg-olive-drab text-white font-weight: 500"
                   : "bg-white text-olive-drab"
-              }`}
+                }`}
             >
               {page}
             </button>
@@ -193,7 +189,7 @@ const RentPropertyList = () => {
             disabled={currentPage === pagination.totalPages}
             className="disabled:opacity-50"
           >
-             <ArrowRightCycle clasName="size-8	text-olive-drab rotate-180"/>
+            <ArrowRightCycle clasName="size-8	text-olive-drab rotate-180" />
           </button>
         </div>
       )}
