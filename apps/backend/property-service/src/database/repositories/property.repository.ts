@@ -8,6 +8,7 @@ import { NotFoundError, UnauthorizedError } from "@/src/utils/error/customErrors
 import {
   RequestPropertyDTO,
   RequestUpdatePropertyDTO,
+  ResponseCategoriesDTO,
   ResponseCreatePropertyDTO,
   ResponseFindPropertyDTO,
   ResponsePropertyDTO,
@@ -164,7 +165,7 @@ export class PropertyRepository {
     }
   }
 
-  
+
 
   public async incrementPropertyViews(propertyId: string): Promise<any> {
     try {
@@ -241,10 +242,12 @@ export class PropertyRepository {
   /**
    * Find favorite properties for a user
    */
-  public async findFavouritePropertyMe(propertyIds: string): Promise<ResponsePropertyDTO[]> {
+  public async findFavouritePropertyMe(propertyIds: string | undefined): Promise<ResponsePropertyDTO[]> {
     try {
-      const propertyIdArray = propertyIds.split(",");
+
+      const propertyIdArray = propertyIds?.split(",");
       return await PropertyModel.find({ _id: { $in: propertyIdArray } }).lean();
+
     } catch (error) {
       throw error;
     }
@@ -252,7 +255,7 @@ export class PropertyRepository {
 
   public async findPropertyUserByCognitoSub(cognitoSub: string): Promise<ResponsePropertyDTO[]>{
     try {
-      return await PropertyModel.find({cognitoSub:cognitoSub});
+      return await PropertyModel.find({ cognitoSub: cognitoSub });
     } catch (error) {
       throw error;
     }
@@ -303,4 +306,15 @@ export class PropertyRepository {
   }
 
 
+  public async getCategories(): Promise<ResponseCategoriesDTO[]> {
+    try {
+      // Fetch the categories from the PropertyModel
+      return  await PropertyModel.find({}).select('category').lean();
+    } catch (error) {
+      console.log(error);
+      
+      throw error;
+    }
+  }
+  
 }

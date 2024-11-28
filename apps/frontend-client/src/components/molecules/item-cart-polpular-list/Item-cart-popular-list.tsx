@@ -7,6 +7,7 @@ import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import NotFound from "@/components/molecules/notFound/NotFound";
 import axiosInstance from "@/libs/axios";
 import { useSearchParams } from "next/navigation";
+import Loading from "@/components/atoms/loading/Loading";
 
 async function fetchProperties(searchParams: { [key: string]: string | string[] | undefined }): Promise<{
   properties: RealEstateItem[];
@@ -14,7 +15,7 @@ async function fetchProperties(searchParams: { [key: string]: string | string[] 
 }> {
   const queryString = new URLSearchParams(searchParams as Record<string, string>).toString();
   const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?${queryString}`);
-  
+
   if (res.status !== 200) {
     throw new Error("Failed to fetch properties");
   }
@@ -45,7 +46,8 @@ function ItemCardPopularList() {
     setError(null);
 
     try {
-      const result = await fetchProperties({ ...searchParams, page: String(page), address});
+      // @ts-ignore
+      const result = await fetchProperties({ ...searchParams, page: String(page), address });
       setDatas(result.properties);
       setPagination(result.pagination);
     } catch (err: any) {
@@ -68,7 +70,9 @@ function ItemCardPopularList() {
   };
 
   if (loading) {
-    return <div><img src="https://www.superiorlawncareusa.com/wp-content/uploads/2020/05/loading-gif-png-5.gif" alt="Loading..." className="w-[200px] m-auto" /></div>;
+    return <div className="w-[1300px] flex items-center justify-center">
+      <Loading />
+    </div>
   } else if (datas.length === 0) {
     return <NotFound />;
   } else if (error) {

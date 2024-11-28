@@ -157,10 +157,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get(`${API_ENDPOINTS.SIGN_IN_WITH_GOOGLE}`);
-
-      setIsAuthenticated(true);
-      // console.log(response.data)
+      
       window.location.href = response.data.data;
+      setIsAuthenticated(true);
     } catch (error) {
       console.error('Signin with Google failed:', error);
       setIsAuthenticated(false);

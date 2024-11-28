@@ -159,6 +159,14 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResponseCategoriesDTO": {
+        "dataType": "refObject",
+        "properties": {
+            "category": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
 const templateService = new ExpressTemplateService(models, {"noImplicitAdditionalProperties":"throw-on-extras","bodyCoercion":true});
 
@@ -516,6 +524,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+<<<<<<< HEAD
         app.post('/api/v1/properties/:propertyId/coordinates',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.addCoordinatesToProperty)),
@@ -524,6 +533,14 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
                     coordinates: {"in":"body","name":"coordinates","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"lng":{"dataType":"double","required":true},"lat":{"dataType":"double","required":true}}},
+=======
+        app.get('/api/v1/properties/category',
+            ...(fetchMiddlewares<RequestHandler>(PropertyController)),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.getCategories)),
+
+            async function PropertyController_getCategories(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+>>>>>>> 14ea7f868edeb48ba2cf572b707bf381041246da
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -535,6 +552,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                 const controller = new PropertyController();
 
               await templateService.apiHandler({
+<<<<<<< HEAD
                 methodName: 'addCoordinatesToProperty',
                 controller,
                 response,
@@ -569,6 +587,9 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'findNearbyProperties',
+=======
+                methodName: 'getCategories',
+>>>>>>> 14ea7f868edeb48ba2cf572b707bf381041246da
                 controller,
                 response,
                 next,

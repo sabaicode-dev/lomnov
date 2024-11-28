@@ -13,6 +13,7 @@ import {
   ResponseAllPropertyMeDTO,
   ResponsePropertyDTO,
   ResponsePropertyByID,
+  ResponseCategoriesDTO,
 } from "@/src/utils/types/indext";
 import { PropertyRepository } from "../database/repositories/property.repository";
 import { NotFoundError, UnauthorizedError } from "../utils/error/customErrors";
@@ -69,14 +70,13 @@ export class PropertyService {
   public async getPropertiesMe(
     queries: RequestQueryPropertyMeDTO
   ): Promise<ResponseAllPropertyMeDTO> {
-    const { cognitoSub, language, page = 1, limit = 12, fav_me = "" } = queries;
+    const { cognitoSub, language, page = 1, limit = 12, fav_me} = queries;
 
     if (!cognitoSub) {
       throw new UnauthorizedError();
     }
 
-    const propertyFavouriteMe =
-      await this.propertyRepository.findFavouritePropertyMe(fav_me);
+    const propertyFavouriteMe = await this.propertyRepository.findFavouritePropertyMe(fav_me);
 
     const skip = (page - 1) * limit;
     const filters = this.buildFilters(queries);
@@ -266,17 +266,10 @@ export class PropertyService {
       const propertyOwner = await this.userServiceClient.propertyOwnerInfo(
         property.cognitoSub as string
       );
-
-      if (!propertyOwner) {
-        throw new Error(
-          `Property owner with cognitoSub ${property.cognitoSub} not found.`
-        );
-      }
-
       // Construct the response object
       const responses: ResponsePropertyByID = {
         //@ts-ignore
-        ...property._doc,
+        ...property,
         propertyOwner,
       };
       return responses;
@@ -445,4 +438,11 @@ public async addCoordinatesToProperty(
 
   
 
+  public async getCategories(): Promise <ResponseCategoriesDTO[]>{
+    try {
+      return await this.propertyRepository.getCategories();
+    } catch (error) {
+      throw error;
+    }
+  }
 }

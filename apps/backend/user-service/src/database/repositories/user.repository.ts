@@ -86,41 +86,45 @@ export class UserRepository {
     cognitoSub: string,
   ): Promise<ResponseFindUserBySubDTO | null> {
     try {
-      return UserModel.findOne({ cognitoSub: cognitoSub }).exec();
+      const findUser = UserModel.findOne({ cognitoSub: cognitoSub }).exec();
+      console.log("FindUser:: ", findUser);
+      
+      if(!findUser){
+        return null;
+      }
+      return findUser;
     } catch (error) {
       throw error;
     }
   }
-
-  // public async updateUserByCognitoSub(
-  //   cognitoSub: string,
-  //   updateData: Partial<User>,
-  // ): Promise<ResponseUpdateUserDTO | null> {
-  //   try {
-  //     return UserModel.findOneAndUpdate(
-  //       { cognitoSub },
-  //       { $set: { propertyId: updateData}  },
-  //       { new: true },
-  //     ).exec();
-  //   } catch (error: any) {
-  //     throw error;
-  //   }
-  // }
 
   public async updateUserByCognitoSub(
     cognitoSub: string,
     updateData: Partial<User>,
   ): Promise<ResponseUpdateUserDTO | null> {
     try {
-      return UserModel.findOneAndUpdate(
+      console.log("Updating user with cognitoSub:", cognitoSub);
+      console.log("Update data:", updateData);
+  
+      const updatedUser = await UserModel.findOneAndUpdate(
         { cognitoSub },
-        { $set: updateData }, // Update only the necessary fields
+        { $set: updateData },
         { new: true },
       ).exec();
-    } catch (error: any) {
+  
+      if (!updatedUser) {
+        throw new NotFoundError("User not found for update.");
+      }
+  
+      console.log("Database successfully updated user:", updatedUser);
+  
+      return updatedUser;
+    } catch (error) {
+      console.error("Error in updateUserByCognitoSub:", error);
       throw error;
     }
-  }
+  }  
+
   public async findUserFavorites(cognitoSub: string): Promise<any[]> {
     try {
       const user = await UserModel.findOne({ cognitoSub }).select("favorite").lean();

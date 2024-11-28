@@ -366,4 +366,15 @@ public async findNearbyProperties(
   }
 }
 
+  /**
+   * This method use for responses only category 
+   */
+  @Get("/properties/category")
+  public async getCategories(){
+    try {
+      return await this.propertyService.getCategories();
+    } catch (error) {
+      throw error;
+    }
+  }
 }
