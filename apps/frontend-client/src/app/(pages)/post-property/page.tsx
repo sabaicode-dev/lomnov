@@ -343,8 +343,6 @@ function Page() {
         {showPopup && (
           <div className="shadow mx-auto fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center ">
             <div className="bg-white p-6 rounded-lg shadow-lg relative">
-             
-
               {/* Content */}
               <div className="p-6 pt-0 text-center">
                 <svg
@@ -388,8 +386,6 @@ function Page() {
         {showPopupCreate && (
           <div className="shadow mx-auto fixed  inset-0 bg-black bg-opacity-50 flex items-center justify-center ">
             <div className="bg-white p-6 rounded-lg shadow-lg relative w-[80%]">
-
-
               {/* Content */}
 
               <svg
@@ -493,7 +489,7 @@ function Page() {
               {/* Content */}
               <div className="p-6 pt-0 text-center">
                 <svg
-                  className="w-30 h-30 text-red-600 mx-auto "
+                  className="w-[110px] h-[110px] text-red-600 mx-auto "
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
