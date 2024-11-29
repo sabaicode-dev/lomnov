@@ -13,6 +13,12 @@ declare global {
   }
 }
 
+declare module 'express' {
+  export interface Request {
+    routeConfig?: any; // Use the appropriate type for `routeConfig` instead of `any`
+  }
+}
+
 const verifier = CognitoJwtVerifier.create({
   tokenUse: "access",
   userPoolId: configs.awsCognitoUserPoolId,

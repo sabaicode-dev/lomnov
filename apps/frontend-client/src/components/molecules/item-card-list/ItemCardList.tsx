@@ -66,7 +66,7 @@ const PropertyList = () => {
             disabled={currentPage === 1}
             className="disabled:opacity-50 "
           >
-             <ArrowLeftCycle clasName="size-8 	font-weight: 300 text-olive-drab rotate-90"/>
+             <ArrowLeftCycle className="size-8 	font-weight: 300 text-olive-drab rotate-90"/>
           </button>
           {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((page) => (
             <button
@@ -85,7 +85,7 @@ const PropertyList = () => {
             className="disabled:opacity-50"
           >
            
-             <ArrowRightCycle clasName="size-8	 text-olive-drab rotate-180"/>
+             <ArrowRightCycle className="size-8	 text-olive-drab rotate-180"/>
           </button>
         </div>
       )}

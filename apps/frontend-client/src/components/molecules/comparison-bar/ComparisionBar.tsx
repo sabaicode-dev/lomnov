@@ -5,9 +5,10 @@ import Image from "next/image";
 
 interface ComparisonBarProps {
   selectedItems: RealEstateItem[];
+  onCompare: () => void; // Function to handle comparison navigation
 }
 
-const ComparisonBar = ({ selectedItems }: ComparisonBarProps) => {
+const ComparisonBar = ({ selectedItems, onCompare }: ComparisonBarProps) => {
   return (
     <>
       {selectedItems.length > 0 && (
@@ -17,17 +18,21 @@ const ComparisonBar = ({ selectedItems }: ComparisonBarProps) => {
           </p>
           <div className="flex space-x-4">
             {selectedItems.map((item) => (
-              <div key={item.id} className="w-24 h-24 relative">
+              <div key={item._id} className="w-24 h-24 relative">
                 <Image
                   src={item.thumbnail}
-                  alt={item.title}
+                  alt={item.title[0].content}
                   layout="fill"
                   objectFit="cover"
                 />
               </div>
             ))}
           </div>
-          <button className="ml-auto bg-green-500 text-white p-2 rounded">
+          <button
+            className="ml-auto bg-green-500 text-white p-2 rounded"
+            onClick={onCompare} // Trigger the comparison action
+            disabled={selectedItems.length !== 2} // Disable if not exactly 2 properties are selected
+          >
             Compare
           </button>
         </div>
