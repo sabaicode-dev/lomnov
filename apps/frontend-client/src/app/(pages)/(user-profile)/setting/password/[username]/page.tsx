@@ -10,7 +10,7 @@ import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 async function fetchUserDetails(username: string) {
   try{
     const res = await axiosInstance.get(
-      `${API_ENDPOINTS.USER}?username=${username}`
+      `${API_ENDPOINTS.USER}?userName=${username}`
     );
     if (res.status !== 200) {
       throw new Error("Failed to fetch user details");

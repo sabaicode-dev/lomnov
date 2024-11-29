@@ -4,8 +4,9 @@ import React, { useState, useEffect } from "react";
 import { User } from "@/libs/types/user-types/user";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import { UserProfileHeaderProps } from "@/components/molecules/user-profile-header/UserProfileHeader";
 
-const GeneralInfoForm = ({ user }: { user: User }) => {
+const GeneralInfoForm = ({ user }: UserProfileHeaderProps) => {
   const initialFormData = {
     userName: user.userName,
     firstName: user.firstName,
