@@ -32,6 +32,99 @@
 				"type": "object",
 				"description": "Construct a type with a set of properties K of type T"
 			},
+			"IProperty": {
+				"properties": {
+					"_id": {
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
+					"coordinate": {
+						"properties": {
+							"coordinates": {
+								"items": {
+									"type": "number",
+									"format": "double"
+								},
+								"type": "array"
+							},
+							"type": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"coordinates",
+							"type"
+						],
+						"type": "object"
+					},
+					"cognitoSub": {
+						"type": "string"
+					},
+					"title": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"description": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"thumbnail": {
+						"type": "string"
+					},
+					"images": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"urlmap": {
+						"type": "string"
+					},
+					"address": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"location": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"category": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"transition": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"detail": {
+						"$ref": "#/components/schemas/Record_string.any_"
+					},
+					"status": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"_id",
+					"coordinate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ResponseCreatePropertyDTO": {
 				"properties": {
 					"_id": {
@@ -97,6 +190,12 @@
 					},
 					"status": {
 						"type": "boolean"
+					},
+					"condanate": {
+						"items": {
+							"$ref": "#/components/schemas/IProperty"
+						},
+						"type": "array"
 					}
 				},
 				"required": [
@@ -218,6 +317,12 @@
 					},
 					"status": {
 						"type": "boolean"
+					},
+					"condanate": {
+						"items": {
+							"$ref": "#/components/schemas/IProperty"
+						},
+						"type": "array"
 					}
 				},
 				"required": [
@@ -1119,9 +1224,70 @@
 				]
 			}
 		},
+<<<<<<< HEAD
+		"/api/v1/properties/{propertyId}/coordinates": {
+			"post": {
+				"operationId": "AddCoordinatesToProperty",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponsePropertyDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "propertyId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"lng": {
+										"type": "number",
+										"format": "double"
+									},
+									"lat": {
+										"type": "number",
+										"format": "double"
+									}
+								},
+								"required": [
+									"lng",
+									"lat"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/properties/nearby": {
+			"get": {
+				"operationId": "FindNearbyProperties",
+=======
 		"/api/v1/properties/category": {
 			"get": {
 				"operationId": "GetCategories",
+>>>>>>> 14ea7f868edeb48ba2cf572b707bf381041246da
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -1129,7 +1295,11 @@
 							"application/json": {
 								"schema": {
 									"items": {
+<<<<<<< HEAD
+										"$ref": "#/components/schemas/ResponsePropertyDTO"
+=======
 										"$ref": "#/components/schemas/ResponseCategoriesDTO"
+>>>>>>> 14ea7f868edeb48ba2cf572b707bf381041246da
 									},
 									"type": "array"
 								}
@@ -1137,12 +1307,60 @@
 						}
 					}
 				},
+<<<<<<< HEAD
+=======
 				"description": "This method use for responses only category",
+>>>>>>> 14ea7f868edeb48ba2cf572b707bf381041246da
 				"tags": [
 					"Property Service"
 				],
 				"security": [],
+<<<<<<< HEAD
+				"parameters": [
+					{
+						"in": "query",
+						"name": "lat",
+						"required": false,
+						"schema": {
+							"default": 0,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "lng",
+						"required": false,
+						"schema": {
+							"default": 0,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "maxDistance",
+						"required": false,
+						"schema": {
+							"default": 1000,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+=======
 				"parameters": []
+>>>>>>> 14ea7f868edeb48ba2cf572b707bf381041246da
 			}
 		}
 	},

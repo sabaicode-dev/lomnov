@@ -1,7 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { TsoaRoute, fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
+import type { TsoaRoute } from '@tsoa/runtime';
+import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { PropertyController } from './../../controllers/property.controller';
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
@@ -32,6 +33,28 @@ const models: TsoaRoute.Models = {
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{},"additionalProperties":{"dataType":"any"},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IProperty": {
+        "dataType": "refObject",
+        "properties": {
+            "_id": {"ref":"mongoose.Types.ObjectId","required":true},
+            "coordinate": {"dataType":"nestedObjectLiteral","nestedProperties":{"coordinates":{"dataType":"array","array":{"dataType":"double"},"required":true},"type":{"dataType":"string","required":true}},"required":true},
+            "cognitoSub": {"dataType":"string"},
+            "title": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"}},
+            "description": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"}},
+            "thumbnail": {"dataType":"string"},
+            "images": {"dataType":"array","array":{"dataType":"string"}},
+            "urlmap": {"dataType":"string"},
+            "address": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"}},
+            "location": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"}},
+            "price": {"dataType":"double"},
+            "category": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"}},
+            "transition": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"}},
+            "detail": {"ref":"Record_string.any_"},
+            "status": {"dataType":"boolean"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ResponseCreatePropertyDTO": {
         "dataType": "refObject",
         "properties": {
@@ -49,6 +72,7 @@ const models: TsoaRoute.Models = {
             "transition": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"},"required":true},
             "detail": {"ref":"Record_string.any_"},
             "status": {"dataType":"boolean"},
+            "condanate": {"dataType":"array","array":{"dataType":"refObject","ref":"IProperty"}},
         },
         "additionalProperties": false,
     },
@@ -89,6 +113,7 @@ const models: TsoaRoute.Models = {
             "transition": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"},"required":true},
             "detail": {"ref":"Record_string.any_"},
             "status": {"dataType":"boolean"},
+            "condanate": {"dataType":"array","array":{"dataType":"refObject","ref":"IProperty"}},
         },
         "additionalProperties": false,
     },
@@ -161,7 +186,15 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
     
         app.post('/api/v1/properties',
-            upload.fields([{"name":"thumbnail","maxCount":1,"multiple":false},{"name":"images","multiple":true}]),
+            upload.fields([
+                {
+                    name: "thumbnail",
+                    maxCount: 1
+                },
+                {
+                    name: "images",
+                }
+            ]),
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.createProperty)),
 
@@ -318,7 +351,15 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/v1/properties/me/:propertyId',
-            upload.fields([{"name":"thumbnail","maxCount":1,"multiple":false},{"name":"images","multiple":true}]),
+            upload.fields([
+                {
+                    name: "thumbnail",
+                    maxCount: 1
+                },
+                {
+                    name: "images",
+                }
+            ]),
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.updateProperty)),
 
@@ -483,12 +524,23 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+<<<<<<< HEAD
+        app.post('/api/v1/properties/:propertyId/coordinates',
+            ...(fetchMiddlewares<RequestHandler>(PropertyController)),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.addCoordinatesToProperty)),
+
+            async function PropertyController_addCoordinatesToProperty(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
+                    coordinates: {"in":"body","name":"coordinates","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"lng":{"dataType":"double","required":true},"lat":{"dataType":"double","required":true}}},
+=======
         app.get('/api/v1/properties/category',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.getCategories)),
 
             async function PropertyController_getCategories(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
+>>>>>>> 14ea7f868edeb48ba2cf572b707bf381041246da
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -500,7 +552,44 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                 const controller = new PropertyController();
 
               await templateService.apiHandler({
+<<<<<<< HEAD
+                methodName: 'addCoordinatesToProperty',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/api/v1/properties/nearby',
+            ...(fetchMiddlewares<RequestHandler>(PropertyController)),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.findNearbyProperties)),
+
+            async function PropertyController_findNearbyProperties(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    lat: {"default":0,"in":"query","name":"lat","dataType":"double"},
+                    lng: {"default":0,"in":"query","name":"lng","dataType":"double"},
+                    maxDistance: {"default":1000,"in":"query","name":"maxDistance","dataType":"double"},
+                    limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new PropertyController();
+
+              await templateService.apiHandler({
+                methodName: 'findNearbyProperties',
+=======
                 methodName: 'getCategories',
+>>>>>>> 14ea7f868edeb48ba2cf572b707bf381041246da
                 controller,
                 response,
                 next,
