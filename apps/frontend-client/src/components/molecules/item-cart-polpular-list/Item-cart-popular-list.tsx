@@ -1,6 +1,5 @@
-
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import PropertyCardWithModal from "../item-cart-popluar/Item-cart-popular";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
@@ -41,7 +40,7 @@ function ItemCardPopularList() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = async (page: number) => {
+  const fetchData = useCallback(async (page: number) => {
     setLoading(true);
     setError(null);
 
@@ -56,12 +55,12 @@ function ItemCardPopularList() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchParams, address]); // Add dependencies to useCallback
 
   // Fetch data on mount or when address query changes
   useEffect(() => {
     fetchData(1);
-  }, [address]); // Re-fetch data when the address query changes
+  }, [fetchData]); // Use fetchData in the dependency array
 
   const handlePageChange = (page: number) => {
     if (page !== pagination.currentPage) {

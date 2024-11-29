@@ -19,7 +19,7 @@ const isServer = typeof window === 'undefined';
 async function getServerCookies(): Promise<string | undefined> {
   if (isServer) {
     const { cookies } = (await import("next/headers"));
-    console.log(cookies);
+    // console.log(cookies);
 
     const cookieStore = cookies();
     return cookieStore.getAll().map(cookie => `${cookie.name}=${cookie.value}`).join('; ');
@@ -38,13 +38,13 @@ async function refreshToken(): Promise<{ accessToken: string; idToken: string }>
     }
     );
 
-    console.log('response::: ', response.data)
+    // console.log('response::: ', response.data)
 
     const { accessToken, idToken } = extractTokensFromResponse(response);
     return { accessToken, idToken };
 
   } catch (error) {
-    console.error("Error refreshing token:", error);
+    // console.error("Error refreshing token:", error);
     throw error;
   }
 }
@@ -77,12 +77,12 @@ function extractTokensFromResponse(response: AxiosResponse): { accessToken: stri
 axiosInstance.interceptors.response.use(
   (response) => response,
   async function (error) {
-    console.log(error);
+    // console.log(error);
     
     const { response, config: originalRequest } = error;
-    console.log('2.:::', response)
+    // console.log('2.:::', response)
     const status = response?.status;
-    console.log('1.:::', status)
+    // console.log('1.:::', status)
     // 1.
     if (status === 401 && !originalRequest._retry) {
       // 1.1

@@ -4,9 +4,10 @@ import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import ItemCard from "@/components/molecules/item-card/ItemCard";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import Loading from "@/components/atoms/loading/Loading";
 const SavedProperties = () => {
   const [savedProperties, setSavedProperties] = useState<RealEstateItem[]>([]);
-  const [loading,setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     // Fetch saved properties for the user
     async function fetchSavedPropertiesID() {
@@ -30,7 +31,7 @@ const SavedProperties = () => {
     async function fetchFavouriteProperties() {
       try {
         const favoritesId = await fetchSavedPropertiesID();
-        console.log(favoritesId);
+        // console.log(favoritesId);
         if (favoritesId) {
           const favItemReponses = await axiosInstance.get(`${API_ENDPOINTS.MY_PROPERTY}?fav_me=${favoritesId}`);
           if (favItemReponses.status === 200) {
@@ -39,17 +40,19 @@ const SavedProperties = () => {
         }
       } catch (error) {
         throw error;
-      }finally{
+      } finally {
         setLoading(false);
       }
     }
     fetchFavouriteProperties();
   }, []);
-  if(loading) return <p className="text-center">loading properties...</p>
+
   return (
     <div className="max-w-[1300px] mx-auto">
       <div className="grid mt-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5 2xl:gap-5">
-        {savedProperties.length > 0 ? (
+        {loading ? (<div className="w-[1300px] flex items-center justify-center">
+          <Loading />
+        </div>) : savedProperties.length > 0 ? (
           savedProperties.map((property) => (
             <ItemCard favourited={true} key={property._id} item={property} />
           ))

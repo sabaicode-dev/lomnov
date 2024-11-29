@@ -10,21 +10,28 @@ import UserProfileHeader from "@/components/molecules/user-profile-header/UserPr
 import ListedProperties from "@/components/organisms/listed-properties/ListedProperties";
 
 async function fetchUserDetails(username: string): Promise<User | null> {
+  //console.log("Fetching user details for username:", username);
+
   try {
-    const res = await axiosInstance.get(`${API_ENDPOINTS.USER}?username=${encodeURIComponent(username)}`);
+    const res = await axiosInstance.get(`${API_ENDPOINTS.USER}?userName=${username}`);
+    // console.log(res.data);
+
     return res.data.users[0] || null;
-  } catch {
+  } catch (error) {
+    // console.error("Error fetching user details:", error);
     return null;
   }
 }
 
 const ProfilePage = async ({ params }: { params: { username: string } }) => {
   const { username } = params;
-  //console.log(username);
-  
+
+  // No need to encode the username
+  //console.log("Username from params:", username);
+
   const user = await fetchUserDetails(username);
-  //console.log("User Profiles:::: ,",user);
-  
+  //console.log("Fetched User:", user);
+
   if (!user) {
     return <div>User not found</div>; // Render a message if user data is not found
   }
@@ -33,7 +40,7 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
     <Layout>
       <div>
         <UserProfileHeader user={user} />
-        <ListedProperties  />   
+        <ListedProperties />
       </div>
     </Layout>
   );

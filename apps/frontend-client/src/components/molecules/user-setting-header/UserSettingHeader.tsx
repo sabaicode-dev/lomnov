@@ -13,8 +13,6 @@ import getCroppedImg from '@/libs/cropImage';
 
 interface UserSittingHeaderProps {
   user: User;
-  userName: String;
-  createdAt: String;
 }
 
 const formatDate = (dateString?: string): string => {

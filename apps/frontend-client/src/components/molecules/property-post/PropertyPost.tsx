@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, forwardRef, useImperativeHandle } from "react";
 
 interface Option {
   name: string;
@@ -17,9 +17,9 @@ const properties = [
   { name: "Shop" },
 ];
 
-const PropertyPost: React.FC<PropertyPostProps> = ({ onChange }) => {
+const PropertyPost = forwardRef((props: PropertyPostProps, ref) => {
   const [selectedOption, setSelectedOption] = useState<Option | null>(null);
-  const [error, setError] = useState<string | null>(null); // State for error handling
+  const [error, setError] = useState<string | null>(null);
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedName = event.target.value;
@@ -27,24 +27,25 @@ const PropertyPost: React.FC<PropertyPostProps> = ({ onChange }) => {
     if (selected) {
       setSelectedOption(selected);
       setError(null); // Clear the error if a valid option is selected
-      onChange(selected); // Trigger the parent's onChange handler
+      props.onChange(selected); // Trigger the parent's onChange handler
     }
   };
 
-  const validate = () => {
-    if (!selectedOption) {
-      setError("Please select a property type.");
-      return false;
-    }
-    return true;
-  };
+  // Expose validate method via ref
+  useImperativeHandle(ref, () => ({
+    validate: () => {
+      if (!selectedOption) {
+        setError("Please select a property type.");
+        return false;
+      }
+      return true;
+    },
+    getSelectedOption: () => selectedOption,
 
-  const handleSubmit = () => {
-    if (validate()) {
-      console.log("Property type selected:", selectedOption?.name);
-      setError(null); // Clear the error on successful submission
-    }
-  };
+    reset() {
+      setSelectedOption(null);
+    },
+  }));
 
   return (
     <div>
@@ -52,31 +53,25 @@ const PropertyPost: React.FC<PropertyPostProps> = ({ onChange }) => {
         name="propertyType"
         id="propertyType"
         className={`border-[2px] rounded-lg w-full px-5 py-3 mt-2 mb-4 cursor-pointer ${
-          error ? "border-red-500" : "border-gray-400"
+          error ? "border-red-400" : "border-gray-400"
         }`}
         value={selectedOption?.name || ""}
         onChange={handleOptionChange}
       >
-        <option value="" disabled className="text-gray-300">
+        <option value="" disabled>
           Select a property type
         </option>
         {properties.map((option, index) => (
-          <option key={index} value={option.name} className="cursor-pointer">
+          <option key={index} value={option.name}>
             {option.name}
           </option>
         ))}
       </select>
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-
-      {/* <button
-        type="button"
-        onClick={handleSubmit}
-        className="mt-4 text-white bg-blue-700 hover:bg-blue-800 rounded-lg px-4 py-2"
-      >
-        Submit
-      </button> */}
+      {error && <p className="text-red-400 text-sm mt-1">{error}</p>}
     </div>
   );
-};
+});
+
+PropertyPost.displayName = "PropertyPost"; // Required for forwardRef
 
 export default PropertyPost;
