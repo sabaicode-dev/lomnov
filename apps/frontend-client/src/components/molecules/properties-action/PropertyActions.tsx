@@ -18,21 +18,21 @@ const PropertyActions: React.FC<PropertyActionsProps> = ({
   return (
     <div className="flex justify-end space-x-[10px] items-center font-helvetica text-helvetica-paragraph text-charcoal font-bold">
       <Link
-        className="py-[5px] px-[25px] rounded-[10px] bg-green-500 hover:bg-green-500 transition-all duration-150 ease-in-out hover:scale-105 active:scale-95  "
+        className="py-[5px] px-[25px] rounded-[5px] bg-olive-green text-white   "
         href={"/post-property"}
         // onClick={onPost}
       >
         Post
       </Link>
       <button
-        className="py-[5px] px-[25px] rounded-[8px] bg-neutral"
+        className="py-[5px] px-[25px] rounded-[5px] bg-[#BCBCB3]"
         onClick={onUpdate}
         disabled={selectedProperties.length !== 1}
       >
         Update
       </button>
       <button
-        className="py-[5px] px-[25px] rounded-[8px] bg-beige border border-pale-gray"
+        className="py-[5px] px-[25px] rounded-[5px] bg-[#E5D2B0] border border-pale-gray"
         onClick={onDelete}
         disabled={selectedProperties.length === 0}
       >

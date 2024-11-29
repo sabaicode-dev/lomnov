@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from "react";
+'use client'
+import React, { useState, useCallback, useEffect } from "react";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import ItemCard from "@/components/molecules/item-card/ItemCard";
 import banner from "@/images/banner.png";
@@ -40,7 +40,7 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = async (page: number) => {
+  const fetchData = useCallback(async (page: number) => {
     setLoading(true);
     setError(null);
 
@@ -58,12 +58,12 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
     } finally {
       setLoading(false);
     }
-  };
-
-  // Fetch data on mount
-  React.useEffect(() => {
-    fetchData(1);
   }, [searchParams]);
+
+  // Fetch data on mount or when searchParams change
+  useEffect(() => {
+    fetchData(1);
+  }, [searchParams, fetchData]);
 
   const handlePageChange = (page: number) => {
     if (page !== pagination.currentPage) {
