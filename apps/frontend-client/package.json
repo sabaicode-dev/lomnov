@@ -34,6 +34,7 @@
     "react-is": "^18.3.1",
     "react-loading-skeleton": "^3.4.0",
     "react-modal": "^3.16.1",
+    "react-rte": "^0.16.5",
     "react-spring": "^9.7.4",
     "sst": "^2.43.1",
     "zod": "^3.23.8"
@@ -54,6 +55,7 @@
     "@types/react-dom": "^18",
     "@types/react-is": "^18",
     "@types/react-modal": "^3",
+    "@types/react-rte": "^0",
     "aws-cdk-lib": "2.142.1",
     "constructs": "10.3.0",
     "eslint": "^8",
