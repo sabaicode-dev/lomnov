@@ -63,7 +63,7 @@ const ItemCard = ({ item, flexRow, favourited }: ItemCardProps) => {
   const address = item.address[0]?.content || "No address available.";
 
   return (
-    <div className={flexRow ? "flex w-full h-[150px] gap-3 rounded-[20px] overflow-hidden shadow-md bg-white border-[1px] border-neutral p-4" : "w-full h-[380px] rounded-[20px] overflow-hidden shadow-md flex flex-col gap-5 bg-white border-[1px] border-neutral p-4"}>
+    <div className={flexRow ? "flex w-full h-[150px] gap-3 rounded-[20px] overflow-hidden shadow-md bg-white border-[1px] border-neutral p-4" : "w-full h-[380px] rounded-[20px] overflow-hidden shadow-md flex flex-col gap-5 bg-white border-[1px] border-neutral p-4 mb-4"}>
       <div className={flexRow ? "bg-olive-green w-[50%] relative overflow-hidden rounded-[15px] hover:transition-all duration-1000 ease-out" : "w-full h-[65%] relative overflow-hidden bg-olive-green rounded-[15px] hover:transition-all duration-1000 ease-out"}>
         <Link href={`/detail/${item._id}`} className="absolute w-full h-full rounded-[10px] overflow-hidden transition-transform duration-300 transform hover:scale-110">
           <div className="group absolute left-0 top-0 w-full h-full hover:bg-[#00000033] z-2 transition duration-300"></div>
