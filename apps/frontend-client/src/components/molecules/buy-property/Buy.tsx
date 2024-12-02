@@ -1,32 +1,30 @@
-
-
-//============================
-
 'use client';
 
 import React, { useEffect, useState } from "react";
 import ItemCard from "../item-card/ItemCard";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
-import { useProperties } from "@/context/property"; // Updated context
+import { useProperties } from "@/context/property";
 import ArrowLeftCycle from "@/icons/Arrow";
 import ArrowRightCycle from "@/icons/Arrowup";
 import Loading from "@/components/atoms/loading/Loading";
+import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar"; 
 
 const BuyProperty = () => {
   const { properties, loading, error, fetchProperties, pagination } = useProperties();
   const [currentPage, setCurrentPage] = useState(1);
   const [items, setItems] = useState<RealEstateItem[]>([]);
 
-  // Fetch properties with debounce to avoid multiple requests
+  // Comparison state
+  const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([]);
+
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      fetchProperties({ page: currentPage, limit: 24 }); // Ensure the limit matches your backend setup
-    }, 500); // Reduced debounce to make it more responsive
+      fetchProperties({ page: currentPage, limit: 24 });
+    }, 500);
 
-    return () => clearTimeout(delayDebounce); // Cleanup timeout
+    return () => clearTimeout(delayDebounce);
   }, [currentPage, fetchProperties]);
 
-  // Update local items whenever properties from context are updated
   useEffect(() => {
     if (!loading && properties) {
       setItems(properties);
@@ -35,27 +33,45 @@ const BuyProperty = () => {
 
   const handlePageChange = (page: number) => {
     if (page !== currentPage) {
-      setCurrentPage(page); // Update the current page
+      setCurrentPage(page);
     }
   };
 
-  //   const filteredProvinces = provinces.filter((province) => province.name === "Kep");
   const filterPropertyBuy = items.filter((data) =>
     data.transition.some((t) => t.content === "For Sale")
   );
 
-
-
-  //create stitch
+  // toggleCompare function to add or remove items from comparison
+  const toggleCompare = (item: RealEstateItem[]) => {
+    console.log("Item:: ", item);
+    setSelectedItems((prevState) => {
+      const updatedState = [...prevState];
+      item.forEach((newItem) => {
+        const isSelected = updatedState.some((selectedItem) => selectedItem._id === newItem._id);
+        if (isSelected) {
+          updatedState.splice(updatedState.findIndex((selectedItem) => selectedItem._id === newItem._id), 1); // Remove if already selected
+        } else {
+          updatedState.push(newItem);
+        }
+      });
+      return updatedState;
+    });
+  };
 
   return (
     <div>
+      {/* Comparison Bar at the top */}
+      <ComparisonBar selectedItems={selectedItems} toggleCompare={toggleCompare} /> {/* Show comparison bar */}
+
       {error && <p>{error}</p>}
       {!loading && filterPropertyBuy.length > 0 ? (
         <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
-          {filterPropertyBuy.map((item) => (
-            <ItemCard key={item._id} item={item} />
-          ))}
+          {filterPropertyBuy.map((item) => {
+            const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
+            return (
+              <ItemCard key={item._id} item={item} toggleCompare={toggleCompare} isSelected={isSelected} />
+            );
+          })}
         </div>
       ) : (
         <div className="w-[1300px] flex items-center justify-center">
@@ -69,16 +85,15 @@ const BuyProperty = () => {
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="disabled:opacity-50 "
+            className="disabled:opacity-50"
           >
-            <ArrowLeftCycle clasName="size-8 	font-weight: 300 text-olive-drab rotate-90" />
+            <ArrowLeftCycle className="size-8 font-weight: 300 text-olive-drab rotate-90" />
           </button>
           {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map((page) => (
             <button
               key={page}
               onClick={() => handlePageChange(page)}
-              className={`px-3 py-1 border rounded-full ${page === currentPage ? "bg-olive-drab text-white font-weight: 500" : "bg-white text-olive-drab"
-                }`}
+              className={`px-3 py-1 border rounded-full ${page === currentPage ? "bg-olive-drab text-white font-weight: 500" : "bg-white text-olive-drab"}`}
             >
               {page}
             </button>
@@ -88,8 +103,7 @@ const BuyProperty = () => {
             disabled={currentPage === pagination.totalPages}
             className="disabled:opacity-50"
           >
-
-            <ArrowRightCycle clasName="size-8	 text-olive-drab rotate-180" />
+            <ArrowRightCycle className="size-8 text-olive-drab rotate-180" />
           </button>
         </div>
       )}
