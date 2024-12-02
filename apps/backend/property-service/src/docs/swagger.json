@@ -1224,7 +1224,6 @@
 				]
 			}
 		},
-<<<<<<< HEAD
 		"/api/v1/properties/{propertyId}/coordinates": {
 			"post": {
 				"operationId": "AddCoordinatesToProperty",
@@ -1283,11 +1282,6 @@
 		"/api/v1/properties/nearby": {
 			"get": {
 				"operationId": "FindNearbyProperties",
-=======
-		"/api/v1/properties/category": {
-			"get": {
-				"operationId": "GetCategories",
->>>>>>> 14ea7f868edeb48ba2cf572b707bf381041246da
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -1295,11 +1289,7 @@
 							"application/json": {
 								"schema": {
 									"items": {
-<<<<<<< HEAD
 										"$ref": "#/components/schemas/ResponsePropertyDTO"
-=======
-										"$ref": "#/components/schemas/ResponseCategoriesDTO"
->>>>>>> 14ea7f868edeb48ba2cf572b707bf381041246da
 									},
 									"type": "array"
 								}
@@ -1307,15 +1297,10 @@
 						}
 					}
 				},
-<<<<<<< HEAD
-=======
-				"description": "This method use for responses only category",
->>>>>>> 14ea7f868edeb48ba2cf572b707bf381041246da
 				"tags": [
 					"Property Service"
 				],
 				"security": [],
-<<<<<<< HEAD
 				"parameters": [
 					{
 						"in": "query",
@@ -1358,9 +1343,32 @@
 						}
 					}
 				]
-=======
+			}
+		},
+		"/api/v1/properties/category": {
+			"get": {
+				"operationId": "GetCategories",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResponseCategoriesDTO"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "This method use for responses only category",
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
 				"parameters": []
->>>>>>> 14ea7f868edeb48ba2cf572b707bf381041246da
 			}
 		}
 	},
