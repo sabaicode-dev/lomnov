@@ -6,7 +6,9 @@ import ItemCard from "@/components/molecules/item-card/ItemCard";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar"; 
+import { toggleCompare } from "@/libs/const/toggleCompare";
 
+import Loading from "@/components/atoms/loading/Loading";
 const SavedProperties = () => {
   const [savedProperties, setSavedProperties] = useState<RealEstateItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -52,38 +54,36 @@ const SavedProperties = () => {
 
   if (loading) return <p className="text-center">Loading properties...</p>;
 
-  // toggleCompare function to add or remove items from comparison
-  const toggleCompare = (item: RealEstateItem[]) => {
-    setSelectedItems((prevState) => {
-      const updatedState = [...prevState];
-      item.forEach((newItem) => {
-        const isSelected = updatedState.some((selectedItem) => selectedItem._id === newItem._id);
-        if (isSelected) {
-          updatedState.splice(updatedState.findIndex((selectedItem) => selectedItem._id === newItem._id), 1); // Remove if already selected
-        } else {
-          updatedState.push(newItem); // Add if not selected
-        }
-      });
-      return updatedState;
-    });
-  };
+ // Handle comparison toggling using the imported toggleCompare function
+ const handleToggleCompare = (items: RealEstateItem[]) => {
+  toggleCompare(items, selectedItems, setSelectedItems);
+};
 
   return (
     <div className="max-w-[1300px] mx-auto">
       {/* Comparison Bar at the top */}
-      <ComparisonBar selectedItems={selectedItems} toggleCompare={toggleCompare} /> {/* Show comparison bar */}
+      <ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems} /> {/* Show comparison bar */}
 
       <div className="grid mt-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5 2xl:gap-5">
-        {savedProperties.length > 0 ? (
-          savedProperties.map((property) => (
-            <ItemCard
-              favourited={true}
-              key={property._id}
-              item={property}
-              toggleCompare={toggleCompare}
-              isSelected={selectedItems.some((selectedItem) => selectedItem._id === property._id)} // Mark if selected
-            />
-          ))
+        {loading ? (<div className="w-[1300px] flex items-center justify-center">
+          <Loading />
+        </div>) : savedProperties.length > 0 ? (
+          savedProperties.map((property) => {
+            const isSelected = selectedItems.some((selectedItem) => selectedItem._id === property._id);
+            return (
+
+              <ItemCard
+                favourited={true}
+                key={property._id}
+                item={property}
+                toggleCompare={() => handleToggleCompare([property])}
+                isSelected={selectedItems.some((selectedItem) => selectedItem._id === property._id)}
+                disabled={selectedItems.length >= 2 && !isSelected}
+              />
+            )
+
+          }
+          )
         ) : (
           <p>No saved properties found.</p>
         )}

@@ -8,6 +8,7 @@ import ArrowLeftCycle from "@/icons/Arrow";
 import ArrowRightCycle from "@/icons/Arrowup";
 import Loading from "@/components/atoms/loading/Loading";
 import ComparisonBar from "../comparison-bar/ComparisionBar";
+import { toggleCompare } from "@/libs/const/toggleCompare";
 
 const RentPropertyList = () => {
   const { properties, loading, error, fetchProperties, pagination } = useProperties();
@@ -44,20 +45,11 @@ const RentPropertyList = () => {
     data.transition.some((t) => t.content === "For Rent")
   );
 
-  // toggleCompare function to add or remove items from comparison
-  const toggleCompare = (item: RealEstateItem[]) => {
-    setSelectedItems((prevState) => {
-      const updatedState = [...prevState];
-      item.forEach((newItem) => {
-        const isSelected = updatedState.some((selectedItem) => selectedItem._id === newItem._id);
-        if (isSelected) {
-          updatedState.splice(updatedState.findIndex((selectedItem) => selectedItem._id === newItem._id), 1); // Remove if already selected
-        } else {
-          updatedState.push(newItem); // Add if not selected
-        }
-      });
-      return updatedState;
-    });
+  // Handle comparison toggling using the imported toggleCompare function
+  const handleToggleCompare = (items: RealEstateItem[]) => {
+    console.log("item details:: ", items);
+    
+    toggleCompare(items, selectedItems, setSelectedItems);
   };
 
   return (
@@ -65,10 +57,10 @@ const RentPropertyList = () => {
       {error && <p>{error}</p>}
       {!loading && filterPropertyRent.length > 0 ? (
         <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
-          {filterPropertyRent.map((item) => {
+          {filterPropertyRent.map((item) => {            
             const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
             return (
-              <ItemCard key={item._id} item={item} toggleCompare={toggleCompare} isSelected={isSelected} />
+              <ItemCard key={item._id} item={item} toggleCompare={()=> handleToggleCompare([item])} isSelected={isSelected}disabled={selectedItems.length >= 2 && !isSelected} />
             );
           })}
         </div>
@@ -79,7 +71,7 @@ const RentPropertyList = () => {
       )}
 
       {/* Render the ComparisonBar */}
-      <ComparisonBar selectedItems={selectedItems} toggleCompare={toggleCompare} />
+      <ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems} />
 
       {/* Pagination Controls */}
       {pagination && pagination.totalPages > 1 && (

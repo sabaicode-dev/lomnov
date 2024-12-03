@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 interface ComparisonBarProps {
   selectedItems: RealEstateItem[];
-  toggleCompare: (id: RealEstateItem[]) => void; 
+  toggleCompare: (selectedItems: RealEstateItem[]) => void;
 }
 
 const ComparisonBar = ({ selectedItems, toggleCompare }: ComparisonBarProps) => {
@@ -16,9 +16,11 @@ const ComparisonBar = ({ selectedItems, toggleCompare }: ComparisonBarProps) => 
   const message =
     selectedItems.length === 0
       ? `Select 2 properties to compare`
-      : selectedItems.length > 2
-      ? `Select only 2 properties to compare`
-      : `Select ${selectedItems.length} properties to compare`;
+      : selectedItems.length < 2
+      ? `Select ${selectedItems.length} more properties to compare`
+      : `Select "Compare" Button to compare`
+      // : selectedItems.length >= 2 
+      // ? `Select Compare Button to compare`
 
   // Dynamic classes based on selection count
   const messageClass = selectedItems.length > 2 ? "text-red-500" : "text-gray-700";
@@ -26,7 +28,7 @@ const ComparisonBar = ({ selectedItems, toggleCompare }: ComparisonBarProps) => 
   // Remove selected property
   const handleRemoveProperty = (id: string) => {
     const updatedItems = selectedItems.filter((item) => item._id !== id);
-    toggleCompare(updatedItems); 
+    toggleCompare(updatedItems);  // Pass the updated items to toggleCompare
   };
 
   // Handle compare button click to navigate to comparison page
@@ -41,10 +43,10 @@ const ComparisonBar = ({ selectedItems, toggleCompare }: ComparisonBarProps) => 
     <>
       {selectedItems.length > 0 && (
         <div className="fixed bottom-0 left-0 right-0 bg-gray-100 p-4 flex items-center z-50 shadow-lg justify-between">
-          <p className={`text-sm ${messageClass}`}>{message}</p>
+          <p className={`pl-[350px] text-lg ${messageClass}`}>{message}</p>
 
           {/* Selected items */}
-          <div className="flex items-center space-x-4 overflow-x-auto">
+          <div className="w-[1300px] flex items-center space-x-4 overflow-x-auto">
             {selectedItems.map((item) => (
               <div key={item._id} className="relative w-24 h-24 rounded-md overflow-hidden">
                 <img
@@ -62,16 +64,15 @@ const ComparisonBar = ({ selectedItems, toggleCompare }: ComparisonBarProps) => 
                 </button>
               </div>
             ))}
-          </div>
-
           {/* Compare Button aligned to the far right */}
           <button
-            className="bg-olive-drab text-white p-2 rounded-md font-semibold disabled:bg-gray-400"
+            className="bg-olive-drab text-white hover:bg-neutral p-2 rounded-md font-semibold disabled:bg-gray-400"
             onClick={handleCompareClick} 
             disabled={selectedItems.length !== 2}
           >
             Compare
           </button>
+          </div>
         </div>
       )}
     </>

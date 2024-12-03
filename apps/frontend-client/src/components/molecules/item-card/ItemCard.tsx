@@ -17,8 +17,9 @@ export interface ItemCardProps {
   item: RealEstateItem;
   flexRow?: boolean;
   favourited?: boolean;
-  toggleCompare: (item: RealEstateItem[]) => void;
+  toggleCompare: (item: RealEstateItem) => void;  // Accept a single item, not an array
   isSelected: boolean;
+  disabled: boolean;
 }
 
 const ItemCard = ({
@@ -28,8 +29,8 @@ const ItemCard = ({
   toggleCompare,
   isSelected,
 }: ItemCardProps) => {
-  const [isLike, setIsLike] = useState(favourited); // Start with the initial favorite state from props
-  const [viewCount, setViewCount] = useState(0); // Function to toggle the favorite status
+  const [isLike, setIsLike] = useState(favourited);
+  const [viewCount, setViewCount] = useState(0);
 
   // Function to toggle the favorite status
   const toggleIsLike = async (id: string) => {
@@ -101,8 +102,12 @@ const ItemCard = ({
 
         {/* Favorite Icon */}
         <div className="absolute top-[10px] right-[17px] cursor-pointer" onClick={async () => await toggleIsLike(item._id)}>
-          {favourited ? <HeartInline className="text-white text-[25px]" /> : (
-            isLike ? <HeartInline className="text-white text-[25px]" /> : <HeartOutline className="text-white text-[25px]" />
+          {favourited ? (
+            <HeartInline className="text-white text-[25px]" />
+          ) : isLike ? (
+            <HeartInline className="text-white text-[25px]" />
+          ) : (
+            <HeartOutline className="text-white text-[25px]" />
           )}
         </div>
 
@@ -132,7 +137,7 @@ const ItemCard = ({
             <div className="w-[40%] flex justify-end items-center cursor-pointer">
               <Compare
                 className={`text-olive-drab text-[20px] ${isSelected ? "text-blue-500" : ""}`}
-                onClick={() => toggleCompare([item])} // Pass the item ID to the toggleCompare function
+                onClick={() => toggleCompare(item)} // Pass single item, not array
               />
             </div>
           </div>

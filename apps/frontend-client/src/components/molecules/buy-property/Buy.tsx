@@ -8,6 +8,7 @@ import ArrowLeftCycle from "@/icons/Arrow";
 import ArrowRightCycle from "@/icons/Arrowup";
 import Loading from "@/components/atoms/loading/Loading";
 import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar"; 
+import { toggleCompare } from "@/libs/const/toggleCompare";
 
 const BuyProperty = () => {
   const { properties, loading, error, fetchProperties, pagination } = useProperties();
@@ -41,27 +42,15 @@ const BuyProperty = () => {
     data.transition.some((t) => t.content === "For Sale")
   );
 
-  // toggleCompare function to add or remove items from comparison
-  const toggleCompare = (item: RealEstateItem[]) => {
-    console.log("Item:: ", item);
-    setSelectedItems((prevState) => {
-      const updatedState = [...prevState];
-      item.forEach((newItem) => {
-        const isSelected = updatedState.some((selectedItem) => selectedItem._id === newItem._id);
-        if (isSelected) {
-          updatedState.splice(updatedState.findIndex((selectedItem) => selectedItem._id === newItem._id), 1); // Remove if already selected
-        } else {
-          updatedState.push(newItem);
-        }
-      });
-      return updatedState;
-    });
+  // Handle comparison toggling using the imported toggleCompare function
+  const handleToggleCompare = (items: RealEstateItem[]) => {
+    toggleCompare(items, selectedItems, setSelectedItems);
   };
 
   return (
     <div>
       {/* Comparison Bar at the top */}
-      <ComparisonBar selectedItems={selectedItems} toggleCompare={toggleCompare} /> {/* Show comparison bar */}
+      <ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems} /> {/* Show comparison bar */}
 
       {error && <p>{error}</p>}
       {!loading && filterPropertyBuy.length > 0 ? (
@@ -69,7 +58,7 @@ const BuyProperty = () => {
           {filterPropertyBuy.map((item) => {
             const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
             return (
-              <ItemCard key={item._id} item={item} toggleCompare={toggleCompare} isSelected={isSelected} />
+              <ItemCard key={item._id} item={item} toggleCompare={() => handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />
             );
           })}
         </div>

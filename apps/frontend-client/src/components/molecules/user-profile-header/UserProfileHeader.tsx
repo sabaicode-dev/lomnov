@@ -11,10 +11,8 @@ import axiosInstance from '@/libs/axios';
 import { API_ENDPOINTS } from '@/libs/const/api-endpoints';
 import getCroppedImg from '@/libs/cropImage';
 
-interface UserProfileHeaderProps {
+export interface UserProfileHeaderProps {
   user: User;
-  userName: String;
-  createdAt: String;
 }
 
 // Helper function to format joinedDate
@@ -43,7 +41,7 @@ const UserProfileHeader = ({ user }: UserProfileHeaderProps) => {
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState<string | null>(null); 
 
-  console.log('user:: ', user)
+  // console.log('user:: ', user)
 
   // Handle file change for uploading (background or profile)
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, isProfile: boolean) => {

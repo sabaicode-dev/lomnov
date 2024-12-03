@@ -8,7 +8,8 @@ import ItemCard from "../item-card/ItemCard";
 import { ArrowDown, ArrowUp } from "@/icons";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
-import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar"; // Import ComparisonBar
+import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar";
+import { toggleCompare } from "@/libs/const/toggleCompare";
 
 async function fetchRelatedProperties(
   category: string,
@@ -76,20 +77,9 @@ const RecommendedProperties = ({
     setShowLess(false);
   };
 
-  // toggleCompare function to add or remove items from comparison
-  const toggleCompare = (item: RealEstateItem[]) => {
-    setSelectedItems((prevState) => {
-      const updatedState = [...prevState];
-      item.forEach((newItem) => {
-        const isSelected = updatedState.some((selectedItem) => selectedItem._id === newItem._id);
-        if (isSelected) {
-          updatedState.splice(updatedState.findIndex((selectedItem) => selectedItem._id === newItem._id), 1); // Remove if already selected
-        } else {
-          updatedState.push(newItem); // Add if not selected
-        }
-      });
-      return updatedState;
-    });
+  // Handle comparison toggling using the imported toggleCompare function
+  const handleToggleCompare = (items: RealEstateItem[]) => {
+    toggleCompare(items, selectedItems, setSelectedItems);
   };
 
   return (
@@ -99,7 +89,7 @@ const RecommendedProperties = ({
       style={containerSpring}
     >
       {/* Comparison Bar at the top */}
-      <ComparisonBar selectedItems={selectedItems} toggleCompare={toggleCompare} /> {/* Show comparison bar */}
+      <ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems} /> {/* Show comparison bar */}
 
       <h2 className="text-2xl mb-4 font-helvetica font-bold text-charcoal">
         Recommended Properties
@@ -112,8 +102,9 @@ const RecommendedProperties = ({
               <ItemCard
                 key={item._id}
                 item={item}
-                toggleCompare={toggleCompare}
-                isSelected={isSelected} // Pass isSelected to ItemCard
+                toggleCompare={() => handleToggleCompare([item])}
+                isSelected={isSelected}
+                disabled={selectedItems.length >= 2 && !isSelected}
               />
             </animated.div>
           );

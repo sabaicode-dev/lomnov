@@ -11,7 +11,7 @@ import axiosInstance from "@/libs/axios";
 
 async function fetchUserDetails(username: string) {
   try {
-    const res = await axiosInstance.get(`${API_ENDPOINTS.USER}?username=${username}`);
+    const res = await axiosInstance.get(`${API_ENDPOINTS.USER}?userName=${username}`);
     if (res.status !== 200) {
       throw new Error("Failed to fetch user details");
     }

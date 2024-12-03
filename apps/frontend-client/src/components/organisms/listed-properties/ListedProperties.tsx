@@ -10,11 +10,12 @@ import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import Loading from "@/components/atoms/loading/Loading";
 import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar";
+import { toggleCompare } from "@/libs/const/toggleCompare";
 
 const ListedProperties = () => {
   const { user, isAuthenticated } = useAuth(); 
   const { properties, error } = useProperties();
-  const [selectedProperties, setSelectedProperties] = useState<RealEstateItem[]>([]); // Store selected properties as RealEstateItem objects
+  const [selectedProperties, setSelectedProperties] = useState<RealEstateItem[]>([]);
   const [items, setItems] = useState<RealEstateItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -46,19 +47,9 @@ const ListedProperties = () => {
     }
   }, [isAuthenticated, user?._id]);
 
-  // Toggle selection for comparison
-  const toggleCompare = (property: RealEstateItem) => {
-    setSelectedProperties((prevState) => {
-      const updatedState = [...prevState];
-      const isSelected = updatedState.some((selectedItem) => selectedItem._id === property._id);
-      if (isSelected) {
-        // Remove property from selected list
-        return updatedState.filter((selectedItem) => selectedItem._id !== property._id);
-      } else {
-        // Add property to selected list
-        return [...updatedState, property];
-      }
-    });
+  // Handle comparison toggling using the imported toggleCompare function
+  const handleToggleCompare = (items: RealEstateItem[]) => {
+    toggleCompare(items, selectedProperties, setSelectedProperties);
   };
 
   const handlePost = () => {
@@ -113,8 +104,9 @@ const ListedProperties = () => {
               <ItemCard
                 key={item._id}
                 item={item}
-                toggleCompare={() => toggleCompare(item)} // Toggle selection on click
-                isSelected={isSelected} // Pass isSelected to ItemCard
+                toggleCompare={() => handleToggleCompare([item])} 
+                isSelected={isSelected} 
+                disabled={selectedProperties.length >= 2 && !isSelected}
               />
             );
           })

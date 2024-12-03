@@ -23,7 +23,7 @@ const Footer: React.FC<FooterProps> = ({
   facebookLink = "",
 }) => {
   return (
-    <footer className="w-full h-auto bg-olive-drab mt-5  flex flex-col ">
+    <footer className="w-full h-auto bg-olive-drab flex flex-col ">
       <div className="relative py-10">
         <Image
           src={imageFooter}

@@ -10,7 +10,7 @@ import GeneralInfoForm from "@/components/organisms/general-info-form/GeneralInf
 
 async function fetchUserDetails(username: string): Promise<User | null> {
   try {
-    const res = await axiosInstance.get(`${API_ENDPOINTS.USER}?username=${encodeURIComponent(username)}`);
+    const res = await axiosInstance.get(`${API_ENDPOINTS.USER}?userName=${username}`);
     return res.data.users[0] || null;
   } catch (error: any) {
     console.error("Error fetching user details:", error);

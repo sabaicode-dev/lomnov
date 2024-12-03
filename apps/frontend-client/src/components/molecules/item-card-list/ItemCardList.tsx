@@ -7,6 +7,7 @@ import { useProperties } from "@/context/property"; // Updated context
 import ArrowLeftCycle from "@/icons/Arrow";
 import ArrowRightCycle from "@/icons/Arrowup";
 import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar"; // Import the ComparisonBar
+import Loading from "@/components/atoms/loading/Loading";
 
 // Define the props for the PropertyList component
 interface PropertyListProps {
@@ -18,6 +19,7 @@ const PropertyList: React.FC<PropertyListProps> = ({ toggleCompare, selectedProp
   const { properties, loading, error, fetchProperties, pagination } = useProperties();
   const [currentPage, setCurrentPage] = useState(1);
   const [items, setItems] = useState<RealEstateItem[]>([]);
+  const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([])
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -39,24 +41,36 @@ const PropertyList: React.FC<PropertyListProps> = ({ toggleCompare, selectedProp
     }
   };
 
+  // Handle comparison toggling using the imported toggleCompare function
+  const handleToggleCompare = (items: RealEstateItem[]) => {
+    toggleCompare(items);
+  };
+
   return (
     <div>
       {loading && <p>Loading properties...</p>}
       {error && <p>{error}</p>}
       {!loading && items.length > 0 ? (
         <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
-          {items.map((item) => (
-            <ItemCard
-              key={item._id}
-              item={item}
-              toggleCompare={toggleCompare}  // Pass the toggleCompare function directly
-              isSelected={selectedProperties.some((selected) => selected._id === item._id)}  // Highlight if selected
-            />
-          ))}
+          {items.map((item) => {
+
+            const isSelected = selectedItems.some((selectedItem)=> selectedItem._id === item._id)
+            return (
+              <ItemCard
+                key={item._id}
+                item={item}
+                toggleCompare={()=> handleToggleCompare([item])} 
+                isSelected={isSelected}
+                disabled={selectedItems.length >= 2 && !isSelected}
+              />
+            )
+          }
+          )}
         </div>
       ) : (
-        <img src="https://www.superiorlawncareusa.com/wp-content/uploads/2020/05/loading-gif-png-5.gif" alt="" className="w-[100px] m-auto" />
-      )}
+        <div className="w-[1300px] flex items-center justify-center">
+          <Loading />
+        </div>)}
 
       {/* Pagination Controls */}
       {pagination && pagination.totalPages > 1 && (
@@ -95,7 +109,7 @@ const PropertyList: React.FC<PropertyListProps> = ({ toggleCompare, selectedProp
       )}
 
       {/* Render the ComparisonBar */}
-      <ComparisonBar selectedItems={selectedProperties} toggleCompare={toggleCompare} />
+      <ComparisonBar selectedItems={selectedProperties} toggleCompare={setSelectedItems} />
     </div>
   );
 };

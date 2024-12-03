@@ -1,530 +1,147 @@
-"use client";
+'use client'
+import Image from 'next/image';
+import React, { useState } from 'react';
+import banner from "@/images/banner.png";
+import PostPropertiesTitle from '@/components/atoms/post-title/PostPropertiesTitle';
+import PostRichEditor from '@/components/atoms/post-rich-editor/PostRichEditor';
+import PostSelectTransition from '@/components/atoms/post-select-transition/PostSelectTransition';
+import PostInputField from '@/components/atoms/post-input-field/PostInputField';
+import PostSelectField from '@/components/atoms/post-select-field/PostSelectField';
+import Map from '@/components/molecules/map/Map';
+const properties = [
+  { name: "land" },
+  { name: "villa" },
+  { name: "home" },
+  { name: "shop" },
 
-import React, { useState, useRef } from "react";
-import PropertyPost from "@/components/molecules/property-post/PropertyPost";
-import InformationProperty from "@/components/molecules/information-property/InformationProperty";
-import LocationProperty from "@/components/molecules/location-property/LocationProperty";
-import PropertyPurpose from "@/components/molecules/property-purpose/PropertyPurpose";
+];
+export default function Page() {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedOption, setSelectedOption] = useState<string>('Properties');
+  const handleOptionClick = (option: string) => {
+    setSelectedOption(option);
+    setIsOpen(false);
 
-function Page() {
-  const [selectedProperty, setSelectedProperty] = useState<string | null>(null);
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [errors, setErrors] = useState<{
-    title?: string;
-    description?: string;
-  }>({});
-  const [showPopup, setShowPopup] = useState<boolean>(false); // State for the popup
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [showPopupCreate, setShowPopupCreate] = useState<boolean>(false);
-  const [titleData, setTitleData] = useState("");
-  const [descriptpData, setDescriptionData] = useState("");
-  const [propertyPurposeData, setPropertyPurposeData] = useState("");
-  const [showPopupErrorCreate, setShowPopupErrorCreate] =
-    useState<boolean>(false);
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-
-  const infoRef = useRef<any>(null); // Ref for the InformationProperty component
-  const propertyPurposeRef = useRef<any>(null); // Ref for the PropertyPurpose component
-  const locationRef = useRef<any>(null); // Ref for the LocationProperty component
-  const propertyPostRef = useRef<any>(null); // Ref for PropertyPost
-
-  // References to input fields
-  const titleInputRef = useRef<HTMLInputElement>(null);
-  const descriptionInputRef = useRef<HTMLInputElement>(null);
-
-  // catch Data
-
-  const SendMessage = (FormData: any) => {
-    setTitleData(FormData.get("titleData"));
-    setDescriptionData(FormData.get("discriptionData"));
-    setPropertyPurposeData(FormData.get("propertyPurposeData"));
   };
-
-  const handleInputChange = (field: string, value: string) => {
-    // Update the input value and clear the associated error
-    if (field === "title") {
-      setTitle(value);
-      setErrors((prev) => ({ ...prev, title: undefined }));
-    }
-    if (field === "description") {
-      setDescription(value);
-      setErrors((prev) => ({ ...prev, description: undefined }));
-    }
-  };
-
-  const handleCreatePost = () => {
-    // Gather all form data
-    const formData = {
-      title: titleData,
-      description: descriptpData,
-      // Include other necessary form data
-    };
-
-    // Log the form data (you can replace this with an API call to submit the data)
-    console.log("Creating post with the following data:", formData);
-
-    // Close the 'Create Post' popup
-    setShowPopupCreate(false);
-
-    // Show the success popup
-    setShowSuccessPopup(true);
-
-    // Optionally, you can reset the form or clear input fields
-    setTitleData("");
-    setDescriptionData("");
-  };
-
-  // Handle keydown events
-  const handleKeyDown = (e: React.KeyboardEvent, field: string) => {
-    // If the Enter key is pressed, move to the next input/component
-    if (e.key === "Enter") {
-      e.preventDefault(); // Prevent default form submit behavior
-
-      if (field === "title" && title.trim()) {
-        // Move focus to the description input
-        descriptionInputRef.current?.focus();
-      } else if (field === "description" && description.trim()) {
-        // Move to the PropertyPurpose section
-        propertyPurposeRef.current?.focus();
-      } else if (field === "propertyPurpose" && propertyPurposeRef.current) {
-        // Move to the InformationProperty section
-        infoRef.current?.focus();
-      } else if (field === "informationProperty" && infoRef.current) {
-        // Move to the LocationProperty section
-        locationRef.current?.focus();
-      } else if (field === "locationProperty" && locationRef.current) {
-        // Move to the PropertyPost section
-        propertyPostRef.current?.focus();
-      }
-    }
-    // You can also add more functionality for other keys if needed
-    if (e.key === "Escape") {
-      e.preventDefault();
-      handleClearAll(); // Clear inputs if Escape is pressed
-    }
-  };
-
-  const handleSubmit = () => {
-    let formIsValid = true;
-
-    // Validate title and description
-    const newErrors: { title?: string; description?: string } = {};
-    if (!title.trim()) {
-      newErrors.title = "Title is required.";
-      formIsValid = false;
-    }
-    if (!description.trim()) {
-      newErrors.description = "Description is required.";
-      formIsValid = false;
-    }
-
-    // Validate InformationProperty inputs
-    if (infoRef.current) {
-      const { isValid, formData } = infoRef.current.validate();
-      if (!isValid) {
-        formIsValid = false;
-        setErrorMessage("Please fill out all required fields.");
-      } else {
-        console.log("Form Data:", formData);
-        setErrorMessage(null);
-      }
-    }
-
-    // Validate PropertyPurpose selection
-    if (propertyPurposeRef.current) {
-      const isValid = propertyPurposeRef.current.validateSelection();
-      if (!isValid) {
-        formIsValid = false;
-      } else {
-        const selectedPurpose = propertyPurposeRef.current.getSelected();
-        console.log("Selected Property Purpose:", selectedPurpose);
-      }
-    }
-
-    // Validate LocationProperty inputs
-    if (locationRef.current) {
-      const { isValid, data } = locationRef.current.validate();
-      if (!isValid) {
-        formIsValid = false;
-        setErrorMessage("Please fill out all required location fields.");
-      } else {
-        console.log("Location Data:", data);
-        setErrorMessage(null);
-      }
-    }
-
-    // Validate PropertyPost inputs
-    if (propertyPostRef.current) {
-      const isValid = propertyPostRef.current.validate();
-      if (!isValid) {
-        formIsValid = false;
-      } else {
-        const selectedOption = propertyPostRef.current.getSelectedOption();
-        console.log("Selected Property Type:", selectedOption?.name);
-      }
-    }
-
-    // Set errors and show error message if validation failed
-    setErrors(newErrors);
-
-    if (formIsValid) {
-      // Show the create popup if form is valid
-      setShowPopupCreate(true);
-      setErrorMessage(null); // Hide error message if the form is valid
-    } else {
-      // Show the error popup if form is invalid
-      setShowPopupErrorCreate(true);
-      setShowPopupCreate(false); // Hide the create popup if form is invalid
-    }
-  };
-
-  const handleClearAll = () => {
-    setTitle("");
-    setDescription("");
-    setSelectedProperty(null);
-    setErrors({});
-    setShowPopup(false); // Close the popup after clearing
-
-    infoRef.current?.clear();
-    propertyPurposeRef.current?.clear();
-    locationRef.current?.clear();
-    propertyPostRef.current?.clear();
-  };
-
   return (
-    <>
-      <form className="h-full mt-[150px] bg-[#F6F6F6]" action={SendMessage}>
-        <div className="ms-[130px] me-[130px]">
-          {/* Property Purpose */}
-          <PropertyPurpose
-            ref={propertyPurposeRef}
-            message={propertyPurposeData}
-          />
-
-          {/* Line */}
-          <div className="mt-10 left-0 w-full h-px bg-black"></div>
-
-          {/* Overview Section */}
-          <div className="mt-10 flex items-center space-x-3">
-            <svg
-              className="w-4 h-4 text-gray-800 dark:text-red-600"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M8 4H4m0 0v4m0-4 5 5m7-5h4m0 0v4m0-4-5 5M8 20H4m0 0v-4m0 4 5-5m7 5h4m0 0v-4m0 4-5-5"
-              />
-            </svg>
-            <span className="text-lg font-bold text-gray-900">Overview</span>
-          </div>
-
-          {/* Title Field */}
-          <div className="mt-5 ms-10">
-            <label className="font-medium">
-              Title <span className="text-red-500">*</span>
-            </label>
-            <input
-              ref={titleInputRef}
-              name="titleData"
-              type="text"
-              placeholder="Enter your title"
-              value={title}
-              onChange={(e) => handleInputChange("title", e.target.value)}
-              onKeyDown={(e) => handleKeyDown(e, "title")}
-              className={`border-[2px] rounded-lg w-full px-5 py-3 mt-2 ${
-                errors.title ? "border-red-500" : "border-gray-400"
-              }`}
-            />
-            {errors.title && (
-              <p className="text-red-500 text-sm mt-1">{errors.title}</p>
-            )}
-          </div>
-
-          {/* Description Field */}
-          <div className="mt-5 ms-10">
-            <label className="font-medium">
-              Description <span className="text-red-500">*</span>
-            </label>
-            <input
-              ref={descriptionInputRef}
-              type="text"
-              name="discriptionData"
-              placeholder="Enter your description"
-              value={description}
-              onChange={(e) => handleInputChange("description", e.target.value)}
-              onKeyDown={(e) => handleKeyDown(e, "description")}
-              className={`border-[2px] rounded-lg w-full px-5 py-3 mt-2 ${
-                errors.description ? "border-red-500" : "border-gray-400"
-              }`}
-            />
-            {errors.description && (
-              <p className="text-red-500 text-sm mt-1">{errors.description}</p>
-            )}
-          </div>
-
-          {/* Line */}
-          <hr className="mt-10 w-full h-px border-black" />
-
-          {/* Property Type Section */}
-          <div className="mt-10 flex items-center space-x-3">
-            <svg
-              className="w-4 h-4 text-gray-800 dark:text-red-600"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M8 4H4m0 0v4m0-4 5 5m7-5h4m0 0v4m0-4-5 5M8 20H4m0 0v-4m0 4 5-5m7 5h4m0 0v-4m0 4-5-5"
-              />
-            </svg>
-            <span className="text-lg font-medium text-gray-900">
-              Property type
-            </span>
-          </div>
-
-          <div className="mt-5 ms-10">
-            <label className="font-bold">
-              Type: <span className="text-red-500">*</span>
-            </label>
-            <PropertyPost
-              ref={propertyPostRef}
-              onChange={(selectedOption) =>
-                console.log("Property type changed to:", selectedOption.name)
-              }
-            />
-          </div>
-
-          {/* Line */}
-          <div className="mt-10 w-full h-px bg-black"></div>
-
-          <InformationProperty ref={infoRef} />
-
-          {/* Line */}
-          <hr className="mt-10 w-full h-px border-black" />
-
-          {/* Location Section */}
-          <LocationProperty ref={locationRef} />
-
-          {/* Action Buttons */}
-          <div className="flex flex-row justify-end mt-10">
-            <button
-              type="button"
-              className="text-white bg-red-700 hover:bg-red-700 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 hover:scale-105 active:scale-95 transition-transform duration-150"
-              onClick={() => setShowPopup(true)} // Show the confirmation popup
-            >
-              Clear all
-            </button>
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className="text-white bg-blue-700 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 hover:scale-105 active:scale-95 transition-transform duration-150"
-            >
-              Priview
-            </button>
-          </div>
-        </div>
-        {/* Confirmation Clear all Popup */}
-        {showPopup && (
-          <div className="shadow mx-auto fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center ">
-            <div className="bg-white p-6 rounded-lg shadow-lg relative">
-              {/* Content */}
-              <div className="p-6 pt-0 text-center">
-                <svg
-                  className="w-20 h-20 text-red-600 mx-auto"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <h3 className="text-xl font-normal text-gray-500 mt-5 mb-6">
-                  Do you want to clear all inputs?
-                </h3>
-                <a
-                  type="submit"
-                  onClick={() => setShowPopup(false)} // Close the popup
-                  href="#"
-                  className="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 me-2 text-center hover:scale-105 active:scale-95 transition-transform duration-150"
-                >
-                  No, cancel
-                </a>
-                <a
-                  type="submit"
-                  onClick={handleClearAll} // Clear all inputs
-                  href="#"
-                  className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2 hover:scale-105 active:scale-95 transition-transform duration-150"
-                >
-                  Yes, I`m sure
-                </a>
+    <main className='w-full bg-[#E6E6E6]'>
+      {/* banner */}
+      <header className="relative w-full h-[300px]">
+        <Image
+          src={banner}
+          alt="banner"
+          layout="fill"
+          objectFit="cover"
+          className="brightness-75"
+        />
+        <div className="absolute left-0 top-0 w-full h-full bg-[#0000004e]"></div>
+      </header>
+      {/* form  */}
+      <div className='w-full h-full'>
+        <div className='max-w-full w-[1400px] m-auto mt-16 h-full'>
+          <h1 className='font-[600] leading-[5px] text-[20px] font-helvetica text-helvetica-h4'>Create properties</h1>
+          <form className='w-full h-full p-2' action="">
+            <div className='w-full block justify-between flex-row mt-2 gap-1'>
+              {/* row 1 */}
+              <PostPropertiesTitle />
+              {/* rich editor */}
+              <PostRichEditor />
+              {/* transition sale & rent  */}
+              <h1 className='font-[600] leading-[5px] text-[25px] font-helvetica text-helvetica-paragraph mt-10 tracking-widest '>Type*</h1>
+              <PostSelectTransition />
+              {/* row 2 */}
+              <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'>
+                <PostInputField title='Price' placeholder='Properties price' />
+                {/* Category Dropdown (div-based) */}
+                <PostSelectField placholer='Select Category' title='Category' zIndex='20' />
               </div>
-            </div>
-          </div>
-        )}
-        {/* Create button pop up */}
-        {showPopupCreate && (
-          <div className="shadow mx-auto fixed  inset-0 bg-black bg-opacity-50 flex items-center justify-center ">
-            <div className="bg-white p-6 rounded-lg shadow-lg relative w-[80%]">
-              {/* Content */}
-
-              <svg
-                className="w-20 h-20 text-red-600 mx-auto"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-
-              <div className="p-6 pt-0 text-center">
-                <h1 className="text-2xl font-normal text-gray-500 mt-5 mb-6">
-                  Here is your information about your property for
-                </h1>
-
-                <div className="mb-5">
-                  <h1>title: {titleData}</h1>
+              <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'>
+                <PostInputField title='Address' placeholder='Properties address' />
+                {/* Category Dropdown (div-based) */}
+                <PostSelectField placholer='Select Location' title='Location' />
+              </div>
+              <div className='w-full mt-5'>
+                <div className='bg-gray-50 shadow-md w-full h-full p-2 rounded-t-[12px] border-gray-[#D9D9D9] border-b-[2px]'>
+                  <div className='w-[380px] h-auto flex justify-between items-center'>
+                    <span className='font-helvetica leading-3 tracking-widest my-3 text-[18px] text-helvetica-paragraph font-bold text-gray-700'>Properties attributes*</span>
+                  </div>
                 </div>
-                <div className="mb-5">
-                  <h1>Description: {descriptpData}</h1>
+                <div className='bg-white shadow-md w-full h-full rounded-b-[12px] pb-10'>
+                  <div className='w-full h-full  flex flex-1 gap-9 px-[20px]'>
+                    <PostInputField title='Bedrooms' className='border border-[#D9D9D9] shadow-sm ' types='number' />
+                    <PostInputField title='Bathrooms' className='border border-[#D9D9D9] shadow-sm' types='number' />
+                  </div>
+                  <div className='w-full h-full  flex flex-1 gap-9 px-[20px]'>
+                    <PostInputField title='Spacious life (m2)' className='border border-[#D9D9D9] shadow-sm ' types='number' />
+                    <PostInputField title='Parking available' className='border border-[#D9D9D9] shadow-sm ' types='number' />
+                  </div>
+
+                </div>
+              </div>
+              <div className="w-full mt-5">
+                <div className="bg-gray-50 shadow-md w-full h-full p-2 rounded-t-[12px] border-gray-[#D9D9D9] border-b-[2px]">
+                  <div className="w-[380px] h-auto flex justify-between items-center">
+                    <span className="font-helvetica leading-3 tracking-widest my-3 text-[18px] font-bold text-gray-700 text-helvetica-paragraph">Images*</span>
+                  </div>
                 </div>
 
-                <a
-                  type="submit"
-                  onClick={() => setShowPopupCreate(false)} // Close the popup
-                  href="#"
-                  className="text-gray-900 bg-white hover:bg-red-500 hover:text-white focus:ring-4 focus:ring-red-100 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 me-2 text-center hover:scale-105 active:scale-95 transition-transform duration-150"
-                >
-                  Wait a moment
-                </a>
-                <a
-                  type="submit"
-                  onClick={() => handleCreatePost()} // Clear all inputs
-                  href="#"
-                  className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2 hover:scale-105 active:scale-95 transition-transform duration-150"
-                >
-                  Create
-                </a>
+                <div className="bg-white shadow-md w-full h-full rounded-b-[12px] px-[12px] py-[10px]">
+                  <div className="flex items-center justify-center w-full  border  border-[#D9D9D9] shadow-sm rounded-lg">
+                    <label htmlFor="dropzone-file" className="w-full cursor-pointer">
+                      <div className="flex flex-col items-center justify-center">
+                        <p className="mb-2 text-[17px] font-semibold text-olive-drab pb-[7px] pt-[15px]"><span className=" text-gray-900 text-[17px]">Drag and Drap you file or</span> browse</p>
+                      </div>
+                      <input id="dropzone-file" type="file" className="hidden" />
+                    </label>
+                  </div>
+
+                </div>
+              </div>
+              <div className="w-full mt-5">
+                <div className="bg-gray-50 shadow-md w-full h-full p-2 rounded-t-[12px] border-gray-[#D9D9D9] border-b-[2px]">
+                  <div className="w-[380px] h-auto flex justify-between items-center">
+                    <span className="font-helvetica leading-3 tracking-widest my-3 text-[18px] font-bold text-gray-700 text-helvetica-paragraph">Map*</span>
+                  </div>
+                </div>
+                <div className="bg-white shadow-md w-full h-full rounded-b-[12px] px-[12px] py-[10px]">
+                  <div className='w-full h-full  flex flex-1 gap-9 px-[20px]'>
+                    <PostInputField className='border border-[#D9D9D9] shadow-sm ' placeholder='google map link!' />
+                  </div>
+                  <div className='w-full h-full -mt-8 -ml-5'>
+                    <Map property='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.835434509658!2d144.95592731584442!3d-37.81720977975179!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xb69b6c8f7c0f89c!2sMelbourne!5e0!3m2!1sen!2sau!4v1510911234567' />
+                  </div>
+                </div>
+              </div>
+              <div className="w-full mt-5">
+                <div className="bg-gray-50 shadow-md w-full h-full p-2 rounded-t-[12px] border-gray-[#D9D9D9] border-b-[2px]">
+                  <div className="w-[380px] h-auto flex justify-between items-center">
+                    <span className="font-helvetica font-bold text-gray-700 leading-3 tracking-widest my-3 text-[18px] text-helvetica-paragraph">Status*</span>
+                  </div>
+                </div>
+
+                <div className="bg-white shadow-md w-full h-full rounded-b-[12px] px-[12px] py-[10px]">
+                  <div className="w-full ">
+
+                    <label className="inline-flex items-center cursor-pointer">
+                      <input type="checkbox" value="" className="sr-only peer"/>
+                        <div className="relative w-11 h-6 bg-gray-200   rounded-full peer dark:bg-gray-500 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px]  after:border after:rounded-full after:h-5 after:w-5 after:transition-all "></div>
+                        <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-700">Public</span>
+                
+                    </label><br />
+                      <span className='font-helvetica text-gray-500 leading-3 tracking-widest my-3 text-[18px] text-helvetica-paragraph'>This product will be hidden from all sales channels.</span>
+                  </div>
+                </div>
+              </div>
+              <div className='w-full h-full flex justify-end items-center py-2'>
+                <div>
+                  <button className='px-4 py-2 rounded-md m-2 font-medium text-slate-800 bg-slate-300'>Cancel</button>
+                  <button className='px-4 py-2 text-white font-medium rounded-md bg-blue-700'>Create</button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-        {/* pop up success */}
-        {showSuccessPopup && (
-          <div className="shadow mx-auto fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg relative w-[80%] transition-transform duration-300 ">
-              {/* Success Content */}
-              <svg
-                className="w-20 h-20 text-green-600 mx-auto"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-
-              <div className="p-6 pt-0 text-center">
-                <h1 className="text-2xl font-normal text-gray-500 mt-5 mb-6">
-                  Your post has been successfully created!
-                </h1>
-
-                <a
-                  type="button"
-                  onClick={() => setShowSuccessPopup(false)} // Close the success popup
-                  href="#"
-                  className="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2 hover:scale-105 active:scale-95 transition-transform duration-150"
-                >
-                  Done
-                </a>
-              </div>
-            </div>
-          </div>
-        )}
-        ;{/* Error create pop up */}
-        {showPopupErrorCreate && (
-          <div
-            className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-all duration-500 ease-in-out ${
-              showPopupErrorCreate ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <div
-              className={`bg-white p-6 rounded-lg shadow-lg relative transform transition-all duration-300 ease-out ${
-                showPopupErrorCreate
-                  ? "scale-100 opacity-100"
-                  : "scale-95 opacity-0"
-              }`}
-            >
-              {/* Content */}
-              <div className="p-6 pt-0 text-center">
-                <svg
-                  className="w-[110px] h-[110px] text-red-600 mx-auto "
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-
-                <h1 className="text-4xl text-black ">Opp!!!</h1>
-                <br />
-                <p className="mb-5">
-                  You`ve forgot to fill some information!!
-                  <br /> please check again
-                </p>
-
-                <a
-                  type="submit"
-                  onClick={() => setShowPopupErrorCreate(false)} // Close the popup
-                  href="#"
-                  className="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 me-2 text-center hover:scale-105 active:scale-95 transition-transform duration-150"
-                >
-                  Back
-                </a>
-              </div>
-            </div>
-          </div>
-        )}
-      </form>
-    </>
+          </form>
+        </div >
+      </div >
+    </main >
   );
 }
-
-export default Page;
