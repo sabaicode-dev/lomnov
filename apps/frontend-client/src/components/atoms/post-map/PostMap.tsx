@@ -1,10 +1,17 @@
 import React, { ChangeEvent } from 'react'
 import PostInputField from '../post-input-field/PostInputField'
-import Map from '@/components/molecules/map/Map'
-
+// import Map from '@/components/molecules/map/Map'
+import {
+    MapContainer,
+    Marker,
+    Popup,
+    TileLayer,
+    useMap,
+} from 'react-leaflet'
+import { LatLngExpression } from 'leaflet';
 export default function PostMap({ values, onChange }: { values?: string, onChange: (e: ChangeEvent<HTMLInputElement>) => void }) {
     console.log(values);
-
+    const position = [51.505, -0.09] as LatLngExpression
     return (
         <>
             <div className="bg-gray-50 shadow-md w-full h-full p-2 rounded-t-[12px] border-gray-[#D9D9D9] border-b-[2px]">
@@ -17,7 +24,18 @@ export default function PostMap({ values, onChange }: { values?: string, onChang
                     <PostInputField onChange={onChange} values={values} name='urlmap' className='border border-[#D9D9D9] shadow-sm ' placeholder='google map link!' />
                 </div>
                 <div className='w-full h-full -mt-8 -ml-5'>
-                    <Map property={values || 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.835434509658!2d144.95592731584442!3d-37.81720977975179!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xb69b6c8f7c0f89c!2sMelbourne!5e0!3m2!1sen!2sau!4v1510911234567'} />
+                    <div className="max-w-[1300px] h-[400px] mx-auto mt-[50px] px-[10px]">
+                        <div className="w-full h-full text-black">
+                            <MapContainer className='w-72 h-40' center={position} zoom={13} scrollWheelZoom={false}>
+                           
+                                <Marker position={position}>
+                                    <Popup>
+                                        A pretty CSS3 popup. <br /> Easily customizable.
+                                    </Popup>
+                                </Marker>
+                            </MapContainer>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

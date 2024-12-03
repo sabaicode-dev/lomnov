@@ -13,6 +13,33 @@ import PostMap from '@/components/atoms/post-map/PostMap';
 import PostToggleButton from '@/components/atoms/post-toggle-button/PostToggleButton';
 import axiosInstance from '@/libs/axios';
 import { API_ENDPOINTS } from '@/libs/const/api-endpoints';
+const properties = [
+  { name: "Apartment" },
+  { name: "Villa" },
+  { name: "House" },
+  { name: "Condo" },
+  { name: "Townhouse" },
+  { name: "Penthouse" },
+  { name: "Duplex" },
+  { name: "Studio" },
+  { name: "Commercial Property" },
+  { name: "Shop/Office Space" },
+  { name: "Land" },
+  { name: "Residential" },
+  { name: "Commercial" },
+  { name: "Industrial" },
+  { name: "Agricultural" },
+  { name: "Mixed-use" },
+  { name: "Vacation Home" },
+  { name: "Rental Properties" },
+  { name: "Fixer-upper" },
+  { name: "Luxury Properties" },
+  { name: "Foreclosed Properties" },
+  { name: "New Developments" },
+  { name: "Off-plan Properties" },
+
+];
+const defaultCategory = { name: "Select Category" };
 export interface IPostPropertiesType {
   title: Array<{ content: string; language: string }>;
   slug: Array<{ content: string; language: string }>;
@@ -33,7 +60,10 @@ export default function Page() {
   const [displayMap, setDisplayMap] = useState<string>('');
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isValidate, setIsValidate] = useState<boolean>(false);
-
+  /**
+   * defualt select options
+   */
+  const [defualtOption, _setDefualtOption] = useState<{ name: string }>(defaultCategory);
   // Initialize state for form data
   const [formData, setFormData] = useState<IPostPropertiesType>({
     title: [{ content: '', language: 'en' }],
@@ -62,7 +92,7 @@ export default function Page() {
     address: [{ content: '', language: 'en' }]
   });
 
- 
+
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   /** Function to generate slug from title*/
   const generateSlug = (title: string) => {
@@ -83,7 +113,7 @@ export default function Page() {
       /** Extract the first image as a thumbnail */
       const firstImage = imageUrls[0];
       /** set the image to previews when user click upload */
-      setImagePreviews(imageUrls); 
+      setImagePreviews(imageUrls);
       /** Update state for images and thumbnail for from submition */
       //@ts-ignore
       setFormData(prevState => ({
@@ -93,7 +123,7 @@ export default function Page() {
       }));
     }
   };
-  /** Handle input changes dynamically */ 
+  /** Handle input changes dynamically */
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     console.log(name, value);
@@ -159,12 +189,21 @@ export default function Page() {
               <PostRichEditor errorMsg={isValidate} title='Detail*' name='description.0.content' values={formData.description[0].content} onChange={handleInputChange} />
               {/* transition sale & rent  */}
               <h1 className='font-[600] leading-[5px] text-[25px] font-helvetica text-helvetica-paragraph mt-10 tracking-widest '>Type*</h1>
-              <PostSelectTransition onChange={handleInputChange} transitionValue={formData.transition[0].content}/>
+              <PostSelectTransition onChange={handleInputChange} transitionValue={formData.transition[0].content} />
               {/* row 2 */}
               <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'>
-              <PostInputField onChange={handleInputChange} errorMsg={isValidate} title='Price*' name='price' types='number' placeholder='Properties price' />
-              {/* Category Dropdown (div-based) */}
-              {/* <PostSelectField onChange={handleInputChange} errorMsg={false}  name='category.0.content' placholer='Select Category' title='Category*' zIndex='20' /> */}
+                <PostInputField onChange={handleInputChange} errorMsg={isValidate} title='Price*' name='price' types='number' placeholder='Properties price' />
+                {/* Category Dropdown (div-based) */}
+                <PostSelectField
+                  options={properties}
+                  onChange={handleInputChange}
+                  errorMsg={false}
+                  name='category.0.content'
+                  title='Category*'
+                  zIndex='20'
+                  defaultOption={defualtOption} // Pass the default option
+                />
+
               </div>
               {/* <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'> */}
               {/* <PostInputField errorMsg={isValidate} title='Address' name='address' placeholder='Properties address' /> */}
