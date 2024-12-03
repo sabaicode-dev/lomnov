@@ -27,21 +27,7 @@ const UserProfileNavigation = ({ userName }: UserProfileNavigationProps) => {
     }
   };
 
-  const handleUpdate = () => {
-    if (selectedProperties.length === 1) {
-      alert("Update selected property");
-    } else {
-      alert("Please select exactly one property to update");
-    }
-  };
-
-  const handleDelete = () => {
-    if (selectedProperties.length > 0) {
-      alert("Delete selected properties");
-    } else {
-      alert("No properties selected to delete");
-    }
-  };
+ 
   return (
     <div className="w-full mt-[70px] mx-auto ">
       <div className="border-b border-neutral">
@@ -68,10 +54,8 @@ const UserProfileNavigation = ({ userName }: UserProfileNavigationProps) => {
 
           </div>
             <PropertyActions
-              selectedProperties={selectedProperties}
+           
               onPost={handlePost}
-              onUpdate={handleUpdate}
-              onDelete={handleDelete}
             />
         </div>
       </div>
