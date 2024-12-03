@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from "react";
-import ItemCard from "@/components/molecules/item-card/ItemCard";
+
 import PropertyActions from "@/components/molecules/properties-action/PropertyActions";
 import { useProperties } from "@/context/property";
 import { useAuth } from "@/context/user";
@@ -9,6 +9,7 @@ import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import Loading from "@/components/atoms/loading/Loading";
+import ItemCardPost from "@/components/molecules/item-cart-post-property/ItemCartPost";
 
 const ListedProperties = () => {
   const { user, isAuthenticated } = useAuth(); // Access user and auth status from context
@@ -44,37 +45,7 @@ const ListedProperties = () => {
     }
   }, [isAuthenticated, user?._id, fetchProperties]); // Include fetchProperties in dependencies
 
-  const handleSelectProperty = (id: string) => {
-    setSelectedProperties((prevSelected) =>
-      prevSelected.includes(id)
-        ? prevSelected.filter((propertyId) => propertyId !== id)
-        : [...prevSelected, id]
-    );
-  };
 
-  const handlePost = () => {
-    if (selectedProperties.length > 0) {
-      alert("Post selected properties");
-    } else {
-      alert("No properties selected to post");
-    }
-  };
-
-  const handleUpdate = () => {
-    if (selectedProperties.length === 1) {
-      alert("Update selected property");
-    } else {
-      alert("Please select exactly one property to update");
-    }
-  };
-
-  const handleDelete = () => {
-    if (selectedProperties.length > 0) {
-      alert("Delete selected properties");
-    } else {
-      alert("No properties selected to delete");
-    }
-  };
 
   if (error) return <p>{error}</p>;
 
@@ -89,7 +60,7 @@ const ListedProperties = () => {
           </div>
         ) : (
           items.map((item) => (
-            <ItemCard key={item._id} item={item} />
+            <ItemCardPost key={item._id} item={item} />
           ))
         )}
       </div>
