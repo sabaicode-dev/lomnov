@@ -6,30 +6,33 @@ const properties = [
     { name: "shop" },
 
 ];
+type ISelectOptionTypes = {
+    name:string;
+}[]
 interface IPostSelectFieldProps {
     zIndex?: string;
     title?: string;
-    placholer:string
+    placholer: string;
+    name?: string;
+    errorMsg?: boolean;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    selectedOption?:Array<{ content: string; language: string }>,
+    options: ISelectOptionTypes;
 }
-export default function PostSelectField({ zIndex ,title , placholer}: IPostSelectFieldProps) {
+export default function PostSelectField({ zIndex, title,options, placholer, name, errorMsg , onChange, selectedOption}: IPostSelectFieldProps) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [selectedOption, setSelectedOption] = useState<string>(placholer ? placholer : 'Properties');
-    const handleOptionClick = (option: string) => {
-        setSelectedOption(option);
-        setIsOpen(false);
-
-    };
+    const handleOptionClick = () => {}
     return (
         <div className={` ${zIndex ? `z-${zIndex}` : 'z-10'} w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1`}>
             <div className='w-full'>
                 <p className='font-helvetica leading-3 tracking-widest my-3 text-[18px] text-helvetica-paragraph'>{title}*</p>
                 <div className="relative w-full">
-                    <button
+                    <button name='category'
                         type='button'
                         onClick={() => setIsOpen(!isOpen)}
-                        className='flex items-center justify-between w-full rounded-lg border-none bg-white shadow-sm py-[13px] px-[12px] focus:ring-olive-green focus:outline-none focus:ring-2'
+                        className='flex items-center text-center justify-between w-full rounded-lg border-none bg-white shadow-sm py-[4.7px] px-[5px] focus:ring-olive-green focus:outline-none focus:ring-2'
                     >
-                        <span className="text-gray-700">{selectedOption}</span>
+                        <input onChange={onChange} name={name} className="text-gray-700 border-none outline-none focus:ring-transparent"  />
                         <svg
                             className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}
                             xmlns="http://www.w3.org/2000/svg"
@@ -45,10 +48,10 @@ export default function PostSelectField({ zIndex ,title , placholer}: IPostSelec
                         <div
                             className="absolute left-0 right-0 mt-2 bg-[#E0E0DC] shadow-lg rounded-md max-h-60 overflow-auto p-2"
                         >
-                            {properties.map((option, index) => (
+                            {options.map((option, index) => (
                                 <div
                                     key={index}
-                                    onClick={() => handleOptionClick(option.name)}
+                                    
                                     className="flex items-center px-4 py-2 cursor-pointer hover:bg-olive-green rounded-md"
                                 >
                                     <span className="text-black text-[14px] hover:text-white w-full capitalize">
@@ -59,6 +62,7 @@ export default function PostSelectField({ zIndex ,title , placholer}: IPostSelec
                         </div>
                     )}
                 </div>
+                {errorMsg ? <span className='text-red-700 font-helvetica leading-3 tracking-widest my-3 text-[15px] text-helvetica-paragraph'>{`${name} are require value*`}</span> : ''}
             </div>
         </div>
     )
