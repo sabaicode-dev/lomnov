@@ -42,8 +42,8 @@ const ItemCardPost = ({ item, flexRow, favourited }: ItemCardProps) => {
    //handle delete
    const handleDelete = async () => {
     try {
-      await axiosInstance.delete(`${API_ENDPOINTS.PROPERTIES}/${item._id}`);
-      console.log("Property deleted");
+      await axiosInstance.delete(`${API_ENDPOINTS.MY_PROPERTY}/${item._id}`);
+      alert("Property deleted");
       setShowDeleteModal(false);
     } catch (error) {
       console.error("Error deleting property", error);
