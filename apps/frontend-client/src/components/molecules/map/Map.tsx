@@ -7,7 +7,7 @@ interface prop {
 
 const Map = ({ property }: prop) => {
   // Log the map URL to check if it's correct
-  console.log("Map URL:", property);
+  // console.log("Map URL:", property);
 
   return (
     <div className="max-w-[1300px] h-[400px] mx-auto mt-[50px] px-[10px]">
