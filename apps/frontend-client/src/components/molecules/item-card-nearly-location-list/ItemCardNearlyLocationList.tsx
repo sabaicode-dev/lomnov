@@ -5,7 +5,9 @@ import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 
 async function fetchProperties(): Promise<RealEstateItem[]> {
-  const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?limit=3`);
+  const page = 1;
+  const limit = 3;
+  const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?page=${page}&limit=${limit}`);
  // console.log(res);
   if (res.status!==200) {
     throw new Error("Failed to fetch");

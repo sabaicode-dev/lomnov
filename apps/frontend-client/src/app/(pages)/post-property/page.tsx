@@ -1,28 +1,169 @@
 'use client'
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import banner from "@/images/banner.png";
 import PostPropertiesTitle from '@/components/atoms/post-title/PostPropertiesTitle';
 import PostRichEditor from '@/components/atoms/post-rich-editor/PostRichEditor';
 import PostSelectTransition from '@/components/atoms/post-select-transition/PostSelectTransition';
 import PostInputField from '@/components/atoms/post-input-field/PostInputField';
 import PostSelectField from '@/components/atoms/post-select-field/PostSelectField';
-import Map from '@/components/molecules/map/Map';
+import PostAtttributes from '@/components/atoms/post-attributes/PostAtttributes';
+import PostUploadImages from '@/components/atoms/post-images-upload/PostUploadImages';
+import PostMap from '@/components/atoms/post-map/PostMap';
+import PostToggleButton from '@/components/atoms/post-toggle-button/PostToggleButton';
+import axiosInstance from '@/libs/axios';
+import { API_ENDPOINTS } from '@/libs/const/api-endpoints';
 const properties = [
-  { name: "land" },
-  { name: "villa" },
-  { name: "home" },
-  { name: "shop" },
+  { name: "Apartment" },
+  { name: "Villa" },
+  { name: "House" },
+  { name: "Condo" },
+  { name: "Townhouse" },
+  { name: "Penthouse" },
+  { name: "Duplex" },
+  { name: "Studio" },
+  { name: "Commercial Property" },
+  { name: "Shop/Office Space" },
+  { name: "Land" },
+  { name: "Residential" },
+  { name: "Commercial" },
+  { name: "Industrial" },
+  { name: "Agricultural" },
+  { name: "Mixed-use" },
+  { name: "Vacation Home" },
+  { name: "Rental Properties" },
+  { name: "Fixer-upper" },
+  { name: "Luxury Properties" },
+  { name: "Foreclosed Properties" },
+  { name: "New Developments" },
+  { name: "Off-plan Properties" },
 
 ];
+const defaultCategory = { name: "Select Category" };
+export interface IPostPropertiesType {
+  title: Array<{ content: string; language: string }>;
+  slug: Array<{ content: string; language: string }>;
+  description: Array<{ content: string; language: string }>;
+  thumbnail: '';
+  images: string[];
+  urlmap?: string;
+  address: Array<{ content: string; language: string }>;
+  location: Array<{ content: string; language: string }>;
+  price?: number;
+  category: Array<{ content: string; language: string }>,
+  transition: Array<{ content: string; language: string }>,
+  detail?: Array<{ language: string; content: { [key: string]: string } }>,
+  status?: boolean;
+  coordinate?: Array<{ types: string; coordinates: number[] }>;
+}
 export default function Page() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedOption, setSelectedOption] = useState<string>('Properties');
-  const handleOptionClick = (option: string) => {
-    setSelectedOption(option);
-    setIsOpen(false);
+  const [displayMap, setDisplayMap] = useState<string>('');
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [isValidate, setIsValidate] = useState<boolean>(false);
+  /**
+   * defualt select options
+   */
+  const [defualtOption, _setDefualtOption] = useState<{ name: string }>(defaultCategory);
+  // Initialize state for form data
+  const [formData, setFormData] = useState<IPostPropertiesType>({
+    title: [{ content: '', language: 'en' }],
+    slug: [{ content: '', language: 'en' }],
+    description: [{ content: '', language: 'en' }],
+    price: 0,
+    category: [{ content: '', language: 'en' }],
+    location: [{ content: '', language: 'en' }],
+    detail: [
+      {
+        content: {
+          bedrooms: '',
+          bathrooms: '',
+          size: '',
+          parking: ''
+        },
+        language: 'en'
+      }
+    ],
+    urlmap: '',
+    transition: [{ content: '', language: 'en' }],
+    status: true,
+    thumbnail: '',
+    images: [''],  // Corrected here
+    coordinate: [{ types: '', coordinates: [0] }],
+    address: [{ content: '', language: 'en' }]
+  });
 
+
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  /** Function to generate slug from title*/
+  const generateSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')  // Remove special characters
+      .replace(/\s+/g, '-')       // Replace spaces with hyphens
+      .replace(/-+/g, '-');       // Replace multiple hyphens with a single hyphen
   };
+  /** Handle file input change (for multiple image previews)*/
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+    const files = e.target.files;
+    if (files) {
+      /**  Convert files to URLs and update the state*/
+      const imageUrls = Array.from(files).map(file => URL.createObjectURL(file));
+      /** Extract the first image as a thumbnail */
+      const firstImage = imageUrls[0];
+      /** set the image to previews when user click upload */
+      setImagePreviews(imageUrls);
+      /** Update state for images and thumbnail for from submition */
+      //@ts-ignore
+      setFormData(prevState => ({
+        ...prevState,
+        images: imageUrls,
+        thumbnail: firstImage
+      }));
+    }
+  };
+  /** Handle input changes dynamically */
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+
+    // Check if the field is part of a nested array
+    if (name.includes(".")) {
+      if (name === 'title.0.content') {
+        // auot update slug base on title 
+        const newSlug = generateSlug(value);
+        setFormData(prevState => ({
+          ...prevState,
+          title: [{ content: value, language: 'en' }],
+          slug: [{ content: newSlug, language: 'en' }] // Set the generated slug
+        }));
+      } else {
+        const [arrayName, index, key] = name.split(".");
+        const indexNum = parseInt(index, 10);
+        setFormData(prevState => {
+          const updatedArray = [...prevState[arrayName as keyof IPostPropertiesType] as any];
+          updatedArray[indexNum] = { ...updatedArray[indexNum], [key]: value };
+          return { ...prevState, [arrayName]: updatedArray };
+        });
+      }
+    } else {
+      setFormData(prevState => ({ ...prevState, [name]: value })) // Dynamically update the field based on its name
+    }
+  };
+
+  // Handle form submission
+  const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      console.log(imagePreviews);
+      // const responses = await axiosInstance.post(`${API_ENDPOINTS.PROPERTIES}`);
+      console.log(formData)
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return (
     <main className='w-full bg-[#E6E6E6]'>
       {/* banner */}
@@ -40,102 +181,53 @@ export default function Page() {
       <div className='w-full h-full'>
         <div className='max-w-full w-[1400px] m-auto mt-16 h-full'>
           <h1 className='font-[600] leading-[5px] text-[20px] font-helvetica text-helvetica-h4'>Create properties</h1>
-          <form className='w-full h-full p-2' action="">
+          <form onSubmit={(e: FormEvent<HTMLFormElement>) => handleFormSubmit(e)} className='w-full h-full p-2' action="">
             <div className='w-full block justify-between flex-row mt-2 gap-1'>
               {/* row 1 */}
-              <PostPropertiesTitle />
+              <PostPropertiesTitle errorMsg={isValidate} onChange={handleInputChange} title={formData.title} slug={formData.slug} />
               {/* rich editor */}
-              <PostRichEditor />
+              <PostRichEditor errorMsg={isValidate} title='Detail*' name='description.0.content' values={formData.description[0].content} onChange={handleInputChange} />
               {/* transition sale & rent  */}
               <h1 className='font-[600] leading-[5px] text-[25px] font-helvetica text-helvetica-paragraph mt-10 tracking-widest '>Type*</h1>
-              <PostSelectTransition />
+              <PostSelectTransition onChange={handleInputChange} transitionValue={formData.transition[0].content} />
               {/* row 2 */}
               <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'>
-                <PostInputField title='Price' placeholder='Properties price' />
+                <PostInputField onChange={handleInputChange} errorMsg={isValidate} title='Price*' name='price' types='number' placeholder='Properties price' />
                 {/* Category Dropdown (div-based) */}
-                <PostSelectField placholer='Select Category' title='Category' zIndex='20' />
-              </div>
-              <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'>
-                <PostInputField title='Address' placeholder='Properties address' />
-                {/* Category Dropdown (div-based) */}
-                <PostSelectField placholer='Select Location' title='Location' />
-              </div>
-              <div className='w-full mt-5'>
-                <div className='bg-gray-50 shadow-md w-full h-full p-2 rounded-t-[12px] border-gray-[#D9D9D9] border-b-[2px]'>
-                  <div className='w-[380px] h-auto flex justify-between items-center'>
-                    <span className='font-helvetica leading-3 tracking-widest my-3 text-[18px] text-helvetica-paragraph font-bold text-gray-700'>Properties attributes*</span>
-                  </div>
-                </div>
-                <div className='bg-white shadow-md w-full h-full rounded-b-[12px] pb-10'>
-                  <div className='w-full h-full  flex flex-1 gap-9 px-[20px]'>
-                    <PostInputField title='Bedrooms' className='border border-[#D9D9D9] shadow-sm ' types='number' />
-                    <PostInputField title='Bathrooms' className='border border-[#D9D9D9] shadow-sm' types='number' />
-                  </div>
-                  <div className='w-full h-full  flex flex-1 gap-9 px-[20px]'>
-                    <PostInputField title='Spacious life (m2)' className='border border-[#D9D9D9] shadow-sm ' types='number' />
-                    <PostInputField title='Parking available' className='border border-[#D9D9D9] shadow-sm ' types='number' />
-                  </div>
+                <PostSelectField
+                  options={properties}
+                  onChange={handleInputChange}
+                  errorMsg={false}
+                  name='category.0.content'
+                  title='Category*'
+                  zIndex='20'
+                  defaultOption={defualtOption} // Pass the default option
+                />
 
-                </div>
+              </div>
+              {/* <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'> */}
+              {/* <PostInputField errorMsg={isValidate} title='Address' name='address' placeholder='Properties address' /> */}
+              {/* Category Dropdown (div-based) */}
+              {/* <PostSelectField errorMsg={isValidate} name='location' placholer='Select Location' title='Location' /> */}
+              {/* </div> */}
+              {/* properties att */}
+              {/* <div className='w-full mt-5'>
+                <PostAtttributes />
+              </div> */}
+              {/* Images Upload  */}
+              <div className="w-full mt-5">
+                <PostUploadImages OnImageChange={handleImageChange} imagePreviews={imagePreviews} />
               </div>
               <div className="w-full mt-5">
-                <div className="bg-gray-50 shadow-md w-full h-full p-2 rounded-t-[12px] border-gray-[#D9D9D9] border-b-[2px]">
-                  <div className="w-[380px] h-auto flex justify-between items-center">
-                    <span className="font-helvetica leading-3 tracking-widest my-3 text-[18px] font-bold text-gray-700 text-helvetica-paragraph">Images*</span>
-                  </div>
-                </div>
-
-                <div className="bg-white shadow-md w-full h-full rounded-b-[12px] px-[12px] py-[10px]">
-                  <div className="flex items-center justify-center w-full  border  border-[#D9D9D9] shadow-sm rounded-lg">
-                    <label htmlFor="dropzone-file" className="w-full cursor-pointer">
-                      <div className="flex flex-col items-center justify-center">
-                        <p className="mb-2 text-[17px] font-semibold text-olive-drab pb-[7px] pt-[15px]"><span className=" text-gray-900 text-[17px]">Drag and Drap you file or</span> browse</p>
-                      </div>
-                      <input id="dropzone-file" type="file" className="hidden" />
-                    </label>
-                  </div>
-
-                </div>
+                <PostMap onChange={handleInputChange} values={formData.urlmap} />
               </div>
-              <div className="w-full mt-5">
-                <div className="bg-gray-50 shadow-md w-full h-full p-2 rounded-t-[12px] border-gray-[#D9D9D9] border-b-[2px]">
-                  <div className="w-[380px] h-auto flex justify-between items-center">
-                    <span className="font-helvetica leading-3 tracking-widest my-3 text-[18px] font-bold text-gray-700 text-helvetica-paragraph">Map*</span>
-                  </div>
-                </div>
-                <div className="bg-white shadow-md w-full h-full rounded-b-[12px] px-[12px] py-[10px]">
-                  <div className='w-full h-full  flex flex-1 gap-9 px-[20px]'>
-                    <PostInputField className='border border-[#D9D9D9] shadow-sm ' placeholder='google map link!' />
-                  </div>
-                  <div className='w-full h-full -mt-8 -ml-5'>
-                    <Map property='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.835434509658!2d144.95592731584442!3d-37.81720977975179!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xb69b6c8f7c0f89c!2sMelbourne!5e0!3m2!1sen!2sau!4v1510911234567' />
-                  </div>
-                </div>
-              </div>
-              <div className="w-full mt-5">
-                <div className="bg-gray-50 shadow-md w-full h-full p-2 rounded-t-[12px] border-gray-[#D9D9D9] border-b-[2px]">
-                  <div className="w-[380px] h-auto flex justify-between items-center">
-                    <span className="font-helvetica font-bold text-gray-700 leading-3 tracking-widest my-3 text-[18px] text-helvetica-paragraph">Status*</span>
-                  </div>
-                </div>
-
-                <div className="bg-white shadow-md w-full h-full rounded-b-[12px] px-[12px] py-[10px]">
-                  <div className="w-full ">
-
-                    <label className="inline-flex items-center cursor-pointer">
-                      <input type="checkbox" value="" className="sr-only peer"/>
-                        <div className="relative w-11 h-6 bg-gray-200   rounded-full peer dark:bg-gray-500 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px]  after:border after:rounded-full after:h-5 after:w-5 after:transition-all "></div>
-                        <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-700">Public</span>
-                
-                    </label><br />
-                      <span className='font-helvetica text-gray-500 leading-3 tracking-widest my-3 text-[18px] text-helvetica-paragraph'>This product will be hidden from all sales channels.</span>
-                  </div>
-                </div>
-              </div>
+              {/* <div className="w-full mt-5">
+                <PostToggleButton isChecked={isChecked} onChecked={(e: ChangeEvent<HTMLInputElement>) => setIsChecked(!isChecked)} />
+              </div> */}
               <div className='w-full h-full flex justify-end items-center py-2'>
                 <div>
                   <button className='px-4 py-2 rounded-md m-2 font-medium text-slate-800 bg-slate-300'>Cancel</button>
-                  <button className='px-4 py-2 text-white font-medium rounded-md bg-blue-700'>Create</button>
+                  <button type='submit' className='px-4 py-2 text-white font-medium rounded-md cursor-pointer bg-blue-700'>Create</button>
                 </div>
               </div>
             </div>
