@@ -1,16 +1,17 @@
 import AWS from 'aws-sdk';
 import multer from 'multer';
 import multerS3 from 'multer-s3';
+import configs from '../config';
 
 // Configure AWS S3
 const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION,
+    accessKeyId: configs.awsAccessKeyId,
+    secretAccessKey: configs.awsSecretAccessKey,
+    region: configs.awsRegion,
 });
 
 // Check if environment variables are defined
-if (!process.env.AWS_S3_BUCKET_NAME) {
+if (!configs.awsS3BucketName) {
     throw new Error("AWS_S3_BUCKET_NAME is not defined in environment variables.");
 }
 
@@ -18,7 +19,7 @@ if (!process.env.AWS_S3_BUCKET_NAME) {
 const upload = multer({
     storage: multerS3({
         s3: s3,
-        bucket: process.env.AWS_S3_BUCKET_NAME as string, // Cast to string
+        bucket: configs.awsS3BucketName as string, // Cast to string
         key: (_req, file, cb) => {
             const fileName = `${Date.now().toString()}_${file.originalname}`;
             cb(null, fileName);
@@ -33,12 +34,13 @@ export const uploadMiddleware = upload.array('files'); // Assuming multiple file
 export const uploadFileToS3 = (file: Express.Multer.File): Promise<string> => {
     return new Promise((resolve, reject) => {
         const uploadParams = {
-            Bucket: process.env.AWS_S3_BUCKET_NAME as string, // Cast to string
+            Bucket: configs.awsS3BucketName as string, // Cast to string
             Key: `${Date.now().toString()}_${file.originalname}`, // Generate a unique filename
             Body: file.buffer,
             ContentType: file.mimetype,
         };
-
+        console.log(uploadParams);
+        
         // Use the correct callback types directly
         s3.upload(uploadParams, (error: Error | null, data: AWS.S3.ManagedUpload.SendData) => {
             if (error) {

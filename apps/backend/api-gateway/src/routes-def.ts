@@ -109,8 +109,8 @@ const ROUTE_PATHS: RoutesConfig = {
     target: configs.propertyServiceUrl, // Should be http://localhost:4003
     methods: {
       GET: { authRequired: false, roles: [] },
-      POST: { authRequired: false, roles: ["admin", "user"] },
-      DELETE: { authRequired: false, roles: ['admin', 'user'] },
+      POST: { authRequired: true, roles: ["admin", "user"] },
+      DELETE: { authRequired: true, roles: ['admin', 'user'] },
       PUT: { authRequired: true, roles: ['admin', 'user'] }
     },
     nestedRoutes: [

@@ -19,16 +19,17 @@ export class PropertyRepository {
   /**
    * Create a new property
    */
-  public async create(
-    propertyData: RequestPropertyDTO,
-    files: { thumbnail: Express.Multer.File; images: Express.Multer.File[] },
-  ): Promise<ResponseCreatePropertyDTO> {
+  public async create(propertyData: RequestPropertyDTO, files: { thumbnail: Express.Multer.File; images: Express.Multer.File[] },): Promise<ResponseCreatePropertyDTO> {
     try {
       if (!files?.thumbnail) {
+        console.log("Image files are missing");
+
         throw new Error("Thumbnail file is missing");
       }
 
       if (!files?.images || !Array.isArray(files.images) || files.images.length === 0) {
+        console.log("Image files are missing");
+
         throw new Error("Image files are missing");
       }
 
@@ -52,6 +53,8 @@ export class PropertyRepository {
       await newProperty.save();
       return newProperty.toObject();
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }
@@ -253,7 +256,7 @@ export class PropertyRepository {
     }
   }
 
-  public async findPropertyUserByCognitoSub(cognitoSub: string): Promise<ResponsePropertyDTO[]>{
+  public async findPropertyUserByCognitoSub(cognitoSub: string): Promise<ResponsePropertyDTO[]> {
     try {
       return await PropertyModel.find({ cognitoSub: cognitoSub });
     } catch (error) {
@@ -285,11 +288,11 @@ export class PropertyRepository {
     }
   }
 
-    /**
-   * Find properties with coordinates within a certain distance
-   */
-   // Example repository method to handle the geospatial query
-   public async findNearbyProperties(
+  /**
+ * Find properties with coordinates within a certain distance
+ */
+  // Example repository method to handle the geospatial query
+  public async findNearbyProperties(
     locationFilter: any,
     limit: number
   ): Promise<IProperty[]> { // Use IProperty[] instead of Property[]
@@ -297,7 +300,7 @@ export class PropertyRepository {
       const properties = await PropertyModel.find(locationFilter)
         .limit(limit)
         .exec(); // Execute the query
-  
+
       return properties
     } catch (error) {
       console.error("Error in findNearbyProperties:", error);
@@ -309,12 +312,12 @@ export class PropertyRepository {
   public async getCategories(): Promise<ResponseCategoriesDTO[]> {
     try {
       // Fetch the categories from the PropertyModel
-      return  await PropertyModel.find({}).select('category').lean();
+      return await PropertyModel.find({}).select('category').lean();
     } catch (error) {
       console.log(error);
-      
+
       throw error;
     }
   }
-  
+
 }

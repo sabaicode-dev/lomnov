@@ -19,6 +19,7 @@ const UserProfileNavigation = ({ userName }: UserProfileNavigationProps) => {
   console.log(isListedPropertiesActive);
   
   const isSavedPropertiesActive = pathname === `/profile/saved-properties/${userName}`;
+  /*
   const handlePost = () => {
     if (selectedProperties.length > 0) {
       alert("Post selected properties");
@@ -26,7 +27,7 @@ const UserProfileNavigation = ({ userName }: UserProfileNavigationProps) => {
       alert("No properties selected to post");
     }
   };
-
+*/
  
   return (
     <div className="w-full mt-[70px] mx-auto ">
@@ -53,10 +54,7 @@ const UserProfileNavigation = ({ userName }: UserProfileNavigationProps) => {
             </Link>
 
           </div>
-            <PropertyActions
-           
-              onPost={handlePost}
-            />
+            <PropertyActions/>
         </div>
       </div>
     </div>
