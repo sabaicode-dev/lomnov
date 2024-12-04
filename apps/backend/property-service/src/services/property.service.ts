@@ -274,6 +274,7 @@ export class PropertyService {
         ...property,
         propertyOwner,
       };
+      console.log("Response Data:: ", responses)
       return responses;
     } catch (error) {
       console.error(`Error fetching property by ID ${id}:`, error);

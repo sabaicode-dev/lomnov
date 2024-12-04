@@ -60,7 +60,7 @@ const RentPropertyList = () => {
           {filterPropertyRent.map((item) => {            
             const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
             return (
-              <ItemCard key={item._id} item={item} toggleCompare={()=> handleToggleCompare([item])} isSelected={isSelected}disabled={selectedItems.length >= 2 && !isSelected} />
+              <ItemCard key={item._id} item={item} toggleCompare={()=> handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />
             );
           })}
         </div>
