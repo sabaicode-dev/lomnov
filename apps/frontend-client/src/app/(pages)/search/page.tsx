@@ -103,7 +103,7 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
       </header>
 
       {/* Properties */}
-      <div className="w-[1300px] m-auto grid grid-cols-4 gap-5 mt-[100px] z-0">
+      <div className="w-[1300px] m-auto grid grid-cols-4 gap-5 mt-[100px] z-0 mb-10">
         {
           loading ? (
             <div className="w-[1300px] flex items-center justify-center">
