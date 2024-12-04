@@ -88,9 +88,6 @@ const RecommendedProperties = ({
       className="mt-10 max-w-[1300px] mx-auto"
       style={containerSpring}
     >
-      {/* Comparison Bar at the top */}
-      <ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems} /> {/* Show comparison bar */}
-
       <h2 className="text-2xl mb-4 font-helvetica font-bold text-charcoal">
         Recommended Properties
       </h2>
@@ -130,6 +127,8 @@ const RecommendedProperties = ({
           </button>
         )}
       </div>
+      {/* Comparison Bar at the top */}
+      <ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems} /> 
     </animated.div>
   );
 };

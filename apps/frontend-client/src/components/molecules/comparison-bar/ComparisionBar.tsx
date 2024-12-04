@@ -44,7 +44,7 @@ const ComparisonBar = ({ selectedItems, toggleCompare }: ComparisonBarProps) => 
     <>
       {selectedItems.length > 0 && (
         <div className="fixed bottom-0 left-0 right-0 bg-gray-100 p-4 flex items-center z-50 shadow-lg justify-around">
-          <p className={`pl-[300px] text-xl ${messageClass}`}>{message}</p>
+          <p className={`px-8 text-lg ${messageClass}`}>{message}</p>
 
           {/* Selected items */}
           <div className="w-[1300px] flex items-center space-x-4 overflow-x-auto">
