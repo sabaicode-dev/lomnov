@@ -1,13 +1,13 @@
 import React  from "react";
 import { BsArrowLeftCircle } from "react-icons/bs";
 type prop =  {
-    clasName ?: string
+    className ?: string
 }
 
-function ArrowRightCycle({clasName}:prop){
+function ArrowRightCycle({className}:prop){
     return(
         <>
-            <BsArrowLeftCircle className={clasName}/>
+            <BsArrowLeftCircle className={className}/>
         </>
     )
 }

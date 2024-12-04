@@ -10,6 +10,8 @@ import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import Loading from "@/components/atoms/loading/Loading";
 import ItemCardPost from "@/components/molecules/item-cart-post-property/ItemCartPost";
+import { toggleCompare } from "@/libs/const/toggleCompare";
+import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar";
 
 const ListedProperties = () => {
   const { user, isAuthenticated } = useAuth(); // Access user and auth status from context
@@ -17,6 +19,7 @@ const ListedProperties = () => {
   const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
   const [items, setItems] = useState<RealEstateItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([]);
 
   // Filter properties based on the authenticated user
   const listedProperties = user && properties
@@ -45,6 +48,10 @@ const ListedProperties = () => {
     }
   }, [isAuthenticated, user?._id, fetchProperties]); // Include fetchProperties in dependencies
 
+  // Handle comparison toggling using the imported toggleCompare function
+  const handleToggleCompare = (items: RealEstateItem[]) => {
+    toggleCompare(items, selectedItems, setSelectedItems);
+  };
 
 
   if (error) return <p>{error}</p>;
@@ -59,11 +66,16 @@ const ListedProperties = () => {
             <Loading />
           </div>
         ) : (
-          items.map((item) => (
-            <ItemCardPost key={item._id} item={item} />
-          ))
+          items.map((item) => {
+            const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
+            return (
+              <ItemCardPost key={item._id} item={item} toggleCompare={() => handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />
+            )
+          })
         )}
       </div>
+      {/* Comparison Bar */}
+      <ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems} />
     </div>
   );
 };

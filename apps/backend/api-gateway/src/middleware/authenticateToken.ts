@@ -19,7 +19,6 @@ declare module 'express' {
   }
 }
 
-
 const verifier = CognitoJwtVerifier.create({
   tokenUse: "access",
   userPoolId: configs.awsCognitoUserPoolId,

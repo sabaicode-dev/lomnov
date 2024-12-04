@@ -5,11 +5,14 @@ import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import { useProperties } from "@/context/property"; // Updated context
 import ArrowLeftCycle from "@/icons/Arrow";
 import ArrowRightCycle from "@/icons/Arrowup";
+import ComparisonBar from "../comparison-bar/ComparisionBar";
+import { toggleCompare } from "@/libs/const/toggleCompare";
 
 const ItemCartNearlyList = () => {
   const { nearbyProperties, properties, loading, error, fetchNearbyProperties } = useProperties();
   const [items, setItems] = useState<RealEstateItem[]>([]);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([]);
 
   // Pagination States
   const [currentPage, setCurrentPage] = useState(1);
@@ -118,6 +121,11 @@ const ItemCartNearlyList = () => {
     }
   };
 
+  // Handle comparison toggling using the imported toggleCompare function
+  const handleToggleCompare = (items: RealEstateItem[]) => {
+    toggleCompare(items, selectedItems, setSelectedItems);
+  };
+
   return (
     <div>
       {loading && <p>Loading properties...</p>}
@@ -126,9 +134,13 @@ const ItemCartNearlyList = () => {
 
       {!loading && items.length > 0 ? (
         <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
-          {items.map((item) => (
-            <ItemCard key={item._id} item={item} />
-          ))}
+          {items.map((item) => {
+            const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id)
+            return (
+              <ItemCard key={item._id} item={item} toggleCompare={()=> handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />
+            )
+          }
+          )}
         </div>
       ) : (
         !loading && (
@@ -149,7 +161,7 @@ const ItemCartNearlyList = () => {
             disabled={currentPage === 1}
             className="disabled:opacity-50 "
           >
-            <ArrowLeftCycle clasName="size-8 	font-weight: 300 text-olive-drab rotate-90"/>
+            <ArrowLeftCycle className="size-8 	font-weight: 300 text-olive-drab rotate-90"/>
           </button>
 
           {/* Page Number Buttons */}
@@ -163,13 +175,16 @@ const ItemCartNearlyList = () => {
             </button>
           ))}
 
+          {/* Comparison Bar */}
+          <ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems}/>
+
           {/* Next Button */}
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === Math.ceil((nearbyProperties?.length || 0 + properties?.length || 0) / itemsPerPage)}
             className="disabled:opacity-50 "
           >
-            <ArrowRightCycle clasName="size-8	 text-olive-drab rotate-180"/>
+            <ArrowRightCycle className="size-8	 text-olive-drab rotate-180"/>
           </button>
         </div>
       )}
