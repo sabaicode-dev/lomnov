@@ -18,8 +18,8 @@ export interface ItemCardProps {
   flexRow?: boolean;
   favourited?: boolean;
   toggleCompare: (item: RealEstateItem) => void;  // Accept a single item, not an array
-  isSelected: boolean;
-  disabled: boolean;
+  isSelected?: boolean;
+  disabled?: boolean;
 }
 
 const ItemCard = ({

@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { RealEstateItem } from '@/libs/types/api-properties/property-response';
 import { fetchPropertyById } from '@/libs/fetch-data/api'; 
+import Image from 'next/image';
 
 const ComparisonPage = () => {
   const searchParams = useSearchParams(); 
@@ -80,14 +81,14 @@ console.log("Item 2 Details Content: ", item2Details);
       {/* Property Images */}
       <div className="flex flex-col sm:flex-row sm:space-x-6 mb-8">
         <div className="w-full sm:w-1/2 mb-6 sm:mb-0">
-          <img
+          <Image
             src={item1?.thumbnail || ""}
             alt={item1?.title[0]?.content || "Property 1"}
             className="w-full h-[100%] object-cover rounded-lg shadow-md"
           />
         </div>
         <div className="w-full sm:w-1/2">
-          <img
+          <Image
             src={item2?.thumbnail || ""}
             alt={item2?.title[0]?.content || "Property 2"}
             className="w-full h-[100%] object-cover rounded-lg shadow-md"

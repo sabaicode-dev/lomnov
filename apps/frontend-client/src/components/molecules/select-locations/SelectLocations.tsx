@@ -2,7 +2,7 @@
 
 import { IconLocation } from "@/icons";
 import { useState } from "react";
-
+import { locations } from "@/libs/const/location";
 interface Option {
   name: string;
 }
@@ -16,33 +16,6 @@ interface SelectPropertiesProps {
   onChange: (option: Option) => void;
   backGroundColor?:"bg-white" | "bg-grayish-white";
 }
-
-const address = [
-  { name: "banteay meanchey" },
-  { name: "battambang" },
-  { name: "kampong cham" },
-  { name: "kampong chhang" },
-  { name: "kampong speu" },
-  { name: "kampong thom" },
-  { name: "kampot" },
-  { name: "kandal" },
-  { name: "Kep" },
-  { name: "koh kong" },
-  { name: "kratié" },
-  { name: "mondulkiri" },
-  { name: "Oddar Meanchey" },
-  { name: "pailin" },
-  { name: "Phnom Penh" },
-  { name: "Preah Sihanouk" },
-  { name: "preah Vihear" },
-  { name: "prey Veng" },
-  { name: "pursat" },
-  { name: "Siem Reap" },
-  { name: "stung treng" },
-  { name: "svay rieng" },
-  { name: "takéo" },
-  { name: "tboung khmum" },
-];
 
 const defaultLocation = { name: "Locations" };
 
@@ -95,7 +68,7 @@ const SelectLocations: React.FC<SelectPropertiesProps> = ({ onChange ,backGround
         <div
           className={` rounded-md absolute left-0 right-0 z-20 mt-2 bg-[#E0E0DC] shadow-lg transition-all duration-300 ${isOpen ? "max-h-[190px] overflow-auto opacity-100 p-2" : "max-h-0 opacity-0"}`}
         >
-          {address.map((option, index) => (
+          {locations.map((option, index) => (
             <div
               key={index}
               className="flex items-center px-4 py-2 cursor-pointer hover:bg-olive-green overflow-auto rounded-md "

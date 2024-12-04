@@ -37,7 +37,7 @@ export default function PostToggleButton({ isChecked, onChecked ,values}: IPostT
           </label>
           <br />
           <span className="font-helvetica text-gray-500 leading-3 tracking-widest my-3 text-[18px] text-helvetica-paragraph">
-            This product will be hidden from all sales channels if it's set to Private.
+            This product will be hidden from all sales channels if it set to Private.
           </span>
         </div>
       </div>

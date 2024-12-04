@@ -32,7 +32,7 @@ const HeroSectionSearch: React.FC<HeroSectionSearchProps> = ({
       return properties;
     }
     return properties.filter((item) =>
-      item.address.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+      item.address[0].content.toLocaleLowerCase().includes(search.toLocaleLowerCase())
     );
   };
 

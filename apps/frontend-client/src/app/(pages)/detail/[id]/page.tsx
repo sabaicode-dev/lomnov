@@ -4,7 +4,7 @@ import PropertyTypeInfo from "../../../../components/organisms/property-type-inf
 import PropertyDescription from "../../../../components/organisms/property-description/PropertyDescription";
 import Map from "../../../../components/molecules/map/Map";
 import RecommendedProperties from "@/components/molecules/RecommendedProperties/RecommendedProperties";
-import UserListed from "@/components/organisms/user-listed-property/UserListed";
+// import UserListed from "@/components/organisms/user-listed-property/UserListed";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 

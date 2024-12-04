@@ -43,22 +43,34 @@ export default function Page() {
           <form className='w-full h-full p-2' action="">
             <div className='w-full block justify-between flex-row mt-2 gap-1'>
               {/* row 1 */}
-              <PostPropertiesTitle />
+              <PostPropertiesTitle title={[]} slug={[]} onChange={function (e: React.ChangeEvent<HTMLInputElement>): void {
+                throw new Error('Function not implemented.');
+              } } />
               {/* rich editor */}
               <PostRichEditor />
               {/* transition sale & rent  */}
               <h1 className='font-[600] leading-[5px] text-[25px] font-helvetica text-helvetica-paragraph mt-10 tracking-widest '>Type*</h1>
-              <PostSelectTransition />
+              <PostSelectTransition onChange={function (e: React.ChangeEvent<HTMLInputElement>): void {
+                throw new Error('Function not implemented.');
+              } } transitionValue={''} />
               {/* row 2 */}
               <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'>
                 <PostInputField title='Price' placeholder='Properties price' />
                 {/* Category Dropdown (div-based) */}
-                <PostSelectField placholer='Select Category' title='Category' zIndex='20' />
+                <PostSelectField  title='Category' zIndex='20' onChange={function (e: React.ChangeEvent<HTMLInputElement>): void {
+                  throw new Error('Function not implemented.');
+                } } options={[]} defaultOption={{
+                  name: ''
+                }} />
               </div>
               <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'>
                 <PostInputField title='Address' placeholder='Properties address' />
                 {/* Category Dropdown (div-based) */}
-                <PostSelectField placholer='Select Location' title='Location' />
+                <PostSelectField  title='Location' onChange={function (e: React.ChangeEvent<HTMLInputElement>): void {
+                  throw new Error('Function not implemented.');
+                } } options={[]} defaultOption={{
+                  name: ''
+                }} />
               </div>
               <div className='w-full mt-5'>
                 <div className='bg-gray-50 shadow-md w-full h-full p-2 rounded-t-[12px] border-gray-[#D9D9D9] border-b-[2px]'>

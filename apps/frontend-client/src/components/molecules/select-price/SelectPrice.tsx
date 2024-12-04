@@ -56,7 +56,7 @@ const SelectPrice: React.FC<SelectPropertiesProps> = ({ onChange,backGroundColor
       >
         {selectedOption ? (
           <div className="flex items-center">
-            <IconDollar props="mr-3 text-olive-green" />
+            <IconDollar className="mr-3 text-olive-green" />
             <span className="text-black text-[14px] lg:mr-20">
               {selectedOption.name}
             </span>

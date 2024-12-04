@@ -3,6 +3,7 @@
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import { FaTimes } from "react-icons/fa"; 
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface ComparisonBarProps {
   selectedItems: RealEstateItem[];
@@ -49,7 +50,7 @@ const ComparisonBar = ({ selectedItems, toggleCompare }: ComparisonBarProps) => 
           <div className="w-[1300px] flex items-center space-x-4 overflow-x-auto">
             {selectedItems.map((item) => (
               <div key={item._id} className="relative w-24 h-24 rounded-md overflow-hidden">
-                <img
+                <Image
                   src={item.thumbnail}
                   alt={item.title[0]?.content || "Property"}
                   className="w-full h-full object-cover rounded-md"
