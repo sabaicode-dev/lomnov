@@ -42,23 +42,23 @@
 // }
 
 // src/libs/types/api-properties/property-response.ts
-
 export interface RealEstateDetail {
   bedrooms: string;
   bathrooms: string;
   size: string;
+  square?: string;
   fireplace?: string;
   garden?: string;
-  patio?: string; // Add other relevant fields as necessary
-  kitchen?:string;
-  land_size?:string;
-  parking?:string;
-  road_size?:string;
+  patio?: string;
+  kitchen?: string;
+  land_size?: string;
+  parking?: string;
+  road_size?: string;
+  pool?: string;
 }
 
-
 export interface RealEstateItem {
-  _id: string; // This must match your API response structure
+  _id: string;
   cognitoSub: string;
   title: { content: string; language: string }[];
   description: { content: string; language: string }[];
@@ -72,13 +72,13 @@ export interface RealEstateItem {
   transition: { content: string; language: string }[];
   detail: { language: string; content: RealEstateDetail }[];
   status: boolean;
-  createdAt: string; // Include this if necessary
-  updatedAt: string; // Include this if necessary
+  createdAt: string;
+  updatedAt: string;
   coordinate: {
     type: string;
     coordinates: number[]; // [longitude, latitude]
   };
   
   views: number;
-  __v: number; // Include this if necessary
+  __v: number;
 }
