@@ -53,6 +53,8 @@ const ComparisonBar = ({ selectedItems, toggleCompare }: ComparisonBarProps) => 
                 <Image
                   src={item.thumbnail}
                   alt={item.title[0]?.content || "Property"}
+                  width={500}
+                  height={500}
                   className="w-full h-full object-cover rounded-md"
                 />
                 
