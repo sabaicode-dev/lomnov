@@ -205,15 +205,15 @@ export default function Page() {
                 />
 
               </div>
-              {/* <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'> */}
+              <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'>
               {/* <PostInputField errorMsg={isValidate} title='Address' name='address' placeholder='Properties address' /> */}
               {/* Category Dropdown (div-based) */}
-              {/* <PostSelectField errorMsg={isValidate} name='location' placholer='Select Location' title='Location' /> */}
-              {/* </div> */}
+              {/* <PostSelectField errorMsg={isValidate} name='location' title='Location' /> */}
+              </div> 
               {/* properties att */}
-              {/* <div className='w-full mt-5'>
+               <div className='w-full mt-5'> 
                 <PostAtttributes />
-              </div> */}
+              </div> 
               {/* Images Upload  */}
               <div className="w-full mt-5">
                 <PostUploadImages OnImageChange={handleImageChange} imagePreviews={imagePreviews} />
