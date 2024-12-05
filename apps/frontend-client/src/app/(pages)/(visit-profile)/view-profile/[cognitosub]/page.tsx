@@ -30,7 +30,7 @@ const ProfilePage = async ({ params }: { params: { cognitosub: string } }) => {
       <div className="">
         <VisitProfileHeader user={user} />
         <div className="max-w-[1300px] mx-auto">
-          <UserPostedProperties property={user.properties as RealEstateItem[]} />
+          <UserPostedProperties items={user.properties as RealEstateItem[]} />
         </div>
       </div>
     </Layout>
