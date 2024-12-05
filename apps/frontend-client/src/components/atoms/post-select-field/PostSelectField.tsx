@@ -20,7 +20,7 @@ export default function PostSelectField({
     title,
     options,
     name,
-    errorMsg,
+    errorMsg = true,
     onChange,
     selectedOption,
     defaultOption,
@@ -78,9 +78,7 @@ export default function PostSelectField({
                         </div>
                     )}
                 </div>
-                {errorMsg && (
-                    <span className='text-red-700 font-helvetica leading-3 tracking-widest my-3 text-[15px] text-helvetica-paragraph'>{`${name} are required value*`}</span>
-                )}
+                {errorMsg ? '' : <span className='text-red-700 font-helvetica leading-3 tracking-widest my-3 text-[15px] text-helvetica-paragraph'>{`${name} are required value*`}</span>}
             </div>
         </div>
     );

@@ -4,7 +4,7 @@ import {
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { s3Service } from "../middlewares/awsS3";
-
+import configs from "../config";
 class UploadFileToS3Service {
   private client: S3Client;
   private bucketName: string;
@@ -12,8 +12,8 @@ class UploadFileToS3Service {
 
   constructor(client: S3Client) {
     this.client = client;
-    this.bucketName = process.env.AWS_S3_BUCKET_NAME!;
-    this.region = process.env.AWS_REGION!;
+    this.bucketName = configs.awsS3BucketName!;
+    this.region = configs.awsRegion!;
   }
 
   public async uploadFile(file: Express.Multer.File): Promise<string> {
@@ -24,6 +24,7 @@ class UploadFileToS3Service {
         Body: file.buffer,
         ContentType: file.mimetype,
       };
+      console.log(params);
 
       const command = new PutObjectCommand(params);
       await this.client.send(command);

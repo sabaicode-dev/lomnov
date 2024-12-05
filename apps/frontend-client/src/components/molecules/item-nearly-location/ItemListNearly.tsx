@@ -1,22 +1,26 @@
 'use client';
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ItemCard from "../item-card/ItemCard"; // Component to display property details
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import { useProperties } from "@/context/property"; // Updated context
 import ArrowLeftCycle from "@/icons/Arrow";
 import ArrowRightCycle from "@/icons/Arrowup";
+import ComparisonBar from "../comparison-bar/ComparisionBar";
+import { toggleCompare } from "@/libs/const/toggleCompare";
+import Loading from "@/components/atoms/loading/Loading";
 
 const ItemCartNearlyList = () => {
   const { nearbyProperties, properties, loading, error, fetchNearbyProperties } = useProperties();
   const [items, setItems] = useState<RealEstateItem[]>([]);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([]);
 
   // Pagination States
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12; // Set items per page
 
   // Function to calculate the distance between two coordinates (Haversine formula)
-  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+  const calculateDistance = useCallback((lat1: number, lon1: number, lat2: number, lon2: number) => {
     const R = 6371; // Radius of the Earth in kilometers
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
@@ -24,27 +28,26 @@ const ItemCartNearlyList = () => {
       Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
       Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c * 1000; // Distance in meters
-    return distance;
-  };
+    return R * c * 1000; // Distance in meters
+  }, []);
 
-  // Function to fetch nearby properties based on user location
-  const fetchNearby = async (latitude: number, longitude: number) => {
+  // Memoize the fetchNearby function with useCallback
+  const fetchNearby = useCallback(async (latitude: number, longitude: number) => {
     try {
       await fetchNearbyProperties({ lat: latitude, lng: longitude, maxDistance: 100000 });
     } catch (err) {
       console.error("Error fetching nearby properties:", err);
       setLocationError("Failed to fetch nearby properties. Please try again.");
     }
-  };
+  }, [fetchNearbyProperties]); // Add dependencies if needed
+
 
   // Function to sort properties by proximity to the user
-  const sortPropertiesByDistance = (latitude: number, longitude: number, allProperties: RealEstateItem[]) => {
-    const sorted = allProperties.sort((a, b) => {
+  const sortPropertiesByDistance = useCallback((latitude: number, longitude: number, allProperties: RealEstateItem[]) => {
+    return allProperties.sort((a, b) => {
       const coordsA = a.coordinate?.coordinates || [0, 0];
       const coordsB = b.coordinate?.coordinates || [0, 0];
 
-      // Validate coordinates before calculating distance
       if (coordsA.length !== 2 || coordsB.length !== 2) {
         console.error("Invalid coordinates in property:", a, b);
         return 0; // Skip invalid coordinates
@@ -55,16 +58,15 @@ const ItemCartNearlyList = () => {
 
       return distanceA - distanceB; // Sort by distance: nearest first
     });
+  }, [calculateDistance]);
 
-    return sorted;
-  };
 
   // Paginate properties based on the current page and items per page
-  const paginateProperties = (allProperties: RealEstateItem[]) => {
+  const paginateProperties = useCallback((allProperties: RealEstateItem[]) => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return allProperties.slice(startIndex, endIndex);
-  };
+  }, [currentPage, itemsPerPage]); // Add dependencies if needed
 
   useEffect(() => {
     const getUserLocation = () => {
@@ -110,7 +112,7 @@ const ItemCartNearlyList = () => {
     };
 
     getUserLocation(); // Call the function to get the user's location
-  }, [fetchNearbyProperties, currentPage]); // Run when the current page changes
+  }, [fetchNearby, nearbyProperties, properties, sortPropertiesByDistance, paginateProperties, currentPage]); // Run when the current page changes
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= Math.ceil((nearbyProperties?.length || 0 + properties?.length || 0) / itemsPerPage)) {
@@ -118,25 +120,31 @@ const ItemCartNearlyList = () => {
     }
   };
 
+  // Handle comparison toggling using the imported toggleCompare function
+  const handleToggleCompare = (items: RealEstateItem[]) => {
+    toggleCompare(items, selectedItems, setSelectedItems);
+  };
+
   return (
     <div>
-      {loading && <p>Loading properties...</p>}
       {error && <p>{error}</p>}
       {locationError && <p>{locationError}</p>}
 
       {!loading && items.length > 0 ? (
         <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
-          {items.map((item) => (
-            <ItemCard key={item._id} item={item} />
-          ))}
+          {items.map((item) => {
+            const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id)
+            return (
+              <ItemCard key={item._id} item={item} toggleCompare={() => handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />
+            )
+          }
+          )}
         </div>
       ) : (
         !loading && (
-          <img
-            src="https://www.superiorlawncareusa.com/wp-content/uploads/2020/05/loading-gif-png-5.gif"
-            alt="Loading..."
-            className="w-[100px] m-auto"
-          />
+          <div className="w-[1300px] flex items-center justify-center">
+            <Loading />
+          </div>
         )
       )}
 
@@ -149,7 +157,7 @@ const ItemCartNearlyList = () => {
             disabled={currentPage === 1}
             className="disabled:opacity-50 "
           >
-            <ArrowLeftCycle clasName="size-8 	font-weight: 300 text-olive-drab rotate-90"/>
+            <ArrowLeftCycle className="size-8 	font-weight: 300 text-olive-drab rotate-90" />
           </button>
 
           {/* Page Number Buttons */}
@@ -163,13 +171,16 @@ const ItemCartNearlyList = () => {
             </button>
           ))}
 
+          {/* Comparison Bar */}
+          <ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems} />
+
           {/* Next Button */}
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === Math.ceil((nearbyProperties?.length || 0 + properties?.length || 0) / itemsPerPage)}
             className="disabled:opacity-50 "
           >
-            <ArrowRightCycle clasName="size-8	 text-olive-drab rotate-180"/>
+            <ArrowRightCycle className="size-8	 text-olive-drab rotate-180" />
           </button>
         </div>
       )}

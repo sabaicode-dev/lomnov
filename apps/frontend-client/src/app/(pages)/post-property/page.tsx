@@ -10,61 +10,18 @@ import PostSelectField from '@/components/atoms/post-select-field/PostSelectFiel
 import PostAtttributes from '@/components/atoms/post-attributes/PostAtttributes';
 import PostUploadImages from '@/components/atoms/post-images-upload/PostUploadImages';
 import PostMap from '@/components/atoms/post-map/PostMap';
+import { extractLatLngFromUrl } from '@/libs/functions/extractLatLngFromUrl';
 import PostToggleButton from '@/components/atoms/post-toggle-button/PostToggleButton';
 import axiosInstance from '@/libs/axios';
 import { API_ENDPOINTS } from '@/libs/const/api-endpoints';
-const properties = [
-  { name: "Apartment" },
-  { name: "Villa" },
-  { name: "House" },
-  { name: "Condo" },
-  { name: "Townhouse" },
-  { name: "Penthouse" },
-  { name: "Duplex" },
-  { name: "Studio" },
-  { name: "Commercial Property" },
-  { name: "Shop/Office Space" },
-  { name: "Land" },
-  { name: "Residential" },
-  { name: "Commercial" },
-  { name: "Industrial" },
-  { name: "Agricultural" },
-  { name: "Mixed-use" },
-  { name: "Vacation Home" },
-  { name: "Rental Properties" },
-  { name: "Fixer-upper" },
-  { name: "Luxury Properties" },
-  { name: "Foreclosed Properties" },
-  { name: "New Developments" },
-  { name: "Off-plan Properties" },
-
-];
-const defaultCategory = { name: "Select Category" };
-export interface IPostPropertiesType {
-  title: Array<{ content: string; language: string }>;
-  slug: Array<{ content: string; language: string }>;
-  description: Array<{ content: string; language: string }>;
-  thumbnail: '';
-  images: string[];
-  urlmap?: string;
-  address: Array<{ content: string; language: string }>;
-  location: Array<{ content: string; language: string }>;
-  price?: number;
-  category: Array<{ content: string; language: string }>,
-  transition: Array<{ content: string; language: string }>,
-  detail?: Array<{ language: string; content: { [key: string]: string } }>,
-  status?: boolean;
-  coordinate?: Array<{ types: string; coordinates: number[] }>;
-}
+import { categories } from '@/libs/const/category';
+import { locations } from "@/libs/const/location"
+import { IPostPropertiesType } from '@/libs/types/api-properties/property-request';
+const defaultCategory = { name: "Select" };
+import { generateSlug } from "@/libs/functions/generateSlug"
+import axios from 'axios';
 export default function Page() {
-  const [displayMap, setDisplayMap] = useState<string>('');
   const [isChecked, setIsChecked] = useState<boolean>(false);
-  const [isValidate, setIsValidate] = useState<boolean>(false);
-  /**
-   * defualt select options
-   */
-  const [defualtOption, _setDefualtOption] = useState<{ name: string }>(defaultCategory);
-  // Initialize state for form data
   const [formData, setFormData] = useState<IPostPropertiesType>({
     title: [{ content: '', language: 'en' }],
     slug: [{ content: '', language: 'en' }],
@@ -85,52 +42,50 @@ export default function Page() {
     ],
     urlmap: '',
     transition: [{ content: '', language: 'en' }],
-    status: true,
+    status: false,
     thumbnail: '',
     images: [''],  // Corrected here
     coordinate: [{ types: '', coordinates: [0] }],
     address: [{ content: '', language: 'en' }]
   });
-
-
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  /** Function to generate slug from title*/
-  const generateSlug = (title: string) => {
-    return title
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')  // Remove special characters
-      .replace(/\s+/g, '-')       // Replace spaces with hyphens
-      .replace(/-+/g, '-');       // Replace multiple hyphens with a single hyphen
-  };
-  /** Handle file input change (for multiple image previews)*/
+  const [formState, setFormState] = useState<any>();
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    console.log(name, value);
-    const files = e.target.files;
+    const { name, files } = e.target;
     if (files) {
-      /**  Convert files to URLs and update the state*/
-      const imageUrls = Array.from(files).map(file => URL.createObjectURL(file));
-      /** Extract the first image as a thumbnail */
-      const firstImage = imageUrls[0];
-      /** set the image to previews when user click upload */
-      setImagePreviews(imageUrls);
-      /** Update state for images and thumbnail for from submition */
+      const selectedFiles = Array.from(files);
+      // Store actual files for the form submission
       //@ts-ignore
       setFormData(prevState => ({
         ...prevState,
-        images: imageUrls,
-        thumbnail: firstImage
+        images: selectedFiles,  // Store file objects here
+        thumbnail: selectedFiles[0]  // Store the first image as the thumbnail
       }));
+      // Generate preview URLs for image display (optional)
+      const imageUrls = selectedFiles.map(file => URL.createObjectURL(file));
+      setImagePreviews(imageUrls);  // Used for preview
     }
   };
+
   /** Handle input changes dynamically */
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    console.log(name, value);
-
-    // Check if the field is part of a nested array
     if (name.includes(".")) {
-      if (name === 'title.0.content') {
+      const [arrayName, index, key, subkey] = name.split(".");
+      if (arrayName === "detail") {
+        const idx = parseInt(index, 10);
+        setFormData(prevState => {
+          const updatedDetails = [...prevState.detail!];
+          updatedDetails[idx] = {
+            ...updatedDetails[idx],
+            content: {
+              ...updatedDetails[idx].content,
+              [subkey]: value, // Update the subkey dynamically
+            }
+          };
+          return { ...prevState, detail: updatedDetails };
+        });
+      } else if (arrayName === 'title') {
         // auot update slug base on title 
         const newSlug = generateSlug(value);
         setFormData(prevState => ({
@@ -139,7 +94,6 @@ export default function Page() {
           slug: [{ content: newSlug, language: 'en' }] // Set the generated slug
         }));
       } else {
-        const [arrayName, index, key] = name.split(".");
         const indexNum = parseInt(index, 10);
         setFormData(prevState => {
           const updatedArray = [...prevState[arrayName as keyof IPostPropertiesType] as any];
@@ -148,22 +102,128 @@ export default function Page() {
         });
       }
     } else {
-      setFormData(prevState => ({ ...prevState, [name]: value })) // Dynamically update the field based on its name
+      if (name === 'urlmap') {
+        const result = extractLatLngFromUrl(value);
+        setFormData(prevState => ({
+          ...prevState,
+          urlmap: value,
+          coordinate: [{ types: "Point", coordinates: result }] as IPostPropertiesType | any
+        }));
+      } else {
+        setFormData(prevState => ({ ...prevState, [name]: value })); // Update non-nested fields
+      }
     }
   };
 
-  // Handle form submission
+  let flags: any
   const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Perform validation
+    // Create a new object where all fields are converted to boolean
+    flags = Object.keys(formData).reduce((acc, key) => {
+      const value = formData[key as keyof IPostPropertiesType];
+      // Handle arrays, objects, strings, numbers, booleans, etc.
+      if (Array.isArray(value)) {
+        // @ts-ignore
+        const [{ content, language }] = value;
+        acc[key] = content?.length > 0;
+      } else {
+        if (typeof value === 'boolean') {
+          acc[key] = value;
+        } else if (typeof value === 'number') {
+          acc[key] = value !== 0;
+        } else if (typeof value === 'string') {
+          acc[key] = value.trim().length > 0;
+        } else {
+          acc[key] = Boolean(value);
+        }
+      }
+
+      return acc;
+    }, {} as { [key: string]: boolean });
+
+    console.log("Flags result:", flags);
+    setFormState(flags);
+    const form = new FormData();
+    // Append images (actual file objects)
+    if (formData.images && formData.images.length > 0) {
+      formData.images.forEach(image => {
+        form.append('images', image);  // Append each image file (not URL)
+      });
+    }
+
+    // Append the thumbnail (first image as thumbnail)
+    if (formData.thumbnail) {
+      form.append('thumbnail', formData.thumbnail);  // Append the actual file for thumbnail
+    }
+    // Append other form fields
+    form.append('title', JSON.stringify(formData.title));
+    form.append('description', JSON.stringify(formData.description));
+    form.append('urlmap', formData.urlmap || "");
+    form.append('address', JSON.stringify(formData.address));
+    form.append('location', JSON.stringify(formData.location));
+    form.append('price', formData?.price.toString());
+    form.append('category', JSON.stringify(formData.category));
+    form.append('transition', JSON.stringify(formData.transition));
+    form.append('detail', JSON.stringify(formData.detail));
     try {
-      console.log(imagePreviews);
-      // const responses = await axiosInstance.post(`${API_ENDPOINTS.PROPERTIES}`);
-      console.log(formData)
-    } catch (error) {
-      throw error;
+      const { thumbnail, title, description, urlmap, address, location, price, category, transition } = formState;
+      if (thumbnail && title && description && urlmap && address && location && price && category && transition) {
+        console.log("let's go...");
+
+        const response = await axiosInstance.post(`${API_ENDPOINTS.PROPERTIES}`, form, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        if (response.status === 200) {
+          /** Go alert to user then clear the state! */
+          // Reset form data
+          setFormData({
+            title: [{ content: '', language: 'en' }],
+            slug: [{ content: '', language: 'en' }],
+            description: [{ content: '', language: 'en' }],
+            price: 0,
+            category: [{ content: '', language: 'en' }],
+            location: [{ content: '', language: 'en' }],
+            detail: [
+              {
+                content: {
+                  bedrooms: '',
+                  bathrooms: '',
+                  size: '',
+                  parking: ''
+                },
+                language: 'en'
+              }
+            ],
+            urlmap: '',
+            transition: [{ content: '', language: 'en' }],
+            status: false,
+            thumbnail: '',
+            images: [''],
+            coordinate: [{ types: '', coordinates: [0] }],
+            address: [{ content: '', language: 'en' }]
+          });
+          // Optionally, reset image previews and other state values
+          setImagePreviews([]);
+          setIsChecked(false);
+
+        }
+      }
+    } catch (error: any) {
+      if (axios.isAxiosError(error) && error.status === 500) {
+        console.log("Internal Server Error!");
+        throw error;
+      }
+      console.error(error);
     }
   };
 
+  const handleStatusChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setIsChecked(e.target.checked);
+    setFormData(prev => ({ ...prev, status: e.target.checked }))
+  };
   return (
     <main className='w-full bg-[#E6E6E6]'>
       {/* banner */}
@@ -184,46 +244,46 @@ export default function Page() {
           <form onSubmit={(e: FormEvent<HTMLFormElement>) => handleFormSubmit(e)} className='w-full h-full p-2' action="">
             <div className='w-full block justify-between flex-row mt-2 gap-1'>
               {/* row 1 */}
-              <PostPropertiesTitle errorMsg={isValidate} onChange={handleInputChange} title={formData.title} slug={formData.slug} />
+              <PostPropertiesTitle errorMsg={formState?.title} onChange={handleInputChange} title={formData.title} slug={formData.slug} />
               {/* rich editor */}
-              <PostRichEditor errorMsg={isValidate} title='Detail*' name='description.0.content' values={formData.description[0].content} onChange={handleInputChange} />
+              <PostRichEditor errorMsg={formState?.description} title='Detail*' name='description.0.content' values={formData.description[0].content} onChange={handleInputChange} />
               {/* transition sale & rent  */}
               <h1 className='font-[600] leading-[5px] text-[25px] font-helvetica text-helvetica-paragraph mt-10 tracking-widest '>Type*</h1>
               <PostSelectTransition onChange={handleInputChange} transitionValue={formData.transition[0].content} />
               {/* row 2 */}
               <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'>
-                <PostInputField onChange={handleInputChange} errorMsg={isValidate} title='Price*' name='price' types='number' placeholder='Properties price' />
+                <PostInputField onChange={handleInputChange} errorMsg={formState?.price} title='Price*' name='price' types='number' placeholder='Properties price' />
                 {/* Category Dropdown (div-based) */}
                 <PostSelectField
-                  options={properties}
+                  options={categories}
                   onChange={handleInputChange}
-                  errorMsg={false}
+                  errorMsg={formState?.category}
                   name='category.0.content'
-                  title='Category*'
+                  title='Category'
                   zIndex='20'
-                  defaultOption={defualtOption} // Pass the default option
+                  defaultOption={defaultCategory} // Pass the default option
                 />
 
               </div>
               <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'>
-              {/* <PostInputField errorMsg={isValidate} title='Address' name='address' placeholder='Properties address' /> */}
-              {/* Category Dropdown (div-based) */}
-              {/* <PostSelectField errorMsg={isValidate} name='location' title='Location' /> */}
-              </div> 
+                <PostInputField onChange={handleInputChange} errorMsg={formState?.address} title='Address*' name='address.0.content' placeholder='Properties address' />
+                {/* Category Dropdown (div-based) */}
+                <PostSelectField onChange={handleInputChange} defaultOption={defaultCategory} options={locations} errorMsg={formState?.location} name='location.0.content' title='Location*' />
+              </div>
               {/* properties att */}
-               <div className='w-full mt-5'> 
-                <PostAtttributes />
-              </div> 
+              <div className='w-full mt-5'>
+                <PostAtttributes onChange={handleInputChange} />
+              </div>
               {/* Images Upload  */}
               <div className="w-full mt-5">
-                <PostUploadImages OnImageChange={handleImageChange} imagePreviews={imagePreviews} />
+                <PostUploadImages errMsg={formState?.thumbnail} OnImageChange={handleImageChange} imagePreviews={imagePreviews} />
               </div>
               <div className="w-full mt-5">
                 <PostMap onChange={handleInputChange} values={formData.urlmap} />
               </div>
-              {/* <div className="w-full mt-5">
-                <PostToggleButton isChecked={isChecked} onChecked={(e: ChangeEvent<HTMLInputElement>) => setIsChecked(!isChecked)} />
-              </div> */}
+              <div className="w-full mt-5">
+                <PostToggleButton isChecked={isChecked} onChecked={handleStatusChange} />
+              </div>
               <div className='w-full h-full flex justify-end items-center py-2'>
                 <div>
                   <button className='px-4 py-2 rounded-md m-2 font-medium text-slate-800 bg-slate-300'>Cancel</button>

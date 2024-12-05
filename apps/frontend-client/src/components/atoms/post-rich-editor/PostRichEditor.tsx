@@ -18,7 +18,7 @@ interface IPostRichEditorProps {
     errorMsg?: boolean;
 }
 
-export default function PostRichEditor({ values, onChange, placeholder, className, readonly, name, title, errorMsg }: IPostRichEditorProps) {
+export default function PostRichEditor({ values, onChange, placeholder, className, readonly, name, title, errorMsg = true}: IPostRichEditorProps) {
     return (
         <div className='w-full mt-7'>
             <p className='font-helvetica leading-3 tracking-widest my-3 text-[18px] text-helvetica-paragraph'>{title}</p>
@@ -45,7 +45,7 @@ export default function PostRichEditor({ values, onChange, placeholder, classNam
                     id=""
                 />
             </div>
-            {errorMsg ? <span className='text-red-700 font-helvetica leading-3 tracking-widest my-3 text-[15px] text-helvetica-paragraph'>{`${name} are require value*`}</span> : ''}
+            {errorMsg ? '' : <span className='text-red-700 font-helvetica leading-3 tracking-widest my-3 text-[15px] text-helvetica-paragraph'>{`${name} are require value*`}</span>}
 
         </div>
     )

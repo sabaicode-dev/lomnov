@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -20,9 +18,14 @@ export interface ItemCardProps {
   item: RealEstateItem;
   flexRow?: boolean;
   favourited?: boolean;
+  toggleCompare: (item: RealEstateItem) => void;
+  isSelected: boolean;
+  disabled: boolean;
 }
 
-const ItemCardPost = ({ item, flexRow, favourited }: ItemCardProps) => {
+const ItemCardPost = ({ item, flexRow = false, favourited = false, toggleCompare
+  , isSelected,
+ }: ItemCardProps) => {
   const [isLike, setIsLike] = useState(false);
   const [viewCount, setViewCount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -72,7 +75,6 @@ const ItemCardPost = ({ item, flexRow, favourited }: ItemCardProps) => {
 
   return (
     <>
-    
     <div
       className={
         flexRow
@@ -164,7 +166,13 @@ const ItemCardPost = ({ item, flexRow, favourited }: ItemCardProps) => {
                   <HeartOutline className="text-[25px] text-[#E9678A]" />
                 )}
               </div>
-              <Compare className="cursor-pointer " />
+              {/* Compare Button */}
+            <div className="w-[40%] flex justify-end items-center cursor-pointer">
+              <Compare
+                className={`text-olive-drab text-[20px] ${isSelected ? "text-blue-500" : ""}`}
+                onClick={() => toggleCompare(item)} // Pass single item, not array
+              />
+            </div>
             </div>
           </div>
         </div>

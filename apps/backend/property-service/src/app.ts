@@ -35,6 +35,7 @@ app.use(loggingMiddleware)
 // Global API V1
 // ========================
 RegisterRoutes(app)
+console.log("Error!");
 
 // ========================
 // API Documentations
@@ -44,7 +45,10 @@ app.use("/api/v1/properties/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerD
 // ========================
 // ERROR Handler
 // ========================
+console.log("Request Body:", express.request.body);
+
 app.use(errorHandler)
+
 
 export default app;
 

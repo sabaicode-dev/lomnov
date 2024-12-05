@@ -7,9 +7,11 @@ import {
     Popup,
     TileLayer,
 } from 'react-leaflet';
-import L ,{LatLngExpression }from 'leaflet';
+import L, { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-
+import Map from '@/components/molecules/map/Map';
+import {extractLatLngFromUrl} from "@/libs/functions/extractLatLngFromUrl";
+import {resolveShortenedUrl} from "@/libs/functions/resolveShortendURL"
 // Define a custom marker icon
 const customIcon = L.icon({
     iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
@@ -19,42 +21,9 @@ const customIcon = L.icon({
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
     shadowSize: [41, 41],
 });
-
-// Function to extract latitude and longitude from a Google Maps URL
-function extractLatLngFromUrl(url: string): [number, number] | null {
-    const regex = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
-    const match = url.match(regex);
-    if (match) {
-        const lat = parseFloat(match[1]);
-        const lng = parseFloat(match[2]);
-        return [lat, lng];
-    }
-    return null;
-}
-
 // Function to resolve shortened URLs (assumes a backend API)
-async function resolveShortenedUrl(url: string): Promise<string | null> {
-    try {
-        const response = await fetch(`https://your-backend-api/resolve-url`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url }),
-        });
-        const data = await response.json();
-        return data.fullUrl || null;
-    } catch (error) {
-        console.error('Error resolving shortened URL:', error);
-        return null;
-    }
-}
 
-export default function PostMap({
-    values,
-    onChange,
-}: {
-    values?: string;
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-}) {
+export default function PostMap({values,onChange}: {values?: string,onChange: (e: ChangeEvent<HTMLInputElement>) => void}) {
     const [position, setPosition] = useState<[number, number] | null>(null);
     const [error, setError] = useState<string | null>(null);
 
@@ -77,16 +46,15 @@ export default function PostMap({
                 // Extract coordinates
                 const extractedPosition = extractLatLngFromUrl(urlToProcess);
                 if (extractedPosition) {
+                   // console.log(extractedPosition);
                     setPosition(extractedPosition);
                 } else {
                     setError('Invalid Google Maps URL. Please provide a URL with coordinates.');
                 }
             }
         }
-
         processUrl();
     }, [values]);
-
     return (
         <>
             <div className="bg-gray-50 shadow-md w-full h-full p-2 rounded-t-[12px] border-gray-[#D9D9D9] border-b-[2px]">
@@ -114,7 +82,7 @@ export default function PostMap({
                             <MapContainer
                                 className="w-full h-full"
                                 center={position as LatLngExpression}
-                                zoom={13}
+                                zoom={20}
                                 scrollWheelZoom={false}
                             >
                                 <TileLayer
@@ -131,7 +99,7 @@ export default function PostMap({
                             </MapContainer>
                         ) : (
                             <div className="text-center text-gray-500">
-                                Enter a valid Google Maps link to display the location.
+                               <Map property='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.960558858241!2d-73.95858052397149!3d40.76896927138521!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c003ad1b39%3A0x636a5a8ae5c286ea!2sJG%20Melon!5e1!3m2!1sen!2skh!4v1733198464249!5m2!1sen!2skh'/>
                             </div>
                         )}
                     </div>

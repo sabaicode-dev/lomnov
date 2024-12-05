@@ -1,25 +1,30 @@
-"use client";
+'use client';
 
 import { useState } from "react";
-// import ItemCardList from "../item-card-list/ItemCardList"; // The server component
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
-import ComparisonBar from "../comparison-bar/ComparisionBar";
+import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar";
+
 
 const ComparisonManager = () => {
   const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([]);
 
-  const toggleCompare = (item: RealEstateItem) => {
-    if (selectedItems.some(selected => selected.id === item.id)) {
-      setSelectedItems(selectedItems.filter(selected => selected.id !== item.id));
-    } else {
-      setSelectedItems([...selectedItems, item]);
-    }
+  const toggleCompare = (item: RealEstateItem[]) => {
+    setSelectedItems((prevState) => {
+      const updatedState = [...prevState];
+      item.forEach((newItem) => {
+        const isSelected = updatedState.some((selectedItem) => selectedItem._id === newItem._id);
+        if (isSelected) {
+          updatedState.splice(updatedState.findIndex((selectedItem) => selectedItem._id === newItem._id), 1); // Remove if already selected
+        } else {
+          updatedState.push(newItem); // Add if not selected
+        }
+      });
+      return updatedState;
+    });
   };
 
   return (
-    <>
-      {/* <ItemCardList toggleCompare={toggleCompare} selectedItems={selectedItems} /> */}
-      <ComparisonBar selectedItems={selectedItems} />
+    <>      <ComparisonBar selectedItems={selectedItems} toggleCompare={toggleCompare} />
     </>
   );
 };

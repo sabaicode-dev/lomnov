@@ -38,6 +38,7 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
       try {
         const queryString = new URLSearchParams(params as Record<string, string>).toString();
         const response = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?${queryString}`);
+        console.log("API Response:", response.data);
         setProperties(response.data.properties);
         setPagination(response.data.pagination);
       } catch (err) {

@@ -31,7 +31,7 @@ esbuild
             to: "./",
           },
           {
-            from: "./src/configs/.env.local",
+            from: "./src/configs/.env.production",
             to: "./configs",
           },
         ],

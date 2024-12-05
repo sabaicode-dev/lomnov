@@ -42,7 +42,7 @@ const ProfilePageClient = ({ user, usernameParam }: ProfilePageClientProps) => {
   return (
     <>
       <UserProfileHeader user={ user } />
-      <ListedProperties user={user.userName} />
+      <ListedProperties/>
     </>
   );
 };

@@ -33,9 +33,11 @@ export class PropertyService {
     propertyData: RequestPropertyDTO,
     files: { thumbnail: Express.Multer.File; images: Express.Multer.File[] }
   ): Promise<ResponseCreatePropertyDTO> {
+    console.log("create properties service");
     try {
       return await this.propertyRepository.create(propertyData, files);
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -272,6 +274,7 @@ export class PropertyService {
         ...property,
         propertyOwner,
       };
+      console.log("Response Data:: ", responses)
       return responses;
     } catch (error) {
       console.error(`Error fetching property by ID ${id}:`, error);

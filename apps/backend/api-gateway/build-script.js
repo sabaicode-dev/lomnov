@@ -18,19 +18,19 @@ esbuild.build({
     copy({
       assets: [
         {
-          from: `../node_modules/swagger-ui-dist/*.css`,
+          from: `../../../node_modules/swagger-ui-dist/*.css`,
           to: './',
         },
         {
-          from: `../node_modules/swagger-ui-dist/*.js`,
+          from: `../../../node_modules/swagger-ui-dist/*.js`,
           to: './',
         },
         {
-          from: `../node_modules/swagger-ui-dist/*.png`,
+          from: `../../../node_modules/swagger-ui-dist/*.png`,
           to: './',
         },
         {
-          from: './src/configs/.env.local',
+          from: './src/configs/.env.production',
           to: './configs',
         },
       ],

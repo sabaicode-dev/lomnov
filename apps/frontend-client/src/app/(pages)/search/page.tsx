@@ -9,6 +9,8 @@ import Search from "@/components/molecules/Search/Search";
 import NotFound from "@/components/molecules/notFound/NotFound";
 import axiosInstance from "@/libs/axios";
 import Loading from "@/components/atoms/loading/Loading";
+import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar";
+import { toggleCompare } from "@/libs/const/toggleCompare";
 
 async function fetchProperties(searchParams: { [key: string]: string | string[] | undefined }): Promise<{
   properties: RealEstateItem[];
@@ -39,6 +41,7 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
   const [pagination, setPagination] = useState({ totalPages: 1, currentPage: 1 });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([]);
 
   const fetchData = useCallback(async (page: number) => {
     setLoading(true);
@@ -71,6 +74,11 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
     }
   };
 
+  // Handle comparison toggling using the imported toggleCompare function
+  const handleToggleCompare = (items: RealEstateItem[]) => {
+    toggleCompare(items, selectedItems, setSelectedItems);
+  };
+
   return (
     <main>
       {/* Banner */}
@@ -95,7 +103,7 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
       </header>
 
       {/* Properties */}
-      <div className="w-[1300px] m-auto grid grid-cols-4 gap-5 mt-[100px] z-0">
+      <div className="w-[1300px] m-auto grid grid-cols-4 gap-5 mt-[100px] z-0 mb-10">
         {
           loading ? (
             <div className="w-[1300px] flex items-center justify-center">
@@ -107,9 +115,13 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
               <NotFound />
             </div>
           ) : (
-            datas.map((item) => (
-              <ItemCard key={item._id} item={item} flexRow={false} />
-            ))
+            datas.map((item) => {
+              const isSelected = selectedItems.some((selectedItem) => selectedItem._id);
+              return (
+                <ItemCard key={item._id} item={item} flexRow={false} toggleCompare={()=> handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />
+              )
+            }
+            )
           )
         }
       </div>
@@ -143,6 +155,9 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
           </button>
         </div>
       )}
+
+      {/* comparison bar */}
+      < ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems}/>
     </main>
   );
 }

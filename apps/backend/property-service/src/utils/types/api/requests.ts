@@ -14,7 +14,7 @@ export interface RequestPropertyDTO {
   category: Array<{ content: string; language: string }>,
   transition: Array<{ content: string; language: string }>,
   detail?: Array<{ language: string; content: { [key: string]: string } }>,
-  status?: boolean;
+  status?: boolean | string;
   coordinate?:Array<{types: string; coordinates: number[]}>;
 
 }

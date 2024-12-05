@@ -2,9 +2,10 @@ import Image from 'next/image';
 import React, { ChangeEvent } from 'react'
 interface IPostUploadImagesProps {
     OnImageChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-    imagePreviews?: string[]
+    imagePreviews?: string[];
+    errMsg: boolean;
 }
-export default function PostUploadImages({ OnImageChange, imagePreviews }: IPostUploadImagesProps) {
+export default function PostUploadImages({ OnImageChange, imagePreviews, errMsg = true }: IPostUploadImagesProps) {
     return (
         <>
             <div className="bg-gray-50 shadow-md w-full h-full p-2 rounded-t-[12px] border-gray-[#D9D9D9] border-b-[2px]">
@@ -30,6 +31,7 @@ export default function PostUploadImages({ OnImageChange, imagePreviews }: IPost
                         </div>
                     ))}
                 </div>
+                {errMsg ? '' : <span className='text-red-700 font-helvetica leading-3 tracking-widest my-3 text-[15px] text-helvetica-paragraph'>{`images are required for thumnails*`}</span>}
             </div>
         </>
     )

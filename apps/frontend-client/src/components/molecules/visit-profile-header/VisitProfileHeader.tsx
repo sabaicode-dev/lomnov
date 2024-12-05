@@ -7,7 +7,7 @@ import Banner from "@/components/molecules/banner/Banner";
 import VisitProfileNavigation from "../visit-profile-navigation/VisitProfileNavigation";
 import ShareIcon from "@/icons/ShareIcon";
 import { VisitProfileHeaderProps } from "@/libs/types/user-types/user";
-import { formatDate } from "@/libs/const/formatDate";
+import { formatDate } from "@/libs/functions/formatDate";
 import SharesToSocial from "@/components/atoms/shares-social/SharesToSocial";
 
 const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {

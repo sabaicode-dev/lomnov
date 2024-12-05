@@ -38,7 +38,7 @@ const ProfileTabs = ({ user }: { user: User }) => {
       <div className="p-[10px] xl:p-0 max-w-[1300px] mx-auto">
         {activeTab === "saved-property" && (
           <div className="mt-[20px]">
-            <SavedProperties userId={user.id} />
+            <SavedProperties/>
           </div>
         )}
         {activeTab === "listed-property" && (

@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { User } from "@/libs/types/user-types/user";
 import GeneralInfoForm from "@/components/organisms/general-info-form/GeneralInfoForm";
 import PasswordForm from "@/components/organisms/password-form/PasswordForm";
+import { UserProfileHeaderProps } from "../user-profile-header/UserProfileHeader";
 
-const SettingTabs = ({ user }: { user: User }) => {
+const SettingTabs = ({ user }: UserProfileHeaderProps ) => {
   const [activeTab, setActiveTab] = useState("general");
 
   return (

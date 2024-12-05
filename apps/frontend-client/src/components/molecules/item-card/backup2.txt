@@ -17,9 +17,8 @@ export interface ItemCardProps {
   item: RealEstateItem;
   flexRow?: boolean;
   favourited?: boolean;
-  toggleCompare: (item: RealEstateItem) => void;  // Accept a single item, not an array
-  isSelected?: boolean;
-  disabled?: boolean;
+  toggleCompare: (item: RealEstateItem[]) => void;
+  isSelected: boolean;
 }
 
 const ItemCard = ({
@@ -29,13 +28,15 @@ const ItemCard = ({
   toggleCompare,
   isSelected,
 }: ItemCardProps) => {
-  const [isLike, setIsLike] = useState(favourited);
-  const [viewCount, setViewCount] = useState(0);
+  const [isLike, setIsLike] = useState(favourited); // Start with the initial favorite state from props
+  const [viewCount, setViewCount] = useState(0); // Function to toggle the favorite status
 
   // Function to toggle the favorite status
   const toggleIsLike = async (id: string) => {
     try {
-      const response = await axiosInstance.put(`${API_ENDPOINTS.TOGGLE_FAVOURITE_PROPERTY}/${id}`);
+      const response = await axiosInstance.put(
+        `${API_ENDPOINTS.TOGGLE_FAVOURITE_PROPERTY}/${id}`
+      );
       if (response.status === 200) {
         setIsLike((prev) => !prev);
       }
@@ -48,7 +49,9 @@ const ItemCard = ({
   // Fetch the current view count for the property
   const fetchViewCount = async (id: string) => {
     try {
-      const response = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}/${id}/views`);
+      const response = await axiosInstance.get(
+        `${API_ENDPOINTS.PROPERTIES}/${id}/views`
+      );
       if (response.status === 200) {
         setViewCount(response.data.views); // Assuming response.data.views holds the view count
       }
@@ -101,10 +104,11 @@ const ItemCard = ({
         </p>
 
         {/* Favorite Icon */}
-        <div className="absolute top-[10px] right-[17px] cursor-pointer" onClick={async () => await toggleIsLike(item._id)}>
-          {favourited ? (
-            <HeartInline className="text-white text-[25px]" />
-          ) : isLike ? (
+        <div
+          className="absolute top-[10px] right-[17px] cursor-pointer"
+          onClick={async () => await toggleIsLike(item._id)}
+        >
+          {favourited || isLike ? (
             <HeartInline className="text-white text-[25px]" />
           ) : (
             <HeartOutline className="text-white text-[25px]" />
@@ -117,7 +121,10 @@ const ItemCard = ({
         </p>
       </div>
 
-      <div className={flexRow ? "flex flex-col text-[18px] gap-1 w-[50%]" : "flex flex-col gap-1 py-2"}>
+      {/* Property Details Section */}
+      <div
+        className={flexRow ? "flex flex-col text-[18px] gap-1 w-[50%]" : "flex flex-col gap-1 py-2"}
+      >
         <p className="capitalize font-[600] text-olive-drab text-[18px]">{title}</p>
         <p className={flexRow ? "mb-5" : ""}>{address}</p>
         <div className="bottom-0 w-full">
@@ -137,7 +144,7 @@ const ItemCard = ({
             <div className="w-[40%] flex justify-end items-center cursor-pointer">
               <Compare
                 className={`text-olive-drab text-[20px] ${isSelected ? "text-blue-500" : ""}`}
-                onClick={() => toggleCompare(item)} // Pass single item, not array
+                onClick={() => toggleCompare([item])} // Pass the item ID to the toggleCompare function
               />
             </div>
           </div>

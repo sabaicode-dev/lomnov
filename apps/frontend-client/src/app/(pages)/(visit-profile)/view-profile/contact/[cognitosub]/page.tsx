@@ -57,7 +57,7 @@ const SavedPropertiesPage = async ({
 
             {/* Location */}
             <div className="flex items-center space-x-3">
-              <Location props="w-[23px] h-[20px] text-olive-green" />
+              <Location className="w-[23px] h-[20px] text-olive-green" />
               <label className="font-bold text-base">Location</label>
               <span className="text-sm sm:text-base font-medium text-gray-800">
                 {user.user.location}

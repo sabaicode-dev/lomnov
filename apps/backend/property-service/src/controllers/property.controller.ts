@@ -56,8 +56,17 @@ export class PropertyController extends Controller {
     @FormField() detail?: string,
     @Request() request?: Express.Request
   ): Promise<ResponseCreatePropertyDTO> {
+    console.log('Thumbnail:', thumbnail);  // Add a log to check if the file is received
+    console.log('Images:', images);        // Log images array
+    console.log('description:', description);        // Log images array
+    console.log('location:', location);        // Log images array
+    console.log("Price::", price);
+
     try {
+
       const cognitoSub = request?.cookies.username!;
+      console.log(cognitoSub);
+
       if (!cognitoSub) {
         throw new UnauthorizedError();
       }
@@ -80,6 +89,8 @@ export class PropertyController extends Controller {
         images,
       });
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }
@@ -268,7 +279,7 @@ export class PropertyController extends Controller {
       throw error;
     }
   }
-  
+
 
   @Get("/properties/{propertyId}/views")
   public async getPropertyViews(
@@ -321,56 +332,56 @@ export class PropertyController extends Controller {
 
 
 
-@Get("/properties/nearby")
-public async findNearbyProperties(
-  @Query() lat: number = 0,
-  @Query() lng: number = 0,
-  @Query() maxDistance: number = 1000, // Default 1km
-  @Query() limit: number = 10 // Default limit
-): Promise<ResponsePropertyDTO[]> {
-  try {
-    if (lat === 0 || lng === 0) {
-      throw new Error("Invalid latitude or longitude. Both 'lat' and 'lng' must be provided.");
+  @Get("/properties/nearby")
+  public async findNearbyProperties(
+    @Query() lat: number = 0,
+    @Query() lng: number = 0,
+    @Query() maxDistance: number = 1000, // Default 1km
+    @Query() limit: number = 10 // Default limit
+  ): Promise<ResponsePropertyDTO[]> {
+    try {
+      if (lat === 0 || lng === 0) {
+        throw new Error("Invalid latitude or longitude. Both 'lat' and 'lng' must be provided.");
+      }
+
+      const nearbyProperties: IProperty[] = await this.propertyService.findNearbyProperties(
+        { lat, lng },
+        maxDistance,
+        limit
+      );
+
+      console.log("Raw Nearby Properties:", nearbyProperties);
+
+      const responseProperties: ResponsePropertyDTO[] = nearbyProperties.map((property) => ({
+        _id: property._id,
+        cognitoSub: property.cognitoSub || "",
+        title: property.title || [],
+        description: property.description || [],
+        thumbnail: property.thumbnail || "",
+        images: property.images || [],
+        urlmap: property.urlmap || "",
+        address: property.address || [],
+        location: property.location || [],
+        price: property.price,
+        category: property.category || [],
+        transition: property.transition || [],
+        detail: property.detail || {},
+        status: property.status,
+
+      }));
+
+      return responseProperties;
+    } catch (error) {
+      console.error("Error finding nearby properties:");
+      throw new Error("Failed to fetch nearby properties. Please try again.");
     }
-
-    const nearbyProperties: IProperty[] = await this.propertyService.findNearbyProperties(
-      { lat, lng },
-      maxDistance,
-      limit
-    );
-
-    console.log("Raw Nearby Properties:", nearbyProperties);
-
-    const responseProperties: ResponsePropertyDTO[] = nearbyProperties.map((property) => ({
-      _id: property._id,
-      cognitoSub: property.cognitoSub || "",
-      title: property.title || [],
-      description: property.description || [],
-      thumbnail: property.thumbnail || "",
-      images: property.images || [],
-      urlmap: property.urlmap || "",
-      address: property.address || [],
-      location: property.location || [],
-      price: property.price,
-      category: property.category || [],
-      transition: property.transition || [],
-      detail: property.detail || {},
-      status: property.status,
-    
-    }));
-
-    return responseProperties;
-  } catch (error) {
-    console.error("Error finding nearby properties:");
-    throw new Error("Failed to fetch nearby properties. Please try again.");
   }
-}
 
   /**
    * This method use for responses only category 
    */
   @Get("/properties/category")
-  public async getCategories(){
+  public async getCategories() {
     try {
       return await this.propertyService.getCategories();
     } catch (error) {
