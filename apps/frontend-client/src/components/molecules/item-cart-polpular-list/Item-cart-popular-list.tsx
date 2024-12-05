@@ -6,6 +6,8 @@ import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import NotFound from "@/components/molecules/notFound/NotFound";
 import axiosInstance from "@/libs/axios";
 import { useSearchParams } from "next/navigation";
+import { toggleCompare } from "@/libs/const/toggleCompare";
+import ComparisonBar from "../comparison-bar/ComparisionBar";
 import Loading from "@/components/atoms/loading/Loading";
 
 async function fetchProperties(searchParams: { [key: string]: string | string[] | undefined }): Promise<{
@@ -39,6 +41,7 @@ function ItemCardPopularList() {
   const [pagination, setPagination] = useState({ totalPages: 1, currentPage: 1 });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([]);
 
   const fetchData = useCallback(async (page: number) => {
     setLoading(true);
@@ -78,13 +81,19 @@ function ItemCardPopularList() {
     return <div>{error}</div>;
   }
 
+  // Handle comparison toggling using the imported toggleCompare function
+  const handleToggleCompare = (items: RealEstateItem[]) => {
+    toggleCompare(items, selectedItems, setSelectedItems);
+  };
   return (
     <main>
       {/* Banner */}
       <div className="w-[1300px] m-auto grid grid-cols-4 gap-5 mt-[100px] z-0">
-        {datas.map((item) => (
-          <PropertyCardWithModal key={item._id} item={item} flexRow={false} />
-        ))}
+        {datas.map((item) => {
+          const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
+          return (
+          <PropertyCardWithModal key={item._id} item={item} flexRow={false} toggleCompare={() => handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />
+        )})}
       </div>
 
       {/* Pagination Controls */}
@@ -115,6 +124,9 @@ function ItemCardPopularList() {
           </button>
         </div>
       )}
+
+      {/* comparison bar */}
+      <ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems} />
     </main>
   );
 }
