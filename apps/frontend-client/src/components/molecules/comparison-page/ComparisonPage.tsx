@@ -84,6 +84,8 @@ console.log("Item 2 Details Content: ", item2Details);
           <Image
             src={item1?.thumbnail || ""}
             alt={item1?.title[0]?.content || "Property 1"}
+            width={500}
+            height={500}
             className="w-full h-[100%] object-cover rounded-lg shadow-md"
           />
         </div>
@@ -91,6 +93,8 @@ console.log("Item 2 Details Content: ", item2Details);
           <Image
             src={item2?.thumbnail || ""}
             alt={item2?.title[0]?.content || "Property 2"}
+            width={500}
+            height={500}
             className="w-full h-[100%] object-cover rounded-lg shadow-md"
           />
         </div>
