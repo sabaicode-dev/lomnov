@@ -81,7 +81,7 @@ function ItemCardPopularList() {
   return (
     <main>
       {/* Banner */}
-      <div className="w-[1300px] m-auto grid grid-cols-4 gap-5 mt-[100px] z-0">
+      <div className="w-[1300px] m-auto grid grid-cols-4 gap-5 mt-[100px] mb-[80px] z-0 ">
         {datas.map((item) => (
           <PropertyCardWithModal key={item._id} item={item} flexRow={false} />
         ))}

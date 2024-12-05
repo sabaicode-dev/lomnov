@@ -17,7 +17,6 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
   propertyImage,
 }) => {
   if (!isOpen) return null;
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md text-center">
@@ -26,7 +25,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
         <p className="my-4">{propertyTitle}</p>
         <div className="flex justify-center gap-4">
           <button
-            className="px-4 py-2 w-[100px] bg-[#E9678A] text-white rounded-md hover:bg-red-400"
+            className="px-4 py-2 w-[100px] bg-[#e74141] text-white rounded-md hover:bg-red-400"
             onClick={onConfirm}
           >
             Yes
