@@ -1,4 +1,4 @@
-import { LocalizedContent } from "../indext";
+import { LocalizedContent , IProperty  } from "../indext";
 import { Types } from "mongoose";
 
 export interface Pagination {
@@ -6,23 +6,30 @@ export interface Pagination {
   totalPages: number;
   totalProperty: number;
 }
+
+
+
+
 export interface ResponsePropertyDTO {
-  _id: Types.ObjectId
-  cognitoSub: string
+  _id: Types.ObjectId;
+  cognitoSub: string;
   title?: LocalizedContent[];
   description?: LocalizedContent[];
   thumbnail: string;
   images: string[];
   urlmap?: string;
   address?: LocalizedContent[];
-  location: LocalizedContent[],
+  location: LocalizedContent[];
   price?: number;
-  category: LocalizedContent[],
-  transition: LocalizedContent[],
+  category: LocalizedContent[];
+  transition: LocalizedContent[];
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
+  condanate?: IProperty[];
 }
-
+export interface ResponseCategoriesDTO{
+  category:LocalizedContent[]
+}
 export interface ResponseFPropertiesByLanguageDTO {
   _id: Types.ObjectId
   cognitoSub: string
@@ -57,7 +64,7 @@ export interface ResponseCreatePropertyDTO {
   transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
-
+  condanate?: IProperty[];
 }
 
 export interface ResponseGetPropertyMeDTO {
@@ -75,7 +82,7 @@ export interface ResponseGetPropertyMeDTO {
   transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
-
+  faveMe?: ResponsePropertyDTO[]
 }
 
 export interface ResponseFindPropertyDTO {
@@ -124,5 +131,39 @@ export interface ResponseAllPropertyDTO {
 
 export interface ResponseAllPropertyMeDTO {
   properties: ResponseCreatePropertyDTO[];
+  favoritesMe:ResponsePropertyDTO[],
   pagination: Pagination;
 }
+export interface ResponsePropertyOwner{
+  _id: Types.ObjectId;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  userName: string;
+  phoneNumber?: string;
+  location?: string;
+  address?: string;
+  age?: number;
+  gender?: string;
+  dateOfBirth?: string;
+  profile?: string[];
+  background?: string[];
+}
+export interface ResponsePropertyByID{
+  _id: Types.ObjectId
+  cognitoSub: string
+  title?: LocalizedContent[];
+  description?: LocalizedContent[];
+  thumbnail: string;
+  images: string[];
+  urlmap?: string;
+  address?: LocalizedContent[];
+  location: LocalizedContent[],
+  price?: number;
+  category: LocalizedContent[],
+  transition: LocalizedContent[],
+  detail?: Record<string, any>;  // Flexible key-value pairs
+  status?: boolean;
+  propertyOwner: ResponsePropertyOwner | null;
+}
+

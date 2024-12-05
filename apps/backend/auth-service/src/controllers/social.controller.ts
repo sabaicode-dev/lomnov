@@ -11,8 +11,8 @@ import { Request as ExRequest } from "express";
 import { CognitoService } from "../services/cognito.service";
 
 @Tags("Social Login")
-@Route("api/v1/auth")
-export class AuthController extends Controller {
+@Route("api/v1/auth/backup")
+export class AuthControllerI extends Controller {
   private cognitoService : CognitoService;
   constructor() {
     super()

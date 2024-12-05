@@ -1,4 +1,4 @@
-import { LocalizedContent } from "../indext";
+import { LocalizedContent , IProperty} from "../indext";
 import {Types} from "mongoose"
 
 export interface RequestPropertyDTO {
@@ -14,7 +14,8 @@ export interface RequestPropertyDTO {
   category: Array<{ content: string; language: string }>,
   transition: Array<{ content: string; language: string }>,
   detail?: Array<{ language: string; content: { [key: string]: string } }>,
-  status?: boolean;
+  status?: boolean | string;
+  coordinate?:Array<{types: string; coordinates: number[]}>;
 
 }
 
@@ -48,6 +49,7 @@ export interface RequestQueryPropertyMeDTO {
   price_lte?: number | undefined;
   page?: number | undefined;
   limit?: number | undefined;
+  fav_me?: string | undefined;
 }
 
 export interface RequestUpdatePropertyDTO {
@@ -63,6 +65,7 @@ export interface RequestUpdatePropertyDTO {
   transition?: Array<{ content: string; language: string }>,
   detail?: Array<{ language: string; content: { [key: string]: string } }>,
   status?: boolean;
+  coordinate?:Array<{type: string; coordinates: number[]}>;
 }
 export interface RequestFPropertiesByLanguageDTO {
   _id: Types.ObjectId
@@ -79,4 +82,5 @@ export interface RequestFPropertiesByLanguageDTO {
   transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
+  coordinate?: IProperty[];
 }

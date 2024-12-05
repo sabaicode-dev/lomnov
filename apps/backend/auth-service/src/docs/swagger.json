@@ -7,6 +7,21 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"GoogleCallBackRequest": {
+				"properties": {
+					"code": {
+						"type": "string"
+					},
+					"state": {
+						"type": "string"
+					},
+					"error": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
 			"APIResponse": {
 				"properties": {
 					"message": {
@@ -158,6 +173,33 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"IRefreshTokenResponseDTO": {
+				"properties": {
+					"idToken": {
+						"type": "string"
+					},
+					"accessToken": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IRefreshTokenRequestDTO": {
+				"properties": {
+					"username": {
+						"type": "string"
+					},
+					"refreshToken": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -171,7 +213,7 @@
 		"contact": {}
 	},
 	"paths": {
-		"/api/v1/auth/google-sign-in": {
+		"/api/v1/auth/backup/google-sign-in": {
 			"get": {
 				"operationId": "GoogleSignIn",
 				"responses": {
@@ -189,7 +231,7 @@
 				"parameters": []
 			}
 		},
-		"/api/v1/auth/facebook-sign-in": {
+		"/api/v1/auth/backup/facebook-sign-in": {
 			"get": {
 				"operationId": "FacebookSignIn",
 				"responses": {
@@ -207,7 +249,7 @@
 				"parameters": []
 			}
 		},
-		"/api/v1/auth/callback": {
+		"/api/v1/auth/backup/callback": {
 			"get": {
 				"operationId": "Callback",
 				"responses": {
@@ -274,12 +316,15 @@
 						}
 					}
 				},
+				"tags": [
+					"Login With Google"
+				],
 				"security": [],
 				"parameters": [
 					{
 						"in": "query",
-						"name": "_state",
-						"required": true,
+						"name": "state",
+						"required": false,
 						"schema": {
 							"type": "string"
 						}
@@ -287,37 +332,23 @@
 				]
 			}
 		},
-		"/api/v1/auth/getcallback": {
+		"/api/v1/auth/callback": {
 			"get": {
-				"operationId": "HandleCallBack",
+				"operationId": "OauthCallBack",
 				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"data": {},
-										"message": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"data",
-										"message"
-									],
-									"type": "object"
-								}
-							}
-						}
+					"204": {
+						"description": "No content"
 					}
 				},
+				"tags": [
+					"Login With Google"
+				],
 				"security": [],
 				"parameters": [
 					{
 						"in": "query",
 						"name": "code",
-						"required": true,
+						"required": false,
 						"schema": {
 							"type": "string"
 						}
@@ -325,7 +356,15 @@
 					{
 						"in": "query",
 						"name": "state",
-						"required": true,
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "error",
+						"required": false,
 						"schema": {
 							"type": "string"
 						}
@@ -427,6 +466,38 @@
 						}
 					}
 				}
+			}
+		},
+		"/api/v1/auth/logout": {
+			"post": {
+				"operationId": "Logout",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"data": {},
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"data",
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Manual Registration"
+				],
+				"security": [],
+				"parameters": []
 			}
 		},
 		"/api/v1/auth/change-password": {
@@ -534,15 +605,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"properties": {
-										"message": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"message"
-									],
-									"type": "object"
+									"$ref": "#/components/schemas/IRefreshTokenResponseDTO"
 								}
 							}
 						}
@@ -552,7 +615,17 @@
 					"Manual Registration"
 				],
 				"security": [],
-				"parameters": []
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IRefreshTokenRequestDTO"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/api/v1/auth/{cognitoSub}": {

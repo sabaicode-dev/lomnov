@@ -13,6 +13,12 @@ declare global {
   }
 }
 
+declare module 'express' {
+  export interface Request {
+    routeConfig?: any; // Use the appropriate type for `routeConfig` instead of `any`
+  }
+}
+
 const verifier = CognitoJwtVerifier.create({
   tokenUse: "access",
   userPoolId: configs.awsCognitoUserPoolId,
@@ -25,19 +31,22 @@ const authenticateToken = async (req: Request, _res: Response, next: NextFunctio
     return next();
   }
   const token = req.cookies?.["accessToken"];
-  console.log(token)
+  // console.log('req cookie:: ', req.cookies)
+  // console.log('token:: ',token)
   if (!token) {
     return next(new UnauthorizedError());
   }
 
   try {
     const payload = await verifier.verify(token);
+    // console.log('payload:: ', payload)
     if (!payload || typeof payload.username !== "string") {
       return next(new UnauthorizedError("Invalid token payload."));
     }
     req.user = {
       username: payload.username, roles: payload["cognito:groups"] || [], // Ensure roles is always an array
     };
+    // console.log('user:: ',req.user)
     next();
   } catch (error: any) {
     return next(new UnauthorizedError("Authentication failed."));

@@ -2,9 +2,13 @@
 import configs from "@/src/config";
 import { UserRepository } from "@/src/database/repositories/user.repository";
 import uploadFileToS3Service from "@/src/services/uploadFileToS3.service";
-import { UnauthorizedError } from "@/src/utils/error/customErrors";
-import { DeleteProfileImageRequestDTO, GetAllUsersQueryDTO, RequestUserDTO, ResponseAllUserDTO, ResponseUserDTO, UpdateUserDTO, User } from "@/src/utils/types/indext";
+import { NotFoundError, UnauthorizedError } from "@/src/utils/error/customErrors";
+import { DeleteProfileImageRequestDTO, GetAllUsersQueryDTO, RequestUserDTO, ResponseAllUserDTO, ResponseUserDTO, ResponseViewUserProfileDTO, UpdateUserDTO, User, ViewUserProfileDTO } from "@/src/utils/types/indext";
+
 import { Types } from "mongoose";
+import { HttpPropertyServiceClient } from "./httpPropertyServiceClient";
+import { RequestPropertyClientQuery } from "../utils/types/api/property_client";
+// import { HttpPropertyServiceClient } from "./httpPropertyServiceClient";
 
 
 declare global {
@@ -17,8 +21,10 @@ declare global {
 
 export class UserService {
   private userRepository: UserRepository;
+  private httpPropertiesServiceClient: HttpPropertyServiceClient;
   constructor() {
     this.userRepository = new UserRepository();
+    this.httpPropertiesServiceClient = new HttpPropertyServiceClient(configs.apiGateWayUrl, configs.propertyServiceEndPiont)
   }
 
   public async createUser(
@@ -81,9 +87,9 @@ export class UserService {
   }
 
   public async usernameExsit(username: string): Promise<ResponseUserDTO | {}> {
-    try{
+    try {
       return await this.userRepository.findUsername(username);
-    }catch(error){
+    } catch (error) {
       throw error
     }
   }
@@ -91,41 +97,46 @@ export class UserService {
 
   public async updateUser(data: UpdateUserDTO): Promise<ResponseUserDTO | undefined> {
     try {
-      const { request, profileFiles, backgroundFiles, ...updateFields } = data;
-      const cognitosub = request.cookies?.username
-      if (!cognitosub) {
-        throw new UnauthorizedError();
+      const { request, profileFiles = [], backgroundFiles = [], ...updateFields } = data;
+      const cognitoSub = request.cookies?.username;
+  
+      if (!cognitoSub) {
+        throw new UnauthorizedError("User is not authenticated.");
       }
-      const existingUser = await this.userRepository.findByCognitoSub(cognitosub);
+  
+      const existingUser = await this.userRepository.findByCognitoSub(cognitoSub);
       if (!existingUser) {
-        throw new Error("User not found");
+        throw new Error("User not found.");
       }
-
+  
       const updateData: Partial<User> = { ...updateFields };
-
-      if (profileFiles && profileFiles.length > 0) {
+  
+      if (profileFiles.length > 0) {
+        console.log("Profile files received:", profileFiles);
         const profileUrls = await Promise.all(
           profileFiles.map((file: any) => uploadFileToS3Service.uploadFile(file)),
         );
         updateData.profile = [...new Set([...(existingUser.profile || []), ...profileUrls])];
       }
-
-      if (backgroundFiles && backgroundFiles.length > 0) {
+  
+      if (backgroundFiles.length > 0) {
+        console.log("Background files received:", backgroundFiles);
         const backgroundUrls = await Promise.all(
           backgroundFiles.map((file: any) => uploadFileToS3Service.uploadFile(file)),
         );
         updateData.background = [...new Set([...(existingUser.background || []), ...backgroundUrls])];
       }
-
-      const updatedUser = await this.userRepository.updateUserByCognitoSub(cognitosub, updateData);
-
+  
+      const updatedUser = await this.userRepository.updateUserByCognitoSub(cognitoSub, updateData);
+  
       if (!updatedUser) {
-        throw new Error("Error updating user");
+        throw new Error("Error updating user.");
       }
-
+  
       return updatedUser;
     } catch (error) {
-
+      console.error("Error updating user:", error);
+      throw error;
     }
   }
 
@@ -228,6 +239,54 @@ export class UserService {
       throw error;
     }
   }
+  public async getUserFavoritesID(request: Express.Request): Promise<string[] | null> {
+    try {
+      const cognitoSub = request.cookies?.username;
+      if (!cognitoSub) {
+        throw new UnauthorizedError("User is not logged in.");
+      }
+      const favorites = await this.userRepository.findUserFavorites(cognitoSub);
+      console.log(favorites);
 
+      if (favorites.length === 0) {
+        return []; // No favorites found
+      }
+      const favoritesId = favorites.map(favId => favId.propertyId);
+      return favoritesId;
+    } catch (error) {
+      console.error("Error retrieving user favorites:", error);
+      throw error;
+    }
+  }
+  public async getProperyOwnerProfile(congnitoSub: string, queries: RequestPropertyClientQuery)
+    : Promise<ResponseViewUserProfileDTO | any> {
+    try {
+      const existingUser = await this.userRepository.findByCognitoSub(congnitoSub);
 
+      if (!existingUser)
+        return new NotFoundError("User not found!")
+      const response = {} as ResponseViewUserProfileDTO;
+      const profile = await this.userRepository.findViewProfileOfUser(congnitoSub);
+      const propertiesResponses = await this.httpPropertiesServiceClient.getPropertyUser(congnitoSub, queries);
+      const { properties, totalProperties, totalPages } = propertiesResponses;
+      response.properties = properties;
+      response.totalProperties = totalProperties!;
+      response.totalPages = totalPages!;
+      response.user = profile;
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+  public async getProperyOwnerInfo(cognitoSub: string): Promise<ViewUserProfileDTO | null> {
+    try {
+      const existingUser = await this.userRepository.findByCognitoSub(cognitoSub);
+      if (!existingUser){
+        return null;
+      }
+      return await this.userRepository.findViewProfileOfUser(cognitoSub);
+    } catch (error) {
+      throw error;
+    }
+  }
 }

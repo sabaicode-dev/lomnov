@@ -7,14 +7,17 @@ import logSkyBar from "@/images/banner-sky-bar.jpg";
 import Slider from "@/components/molecules/slider/Slider";
 import Link from "next/link";
 import ItemCardNearlyLocationList from "@/components/molecules/item-card-nearly-location-list/ItemCardNearlyLocationList";
+import LocationAccess from "@/components/organisms/location-access/LocationAccess";
 
 
 export default function Home() {
   return (
     <main className="w-full">
       <HeroSection />
-      <section className="w-full xl:w-[1300px] m-auto py-10 px-2 xl:px-0">
+      <section className="w-full xl:w-[1300px] m-auto py-10 px-2 xl:px-0 flex flex-col justify-center items-center">
+
         <ItemCardPopularLocationList />
+
       </section>
       <section className="w-full  bg-gray-500 h-[1200px] lg:h-[720px] relative ">
         <Image
@@ -28,7 +31,7 @@ export default function Home() {
             <div className="w-full lg:w-[30%] h-full py-32 ">
               <ItemCardNearlyLocationList />
             </div>
-            <div className=" lg:w-[30%] h-full  py-10 flex flex-col items-center">
+            <div className=" lg:w-[30%] h-full  py-10 flex flex-col items-center ">
               <div className=" flex flex-col items-center justify-center mb-40">
                 <h1 className=" text-white font-[600]  text-[30px]">
                   Nearly Location
@@ -39,11 +42,15 @@ export default function Home() {
                 </p>
               </div>
               <Link
-                href={""}
-                className=" px-10 py-2  border-[1px] text-white text-[26px] font-[500]"
+                href={"/nearly-location"}
+                className="px-10 py-2 rounded-md border-[1px] border-white text-white text-[26px] font-[500]
+                  transition-all duration-150 ease-in-out
+                  bg-transparent  hover:text-white hover:border-white hover:scale-105
+                  active:scale-95  active:text-white"
               >
                 View ALL
               </Link>
+
             </div>
           </div>
         </div>

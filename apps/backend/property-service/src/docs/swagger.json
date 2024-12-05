@@ -32,10 +32,29 @@
 				"type": "object",
 				"description": "Construct a type with a set of properties K of type T"
 			},
-			"ResponseCreatePropertyDTO": {
+			"IProperty": {
 				"properties": {
 					"_id": {
 						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
+					"coordinate": {
+						"properties": {
+							"coordinates": {
+								"items": {
+									"type": "number",
+									"format": "double"
+								},
+								"type": "array"
+							},
+							"type": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"coordinates",
+							"type"
+						],
+						"type": "object"
 					},
 					"cognitoSub": {
 						"type": "string"
@@ -101,6 +120,86 @@
 				},
 				"required": [
 					"_id",
+					"coordinate"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseCreatePropertyDTO": {
+				"properties": {
+					"_id": {
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
+					"cognitoSub": {
+						"type": "string"
+					},
+					"title": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"description": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"thumbnail": {
+						"type": "string"
+					},
+					"images": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"urlmap": {
+						"type": "string"
+					},
+					"address": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"location": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"category": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"transition": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"detail": {
+						"$ref": "#/components/schemas/Record_string.any_"
+					},
+					"status": {
+						"type": "boolean"
+					},
+					"condanate": {
+						"items": {
+							"$ref": "#/components/schemas/IProperty"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"_id",
 					"cognitoSub",
 					"thumbnail",
 					"images",
@@ -149,6 +248,91 @@
 				"required": [
 					"properties",
 					"pagination"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponsePropertyDTO": {
+				"properties": {
+					"_id": {
+						"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+					},
+					"cognitoSub": {
+						"type": "string"
+					},
+					"title": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"description": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"thumbnail": {
+						"type": "string"
+					},
+					"images": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"urlmap": {
+						"type": "string"
+					},
+					"address": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"location": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"category": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"transition": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					},
+					"detail": {
+						"$ref": "#/components/schemas/Record_string.any_"
+					},
+					"status": {
+						"type": "boolean"
+					},
+					"condanate": {
+						"items": {
+							"$ref": "#/components/schemas/IProperty"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"_id",
+					"cognitoSub",
+					"thumbnail",
+					"images",
+					"location",
+					"category",
+					"transition"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -228,6 +412,71 @@
 					"location",
 					"category",
 					"transition"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RequestQueryPropertyDTO": {
+				"properties": {
+					"cognitoSub": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string"
+					},
+					"location": {
+						"type": "string"
+					},
+					"category": {
+						"type": "string"
+					},
+					"transition": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"language": {
+						"type": "string"
+					},
+					"price_gte": {
+						"type": "number",
+						"format": "double"
+					},
+					"price_lte": {
+						"type": "number",
+						"format": "double"
+					},
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"limit": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ResponseCategoriesDTO": {
+				"properties": {
+					"category": {
+						"items": {
+							"$ref": "#/components/schemas/LocalizedContent"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"category"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -446,9 +695,40 @@
 						"name": "limit",
 						"required": false,
 						"schema": {
-							"default": 10,
+							"default": 12,
 							"format": "double",
 							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/properties/get/{propertyId}": {
+			"get": {
+				"operationId": "FetchPropertyByID",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponsePropertyDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "propertyId",
+						"required": true,
+						"schema": {
+							"type": "string"
 						}
 					}
 				]
@@ -572,9 +852,17 @@
 						"name": "limit",
 						"required": false,
 						"schema": {
-							"default": 10,
+							"default": 12,
 							"format": "double",
 							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "fav_me",
+						"required": false,
+						"schema": {
+							"type": "string"
 						}
 					}
 				]
@@ -704,6 +992,383 @@
 						}
 					}
 				]
+			}
+		},
+		"/api/v1/properties/{propertyId}/views": {
+			"put": {
+				"operationId": "IncrementPropertyViews",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponsePropertyDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "propertyId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"get": {
+				"operationId": "GetPropertyViews",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"views": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"views"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "propertyId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/properties/user/{cognitoSub}": {
+			"get": {
+				"operationId": "GetPropertyUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"totalProperties": {
+											"type": "number",
+											"format": "double"
+										},
+										"totalPages": {
+											"type": "number",
+											"format": "double"
+										},
+										"properties": {
+											"items": {
+												"$ref": "#/components/schemas/ResponsePropertyDTO"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"totalProperties",
+										"totalPages",
+										"properties"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "cognitoSub",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "cognitoSub",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "title",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "description",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "address",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "location",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "category",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "transition",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "price",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "language",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "price_gte",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "price_lte",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/properties/{propertyId}/coordinates": {
+			"post": {
+				"operationId": "AddCoordinatesToProperty",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponsePropertyDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "propertyId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"lng": {
+										"type": "number",
+										"format": "double"
+									},
+									"lat": {
+										"type": "number",
+										"format": "double"
+									}
+								},
+								"required": [
+									"lng",
+									"lat"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/properties/nearby": {
+			"get": {
+				"operationId": "FindNearbyProperties",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResponsePropertyDTO"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "lat",
+						"required": false,
+						"schema": {
+							"default": 0,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "lng",
+						"required": false,
+						"schema": {
+							"default": 0,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "maxDistance",
+						"required": false,
+						"schema": {
+							"default": 1000,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 10,
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/properties/category": {
+			"get": {
+				"operationId": "GetCategories",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ResponseCategoriesDTO"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "This method use for responses only category",
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": []
 			}
 		}
 	},

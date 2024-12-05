@@ -1,84 +1,81 @@
-"use client"
-import React, { useEffect, useState } from "react";
-import { RealEstateItem } from "@/libs/types/api-properties/property-response";
-import ItemCard from "@/components/molecules/item-card/ItemCard";
+'use client';
+
+import React, { useEffect, useState, useCallback } from "react";
+
 import PropertyActions from "@/components/molecules/properties-action/PropertyActions";
+import { useProperties } from "@/context/property";
+import { useAuth } from "@/context/user";
+import { RealEstateItem } from "@/libs/types/api-properties/property-response";
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import Loading from "@/components/atoms/loading/Loading";
+import ItemCardPost from "@/components/molecules/item-cart-post-property/ItemCartPost";
+import { toggleCompare } from "@/libs/const/toggleCompare";
+import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar";
 
-interface ListedPropertiesProps {
-  user: string;
-}
-
-const ListedProperties = ({ user }: ListedPropertiesProps) => {
-  const [listedProperties, setListedProperties] = useState<RealEstateItem[]>([]);
-  const [selectedProperties, setSelectedProperties] = useState<number[]>([]);
+const ListedProperties = () => {
+  const { user, isAuthenticated } = useAuth(); // Access user and auth status from context
+  const { properties, error, fetchProperties: contextFetchProperties } = useProperties();
+  const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
+  const [items, setItems] = useState<RealEstateItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([]);
+
+  // Filter properties based on the authenticated user
+  const listedProperties = user && properties
+    ? properties.filter((property: RealEstateItem) => property._id === user._id) // Assuming 'ownerId' links property to user
+    : [];
+
+  // Define fetchProperties as a callback function to avoid missing dependencies in useEffect
+  const fetchProperties = useCallback(async () => {
+    try {
+      const res = await axiosInstance.get(`${API_ENDPOINTS.MY_PROPERTY}`);
+      if (res.status !== 200) {
+        throw new Error("Failed to fetch properties");
+      }
+      const properties = res.data.properties;
+      setItems(properties);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    async function fetchProperties() {
-      try {
-        const res = await fetch(`https://lomnov.onrender.com/api/v1/properties?user=${user}`);
-        if (!res.ok) {
-          throw new Error("Failed to fetch properties");
-        }
-        const properties = await res.json();
-        setListedProperties(properties);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
+    if (isAuthenticated && user?._id) {
+      fetchProperties();
     }
+  }, [isAuthenticated, user?._id, fetchProperties]); // Include fetchProperties in dependencies
 
-    fetchProperties();
-  }, [user]);
-
-  const handleSelectProperty = (id: number) => {
-    setSelectedProperties((prevSelected) =>
-      prevSelected.includes(id)
-        ? prevSelected.filter((propertyId) => propertyId !== id)
-        : [...prevSelected, id]
-    );
+  // Handle comparison toggling using the imported toggleCompare function
+  const handleToggleCompare = (items: RealEstateItem[]) => {
+    toggleCompare(items, selectedItems, setSelectedItems);
   };
 
-  const handlePost = () => {
-    alert("Post selected properties");
-  };
 
-  const handleUpdate = () => {
-    alert("Update selected property");
-  };
-
-  const handleDelete = () => {
-    alert("Delete selected properties");
-  };
-
-  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="max-w-[1300px] mx-auto">
-      <PropertyActions
-        selectedProperties={selectedProperties}
-        onPost={handlePost}
-        onUpdate={handleUpdate}
-        onDelete={handleDelete}
-      />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        {listedProperties.length > 0 ? (
-          listedProperties.map((property) => (
-            <div key={property.id} className="flex items-start flex-col">
-              <input
-                type="checkbox"
-                checked={selectedProperties.includes(property.id)}
-                onChange={() => handleSelectProperty(property.id)}
-                className="appearance-none w-5 h-5 border border-olive-green rounded-[5px] checked:bg-olive-green checked:border-olive-green focus:outline-none"
-              />
-              <ItemCard item={property} />
-            </div>
-          ))
+     
+
+      <div className="grid mt-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 sm:gap-5 md:gap-5 lg:gap-5 xl:gap-5 2xl:gap-5">
+        {loading ? (
+          <div className="w-[1300px] flex items-center justify-center">
+            <Loading />
+          </div>
         ) : (
-          <p>No listed properties found.</p>
+          items.map((item) => {
+            const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
+            return (
+              <ItemCardPost key={item._id} item={item} toggleCompare={() => handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />
+            )
+          })
         )}
       </div>
+      {/* Comparison Bar */}
+      <ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems} />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { RouteConfig } from "@/src/utils/types/interface"; 
+import { RouteConfig } from "@/src/utils/types/interface";
 import { ForbiddenError, UnauthorizedError } from "@/src/utils/error/customErrors";
 
 
@@ -28,7 +28,7 @@ const authorizeRole = (req: Request, _res: Response, next: NextFunction) => {
     return next(new UnauthorizedError("Unauthorized: Please log in."));
   }
   const userRoles = req.user.roles || [];
-  const authorized = methodConfig?.roles?.some((role) =>
+  const authorized = methodConfig?.roles?.some((role: any) =>
     userRoles.includes(role),
   );
   // Deny access if user is not authorized

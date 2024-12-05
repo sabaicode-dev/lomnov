@@ -15,7 +15,7 @@ import configs from "@/src/config";
 import setCookie from "@/src/middlewares/cookies";
 import { CognitoService } from "@/src/services/cognito.service";
 import { ValidationError, UnauthorizedError, ServiceUnavailableError } from "@/src/utils/error/customErrors";
-
+import { GlobalSignOutCommandInput, GlobalSignOutCommandOutput } from "@aws-sdk/client-cognito-identity-provider";
 declare global {
   namespace Express {
     interface Request {
@@ -80,7 +80,7 @@ export class AuthService {
       const response = await this.cognitoService.signInUser(data);
 
       setCookie(request.res!, "accessToken", response.authResult!.AccessToken!);
-      setCookie(request.res!, "refreshToken", response.authResult!.RefreshToken!, { maxAge: 30 * 24 * 60 * 60 * 1000 }); // 30 days
+      setCookie(request.res!, "refreshToken", response.authResult!.RefreshToken!); // 30 days
       setCookie(request.res!, "idToken", response.authResult!.IdToken!); // No maxAge, expires with session
       setCookie(request.res!, "username", response.sub!, { maxAge: 30 * 24 * 60 * 60 * 1000 }); // 30 days
 
@@ -128,6 +128,16 @@ export class AuthService {
     const data = { email, newPassword, confirmationCode };
     try {
       return await this.cognitoService.confirmPasswordReset(data);
+    } catch (error) {
+      throw error;
+    }
+  }
+  public async signOutUser(accessToken: string):Promise<GlobalSignOutCommandOutput>{
+    const params:GlobalSignOutCommandInput = {
+      AccessToken: accessToken,
+    }
+    try {
+      return await this.cognitoService.signout(params);
     } catch (error) {
       throw error;
     }

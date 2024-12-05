@@ -8,7 +8,7 @@ const ROUTE_PATHS: RoutesConfig = {
     target: configs.authServiceUrl, // Should be http://localhost:4001
     methods: {
       POST: { authRequired: false, roles: [] },
-      DELETE: {authRequired: true, roles: ["admin"]}
+      DELETE: { authRequired: true, roles: ["admin"] }
     },
     nestedRoutes: [
       {
@@ -22,6 +22,10 @@ const ROUTE_PATHS: RoutesConfig = {
       {
         path: "/signin",
         methods: { POST: { authRequired: false, roles: [] } },
+      },
+      {
+        path: "/logout",
+        methods: { POST: { authRequired: false, roles: [] } }
       },
       {
         path: "/verify",
@@ -40,7 +44,7 @@ const ROUTE_PATHS: RoutesConfig = {
         methods: { POST: { authRequired: false, roles: [] } },
       },
       {
-        path: "/google-sign-in",
+        path: "/google-signin",
         methods: { GET: { authRequired: false, roles: [] } },
       },
       {
@@ -57,8 +61,9 @@ const ROUTE_PATHS: RoutesConfig = {
     path: "/api/v1/users",
     target: configs.userServiceUrl, // Should be http://localhost:4002
     methods: {
-      POST: { authRequired: true, roles: ["admin","user"] },
-      GET: { authRequired: false, roles: [] }
+      POST: { authRequired: true, roles: ["admin", "user"] },
+      GET: { authRequired: false, roles: [] },
+      PUT: { authRequired: true, roles: ["admin", "user"] }
     },
     nestedRoutes: [
       {
@@ -86,8 +91,17 @@ const ROUTE_PATHS: RoutesConfig = {
       },
       {
         path: "/favorite",
-        methods: { PUT: { authRequired: true, roles: [""] } },
+        methods: { PUT: { authRequired: true, roles: ["user"] } },
       },
+      {
+        path: "/me/favorites",
+        methods: { GET: { authRequired: true, roles: ['user'] } }
+      },
+      {
+        path: "/profile-user",
+        methods: { GET: { authRequired: false, roles: [] } }
+      },
+      { path: "/profile-info", methods: { GET: { authRequired: false, roles: [] } } }
     ],
   },
   PROPERTY_SERVICE: {
@@ -95,7 +109,9 @@ const ROUTE_PATHS: RoutesConfig = {
     target: configs.propertyServiceUrl, // Should be http://localhost:4003
     methods: {
       GET: { authRequired: false, roles: [] },
-      POST: { authRequired: false, roles: ["admin","user"] },
+      POST: { authRequired: true, roles: ["admin", "user"] },
+      DELETE: { authRequired: true, roles: ['admin', 'user'] },
+      PUT: { authRequired: true, roles: ['admin', 'user'] }
     },
     nestedRoutes: [
       {
@@ -104,8 +120,20 @@ const ROUTE_PATHS: RoutesConfig = {
       },
       {
         path: "/me",
-        methods: { GET: { authRequired: true, roles: ["user"] } },
+        methods: {
+          GET: { authRequired: true, roles: ["user"] },
+          DELETE: { authRequired: true, roles: ['user', 'admin'] }
+        },
       },
+      {
+        path: "/get",
+        methods: { GET: { authRequired: false, roles: ["user"] } }
+      },
+      {
+        path: "/category",
+        methods: { GET: { authRequired: false, roles: [] } }
+      },
+      { path: "/user", methods: { GET: { authRequired: false, roles: [] } } }
     ],
   },
 };

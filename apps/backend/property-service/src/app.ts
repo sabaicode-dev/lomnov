@@ -7,6 +7,9 @@ import { loggingMiddleware } from './utils/request-response-logger/logger';
 import { errorHandler } from './utils/error/errorHanler';
 import cookieParser from 'cookie-parser';
 
+import cors from "cors";
+import { corsOption } from './middlewares/corsOption';
+
 // Dynamically load swagger.json
 const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, 'docs/swagger.json'), 'utf8'));
 
@@ -14,6 +17,8 @@ const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, 'docs/sw
 // Initialize App Express
 // ========================
 const app = express();
+
+app.use(cors(corsOption));
 app.use(cookieParser());
 
 // ========================
@@ -30,6 +35,7 @@ app.use(loggingMiddleware)
 // Global API V1
 // ========================
 RegisterRoutes(app)
+console.log("Error!");
 
 // ========================
 // API Documentations
@@ -39,7 +45,10 @@ app.use("/api/v1/properties/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerD
 // ========================
 // ERROR Handler
 // ========================
+console.log("Request Body:", express.request.body);
+
 app.use(errorHandler)
+
 
 export default app;
 

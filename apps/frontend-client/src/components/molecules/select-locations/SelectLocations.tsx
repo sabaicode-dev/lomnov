@@ -2,7 +2,7 @@
 
 import { IconLocation } from "@/icons";
 import { useState } from "react";
-
+import { locations } from "@/libs/const/location";
 interface Option {
   name: string;
 }
@@ -14,38 +14,12 @@ interface CustomDropdownProps {
 
 interface SelectPropertiesProps {
   onChange: (option: Option) => void;
+  backGroundColor?:"bg-white" | "bg-grayish-white";
 }
-
-const locations = [
-  { name: "banteay meanchey" },
-  { name: "battambang" },
-  { name: "kampong cham" },
-  { name: "kampong chhang" },
-  { name: "kampong speu" },
-  { name: "kampong thom" },
-  { name: "kampot" },
-  { name: "kandal" },
-  { name: "kep" },
-  { name: "koh kong" },
-  { name: "kratié" },
-  { name: "mondulkiri" },
-  { name: "Oddar Meanchey" },
-  { name: "pailin" },
-  { name: "phnom penh" },
-  { name: "preah Sihanouk" },
-  { name: "preah Vihear" },
-  { name: "prey Veng" },
-  { name: "pursat" },
-  { name: "siem reap" },
-  { name: "stung treng" },
-  { name: "svay rieng" },
-  { name: "takéo" },
-  { name: "tboung khmum" },
-];
 
 const defaultLocation = { name: "Locations" };
 
-const SelectLocations: React.FC<SelectPropertiesProps> = ({ onChange }) => {
+const SelectLocations: React.FC<SelectPropertiesProps> = ({ onChange ,backGroundColor='bg-grayish-white'}) => {
   const [selectedOption, setSelectedOption] = useState<Option | null>(
     defaultLocation,
   );
@@ -60,14 +34,14 @@ const SelectLocations: React.FC<SelectPropertiesProps> = ({ onChange }) => {
   };
 
   return (
-    <div className="relative inline-block bg-grayish-white rounded-lg">
+    <div className={`relative inline-block border border-[#7D7775] rounded-lg ${backGroundColor}`}>
       <button
         className="flex items-center justify-between w-full px-4 py-2  "
         onClick={toggleDropdown}
       >
         {selectedOption ? (
           <div className="flex items-center">
-            <IconLocation props="mr-3 text-olive-green" />
+            <IconLocation className="mr-3 text-olive-green" />
             <span className="text-black text-[14px] lg:mr-20">
               {selectedOption.name}
             </span>

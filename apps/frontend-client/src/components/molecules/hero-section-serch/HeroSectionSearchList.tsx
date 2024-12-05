@@ -25,7 +25,7 @@ const HeroSectionSearchList: React.FC<HeroSectionSearchListProps> = ({
       <ul className="flex flex-col gap-3 md:gap-5" style={{ color: textColor }}>
         {searchLocation.map((item, key) => (
           <Link key={key} href="" className="flex flex-row gap-5">
-            <span className="w-[90%] text-[14px] md:text-[16px]">{item.address}</span>
+            <span className="w-[90%] text-[14px] md:text-[16px]">{item.address[0].content}</span>
             <IconSearch props="text-[20px] text-[gray]" />
           </Link>
         ))}

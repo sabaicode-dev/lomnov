@@ -1,7 +1,7 @@
 
 import { uploadFileToS3 } from "@/src/middlewares/upload";
 // import { UploadedFile } from "tsoa";
-import Image from "../models/image.model";
+import Image from "@/src/database/models/image.model";
 
 export class ImageRepositories {
     // upload single

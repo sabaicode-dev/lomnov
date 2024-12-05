@@ -11,6 +11,9 @@ type Config = {
   awsS3BucketName: string
   awsCognitoUserPoolId: string;
   awsCognitoClientId: string;
+  clientUrl:string;
+  apiGateWayUrl:string;
+  propertyServiceEndPiont:string;
 };
 
 // Function to load and validate environment variables
@@ -29,8 +32,10 @@ function loadConfig(): Config {
     AWS_S3_REGION: Joi.string().required(),
     AWS_S3_BUCKET_NAME: Joi.string().required(),
     AWS_COGNITO_USER_POOL_ID: Joi.string().required(),
-    AWS_COGNITO_CLIENT_ID: Joi.string().required()
-
+    AWS_COGNITO_CLIENT_ID: Joi.string().required(),
+    CLIENT_URL:Joi.string().required(),
+    API_GATEWAY_URL:Joi.string().required(),
+    PROPERTY_SERVICE_ENDPIONT:Joi.string().required()
   }).unknown().required();
 
   // Validate the environment variables
@@ -44,10 +49,13 @@ function loadConfig(): Config {
     mongodbUrl: envVars.MONGODB_URL,
     awsAccessKeyId: envVars.AWS_ACCESS_KEY_ID,
     awsSecretAccessKey: envVars.AWS_SECRET_ACCESS_KEY,
-    awsS3Region: envVars.AWS_REGION,
+    awsS3Region: envVars.AWS_S3_REGION,
     awsS3BucketName: envVars.AWS_S3_BUCKET_NAME,
-    awsCognitoUserPoolId: envVars.USER_POOL_ID,
-    awsCognitoClientId: envVars.COGNITO_APP_CIENTID
+    awsCognitoUserPoolId: envVars.AWS_COGNITO_USER_POOL_ID,
+    awsCognitoClientId: envVars.AWS_COGNITO_CLIENT_ID,
+    clientUrl:envVars.CLIENT_URL,
+    apiGateWayUrl:envVars.API_GATEWAY_URL,
+    propertyServiceEndPiont:envVars.PROPERTY_SERVICE_ENDPIONT
   };
 }
 

@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 // Sample user data
 const properties = [
   {
-    cognitoSub: "74b8c408-c0d1-706e-e4d3-3a4061d4d0e3",
+    cognitoSub: "857468d1-a9dc-4949-b111-5c6215511d85",
     title: [
       { content: "Modern Apartment", language: "en" },
       { content: "អាផាតមិនទំនើប", language: "kh" },
@@ -229,7 +229,7 @@ const properties = [
     updatedAt: new Date(),
   },
   {
-    cognitoSub: "74b8c408-c0d1-706e-e4d3-3a4061d4d0e3",
+    cognitoSub: "857468d1-a9dc-4949-b111-5c6215511d85",
     title: [
       { content: "Seaside Cottage", language: "en" },
       { content: "ផ្ទះតូចជាប់សមុទ្រ", language: "kh" },
@@ -238,7 +238,7 @@ const properties = [
       { content: "A charming cottage with ocean views.", language: "en" },
       { content: "ផ្ទះតូចគួរឱ្យស្រឡាញ់ជាមួយទេសភាពសមុទ្រ។", language: "kh" },
     ],
-    thumbnail: "https://example.com/images/thumbnail11.jpg",
+    thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE8xGYp80KIX-wYPSza6W5P_IK5QFZNqh-K8FENwgkIJt3hiT3h0RNAOUytEVKa5wQfYw&usqp=CAU",
     images: [
       "https://example.com/images/image21.jpg",
       "https://example.com/images/image22.jpg",

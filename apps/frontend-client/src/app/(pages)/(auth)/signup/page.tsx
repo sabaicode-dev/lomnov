@@ -7,7 +7,7 @@ import banner from "@/images/banner.png";
 const signup = () => {
   return (
     <div className="w-full">
-      <div className="w-full relative mb-[800px]">
+      <div className="w-full relative mb-[550px]">
         {/* Banner */}
         <header className="relative w-full h-[400px]">
           <Image

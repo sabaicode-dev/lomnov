@@ -8,15 +8,19 @@ import {
   FormField,
   Get,
   Query,
+  Body,
   Put,
   Path,
   Tags,
-  Request
+  Request,
+  Queries,
 } from "tsoa";
+import { IProperty } from "@/src/utils/types/indext";
 import { PropertyService } from "@/src/services/property.service";
-import { RequestPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
+import { RequestPropertyDTO, RequestQueryPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponsePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
 import { Request as Express } from "express";
-import { UnauthorizedError } from "../utils/error/customErrors";
+
+import { NotFoundError, UnauthorizedError } from "@/src/utils/error/customErrors";
 // ====================================================================
 
 declare global {
@@ -52,8 +56,17 @@ export class PropertyController extends Controller {
     @FormField() detail?: string,
     @Request() request?: Express.Request
   ): Promise<ResponseCreatePropertyDTO> {
+    console.log('Thumbnail:', thumbnail);  // Add a log to check if the file is received
+    console.log('Images:', images);        // Log images array
+    console.log('description:', description);        // Log images array
+    console.log('location:', location);        // Log images array
+    console.log("Price::", price);
+
     try {
+
       const cognitoSub = request?.cookies.username!;
+      console.log(cognitoSub);
+
       if (!cognitoSub) {
         throw new UnauthorizedError();
       }
@@ -76,6 +89,8 @@ export class PropertyController extends Controller {
         images,
       });
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }
@@ -94,7 +109,7 @@ export class PropertyController extends Controller {
     @Query() price_gte?: number,
     @Query() price_lte?: number,
     @Query() page: number = 1,
-    @Query() limit: number = 10,
+    @Query() limit: number = 12,
     // @Request() request?: Express.Request
   ): Promise<ResponseAllPropertyDTO> {
     try {
@@ -119,7 +134,16 @@ export class PropertyController extends Controller {
       throw error
     }
   }
-
+  // Controller get single
+  @Get("/properties/get/{propertyId}")
+  public async fetchPropertyByID(@Path() propertyId: string): Promise<ResponsePropertyDTO> {
+    try {
+      return await this.propertyService.getPropertyByID(propertyId);
+    } catch (error) {
+      console.log(error)
+      throw error;
+    }
+  }
   @Get("/properties/me")
   public async getPropertyMe(
     @Query() title?: string,
@@ -133,7 +157,8 @@ export class PropertyController extends Controller {
     @Query() price_gte?: number,
     @Query() price_lte?: number,
     @Query() page: number = 1,
-    @Query() limit: number = 10,
+    @Query() limit: number = 12,
+    @Query() fav_me?: string,
     @Request() request?: Express.Request,
   ): Promise<ResponseAllPropertyDTO> {
     try {
@@ -155,6 +180,7 @@ export class PropertyController extends Controller {
         price_lte,
         page,
         limit,
+        fav_me
       };
 
       return await this.propertyService.getPropertiesMe(queries);
@@ -228,12 +254,138 @@ export class PropertyController extends Controller {
   ): Promise<{ message: string }> {
     try {
       const cognitoSub = request?.cookies.username;
-      const result = await this.propertyService.deleteProperty(propertyId, cognitoSub );
+      const result = await this.propertyService.deleteProperty(propertyId, cognitoSub);
       return { message: result ? "Delete successfully" : "Property not found" };
     } catch (error) {
       console.error("Error in deleteProperty:", error);
       this.setStatus(500);
       throw new Error("Failed to delete property");
+    }
+  }
+
+  //this method for post view user 
+
+  @Put("/properties/{propertyId}/views")
+  public async incrementPropertyViews(@Path() propertyId: string): Promise<ResponsePropertyDTO> {
+    console.log("Incrementing views for property ID:", propertyId); // Debugging line
+    try {
+      return await this.propertyService.incrementPropertyViews(propertyId);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        this.setStatus(404);
+      } else {
+        this.setStatus(500);
+      }
+      throw error;
+    }
+  }
+
+
+  @Get("/properties/{propertyId}/views")
+  public async getPropertyViews(
+    @Path() propertyId: string
+  ): Promise<{ views: number }> {
+    try {
+      const views = await this.propertyService.getPropertyViews(propertyId);
+      return { views };
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        this.setStatus(404);
+      } else {
+        this.setStatus(500);
+      }
+      throw error;
+    }
+  }
+
+  @Get("/properties/user/{cognitoSub}")
+  public async getPropertyUser(@Path() cognitoSub: string, @Queries() queries: RequestQueryPropertyDTO): Promise<{ properties: ResponsePropertyDTO[]; totalPages: number; totalProperties: number }> {
+    try {
+      return await this.propertyService.getPropertyUser(cognitoSub, queries);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  //endpoint for find nearly location
+  @Post("/properties/{propertyId}/coordinates")
+  public async addCoordinatesToProperty(
+    @Path() propertyId: string,
+    @Body() coordinates: { lat: number; lng: number }
+  ): Promise<ResponsePropertyDTO> {
+    try {
+      const updatedProperty = await this.propertyService.addCoordinatesToProperty(
+        propertyId,
+        coordinates
+      );
+
+      if (!updatedProperty) {
+        throw new NotFoundError("Property not found");
+      }
+
+      return updatedProperty;
+    } catch (error) {
+      console.error("Error adding coordinates to property:", error);
+      throw error;
+    }
+  }
+
+
+
+  @Get("/properties/nearby")
+  public async findNearbyProperties(
+    @Query() lat: number = 0,
+    @Query() lng: number = 0,
+    @Query() maxDistance: number = 1000, // Default 1km
+    @Query() limit: number = 10 // Default limit
+  ): Promise<ResponsePropertyDTO[]> {
+    try {
+      if (lat === 0 || lng === 0) {
+        throw new Error("Invalid latitude or longitude. Both 'lat' and 'lng' must be provided.");
+      }
+
+      const nearbyProperties: IProperty[] = await this.propertyService.findNearbyProperties(
+        { lat, lng },
+        maxDistance,
+        limit
+      );
+
+      console.log("Raw Nearby Properties:", nearbyProperties);
+
+      const responseProperties: ResponsePropertyDTO[] = nearbyProperties.map((property) => ({
+        _id: property._id,
+        cognitoSub: property.cognitoSub || "",
+        title: property.title || [],
+        description: property.description || [],
+        thumbnail: property.thumbnail || "",
+        images: property.images || [],
+        urlmap: property.urlmap || "",
+        address: property.address || [],
+        location: property.location || [],
+        price: property.price,
+        category: property.category || [],
+        transition: property.transition || [],
+        detail: property.detail || {},
+        status: property.status,
+
+      }));
+
+      return responseProperties;
+    } catch (error) {
+      console.error("Error finding nearby properties:");
+      throw new Error("Failed to fetch nearby properties. Please try again.");
+    }
+  }
+
+  /**
+   * This method use for responses only category 
+   */
+  @Get("/properties/category")
+  public async getCategories() {
+    try {
+      return await this.propertyService.getCategories();
+    } catch (error) {
+      throw error;
     }
   }
 }

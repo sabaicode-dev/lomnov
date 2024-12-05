@@ -92,6 +92,7 @@ export interface InputFieldProps {
   hasToggleIcon?: boolean;
   toggleVisibility?: () => void;
   visible?: boolean;
+
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -104,21 +105,23 @@ const InputField: React.FC<InputFieldProps> = ({
   hasToggleIcon = false,
   toggleVisibility,
   visible = false,
+
+
 }) => {
   return (
-    <div className="relative mb-9 mx-[45px]">
+    <div className="relative mb-12  mx-[45px]">
       <input
         type={type}
         {...register}
         onFocus={() => setIsFocused(true)}
         onBlur={(e) => setIsFocused(e.target.value !== "")}
-        className={`w-full px-3 h-[50px]  border rounded-[15px] bg-transparent focus:outline-none focus:border-olive-green  placeholder-transparent ${error ? "border-red-500" : "border-charcoal"}`}
+        className={`w-full px-3 h-[45px]  border rounded-[8px] bg-transparent focus:outline-none focus:border-olive-green  placeholder-transparent ${error ? "border-red-500" : "border-charcoal"}`}
         placeholder=" "
         aria-label={label}
       />
       <label
-        className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-in-out 
-          ${isFocused || error ? "-translate-y-[47px] font-helvetica text-helvetica-h4 font-bold text-olive-green" : "font-helvetica text-helvetica-h4 text-charcoal"} ${error ? "font-helvetica text-helvetica-h5 text-red-500" : "font-helvetica text-helvetica-h5 text-charcoal"}`}
+        className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-in-out
+          ${isFocused || error ? "-translate-y-[47px] font-helvetica text-l  font-bold text-olive-green" : "font-helvetica text-xl text-charcoal"} ${error ? "font-helvetica text-helvetica-h5 text-red-500" : "font-helvetica text-helvetica-h5 text-charcoal"}`}
       >
         {label}
       </label>
