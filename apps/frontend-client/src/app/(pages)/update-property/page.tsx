@@ -8,21 +8,15 @@ import PostSelectTransition from '@/components/atoms/post-select-transition/Post
 import PostInputField from '@/components/atoms/post-input-field/PostInputField';
 import PostSelectField from '@/components/atoms/post-select-field/PostSelectField';
 import Map from '@/components/molecules/map/Map';
-const properties = [
-  { name: "land" },
-  { name: "villa" },
-  { name: "home" },
-  { name: "shop" },
 
-];
 export default function Page() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<string>('Properties');
   const handleOptionClick = (option: string) => {
     setSelectedOption(option);
     setIsOpen(false);
-
   };
+
   return (
     <main className='w-full bg-[#E6E6E6]'>
       {/* banner */}
@@ -138,7 +132,7 @@ export default function Page() {
                       <input type="checkbox" value="" className="sr-only peer"/>
                         <div className="relative w-11 h-6 bg-gray-200   rounded-full peer dark:bg-gray-500 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px]  after:border after:rounded-full after:h-5 after:w-5 after:transition-all "></div>
                         <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-700">Public</span>
-                
+
                     </label><br />
                       <span className='font-helvetica text-gray-500 leading-3 tracking-widest my-3 text-[18px] text-helvetica-paragraph'>This product will be hidden from all sales channels.</span>
                   </div>

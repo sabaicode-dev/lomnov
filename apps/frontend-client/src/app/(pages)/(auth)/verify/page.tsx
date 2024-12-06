@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import axios from "axios";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
@@ -218,4 +218,12 @@ const VerifyAccount: React.FC = () => {
   );
 };
 
-export default VerifyAccount;
+const Page = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyAccount />
+    </Suspense>
+  );
+};
+
+export default Page;

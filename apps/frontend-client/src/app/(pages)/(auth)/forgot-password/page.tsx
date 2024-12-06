@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -172,4 +172,14 @@ const ForgotPassword: React.FC = () => {
     </div>
   );
 };
-export default ForgotPassword;
+
+
+const Page = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ForgotPassword />
+    </Suspense>
+  );
+};
+
+export default Page;

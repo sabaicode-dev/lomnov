@@ -1,26 +1,7 @@
 
 "use client";
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
 import ItemCartNearlyList from "../item-nearly-location/ItemListNearly";
-
-// Define icon URLs
-const markerIconUrl = "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png";
-const markerIcon2xUrl = "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png";
-const markerShadowUrl = "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png";
-
-// Configure default marker icons
-const userIcon = new L.Icon({
-  iconUrl: markerIconUrl,
-  iconRetinaUrl: markerIcon2xUrl,
-  shadowUrl: markerShadowUrl,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-});
 
 // Interface for coordinates
 interface Coordinates {
@@ -28,20 +9,21 @@ interface Coordinates {
   longitude: number;
 }
 
-//this is functuon card location near user 
+//this is functuon card location near user
 const CartAllowLocation: React.FC = () => {
   const [locationAllowed, setLocationAllowed] = useState<boolean | null>(null);
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
   const [showPopup, setShowPopup] = useState<boolean>(true);
+  const [navigator, setNavigator] = useState<any>(null)
 
   const handleAllowLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
+    if (navigator && navigator?.geolocation) {
+      navigator?.geolocation?.getCurrentPosition(
+        (position: any) => {
           setLocationAllowed(true);
           setCoordinates({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
+            latitude: position?.coords?.latitude,
+            longitude: position?.coords?.longitude,
           });
         },
         () => {
@@ -80,7 +62,7 @@ const CartAllowLocation: React.FC = () => {
               Please allow location to find nearly properties.
             </p>
             <div className="flex justify-between gap-3">
-            <button
+              <button
                 onClick={handleAllowLocation}
                 className="bg-olive-drab text-white px-4 py-2 rounded hover:bg-gray-400"
               >
@@ -92,7 +74,6 @@ const CartAllowLocation: React.FC = () => {
               >
                 Deny
               </button>
-            
             </div>
           </div>
         </div>
@@ -109,12 +90,12 @@ const CartAllowLocation: React.FC = () => {
         <div className="mt-[80px]">
           {/* Display Property List */}
           <div className="w-full lg:w-[1300px] m-auto px-2 lg:px-0">
-            <ItemCartNearlyList/>
+            <ItemCartNearlyList />
           </div>
 
           {/* Display Map */}
-   
-           
+
+
         </div>
       )}
 

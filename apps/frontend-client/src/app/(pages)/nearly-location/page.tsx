@@ -5,11 +5,11 @@ import CartAllowLocation from "@/components/molecules/Cart-allowLoaction/CardAll
 
 
 const page = async () => {
- 
+
 
   return (
     <div className="w-full">
-   
+
       {/* Banner */}
       <header className="relative w-full h-[400px]">
         <Image
@@ -30,11 +30,11 @@ const page = async () => {
         <div className="absolute left-0 sm:left-0 md:left-0 lg:left-0 xl:left-0 bottom-[130px] w-[120px] sm:w-[150px] md:w-[235px] lg:w-[290px] xl:w-[300px] 2xl:w-[462px] h-px bg-white"></div>
         <div className="absolute left-[13rem] flex items-center justify-center w-full bottom-[-37px] px-2  ">
           <div className="z-10 m-auto lg:w-fit bg-white rounded-[18px] p-5">
-            <Search/>
+            <Search />
           </div>
         </div>
       </header>
-     <CartAllowLocation/>
+      <CartAllowLocation />
     </div>
   );
 };

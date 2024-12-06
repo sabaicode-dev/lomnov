@@ -9,7 +9,6 @@ import PostInputField from '@/components/atoms/post-input-field/PostInputField';
 import PostSelectField from '@/components/atoms/post-select-field/PostSelectField';
 import PostAtttributes from '@/components/atoms/post-attributes/PostAtttributes';
 import PostUploadImages from '@/components/atoms/post-images-upload/PostUploadImages';
-import PostMap from '@/components/atoms/post-map/PostMap';
 import { extractLatLngFromUrl } from '@/libs/functions/extractLatLngFromUrl';
 import PostToggleButton from '@/components/atoms/post-toggle-button/PostToggleButton';
 import axiosInstance from '@/libs/axios';
@@ -20,6 +19,11 @@ import { IPostPropertiesType } from '@/libs/types/api-properties/property-reques
 const defaultCategory = { name: "Select" };
 import { generateSlug } from "@/libs/functions/generateSlug"
 import axios from 'axios';
+
+import dynamic from "next/dynamic";
+const PostMap = dynamic(() => import('@/components/atoms/post-map/PostMap'), {
+  ssr: false
+});
 export default function Page() {
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [formData, setFormData] = useState<IPostPropertiesType>({
@@ -86,7 +90,7 @@ export default function Page() {
           return { ...prevState, detail: updatedDetails };
         });
       } else if (arrayName === 'title') {
-        // auot update slug base on title 
+        // auot update slug base on title
         const newSlug = generateSlug(value);
         setFormData(prevState => ({
           ...prevState,
@@ -279,7 +283,7 @@ export default function Page() {
                 <PostUploadImages errMsg={formState?.thumbnail} OnImageChange={handleImageChange} imagePreviews={imagePreviews} />
               </div>
               <div className="w-full mt-5">
-                <PostMap onChange={handleInputChange} values={formData.urlmap} />
+                <PostMap onChange={handleInputChange} values={formData && formData.urlmap || ''} />
               </div>
               <div className="w-full mt-5">
                 <PostToggleButton isChecked={isChecked} onChecked={handleStatusChange} />

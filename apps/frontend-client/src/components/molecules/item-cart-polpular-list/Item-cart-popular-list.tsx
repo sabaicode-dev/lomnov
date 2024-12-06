@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, Suspense } from "react";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import PropertyCardWithModal from "../item-cart-popluar/Item-cart-popular";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
@@ -34,7 +34,7 @@ async function fetchProperties(searchParams: { [key: string]: string | string[] 
   return { properties: [], pagination: { totalPages: 1, currentPage: 1 } };
 }
 
-function ItemCardPopularList() {
+function Component() {
   const searchParams = useSearchParams(); // Get query parameters from the URL
   const address = searchParams.get("address"); // Extract the address parameter from the URL
   const [datas, setDatas] = useState<RealEstateItem[]>([]);
@@ -92,8 +92,9 @@ function ItemCardPopularList() {
         {datas.map((item) => {
           const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
           return (
-          <PropertyCardWithModal key={item._id} item={item} flexRow={false} toggleCompare={() => handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />
-        )})}
+            <PropertyCardWithModal key={item._id} item={item} flexRow={false} toggleCompare={() => handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />
+          )
+        })}
       </div>
 
       {/* Pagination Controls */}
@@ -130,5 +131,13 @@ function ItemCardPopularList() {
     </main>
   );
 }
+
+const ItemCardPopularList = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Component />
+    </Suspense>
+  );
+};
 
 export default ItemCardPopularList;

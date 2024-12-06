@@ -115,7 +115,7 @@ const ItemCartNearlyList = () => {
     };
 
     getUserLocation(); // Call the function to get the user's location
-  }, [fetchNearbyProperties, currentPage]); // Run when the current page changes
+  }, [currentPage, nearbyProperties, properties]); // Run when the current page changes
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= Math.ceil((nearbyProperties?.length || 0 + properties?.length || 0) / itemsPerPage)) {
@@ -136,17 +136,17 @@ const ItemCartNearlyList = () => {
       {!loading && items.length > 0 ? (
         <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
           {items.map((item) => {
-          const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
-          return (
-            <ItemCard
-              key={item._id}
-              item={item}
-              toggleCompare={() => handleToggleCompare([item])}
-              isSelected={isSelected}
-              disabled={selectedItems.length >= 2 && !isSelected}
-            />
-          );
-        })}
+            const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
+            return (
+              <ItemCard
+                key={item._id}
+                item={item}
+                toggleCompare={() => handleToggleCompare([item])}
+                isSelected={isSelected}
+                disabled={selectedItems.length >= 2 && !isSelected}
+              />
+            );
+          })}
         </div>
       ) : (
         !loading && (
@@ -165,7 +165,7 @@ const ItemCartNearlyList = () => {
             disabled={currentPage === 1}
             className="disabled:opacity-50 "
           >
-            <ArrowLeftCycle className="size-8   font-weight: 300 text-olive-drab rotate-90"/>
+            <ArrowLeftCycle className="size-8   font-weight: 300 text-olive-drab rotate-90" />
           </button>
 
           {/* Page Number Buttons */}
@@ -185,7 +185,7 @@ const ItemCartNearlyList = () => {
             disabled={currentPage === Math.ceil((nearbyProperties?.length || 0 + properties?.length || 0) / itemsPerPage)}
             className="disabled:opacity-50 "
           >
-            <ArrowRightCycle className="size-8   text-olive-drab rotate-180"/>
+            <ArrowRightCycle className="size-8   text-olive-drab rotate-180" />
           </button>
         </div>
       )}
