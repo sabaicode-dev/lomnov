@@ -78,6 +78,7 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
         </div>
       </div>
 
+      {/* Modal */}
       <Modal
         isOpen={isOpen}
         onRequestClose={closeModal}
