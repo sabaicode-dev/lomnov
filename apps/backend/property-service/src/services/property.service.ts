@@ -295,14 +295,25 @@ export class PropertyService {
       // Fetch property owner details
       const propertyOwner = await this.userServiceClient.propertyOwnerInfo(property.cognitoSub as string);
   
+      
       // Safely map the `detail` field if it exists
       const detailedContent = property.detail
-        ? property.detail.map((detail : any) => ({
+        ? property.detail.map((detail : any) => {
+          return {
             language: detail.language,
-            size: detail.content?.size ?? null,
-            bedrooms: detail.content?.bedrooms ?? null,
-            bathrooms: detail.content?.bathrooms ?? null,
-          }))
+            size: detail.content.get("size"),
+            bedrooms: detail.content?.get("bedrooms"),
+            bathrooms: detail.content?.get("bathrooms"),
+            square: detail.content?.get("square"),
+            fireplace: detail.content?.get("fireplace"),
+            garden: detail.content?.get("garden"),
+            patio: detail.content?.get("patio"),
+            kitchen: detail.content?.get("kitchen"),
+            land_size: detail.content?.get("land_size"),
+            parking: detail.content?.get("parking"),
+            road_size: detail.content?.get("road_size"),
+            pool: detail.content?.get("pool"),
+          }})
         : [];
   
       // Construct the response object

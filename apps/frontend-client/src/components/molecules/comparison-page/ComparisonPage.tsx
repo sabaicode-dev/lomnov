@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { RealEstateItem } from '@/libs/types/api-properties/property-response';
 import { fetchPropertyById } from '@/libs/fetch-data/api'; 
 import Image from 'next/image';
+import { it } from 'node:test';
 
 const ComparisonPage = () => {
   const searchParams = useSearchParams(); 
@@ -28,8 +29,7 @@ const ComparisonPage = () => {
         try {
           const item1Data = await fetchPropertyById(item1Id);
           const item2Data = await fetchPropertyById(item2Id);
-          console.log("Item1 Data: ", item1Data); 
-          console.log("Item2 Data: ", item2Data); 
+         
           setItem1(item1Data); // Set single item
           setItem2(item2Data); // Set single item
         } catch (err) {
@@ -45,8 +45,8 @@ const ComparisonPage = () => {
 
 // Add logging to check the details directly after fetching
 useEffect(() => {
-  console.log("Item 1 Details: ", item1?.detail);
-  console.log("Item 2 Details: ", item2?.detail);
+  
+  console.log("This is bed room detail :::", item1?.detail[0].content.bedrooms);
 }, [item1, item2]);
 
 
@@ -67,14 +67,14 @@ useEffect(() => {
   if (!item1 || !item2) {
     return <p className="text-center text-xl text-red-500">Properties not found.</p>;
   }
+  
 
-  // Now that item1 and item2 are loaded, you can safely access their detail properties
-  const item1Details = item1?.detail?.[0]?.content;
-const item2Details = item2?.detail?.[0]?.content;
+// Now that item1 and item2 are loaded, you can safely access their detail properties
+const item1Contents = item1?.detail[0];
+const item2Contents = item2?.detail[0];
 
-// Log the details to confirm
-console.log("Item 1 Details Content: ", item1Details);
-console.log("Item 2 Details Content: ", item2Details);
+
+
 
   return (
     <div className="max-w-screen-xl mx-auto p-6 sm:p-8 md:p-10">
@@ -102,7 +102,7 @@ console.log("Item 2 Details Content: ", item2Details);
       {/* Property Title */}
       <div className="flex justify-around ">
         <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
-          Comparing: {item1?.title[0]?.content || "Property 1"} 
+          {item1?.title[0]?.content || "Property 1"} 
         </h2>
         <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
            {item2?.title[0]?.content || "Property 2"}
@@ -112,83 +112,83 @@ console.log("Item 2 Details Content: ", item2Details);
       {/* Comparison Details */}
       <div className="space-y-8">
         <div className="flex justify-between border-gray-500 border-b-[1px]">
-          <p className="text-lg font-medium text-gray-700">Price:</p>
-          <p className="text-lg text-gray-900 font-semibold">
+          <p className="text-lg text-gray-900 font-regular">
             {item1?.price ? `$${item1.price}` : "Not Available"} 
           </p>
-          <p className="text-lg text-gray-900 font-semibold">
+          <p className="text-lg font-bold text-olive-drab">Price</p>
+          <p className="text-lg text-gray-900 font-regular">
             {item2?.price ? `$${item2.price}` : "Not Available"}
           </p>
         </div>
   
         <div className="flex justify-between border-gray-500 border-b-[1px]">
-          <p className="text-lg font-medium text-gray-700">Bedrooms:</p>
-          <p className="text-lg text-gray-900 font-semibold">
-            {item1Details?.bedrooms || "Not Available"}
+          <p className="text-lg text-gray-900 font-regular">
+            {item1Contents.content.bedrooms || "Not Available"}
           </p>
-          <p className="text-lg text-gray-900 font-semibold">
-            {item2Details?.bedrooms || "Not Available"}
-          </p>
-        </div>
-  
-        <div className="flex justify-between border-gray-500 border-b-[1px]">
-          <p className="text-lg font-medium text-gray-700">Bathrooms:</p>
-          <p className="text-lg text-gray-900 font-semibold">
-            {item1Details?.bathrooms || "Not Available"}
-          </p>
-          <p className="text-lg text-gray-900 font-semibold">
-             {item2Details?.bathrooms || "Not Available"}
+          <p className="text-lg font-bold text-olive-drab">Bedrooms</p>
+          <p className="text-lg text-gray-900 font-regular">
+            {item2Contents.content.bedrooms || "Not Available"}
           </p>
         </div>
   
         <div className="flex justify-between border-gray-500 border-b-[1px]">
-          <p className="text-lg font-medium text-gray-700">Square:</p>
-          <p className="text-lg text-gray-900 font-semibold">
-            {item1Details?.square || "Not Available"} 
+          <p className="text-lg text-gray-900 font-regular">
+            {item1Contents?.content.bathrooms || "Not Available"}
           </p>
-          <p className="text-lg text-gray-900 font-semibold">
-            {item2Details?.square || "Not Available"}
+          <p className="text-lg font-bold text-olive-drab">Bathrooms</p>
+          <p className="text-lg text-gray-900 font-regular">
+             {item2Contents?.content.bathrooms || "Not Available"}
+          </p>
+        </div>
+  
+        <div className="flex justify-between border-gray-500 border-b-[1px]">
+          <p className="text-lg text-gray-900 font-regular">
+            {item1Contents?.content.square || "Not Available"} 
+          </p>
+          <p className="text-lg font-bold text-olive-drab">Square</p>
+          <p className="text-lg text-gray-900 font-regular">
+            {item2Contents?.content.square || "Not Available"}
           </p>
         </div>
   
         {/* Additional Details */}
         <div className="flex justify-between border-gray-500 border-b-[1px]">
-          <p className="text-lg font-medium text-gray-700">Land size:</p>
-          <p className="text-lg text-gray-900 font-semibold">
-            {item1Details?.land_size || "Not Available"}
+          <p className="text-lg text-gray-900 font-regular">
+            {item1Contents?.content.land_size || "Not Available"}
           </p>
-          <p className="text-lg text-gray-900 font-semibold">
-             {item2Details?.land_size || "Not Available"}
-          </p>
-        </div>
-
-        <div className="flex justify-between border-gray-500 border-b-[1px]">
-          <p className="text-lg font-medium text-gray-700">Pools:</p>
-          <p className="text-lg text-gray-900 font-semibold">
-            {item1Details?.pool || "Not Available"}
-          </p>
-          <p className="text-lg text-gray-900 font-semibold">
-            {item2Details?.pool || "Not Available"}
+          <p className="text-lg font-bold text-olive-drab">Land size</p>
+          <p className="text-lg text-gray-900 font-regular">
+             {item2Contents?.content.land_size || "Not Available"}
           </p>
         </div>
 
         <div className="flex justify-between border-gray-500 border-b-[1px]">
-          <p className="text-lg font-medium text-gray-700">Parking:</p>
-          <p className="text-lg text-gray-900 font-semibold">
-            {item1Details?.parking || "Not Available"} 
+          <p className="text-lg text-gray-900 font-regular">
+            {item1Contents?.content.pool || "Not Available"}
           </p>
-          <p className="text-lg text-gray-900 font-semibold">
-             {item2Details?.parking || "Not Available"}
+          <p className="text-lg font-bold text-olive-drab">Pools</p>
+          <p className="text-lg text-gray-900 font-regular">
+            {item2Contents?.content.pool || "Not Available"}
+          </p>
+        </div>
+
+        <div className="flex justify-between border-gray-500 border-b-[1px]">
+          <p className="text-lg text-gray-900 font-regular">
+            {item1Contents?.content.parking || "Not Available"} 
+          </p>
+          <p className="text-lg font-bold text-olive-drab">Parking</p>
+          <p className="text-lg text-gray-900 font-regular">
+             {item2Contents?.content.parking || "Not Available"}
           </p>
         </div>
   
         <div className="flex justify-between border-gray-500 border-b-[1px]">
-          <p className="text-lg font-medium text-gray-700">Garden:</p>
-          <p className="text-lg text-gray-900 font-semibold">
-            {item1Details?.garden || "Not Available"} 
+          <p className="text-lg text-gray-900 font-regular">
+            {item1Contents?.content.garden || "Not Available"} 
           </p>
-          <p className="text-lg text-gray-900 font-semibold">
-             {item2Details?.garden || "Not Available"}
+          <p className="text-lg font-bold text-olive-drab">Garden</p>
+          <p className="text-lg text-gray-900 font-regular">
+             {item2Contents?.content.garden || "Not Available"}
           </p>
         </div>
       </div>
