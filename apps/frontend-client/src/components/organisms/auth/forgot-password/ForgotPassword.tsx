@@ -4,6 +4,8 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import banner from "@/images/banner.png";
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 // import { useAuth } from "@/context/user";
 
 const ForgorPassword: React.FC = () => {
@@ -49,8 +51,8 @@ const ForgorPassword: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL_AUTH}/auth/verify`,
+      const response = await axiosInstance.post(
+        `${API_ENDPOINTS.VERIFY}`,
         {
           email: email,
           code: verificationCode,
