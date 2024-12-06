@@ -6,9 +6,7 @@ import Footer from "@/components/organisms/footer/Footer";
 import { AuthProvider } from "@/context/user";
 import LocationAccess from "@/components/organisms/location-access/LocationAccess";
 import { PropertyProvider } from "@/context/property";
-import Modal from 'react-modal';
-
-Modal.setAppElement('#__next'); // The root element for your app
+/* Add this line in your globals.css or a specific stylesheet */
 
 const inter = Inter({ subsets: ["latin"] });
 
