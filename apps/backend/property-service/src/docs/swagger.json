@@ -26,6 +26,53 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"RealEstateDetail": {
+				"properties": {
+					"bedrooms": {
+						"type": "string"
+					},
+					"bathrooms": {
+						"type": "string"
+					},
+					"size": {
+						"type": "string"
+					},
+					"square": {
+						"type": "string"
+					},
+					"fireplace": {
+						"type": "string"
+					},
+					"garden": {
+						"type": "string"
+					},
+					"patio": {
+						"type": "string"
+					},
+					"kitchen": {
+						"type": "string"
+					},
+					"land_size": {
+						"type": "string"
+					},
+					"parking": {
+						"type": "string"
+					},
+					"road_size": {
+						"type": "string"
+					},
+					"pool": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"bedrooms",
+					"bathrooms",
+					"size"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"Record_string.any_": {
 				"properties": {},
 				"additionalProperties": {},
@@ -186,7 +233,7 @@
 						"type": "array"
 					},
 					"detail": {
-						"$ref": "#/components/schemas/Record_string.any_"
+						"$ref": "#/components/schemas/RealEstateDetail"
 					},
 					"status": {
 						"type": "boolean"
@@ -313,7 +360,7 @@
 						"type": "array"
 					},
 					"detail": {
-						"$ref": "#/components/schemas/Record_string.any_"
+						"$ref": "#/components/schemas/RealEstateDetail"
 					},
 					"status": {
 						"type": "boolean"
@@ -398,7 +445,7 @@
 						"type": "array"
 					},
 					"detail": {
-						"$ref": "#/components/schemas/Record_string.any_"
+						"$ref": "#/components/schemas/RealEstateDetail"
 					},
 					"status": {
 						"type": "boolean"

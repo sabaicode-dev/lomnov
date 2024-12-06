@@ -251,36 +251,77 @@ export class PropertyService {
     }
   }
 
+  // public async getPropertyByID(id: string): Promise<ResponsePropertyByID> {
+  //   try {
+  //     // Fetch property details
+  //     const property = (await this.propertyRepository.findPropertyByID(
+  //       id
+  //     )) as ResponsePropertyDTO;
+  //     //@ts-ignore
+  //     //console.log({...property._doc});
+
+  //     if (!property) {
+  //       throw new Error(`Property with ID ${id} not found.`);
+  //     }
+  //     console.log("your property : " , property)
+
+  //     // Fetch property owner details
+  //     const propertyOwner = await this.userServiceClient.propertyOwnerInfo(
+  //       property.cognitoSub as string
+  //     );
+  //     // Construct the response object
+  //     const responses: ResponsePropertyByID = {
+  //       //@ts-ignore
+  //       ...property,
+  //       propertyOwner,
+  //     };
+  //     console.log("Response Data:: ", responses)
+  //     return responses;
+  //   } catch (error) {
+  //     console.error(`Error fetching property by ID ${id}:`, error);
+  //     throw new Error(`Failed to fetch property with ID ${id}`);
+  //   }
+  // }
   public async getPropertyByID(id: string): Promise<ResponsePropertyByID> {
     try {
       // Fetch property details
-      const property = (await this.propertyRepository.findPropertyByID(
-        id
-      )) as ResponsePropertyDTO;
-      //@ts-ignore
-      //console.log({...property._doc});
-
+      const property = await this.propertyRepository.findPropertyByID(id) as ResponsePropertyDTO;
+  
       if (!property) {
         throw new Error(`Property with ID ${id} not found.`);
       }
-
+      console.log("Fetched property:", property);
+  
       // Fetch property owner details
-      const propertyOwner = await this.userServiceClient.propertyOwnerInfo(
-        property.cognitoSub as string
-      );
+      const propertyOwner = await this.userServiceClient.propertyOwnerInfo(property.cognitoSub as string);
+  
+      // Safely map the `detail` field if it exists
+      const detailedContent = property.detail
+        ? property.detail.map((detail : any) => ({
+            language: detail.language,
+            size: detail.content?.size ?? null,
+            bedrooms: detail.content?.bedrooms ?? null,
+            bathrooms: detail.content?.bathrooms ?? null,
+          }))
+        : [];
+  
       // Construct the response object
-      const responses: ResponsePropertyByID = {
-        //@ts-ignore
+      const response: ResponsePropertyByID = {
         ...property,
+        detail: detailedContent, // Replace detail with mapped data (or empty array if undefined)
         propertyOwner,
       };
-      console.log("Response Data:: ", responses)
-      return responses;
+  
+      console.log("Response Data:", response);
+      return response;
     } catch (error) {
       console.error(`Error fetching property by ID ${id}:`, error);
+  
+      // Re-throw the error with more context
       throw new Error(`Failed to fetch property with ID ${id}`);
     }
   }
+  
 
   public async getPropertyUser(
     cognitoSub: string,
