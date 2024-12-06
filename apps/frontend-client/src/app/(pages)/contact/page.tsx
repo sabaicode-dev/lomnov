@@ -8,7 +8,7 @@ import { TiSocialFacebookCircular } from "react-icons/ti";
 import service from "@/images/service.png";
 import MeaaseImg from "@/images/mess.png";
 
-const Context = () => {
+const page = () => {
   return (
     <main className="w-full">
       {/* Banner */}
@@ -132,4 +132,4 @@ const Context = () => {
   );
 };
 
-export default Context;
+export default page;

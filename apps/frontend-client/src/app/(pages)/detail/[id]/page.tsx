@@ -13,7 +13,7 @@ async function fetchProperty(id: string): Promise<RealEstateItem> {
   try {
     // Increment view count
     await axiosInstance.put(`${API_ENDPOINTS.PROPERTIES}/${id}/views`);
-    
+
     const res = await axiosInstance.get(`${API_ENDPOINTS.GET_PROPERTY_BY_ID}/${id}`);
     return res.data;
   } catch (error) {
@@ -90,12 +90,16 @@ const page = async ({ params }: { params: { id: string } }) => {
   );
 };
 
-// This function gets called at build time
+// Generate paths at build time for the dynamic `[id]` route
 export async function generateStaticParams() {
-  const id = ["1", "2", "3"]; // Example IDs
-  return id.map((id) => ({
+  // Example IDs, this should be dynamically fetched if possible
+  const ids = ["1", "2", "3"];
+
+  const paths = ids.map((id) => ({
     id,
   }));
+
+  return paths;
 }
 
 export default page;

@@ -31,15 +31,15 @@ jobs:
       - name: Install dependencies
         run: yarn install --no-immutable
 
-      - name: Build the Next.js project
-        run: yarn build
-        working-directory: apps/frontend-client
+      # - name: Build the Next.js project
+      #   run: yarn build
+      #   working-directory: apps/frontend-client
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: frontend-build
-          path: apps/frontend-client/.next # Adjust this to your actual build output directory
+      # - name: Upload build artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: frontend-build
+      #     path: apps/frontend-client/.next # Adjust this to your actual build output directory
 
   deploy:
     runs-on: ubuntu-latest
