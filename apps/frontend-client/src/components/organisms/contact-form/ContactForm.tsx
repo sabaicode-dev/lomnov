@@ -1,8 +1,9 @@
-"use client";
-
 import React, { useState } from "react";
-import Modal from "react-modal";
+import Modal from "react-modal"; // Import modal as usual
 import { useSpring, animated } from "@react-spring/web";
+
+// TypeScript workaround: Explicitly cast Modal to React.ComponentType
+const ModalComponent = Modal as React.ComponentType<any>;
 
 const ContactForm = ({ propertyUser }: { propertyUser: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +31,7 @@ const ContactForm = ({ propertyUser }: { propertyUser: string }) => {
           Contact {propertyUser}
         </span>
       </button>
-      <Modal
+      <ModalComponent
         isOpen={isOpen}
         onRequestClose={closeModal}
         shouldCloseOnOverlayClick={true}
@@ -100,7 +101,7 @@ const ContactForm = ({ propertyUser }: { propertyUser: string }) => {
             </div>
           </form>
         </animated.div>
-      </Modal>
+      </ModalComponent>
     </div>
   );
 };

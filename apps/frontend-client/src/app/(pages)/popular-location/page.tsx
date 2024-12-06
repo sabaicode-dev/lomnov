@@ -1,8 +1,9 @@
-import ItemCardList from "@/components/molecules/item-card-list/ItemCardList";
+// import ItemCardList from "@/components/molecules/item-card-list/ItemCardList";
 import Image from "next/image";
 import banner from "@/images/banner.png";
 import Search from "@/components/molecules/Search/Search";
 import ItemCardPopularList from "@/components/molecules/item-cart-polpular-list/Item-cart-popular-list";
+import { Suspense } from "react";
 // ===================================================================
 function page() {
   return (
@@ -26,13 +27,16 @@ function page() {
         <div className="absolute left-0 sm:left-0 md:left-0 lg:left-0 xl:left-0 bottom-[130px] w-[120px] sm:w-[150px] md:w-[235px] lg:w-[290px] xl:w-[300px] 2xl:w-[550px] h-px bg-white"></div>
         <div className="absolute left-[13rem] flex items-center justify-center w-full bottom-[-37px] px-2  ">
           <div className="z-10 m-auto lg:w-fit bg-white rounded-[18px] p-5">
-            <Search />
+            <Suspense fallback={<div>Loading Search...</div>}>
+              <Search />
+            </Suspense>
           </div>
         </div>
       </header>
-
       <div className="w-full lg:w-[1300px] m-auto  mt-20 px-2 lg:px-0">
-        <ItemCardPopularList />
+        <Suspense fallback={<div>Loading Search...</div>}>
+          <ItemCardPopularList />
+        </Suspense>
       </div>
     </main>
   );

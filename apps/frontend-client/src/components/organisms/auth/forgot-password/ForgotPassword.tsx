@@ -1,21 +1,28 @@
-"use client";
-import React, { useState } from "react";
-import axios from "axios";
+"use client"; // This tells Next.js that this component should only be rendered on the client side
+
+import React, { useState, useEffect } from "react";
+// import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import banner from "@/images/banner.png";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
-// import { useAuth } from "@/context/user";
 
 const ForgorPassword: React.FC = () => {
-  const searchParams = useSearchParams();
-  const emailFromParams = searchParams.get("email");
-  const [email, setEmail] = useState(emailFromParams || "");
+  const [email, setEmail] = useState<string>("");
   const [code, setCode] = useState<string[]>(Array(6).fill(""));
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // For client-side only, using `useSearchParams` hook
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const emailFromParams = searchParams.get("email");
+    if (emailFromParams) {
+      setEmail(emailFromParams);
+    }
+  }, []);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -63,9 +70,9 @@ const ForgorPassword: React.FC = () => {
         setSuccessMessage("Account verified successfully!");
         setErrorMessage(null);
 
-        // Redirect to sign-in page after 2 seconds
+        // Redirect to sign-in page after 2 seconds (client-side only)
         setTimeout(() => {
-          window.location.href = "/signin"; // Replace with your actual sign-in page route
+          window.location.href = "/signin"; // This should only run client-side
         }, 2000);
       } else {
         setErrorMessage("Verification failed. Please try again.");
@@ -78,9 +85,10 @@ const ForgorPassword: React.FC = () => {
       setIsLoading(false);
     }
   };
+
   return (
     <div className="w-full flex flex-col justify-center items-center">
-      <div className="w-full max-w-full h-[660px] ">
+      <div className="w-full max-w-full h-[660px]">
         <header className="relative w-full h-[400px]">
           <Image
             src={banner}
@@ -108,8 +116,6 @@ const ForgorPassword: React.FC = () => {
         </header>
       </div>
 
-
-
       <div className="absolute bg-white rounded-xl shadow-lg mx-auto top-[330px] px-5 mt-8 ">
         <div className="p-4 sm:p-7">
           <div className="text-center">
@@ -122,7 +128,6 @@ const ForgorPassword: React.FC = () => {
           </div>
 
           <form onSubmit={handleSubmit}>
-
             <div>
               <label className="block text-sm font-bold ml-1 mb-2 mt-2">
                 Email address
@@ -141,7 +146,6 @@ const ForgorPassword: React.FC = () => {
                 Please include a valid email address.
               </p>
             </div>
-
 
             <div className="flex justify-center gap-3 mb-6">
               {code.map((digit, index) => (
@@ -174,4 +178,5 @@ const ForgorPassword: React.FC = () => {
     </div>
   );
 };
+
 export default ForgorPassword;

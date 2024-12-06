@@ -3,13 +3,17 @@ import Image from 'next/image';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import banner from "@/images/banner.png";
 import PostPropertiesTitle from '@/components/atoms/post-title/PostPropertiesTitle';
-import PostRichEditor from '@/components/atoms/post-rich-editor/PostRichEditor';
+// import PostRichEditor from '@/components/atoms/post-rich-editor/PostRichEditor';
 import PostSelectTransition from '@/components/atoms/post-select-transition/PostSelectTransition';
 import PostInputField from '@/components/atoms/post-input-field/PostInputField';
 import PostSelectField from '@/components/atoms/post-select-field/PostSelectField';
 import PostAtttributes from '@/components/atoms/post-attributes/PostAtttributes';
-import PostUploadImages from '@/components/atoms/post-images-upload/PostUploadImages';
-import PostMap from '@/components/atoms/post-map/PostMap';
+// import PostUploadImages from '@/components/atoms/post-images-upload/PostUploadImages';
+// import PostMap from '@/components/atoms/post-map/PostMap';
+const PostMap = dynamic(() => import('@/components/atoms/post-map/PostMap'), { ssr: false });
+const PostRichEditor = dynamic(() => import('@/components/atoms/post-rich-editor/PostRichEditor'), { ssr: false });
+const PostUploadImages = dynamic(() => import('@/components/atoms/post-images-upload/PostUploadImages'), { ssr: false });
+
 import { extractLatLngFromUrl } from '@/libs/functions/extractLatLngFromUrl';
 import PostToggleButton from '@/components/atoms/post-toggle-button/PostToggleButton';
 import axiosInstance from '@/libs/axios';
@@ -20,6 +24,7 @@ import { IPostPropertiesType } from '@/libs/types/api-properties/property-reques
 const defaultCategory = { name: "Select" };
 import { generateSlug } from "@/libs/functions/generateSlug"
 import axios from 'axios';
+import dynamic from 'next/dynamic';
 export default function Page() {
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [formData, setFormData] = useState<IPostPropertiesType>({
