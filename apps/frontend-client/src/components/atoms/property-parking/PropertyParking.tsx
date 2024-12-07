@@ -12,7 +12,7 @@ function PropertyParking({property}:{property:RealEstateItem}) {
                 parking
             </div>
             <div className="font-helvetica text-helvetica-paragraph2 font-black lg:text-helvetica-h3 uppercase text-charcoal">
-                {property.detail[0].content.parking || 0}
+                {property.detail[0].content?.parking || 0}
             </div>
         </div>
     )

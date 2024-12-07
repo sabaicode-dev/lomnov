@@ -12,7 +12,7 @@ const PropertyBathroom = ({ property }: { property: RealEstateItem }) => {
                 bathrooms
             </div>
             <div className="font-helvetica text-helvetica-paragraph2 font-black lg:text-helvetica-h3 uppercase text-charcoal">
-                {property.detail[0]?.content.bathrooms}
+                {property.detail[0]?.content?.bathrooms}
             </div>
         </div>
     )

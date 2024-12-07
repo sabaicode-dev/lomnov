@@ -7,12 +7,13 @@ import RecommendedProperties from "@/components/molecules/RecommendedProperties/
 // import UserListed from "@/components/organisms/user-listed-property/UserListed";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import fetchDynamicId from "@/libs/const/fetchId";
 
 // Fetch property data
 async function fetchProperty(id: string): Promise<RealEstateItem> {
   try {
     // Increment view count
-    await axiosInstance.put(`${API_ENDPOINTS.PROPERTIES}/${id}/views`);
+    //await axiosInstance.put(`${API_ENDPOINTS.PROPERTIES}/${id}/views`);
 
     const res = await axiosInstance.get(`${API_ENDPOINTS.GET_PROPERTY_BY_ID}/${id}`);
     return res.data;
@@ -25,7 +26,9 @@ async function fetchProperty(id: string): Promise<RealEstateItem> {
 const page = async ({ params }: { params: { id: string } }) => {
   // Fetch the property details
   const property = await fetchProperty(params.id);
-
+  console.log(property);
+  
+  if (!property) { return <div>Property not found</div>; }
   return (
     <>
       <div className="w-full mb-[50px] mx-auto relative">
@@ -93,14 +96,11 @@ const page = async ({ params }: { params: { id: string } }) => {
 // Generate paths at build time for the dynamic `[id]` route
 export async function generateStaticParams() {
   // Example IDs, this should be dynamically fetched if possible
-  const ids = ["1", "2", "3"];
-
-  const paths = ids.map((id) => ({
-    id,
-  }));
-
+  const ids = await fetchDynamicId();
+  const paths = ids.map((id) => {id})
   return paths;
 }
+
 
 export default page;
 
