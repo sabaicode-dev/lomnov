@@ -30,6 +30,7 @@ app.use(express.json())  // Help to get the json from request body
 // Request Response logger
 // ========================
 app.use(loggingMiddleware)
+console.log("Hello!!");
 
 // ========================
 // Global API V1
