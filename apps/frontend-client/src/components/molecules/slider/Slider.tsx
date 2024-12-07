@@ -1,4 +1,5 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
 import { RealEstateItem } from '@/libs/types/api-properties/property-response';
 import ExclusiveHomesSlider from '@/components/organisms/exclusive-slider/ExclusiveHomeSlider';
 import axiosInstance from '@/libs/axios';
@@ -12,12 +13,26 @@ async function fetchProperties(): Promise<RealEstateItem[]> {
   return res.data.properties;
 }
 
-async function  Slider() {
-  const item= await fetchProperties();
-
+const Slider =() => {
+  const [items, setItems] = useState<RealEstateItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    const loadProperties = async () => {
+      try {
+        const fetchedItems = await fetchProperties();
+        setItems(fetchedItems); 
+      } catch (error) {
+        setError('Failed to load properties');
+      }finally{
+        setLoading(false);
+      }
+    }
+    loadProperties();
+  },[]);
   return (
     <>
-      <ExclusiveHomesSlider items={item}/>
+      <ExclusiveHomesSlider items={items} />
     </>
   )
 }

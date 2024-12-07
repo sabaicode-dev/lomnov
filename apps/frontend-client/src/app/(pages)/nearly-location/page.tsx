@@ -1,15 +1,20 @@
+import dynamic from 'next/dynamic';
 import Image from "next/image";
 import banner from "@/images/banner.png";
-import Search from "@/components/molecules/Search/Search";
-import CartAllowLocation from "@/components/molecules/Cart-allowLoaction/CardAllow";
+// import Search from "@/components/molecules/Search/Search";
+// import CartAllowLocation from "@/components/molecules/Cart-allowLoaction/CardAllow";
+import { Suspense } from "react";
 
+// Dynamically import Search and CartAllowLocation to avoid SSR issues
+const Search = dynamic(() => import('@/components/molecules/Search/Search'), { ssr: false });
+const CartAllowLocation = dynamic(() => import('@/components/molecules/Cart-allowLoaction/CardAllow'), { ssr: false });
 
 const page = async () => {
- 
+
 
   return (
     <div className="w-full">
-   
+
       {/* Banner */}
       <header className="relative w-full h-[400px]">
         <Image
@@ -30,11 +35,15 @@ const page = async () => {
         <div className="absolute left-0 sm:left-0 md:left-0 lg:left-0 xl:left-0 bottom-[130px] w-[120px] sm:w-[150px] md:w-[235px] lg:w-[290px] xl:w-[300px] 2xl:w-[462px] h-px bg-white"></div>
         <div className="absolute left-[13rem] flex items-center justify-center w-full bottom-[-37px] px-2  ">
           <div className="z-10 m-auto lg:w-fit bg-white rounded-[18px] p-5">
-            <Search/>
+            <Suspense fallback={<div>Loading Search...</div>}>
+              <Search />
+            </Suspense>
           </div>
         </div>
       </header>
-     <CartAllowLocation/>
+      <Suspense fallback={<div>Loading CartAllowLocation...</div>}>
+        <CartAllowLocation />
+      </Suspense>
     </div>
   );
 };
