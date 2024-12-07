@@ -9,6 +9,5 @@ const startServer = async () => {
     console.log(`User service running on Port: ${configs.port}`)
   })
 };
-
 startServer();
 
