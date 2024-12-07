@@ -19,6 +19,8 @@ export const fetchPropertyById = async (id: string): Promise<RealEstateItem> => 
     if (response.status !== 200) {
       throw new Error('Failed to fetch property');
     }
+    console.log("API response data:: ", response.data);
+    
     // Ensure we return the data
     return response.data;
   } catch (error) {
