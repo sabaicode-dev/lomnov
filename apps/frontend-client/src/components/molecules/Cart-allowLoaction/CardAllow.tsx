@@ -99,11 +99,11 @@ const CartAllowLocation: React.FC = () => {
       )}
 
       {/* Content Based on Location Access */}
-      {locationAllowed === null && (
+      {/* {locationAllowed === null && (
         <p className="text-gray-600">
           Please allow location access to view nearby properties and the map.
         </p>
-      )}
+      )} */}
 
       {locationAllowed === true && coordinates && (
         <div className="mt-[80px]">

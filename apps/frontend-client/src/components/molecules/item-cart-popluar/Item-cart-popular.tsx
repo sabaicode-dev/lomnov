@@ -22,9 +22,12 @@ export interface ItemCardProps {
   item: RealEstateItem;
   flexRow?: boolean;
   favourited?: boolean;
+  toggleCompare: (item: RealEstateItem) => void;
+  isSelected?: boolean;
+  disabled?: boolean;
 }
 
-const PropertyCardWithModal = ({ item, flexRow, favourited }: ItemCardProps) => {
+const PropertyCardWithModal = ({ item, flexRow = false, favourited = false, toggleCompare, isSelected }: ItemCardProps) => {
   const [isLike, setIsLike] = useState(false);
   const [viewCount, setViewCount] = useState(0);
 
@@ -111,14 +114,17 @@ const PropertyCardWithModal = ({ item, flexRow, favourited }: ItemCardProps) => 
               </div>
             </div>
             <div className="w-[40%] flex justify-end items-center">
-              <Compare className="cursor-pointer" />
+              <Compare 
+                className={`text-olive-drab text-[20px] cursor-pointer ${isSelected ? "text-blue-500" : ""}`}
+                onClick={() => toggleCompare(item)} // Pass single item, not array
+              />
             </div>
           </div>
 
           {/* View Count */}
           <div className="flex items-center justify-start gap-2 mt-2">
             <Eye className="text-olive-drab text-[20px]" />
-            <span className="text-[14px] text-neutral-600">{viewCount} views</span>
+            <span className="text-[14px] text-neutral">{viewCount} </span>
           </div>
         </div>
       </div>

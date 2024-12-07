@@ -28,6 +28,7 @@ const ItemCard = ({
   favourited = false,
   toggleCompare,
   isSelected,
+  disabled,
 }: ItemCardProps) => {
   const [isLike, setIsLike] = useState(favourited);
   const [viewCount, setViewCount] = useState(0);
@@ -136,7 +137,7 @@ const ItemCard = ({
             {/* Compare Button */}
             <div className="w-[40%] flex justify-end items-center cursor-pointer">
               <Compare
-                className={`text-olive-drab text-[20px] ${isSelected ? "text-blue-500" : ""}`}
+                className={`text-olive-drab text-[20px] ${isSelected ? "text-blue-500" : ""} ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
                 onClick={() => toggleCompare(item)} // Pass single item, not array
               />
             </div>

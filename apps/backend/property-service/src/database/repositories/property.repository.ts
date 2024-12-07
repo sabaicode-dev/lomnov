@@ -162,7 +162,6 @@ export class PropertyRepository {
       if (!property) {
         throw new NotFoundError("Property not found");
       }
-      console.log("This is your detail: " , property.detail)
       
       return property.toObject();
     } catch (error) {

@@ -3,7 +3,7 @@ import Image from "next/image";
 import banner from "@/images/banner.png";
 import LoginForm from "@/components/organisms/auth/form-login/LoginForm";
 
-const SignInPage = () => {
+const Page = () => {
   return (
     <div className="w-full">
       <div className="w-full relative mb-[580px]">
@@ -41,4 +41,4 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+export default Page;
