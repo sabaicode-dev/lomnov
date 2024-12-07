@@ -19,10 +19,8 @@ import { IProperty } from "@/src/utils/types/indext";
 import { PropertyService } from "@/src/services/property.service";
 import { RequestPropertyDTO, RequestQueryPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponsePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
 import { Request as Express } from "express";
-
 import { NotFoundError, UnauthorizedError } from "@/src/utils/error/customErrors";
 // ====================================================================
-
 declare global {
   namespace Express {
     interface Request {

@@ -1,7 +1,6 @@
 import configs from "@/src/config";
 import { RoutesConfig } from "@/src/utils/types/interface";
 // =============================================================
-
 const ROUTE_PATHS: RoutesConfig = {
   AUTH_SERVICE: {
     path: "/api/v1/auth",
