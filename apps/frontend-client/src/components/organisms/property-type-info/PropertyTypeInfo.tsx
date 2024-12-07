@@ -5,6 +5,7 @@ import PropertyTypeInfoShop from "@/components/molecules/property-type/type-shop
 import PropertyTypeInfoLand from "@/components/molecules/property-type/type-land/PropertyTypeInfoLand";
 
 const PropertyTypeInfo = ({ property }: { property: RealEstateItem }) => {
+  
   if (property?.category[0]?.content.toLocaleLowerCase() !== 'shop' || property?.category[0]?.content.toLocaleLowerCase() !== 'land') {
     return (<PropertyTypeInfoVilla property={property} />)
   } else if (property?.category[0]?.content.toLocaleLowerCase() === 'shop') {

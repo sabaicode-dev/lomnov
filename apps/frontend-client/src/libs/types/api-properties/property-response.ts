@@ -43,9 +43,9 @@
 
 // src/libs/types/api-properties/property-response.ts
 export interface RealEstateDetail {
-  bedrooms: string;
-  bathrooms: string;
-  size: string;
+  bedrooms?: string; // Optional since it might not always exist
+  bathrooms?: string; // Optional
+  size?: string; // Optional
   square?: string;
   fireplace?: string;
   garden?: string;
@@ -60,17 +60,17 @@ export interface RealEstateDetail {
 export interface RealEstateItem {
   _id: string;
   cognitoSub: string;
-  title: { content: string; language: string }[];
-  description: { content: string; language: string }[];
+  title: { content: string; language: string }[]; // Multilingual content
+  description: { content: string; language: string }[]; // Multilingual content
   thumbnail: string;
   images: string[];
   urlmap: string;
-  address: { content: string; language: string }[];
-  location: { content: string; language: string }[];
+  address: { content: string; language: string }[]; // Multilingual addresses
+  location: { content: string; language: string }[]; // Multilingual locations
   price: number;
-  category: { content: string; language: string }[];
-  transition: { content: string; language: string }[];
-  detail: { language: string; content: RealEstateDetail }[];
+  category: { content: string; language: string }[]; // Multilingual categories
+  transition: { content: string; language: string }[]; // Multilingual transitions
+  detail: { language: string; content?: RealEstateDetail }[]; // Allow optional content
   status: boolean;
   createdAt: string;
   updatedAt: string;
@@ -78,10 +78,10 @@ export interface RealEstateItem {
     type: string;
     coordinates: number[]; // [longitude, latitude]
   };
-  
   views: number;
   __v: number;
 }
+
 
 export interface IResponseComparePropertes{
 
