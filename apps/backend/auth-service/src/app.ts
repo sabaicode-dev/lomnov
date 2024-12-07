@@ -14,14 +14,10 @@ const swaggerDocument = JSON.parse(
   fs.readFileSync(path.join(__dirname, "docs/swagger.json"), "utf8")
 );
 import cors from "cors";
-
 // ========================
 // Initialize App Express
 // ========================
 const app = express();
-
-
-
 // ========================
 // SECURITIES MIDDLEWARES
 // ========================
