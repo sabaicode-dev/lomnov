@@ -82,3 +82,42 @@ export interface RealEstateItem {
   views: number;
   __v: number;
 }
+
+export interface IResponseComparePropertes{
+
+    _id: string;
+    cognitoSub: string;
+    title: { content: string; language: string }[];
+    description: { content: string; language: string }[];
+    thumbnail: string;
+    images: string[];
+    urlmap: string;
+    address: { content: string; language: string }[];
+    location: { content: string; language: string }[];
+    price: number;
+    category: { content: string; language: string }[];
+    transition: { content: string; language: string }[];
+    detail: { language: string;   bedrooms: string;
+      bathrooms: string;
+      size: string;
+      square?: string;
+      fireplace?: string;
+      garden?: string;
+      patio?: string;
+      kitchen?: string;
+      land_size?: string;
+      parking?: string;
+      road_size?: string;
+      pool?: string;}[];
+    status: boolean;
+    createdAt: string;
+    updatedAt: string;
+    coordinate: {
+      type: string;
+      coordinates: number[]; // [longitude, latitude]
+    };
+    
+    views: number;
+    __v: number;
+  
+}

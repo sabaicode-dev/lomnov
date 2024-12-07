@@ -20,8 +20,6 @@ const ComparisonBar = ({ selectedItems, toggleCompare }: ComparisonBarProps) => 
       : selectedItems.length < 2
       ? `Select ${selectedItems.length} more properties to compare`
       : `Select "Compare" Button to compare`
-      // : selectedItems.length >= 2 
-      // ? `Select Compare Button to compare`
 
   // Dynamic classes based on selection count
   const messageClass = selectedItems.length > 2 ? "text-red-500" : "text-gray-700";
@@ -43,38 +41,39 @@ const ComparisonBar = ({ selectedItems, toggleCompare }: ComparisonBarProps) => 
   return (
     <>
       {selectedItems.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-gray-100 p-4 flex items-center z-50 shadow-lg justify-around">
-          <p className={`px-8 text-lg ${messageClass}`}>{message}</p>
-
-          {/* Selected items */}
-          <div className="w-[1300px] flex items-center space-x-4 overflow-x-auto">
-            {selectedItems.map((item) => (
-              <div key={item._id} className="relative w-24 h-24 rounded-md overflow-hidden">
-                <Image
-                  src={item.thumbnail}
-                  alt={item.title[0]?.content || "Property"}
-                  width={500}
-                  height={500}
-                  className="w-full h-full object-cover rounded-md"
-                />
-                
-                {/* Remove Button */}
-                <button
-                  className="absolute top-1 right-1 bg-white p-1 rounded-full shadow-md text-gray-500 hover:text-red-500"
-                  onClick={() => handleRemoveProperty(item._id)} 
-                >
-                  <FaTimes size={16} />
-                </button>
-              </div>
-            ))}
-          {/* Compare Button aligned to the far right */}
-          <button
-            className="bg-olive-drab text-white hover:bg-neutral p-2 ml-7 rounded-md font-semibold disabled:bg-gray-400"
-            onClick={handleCompareClick} 
-            disabled={selectedItems.length !== 2}
-          >
-            Compare
-          </button>
+        <div className="fixed bottom-0 left-0 right-0 bg-gray-100 flex items-center z-50 shadow-lg justify-end pr-[100px]">
+          <div className=" flex items-center justify-end">
+            <p className={`px-8 text-lg ${messageClass}`}>{message}</p>
+            {/* Selected items */}
+            <div className="flex items-center space-x-4 overflow-x-auto">
+              {selectedItems.map((item) => (
+                <div key={item._id} className="relative w-16 h-16 rounded-md overflow-hidden m-4 mx-6 shadow-xl shadow-gray-600">
+                  <Image
+                    src={item.thumbnail}
+                    alt={item.title[0]?.content || "Property"}
+                    width={500}
+                    height={500}
+                    className="w-full h-full object-cover rounded-md"
+                  />
+            
+                  {/* Remove Button */}
+                  <button
+                    className="absolute top-1 right-1 bg-white p-1 rounded-full shadow-md text-gray-500 hover:text-red-500"
+                    onClick={() => handleRemoveProperty(item._id)}
+                  >
+                    <FaTimes size={12} />
+                  </button>
+                </div>
+              ))}
+            {/* Compare Button aligned to the far right */}
+            <button
+              className="bg-olive-drab text-white hover:bg-neutral p-2 ml-10 rounded-md font-semibold disabled:bg-gray-400"
+              onClick={handleCompareClick}
+              disabled={selectedItems.length !== 2}
+            >
+              Compare
+            </button>
+            </div>
           </div>
         </div>
       )}
