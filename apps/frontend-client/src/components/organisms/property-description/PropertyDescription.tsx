@@ -4,10 +4,9 @@ import React, { useState } from "react";
 import { useInView } from "react-intersection-observer";
 import Image from "next/image";
 import { useSpring, animated } from "@react-spring/web";
-import Modal from "react-modal";
 import Location from "@/icons/Location";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
-
+// import ReactModal from "react-modal";
 const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -78,7 +77,8 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
         </div>
       </div>
 
-      <Modal
+      {/* Modal */}
+      {/* <ReactModal
         isOpen={isOpen}
         onRequestClose={closeModal}
         shouldCloseOnOverlayClick={true}
@@ -102,7 +102,7 @@ const PropertyDescription = ({ property }: { property: RealEstateItem }) => {
             />
           )}
         </animated.div>
-      </Modal>
+      </ReactModal> */}
     </animated.div>
   );
 };

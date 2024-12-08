@@ -2,6 +2,7 @@ import Image from "next/image";
 import banner from "@/images/banner.png";
 
 import ComparisonPage from "@/components/molecules/comparison-page/ComparisonPage";
+import { Suspense } from "react";
 
 // ===================================================================
 function page() {
@@ -27,9 +28,9 @@ function page() {
 
       <div className="w-full lg:w-[1300px] m-auto  mt-20 px-2 lg:px-0">
 
-        {/* <PropertyList /> */}
-        <ComparisonPage />
-
+        <Suspense fallback={<div>Loading comparison page...</div>}>
+          <ComparisonPage />
+        </Suspense>
       </div>
     </main>
   );

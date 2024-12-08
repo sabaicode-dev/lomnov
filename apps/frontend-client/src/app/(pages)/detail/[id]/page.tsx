@@ -8,23 +8,36 @@ import RecommendedProperties from "@/components/molecules/RecommendedProperties/
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 
-// Fetch property data
 async function fetchProperty(id: string): Promise<RealEstateItem> {
   try {
-    // Increment view count
-    await axiosInstance.put(`${API_ENDPOINTS.PROPERTIES}/${id}/views`);
-    
-    const res = await axiosInstance.get(`${API_ENDPOINTS.GET_PROPERTY_BY_ID}/${id}`);
-    return res.data;
+    // Increment view count (non-blocking and gracefully handled if it fails)
+    await axiosInstance
+      .put(`${API_ENDPOINTS.PROPERTIES}/${id}/views`)
+      .catch((error) => {
+        if (error.response?.status === 401) {
+          console.warn('User not logged in. Skipping view increment.');
+        } else {
+          console.error('Failed to increment view count:', error.message);
+        }
+      });
+
+    // Fetch property details
+    const response = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}/get/${id}`);
+    console.log("This is your data :::", response);
+    return response.data;
   } catch (error) {
-    throw error;
+    console.error('Error fetching property details:', error);
+    throw error; // Rethrow to ensure the caller can handle the error
   }
 }
+
+
 
 // Server component to fetch property data
 const page = async ({ params }: { params: { id: string } }) => {
   // Fetch the property details
   const property = await fetchProperty(params.id);
+  console.log("Your Property :::" , property)
 
   return (
     <>
@@ -55,6 +68,7 @@ const page = async ({ params }: { params: { id: string } }) => {
                   {/* Properties Listing */}
                   <div className="grid grid-cols-3 lg:grid-cols-6 w-full items-center justify-center mx-auto gap-[10px] lg:gap-[20px] mr-[10px] lg:mr-[20px]">
                     <PropertyTypeInfo property={property} />
+                    
                   </div>
                 </div>
               </div>
@@ -75,7 +89,10 @@ const page = async ({ params }: { params: { id: string } }) => {
             <PropertyDescription property={property} />
             {/* <UserListed property={property} /> */}
           </div>
-          <Map property={property.urlmap} />
+          <Map property={{
+            latitude: property.coordinate.coordinates[1],
+            longitude: property.coordinate.coordinates[0]
+          }} />
         </div>
 
         {/* Recommend Properties */}
@@ -90,12 +107,16 @@ const page = async ({ params }: { params: { id: string } }) => {
   );
 };
 
-// This function gets called at build time
+// Generate paths at build time for the dynamic `[id]` route
 export async function generateStaticParams() {
-  const id = ["1", "2", "3"]; // Example IDs
-  return id.map((id) => ({
+  // Example IDs, this should be dynamically fetched if possible
+  const ids = ["1", "2", "3"];
+
+  const paths = ids.map((id) => ({
     id,
   }));
+
+  return paths;
 }
 
 export default page;

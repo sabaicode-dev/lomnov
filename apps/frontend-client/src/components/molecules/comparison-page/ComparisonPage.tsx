@@ -23,8 +23,8 @@ const ComparisonPage = () => {
 
     if (item1Id && item2Id) {
       const fetchItems = async () => {
-        setLoading(true);  
-        setError(null);  
+        setLoading(true);
+        setError(null);
         try {
           const item1Data = await fetchComparePropertyById(item1Id);
           const item2Data = await fetchComparePropertyById(item2Id);
@@ -34,13 +34,13 @@ const ComparisonPage = () => {
         } catch (err) {
           setError("Failed to load property details.");
         } finally {
-          setLoading(false); 
+          setLoading(false);
         }
       };
 
       fetchItems();
     }
-}, [searchParams]); 
+  }, [searchParams]);
 
 // Add logging to check the details directly after fetching
   useEffect(() => {
