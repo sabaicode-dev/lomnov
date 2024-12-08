@@ -59,6 +59,8 @@ export default function Page() {
     const { name, files } = e.target;
     if (files) {
       const selectedFiles = Array.from(files);
+      console.log(selectedFiles[0]);
+      
       // Store actual files for the form submission
       //@ts-ignore
       setFormData(prevState => ({
@@ -181,6 +183,8 @@ export default function Page() {
             'Content-Type': 'multipart/form-data',
           },
         });
+        console.log(response);
+        
         if (response.status === 200) {
           /** Go alert to user then clear the state! */
           // Reset form data
