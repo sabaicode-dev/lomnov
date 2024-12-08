@@ -7,16 +7,12 @@ import { AuthProvider } from "@/context/user";
 import LocationAccess from "@/components/organisms/location-access/LocationAccess";
 import { PropertyProvider } from "@/context/property";
 /* Add this line in your globals.css or a specific stylesheet */
-
 const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
-
   title: "Home | Lomnov",
   description:
     "Sell and rent your 2nd hand items on lomnov.com, the Cambodia #1 buy and sell website. Post free online classified ads of your property, real estate, home, land, shop, condo.",
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -24,9 +20,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-      </head>
       <body className={inter.className}>
         <AuthProvider>
           <PropertyProvider>
