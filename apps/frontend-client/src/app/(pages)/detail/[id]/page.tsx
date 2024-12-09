@@ -90,8 +90,8 @@ const page = async ({ params }: { params: { id: string } }) => {
             {/* <UserListed property={property} /> */}
           </div>
           <Map property={{
-            latitude: property.coordinate.coordinates[1],
-            longitude: property.coordinate.coordinates[0]
+            latitude: property?.coordinate?.coordinates[1],
+            longitude: property?.coordinate?.coordinates[0]
           }} />
         </div>
 

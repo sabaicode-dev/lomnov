@@ -126,11 +126,11 @@ const ItemCard = ({
             <div className={flexRow ? "w-[60%] flex gap-3 items-center" : "w-[50%] gap-7 flex items-center"}>
               <div className="flex justify-between font-helvetica text-helvetica-paragraph">
                 <BathRoom className="text-olive-drab text-[20px] gap-1" />
-                <span className="font-[600] text-[12px] font-helvetica ">{item.detail[0]?.content.bathrooms} Bath</span>
+                <span className="font-[600] text-[12px] font-helvetica ">{item.detail[0]?.content?.bathrooms} Bath</span>
               </div>
               <div className="flex justify-between font-helvetica text-helvetica-paragraph font-bold">
                 <BedRoom className="text-olive-drab text-[20px]" />
-                <span className="font-[600] text-[12px] font-helvetica">{item.detail[0]?.content.bedrooms} Bed</span>
+                <span className="font-[600] text-[12px] font-helvetica">{item.detail[0]?.content?.bedrooms} Bed</span>
               </div>
             </div>
 

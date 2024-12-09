@@ -50,23 +50,35 @@ export default function Page() {
     status: false,
     thumbnail: '',
     images: [''],  // Corrected here
-    coordinate: [{ types: '', coordinates: [0] }],
+    coordinate: {type:"Point",coordinates:[0,0]},
     address: [{ content: '', language: 'en' }]
   });
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  const [formState, setFormState] = useState<any>();
+  const [formState, setFormState] = useState<{ [key: string]: boolean }>({
+    title: true,
+    description: true,
+    price: true,
+    category: true,
+    location: true,
+    address: true,
+    transition: true,
+    thumbnail: true,
+    images: true,
+    urlmap: true,
+    status: true,
+    coordinate: true,
+  });
+
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target;
     if (files) {
       const selectedFiles = Array.from(files);
-      console.log(selectedFiles[0]);
-      
       // Store actual files for the form submission
       //@ts-ignore
       setFormData(prevState => ({
         ...prevState,
-        images: selectedFiles,  // Store file objects here
-        thumbnail: selectedFiles[0]  // Store the first image as the thumbnail
+        images: selectedFiles!,  // Store file objects here
+        thumbnail: selectedFiles[0]!  // Store the first image as the thumbnail
       }));
       // Generate preview URLs for image display (optional)
       const imageUrls = selectedFiles.map(file => URL.createObjectURL(file));
@@ -111,10 +123,12 @@ export default function Page() {
     } else {
       if (name === 'urlmap') {
         const result = extractLatLngFromUrl(value);
+        // @ts-ignore
+        const [lat,lng]: number = result;
         setFormData(prevState => ({
           ...prevState,
           urlmap: value,
-          coordinate: [{ types: "Point", coordinates: result }] as IPostPropertiesType | any
+          coordinate: { type: "Point", coordinates: [lng,lat] } as IPostPropertiesType | any
         }));
       } else {
         setFormData(prevState => ({ ...prevState, [name]: value })); // Update non-nested fields
@@ -151,9 +165,12 @@ export default function Page() {
 
     console.log("Flags result:", flags);
     setFormState(flags);
+    console.log(formData)
     const form = new FormData();
     // Append images (actual file objects)
     if (formData.images && formData.images.length > 0) {
+      console.log("Image ...");
+
       formData.images.forEach(image => {
         form.append('images', image);  // Append each image file (not URL)
       });
@@ -161,6 +178,8 @@ export default function Page() {
 
     // Append the thumbnail (first image as thumbnail)
     if (formData.thumbnail) {
+      console.log("thumnail...");
+
       form.append('thumbnail', formData.thumbnail);  // Append the actual file for thumbnail
     }
     // Append other form fields
@@ -173,7 +192,12 @@ export default function Page() {
     form.append('category', JSON.stringify(formData.category));
     form.append('transition', JSON.stringify(formData.transition));
     form.append('detail', JSON.stringify(formData.detail));
+    form.append('coordinate', JSON.stringify(formData.coordinate))
     try {
+      console.log("Form state:: ", formState);
+      //@ts-ignore
+      console.log("form data:: ", formData.coordinate);
+
       const { thumbnail, title, description, urlmap, address, location, price, category, transition } = formState;
       if (thumbnail && title && description && urlmap && address && location && price && category && transition) {
         console.log("let's go...");
@@ -184,7 +208,7 @@ export default function Page() {
           },
         });
         console.log(response);
-        
+
         if (response.status === 200) {
           /** Go alert to user then clear the state! */
           // Reset form data
@@ -211,7 +235,7 @@ export default function Page() {
             status: false,
             thumbnail: '',
             images: [''],
-            coordinate: [{ types: '', coordinates: [0] }],
+            coordinate: { type: "Point", coordinates: [0,0] },
             address: [{ content: '', language: 'en' }]
           });
           // Optionally, reset image previews and other state values

@@ -202,6 +202,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                     category: {"in":"formData","name":"category","dataType":"string"},
                     transition: {"in":"formData","name":"transition","dataType":"string"},
                     detail: {"in":"formData","name":"detail","dataType":"string"},
+                    coordinate: {"in":"formData","name":"coordinate","dataType":"string"},
                     request: {"in":"request","name":"request","dataType":"object"},
             };
 
