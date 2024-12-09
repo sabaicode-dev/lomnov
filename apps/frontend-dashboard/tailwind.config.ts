@@ -22,6 +22,7 @@ export default {
         "BlackSecondary":"#333333"
       },
       borderRadius: {
+        "sml":"6px",
         "sm":"8px",
         "lg":"10px",
         "xls":"12px",
@@ -33,6 +34,7 @@ export default {
       },
       fontWeight: {
         normal: "500",
+        simple : "600",
         bold: "700",
         black: "900",
       },

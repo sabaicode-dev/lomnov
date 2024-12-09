@@ -257,7 +257,7 @@ const LocationProperty = forwardRef((props, ref) => {
         {property ? (
           property.urlmap ? (
             <div className="w-full h-full mt-10">
-              <Map property={property.urlmap} />
+            
             </div>
           ) : (
             <p className="text-center text-gray-600">
