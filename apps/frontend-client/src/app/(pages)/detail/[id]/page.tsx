@@ -7,7 +7,7 @@ import RecommendedProperties from "@/components/molecules/RecommendedProperties/
 // import UserListed from "@/components/organisms/user-listed-property/UserListed";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
-import fetchDynamicId from "@/libs/const/fetchId";
+//import fetchDynamicId from "@/libs/const/fetchId";
 
 async function fetchProperty(id: string): Promise<RealEstateItem> {
   try {
@@ -109,13 +109,13 @@ const page = async ({ params }: { params: { id: string } }) => {
   );
 };
 
-// Generate paths at build time for the dynamic `[id]` route
-export async function generateStaticParams() {
-  // Example IDs, this should be dynamically fetched if possible
-  const ids = await fetchDynamicId();
-  const paths = ids.map((id) => {id})
-  return paths;
-}
+// // Generate paths at build time for the dynamic `[id]` route
+// export async function generateStaticParams() {
+//   // Example IDs, this should be dynamically fetched if possible
+//   const ids = await fetchDynamicId();
+//   const paths = ids.map((id) => {id})
+//   return paths;
+// }
 
 
 export default page;
