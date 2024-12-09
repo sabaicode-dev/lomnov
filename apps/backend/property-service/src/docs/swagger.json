@@ -557,6 +557,9 @@
 									},
 									"detail": {
 										"type": "string"
+									},
+									"coordinate": {
+										"type": "string"
 									}
 								},
 								"required": [

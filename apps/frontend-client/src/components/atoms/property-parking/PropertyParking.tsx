@@ -3,6 +3,9 @@ import { RealEstateItem } from '@/libs/types/api-properties/property-response'
 import React from 'react'
 
 function PropertyParking({property}:{property:RealEstateItem}) {
+  //@ts-ignore
+    const parking = property.detail?.[0]?.parking || 0;
+
     return (
         <div className=" text-center  rounded-[10px]">
             <div className="flex items-center justify-center mb-[7px]">

@@ -4,24 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { IResponseComparePropertes } from '@/libs/types/api-properties/property-response';
 import Image from 'next/image';
-import axiosInstance from '@/libs/axios';
-import { API_ENDPOINTS } from '@/libs/const/api-endpoints';
-const fetchPropertyById = async (id: string): Promise<IResponseComparePropertes> => {
-  try {
-    // Fixing the API endpoint format
-    const response = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}/get/${id}`);
-    if (response.status !== 200) {
-      throw new Error('Failed to fetch property');
-    }
-    console.log("API response data:: ", response.data);
-    
-    // Ensure we return the data
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw new Error('Error fetching property data');
-  }
-};
+import {fetchComparePropertyById} from "@/libs/fetch-data/api"
 
 const ComparisonPage = () => {
   const searchParams = useSearchParams(); 
@@ -43,8 +26,8 @@ const ComparisonPage = () => {
         setLoading(true);
         setError(null);
         try {
-          const item1Data = await fetchPropertyById(item1Id);
-          const item2Data = await fetchPropertyById(item2Id);
+          const item1Data = await fetchComparePropertyById(item1Id);
+          const item2Data = await fetchComparePropertyById(item2Id);
          
           setItem1(item1Data); // Set single item
           setItem2(item2Data); // Set single item

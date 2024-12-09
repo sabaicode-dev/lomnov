@@ -9,7 +9,6 @@ import {
 } from 'react-leaflet';
 import L, { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import Map from '@/components/molecules/map/Map';
 import {extractLatLngFromUrl} from "@/libs/functions/extractLatLngFromUrl";
 import {resolveShortenedUrl} from "@/libs/functions/resolveShortendURL"
 // Define a custom marker icon
@@ -99,7 +98,7 @@ export default function PostMap({values,onChange}: {values?: string,onChange: (e
                             </MapContainer>
                         ) : (
                             <div className="text-center text-gray-500">
-                               <Map property='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.960558858241!2d-73.95858052397149!3d40.76896927138521!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c258c003ad1b39%3A0x636a5a8ae5c286ea!2sJG%20Melon!5e1!3m2!1sen!2skh!4v1733198464249!5m2!1sen!2skh'/>
+                               <p>No map</p>
                             </div>
                         )}
                     </div>

@@ -12,5 +12,8 @@ export interface IPostPropertiesType {
   transition: Array<{ content: string; language: string }>,
   detail?: Array<{ language: string; content: { bedrooms: string, bathrooms: string, size: string, parking: string } }>,
   status?: boolean;
-  coordinate?: Array<{ types: string; coordinates: number[] }>;
+  coordinate: {
+    type: "Point"; // The type should be the literal string "Point"
+    coordinates: [number, number]; // Longitude, Latitude array (corrected to a tuple of 2 numbers)
+  };
 }
