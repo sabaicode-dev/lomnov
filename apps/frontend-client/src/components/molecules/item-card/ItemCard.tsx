@@ -28,6 +28,7 @@ const ItemCard = ({
   favourited = false,
   toggleCompare,
   isSelected,
+  disabled,
 }: ItemCardProps) => {
   const [isLike, setIsLike] = useState(favourited);
   const [viewCount, setViewCount] = useState(0);
@@ -125,18 +126,18 @@ const ItemCard = ({
             <div className={flexRow ? "w-[60%] flex gap-3 items-center" : "w-[50%] gap-7 flex items-center"}>
               <div className="flex justify-between font-helvetica text-helvetica-paragraph">
                 <BathRoom className="text-olive-drab text-[20px] gap-1" />
-                <span className="font-[600] text-[12px] font-helvetica ">{item.detail[0]?.content.bathrooms} Bath</span>
+                <span className="font-[600] text-[12px] font-helvetica ">{item.detail[0]?.content?.bathrooms} Bath</span>
               </div>
               <div className="flex justify-between font-helvetica text-helvetica-paragraph font-bold">
                 <BedRoom className="text-olive-drab text-[20px]" />
-                <span className="font-[600] text-[12px] font-helvetica">{item.detail[0]?.content.bedrooms} Bed</span>
+                <span className="font-[600] text-[12px] font-helvetica">{item.detail[0]?.content?.bedrooms} Bed</span>
               </div>
             </div>
 
             {/* Compare Button */}
             <div className="w-[40%] flex justify-end items-center cursor-pointer">
               <Compare
-                className={`text-olive-drab text-[20px] ${isSelected ? "text-blue-500" : ""}`}
+                className={`text-olive-drab text-[20px] ${isSelected ? "text-blue-500" : ""} ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
                 onClick={() => toggleCompare(item)} // Pass single item, not array
               />
             </div>

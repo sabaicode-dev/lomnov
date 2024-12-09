@@ -3,13 +3,17 @@ import Image from 'next/image';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import banner from "@/images/banner.png";
 import PostPropertiesTitle from '@/components/atoms/post-title/PostPropertiesTitle';
-import PostRichEditor from '@/components/atoms/post-rich-editor/PostRichEditor';
+// import PostRichEditor from '@/components/atoms/post-rich-editor/PostRichEditor';
 import PostSelectTransition from '@/components/atoms/post-select-transition/PostSelectTransition';
 import PostInputField from '@/components/atoms/post-input-field/PostInputField';
 import PostSelectField from '@/components/atoms/post-select-field/PostSelectField';
 import PostAtttributes from '@/components/atoms/post-attributes/PostAtttributes';
-import PostUploadImages from '@/components/atoms/post-images-upload/PostUploadImages';
-import PostMap from '@/components/atoms/post-map/PostMap';
+// import PostUploadImages from '@/components/atoms/post-images-upload/PostUploadImages';
+// import PostMap from '@/components/atoms/post-map/PostMap';
+const PostMap = dynamic(() => import('@/components/atoms/post-map/PostMap'), { ssr: false });
+const PostRichEditor = dynamic(() => import('@/components/atoms/post-rich-editor/PostRichEditor'), { ssr: false });
+const PostUploadImages = dynamic(() => import('@/components/atoms/post-images-upload/PostUploadImages'), { ssr: false });
+
 import { extractLatLngFromUrl } from '@/libs/functions/extractLatLngFromUrl';
 import PostToggleButton from '@/components/atoms/post-toggle-button/PostToggleButton';
 import axiosInstance from '@/libs/axios';
@@ -20,6 +24,7 @@ import { IPostPropertiesType } from '@/libs/types/api-properties/property-reques
 const defaultCategory = { name: "Select" };
 import { generateSlug } from "@/libs/functions/generateSlug"
 import axios from 'axios';
+import dynamic from 'next/dynamic';
 export default function Page() {
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [formData, setFormData] = useState<IPostPropertiesType>({
@@ -45,11 +50,25 @@ export default function Page() {
     status: false,
     thumbnail: '',
     images: [''],  // Corrected here
-    coordinate: [{ types: '', coordinates: [0] }],
+    coordinate: {type:"Point",coordinates:[0,0]},
     address: [{ content: '', language: 'en' }]
   });
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  const [formState, setFormState] = useState<any>();
+  const [formState, setFormState] = useState<{ [key: string]: boolean }>({
+    title: true,
+    description: true,
+    price: true,
+    category: true,
+    location: true,
+    address: true,
+    transition: true,
+    thumbnail: true,
+    images: true,
+    urlmap: true,
+    status: true,
+    coordinate: true,
+  });
+
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target;
     if (files) {
@@ -58,8 +77,8 @@ export default function Page() {
       //@ts-ignore
       setFormData(prevState => ({
         ...prevState,
-        images: selectedFiles,  // Store file objects here
-        thumbnail: selectedFiles[0]  // Store the first image as the thumbnail
+        images: selectedFiles!,  // Store file objects here
+        thumbnail: selectedFiles[0]!  // Store the first image as the thumbnail
       }));
       // Generate preview URLs for image display (optional)
       const imageUrls = selectedFiles.map(file => URL.createObjectURL(file));
@@ -104,10 +123,12 @@ export default function Page() {
     } else {
       if (name === 'urlmap') {
         const result = extractLatLngFromUrl(value);
+        // @ts-ignore
+        const [lat,lng]: number = result;
         setFormData(prevState => ({
           ...prevState,
           urlmap: value,
-          coordinate: [{ types: "Point", coordinates: result }] as IPostPropertiesType | any
+          coordinate: { type: "Point", coordinates: [lng,lat] } as IPostPropertiesType | any
         }));
       } else {
         setFormData(prevState => ({ ...prevState, [name]: value })); // Update non-nested fields
@@ -144,9 +165,12 @@ export default function Page() {
 
     console.log("Flags result:", flags);
     setFormState(flags);
+    console.log(formData)
     const form = new FormData();
     // Append images (actual file objects)
     if (formData.images && formData.images.length > 0) {
+      console.log("Image ...");
+
       formData.images.forEach(image => {
         form.append('images', image);  // Append each image file (not URL)
       });
@@ -154,6 +178,8 @@ export default function Page() {
 
     // Append the thumbnail (first image as thumbnail)
     if (formData.thumbnail) {
+      console.log("thumnail...");
+
       form.append('thumbnail', formData.thumbnail);  // Append the actual file for thumbnail
     }
     // Append other form fields
@@ -166,7 +192,12 @@ export default function Page() {
     form.append('category', JSON.stringify(formData.category));
     form.append('transition', JSON.stringify(formData.transition));
     form.append('detail', JSON.stringify(formData.detail));
+    form.append('coordinate', JSON.stringify(formData.coordinate))
     try {
+      console.log("Form state:: ", formState);
+      //@ts-ignore
+      console.log("form data:: ", formData.coordinate);
+
       const { thumbnail, title, description, urlmap, address, location, price, category, transition } = formState;
       if (thumbnail && title && description && urlmap && address && location && price && category && transition) {
         console.log("let's go...");
@@ -176,6 +207,8 @@ export default function Page() {
             'Content-Type': 'multipart/form-data',
           },
         });
+        console.log(response);
+
         if (response.status === 200) {
           /** Go alert to user then clear the state! */
           // Reset form data
@@ -202,7 +235,7 @@ export default function Page() {
             status: false,
             thumbnail: '',
             images: [''],
-            coordinate: [{ types: '', coordinates: [0] }],
+            coordinate: { type: "Point", coordinates: [0,0] },
             address: [{ content: '', language: 'en' }]
           });
           // Optionally, reset image previews and other state values

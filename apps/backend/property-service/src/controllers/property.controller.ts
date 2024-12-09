@@ -54,14 +54,12 @@ export class PropertyController extends Controller {
     @FormField() category?: string,
     @FormField() transition?: string,
     @FormField() detail?: string,
+    @FormField () coordinate?: string,
     @Request() request?: Express.Request
   ): Promise<ResponseCreatePropertyDTO> {
-    console.log('Thumbnail:', thumbnail);  // Add a log to check if the file is received
-    console.log('Images:', images);        // Log images array
-    console.log('description:', description);        // Log images array
-    console.log('location:', location);        // Log images array
-    console.log("Price::", price);
 
+    console.log(coordinate);
+    
     try {
 
       const cognitoSub = request?.cookies.username!;
@@ -83,7 +81,9 @@ export class PropertyController extends Controller {
         category: category ? JSON.parse(category) : [],
         transition: transition ? JSON.parse(transition) : [],
         detail: detail ? JSON.parse(detail) : [],
+        coordinate: coordinate ? JSON.parse(coordinate) : []
       };
+
       return await this.propertyService.createProperty(propertyData, {
         thumbnail,
         images,
@@ -134,16 +134,33 @@ export class PropertyController extends Controller {
       throw error
     }
   }
+  // Get Detail
   // Controller get single
   @Get("/properties/get/{propertyId}")
   public async fetchPropertyByID(@Path() propertyId: string): Promise<ResponsePropertyDTO> {
     try {
-      return await this.propertyService.getPropertyByID(propertyId);
+      const data = await this.propertyService.getPropertyByID(propertyId);
+      // console.log("This is Your Data : " ,data.detail)
+      return data;
     } catch (error) {
       console.log(error)
       throw error;
     }
   }
+
+//  @Get("/properties/get/{proertyIdDetail}")
+//  public async fetchPropertyByIDdetail(@Path() propertyId : string): Promise<ResponsePropertyDTO> {
+//   try {
+//     const data = await this.propertyService.getPropertyByID(propertyId);
+//     console.log("This is Your Data : " ,data.detail)
+//     return data.detail;
+//   } catch (error) {
+//     console.log(error)
+//     throw error;
+//   }
+//  }
+
+
   @Get("/properties/me")
   public async getPropertyMe(
     @Query() title?: string,

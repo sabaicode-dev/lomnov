@@ -129,7 +129,6 @@ const ItemCartNearlyList = () => {
   };
   return (
     <div>
-      {loading && <p>Loading properties...</p>}
       {error && <p>{error}</p>}
       {locationError && <p>{locationError}</p>}
 

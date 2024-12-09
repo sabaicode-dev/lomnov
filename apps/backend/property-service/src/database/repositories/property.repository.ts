@@ -38,6 +38,7 @@ export class PropertyRepository {
       const imageUrls = await Promise.all(
         files.images.map((file) => uploadFileToS3Service.uploadFile(file)),
       );
+      console.log("coordiante::: ", propertyData.coordinate);
 
       // Add the URLs to the property data
       const propertyWithUrls = {
@@ -46,7 +47,7 @@ export class PropertyRepository {
         images: imageUrls,
         views: 0, // Initialize views to 0
         // Add the coordinate if provided in propertyData
-        coordinate: propertyData.coordinate || { type: "Point", coordinates: [0, 0] }, // Default coordinate (0, 0)
+        coordinate: propertyData.coordinate 
       };
 
       const newProperty = new PropertyModel(propertyWithUrls);
@@ -162,8 +163,7 @@ export class PropertyRepository {
       if (!property) {
         throw new NotFoundError("Property not found");
       }
-      console.log("Property details by id:: ",property?.detail);
-      
+
       return property.toObject();
     } catch (error) {
       throw error;
