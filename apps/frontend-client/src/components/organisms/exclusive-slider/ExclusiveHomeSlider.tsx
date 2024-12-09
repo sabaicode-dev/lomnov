@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "@/app/globals.css";
-import ItemCard from "@/components/molecules/item-card/ItemCard";
+import ExclusiveItemCard from "@/components/molecules/exclusive-home-item-card/ExclusiveHomeItemCard";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar";
 import { toggleCompare } from "@/libs/const/toggleCompare"; 
@@ -59,11 +59,17 @@ const ExclusiveHomesSlider = ({ items }: { items: RealEstateItem[] }) => {
           return (
             <SwiperSlide key={item._id}>
               {/* Pass handleToggleCompare, isSelected, and the disabled state to ItemCard */}
-              <ItemCard 
+              {/* <ItemCard 
                 item={item} 
                 toggleCompare={() => handleToggleCompare([item])}  // Update toggleCompare call
                 isSelected={isSelected} 
                 disabled={selectedItems.length >= 2 && !isSelected} // Disable the button if 2 items are selected
+              /> */}
+              <ExclusiveItemCard
+              item={item} 
+              toggleCompare={() => handleToggleCompare([item])}  // Update toggleCompare call
+              isSelected={isSelected} 
+              disabled={selectedItems.length >= 2 && !isSelected} // Disable the button if 2 items are selected
               />
             </SwiperSlide>
           );
