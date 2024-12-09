@@ -111,12 +111,13 @@ const ItemCardPost = ({ item, flexRow = false, favourited = false, toggleCompare
           {menuOpen && (
             <div className="absolute w-[150px] top-10 right-0 border border-slate-300 bg-white/90 shadow-md rounded-[8px] py-2 px-2 z-10 transition duration-700 ease-in-out ">
                 
-              <button
+              <Link 
+                href={`/update-property/${item._id}`}
                 className=" border-2  mb-2 border-gray-200 text-center block w-full text-white py-1 px-4 bg-olive-green hover:bg-olive-gray rounded-md text-sm"
                 onClick={() => console.log("Update clicked")}
               >
                 Update
-              </button>
+              </Link>
               <button
                 className="block w-full border-2 py-1 px-4  text-center bg-[#E9678A] hover:bg-[#f38da8] rounded-md text-sm text-white"
                 onClick={() => setShowDeleteModal(true)}
@@ -145,11 +146,11 @@ const ItemCardPost = ({ item, flexRow = false, favourited = false, toggleCompare
             >
               <div className="flex justify-between font-helvetica text-helvetica-paragraph">
                 <BathRoom className="text-olive-drab text-[20px] gap-1" />
-                <span className="font-[600] text-[12px] font-helvetica ">{item.detail[0]?.content.bathrooms} Bath</span>
+                <span className="font-[600] text-[12px] font-helvetica ">{item.detail[0]?.content?.bathrooms} Bath</span>
               </div>
               <div className="flex justify-between font-helvetica text-helvetica-paragraph font-bold">
                 <BedRoom className="text-olive-drab text-[20px]" />
-                <span className="font-[600] text-[12px] font-helvetica">{item.detail[0]?.content.bedrooms} Bed</span>
+                <span className="font-[600] text-[12px] font-helvetica">{item.detail[0]?.content?.bedrooms} Bed</span>
               </div>
             </div>
             <div className="w-[40%] ml-5 flex justify-end items-center relative">

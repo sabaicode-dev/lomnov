@@ -98,7 +98,7 @@ export default function PostMap({values,onChange}: {values?: string,onChange: (e
                             </MapContainer>
                         ) : (
                             <div className="text-center text-gray-500">
-                               <p>No map</p>
+                               <span>No map</span>
                             </div>
                         )}
                     </div>
