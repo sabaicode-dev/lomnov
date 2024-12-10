@@ -32,7 +32,6 @@ async function fetchProperties(searchParams: { [key: string]: string | string[] 
     };
   }
 
-  console.error("Invalid response data", data);
   return { properties: [], pagination: { totalPages: 1, currentPage: 1 } };
 }
 
