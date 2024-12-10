@@ -133,7 +133,7 @@ export interface IUpdatePropertiesType {
   price: number;
   category: Array<{ content: string; language: string }>,
   transition: Array<{ content: string; language: string }>,
-  detail?: Array<{ language: string; content: { bedrooms: string, bathrooms: string, size: string, parking: string } }>,
+  detail?: Array<{ language: string;  bedrooms: string, bathrooms: string, size: string, parking: string  }>,
   status?: boolean;
   coordinate: {
     type: "Point"; // The type should be the literal string "Point"

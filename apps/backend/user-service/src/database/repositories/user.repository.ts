@@ -87,7 +87,6 @@ export class UserRepository {
   ): Promise<ResponseFindUserBySubDTO | null> {
     try {
       const findUser = UserModel.findOne({ cognitoSub: cognitoSub }).exec();
-      console.log("FindUser:: ", findUser);
       
       if(!findUser){
         return null;

@@ -64,7 +64,7 @@ export default function PostMap({values,onChange}: {values?: string,onChange: (e
                 </div>
             </div>
             <div className="bg-white shadow-md w-full h-full rounded-b-[12px] px-[12px] py-[10px]">
-                <div className="w-full h-full flex flex-1 gap-9 px-[20px]">
+                <div className="w-full z-0 h-full flex flex-1 gap-9 px-[20px]">
                     <PostInputField
                         onChange={onChange}
                         values={values}
