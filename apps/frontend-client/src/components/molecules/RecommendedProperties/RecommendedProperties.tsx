@@ -8,7 +8,6 @@ import ItemCard from "../item-card/ItemCard";
 import { ArrowDown, ArrowUp } from "@/icons";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
-import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar";
 import { toggleCompare } from "@/libs/const/toggleCompare";
 
 async function fetchRelatedProperties(
@@ -127,8 +126,6 @@ const RecommendedProperties = ({
           </button>
         )}
       </div>
-      {/* Comparison Bar at the top */}
-      <ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems} /> 
     </animated.div>
   );
 };
