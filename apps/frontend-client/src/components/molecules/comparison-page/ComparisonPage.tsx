@@ -76,7 +76,7 @@ console.log("Item 1 Details Content: ", item1Contents);
 console.log("Item 2 Details Content: ", item2Contents);
 
 return (
-  <div className="max-w-screen-xl mx-auto p-6 sm:p-8 md:p-10">
+  <div className="max-w-screen-xl mx-auto p-2 sm:p-8 md:p-10">
  {/* Back to Comparison Bar Button */}
     <div className="mb-6 flex items-center">
       <button
@@ -123,7 +123,18 @@ return (
     </div>
 
     {/* Comparison Details */}
-    <div className="space-y-8">
+    <div className="space-y-8 mt-12">
+    <div className="flex justify-between border-gray-500 border-b-[1px]">
+        <p className="text-lg text-gray-900 font-regular">
+          {item1?.category[0].content ?? "0"} 
+        </p>
+        <p className="text-lg font-bold text-olive-drab">Property Type</p>
+        <p className="text-lg text-gray-900 font-regular">
+          {item2?.category[0].content ?? "0"}
+        </p>
+      </div>
+      
+
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
           {item1?.price ? `$${item1.price}` : "0"} 
@@ -136,72 +147,72 @@ return (
 
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1Contents[0].bedrooms || "0"}
+          {item1Contents[0].bedrooms ?? "0"}
         </p>
         <p className="text-lg font-bold text-olive-drab">Bedrooms</p>
         <p className="text-lg text-gray-900 font-regular">
-          {item2Contents[0].bedrooms || "0"}
+          {item2Contents[0].bedrooms ?? "0"}
         </p>
       </div>
 
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1Contents[0].bathrooms || "0"}
+          {item1Contents[0].bathrooms ?? "0"}
         </p>
         <p className="text-lg font-bold text-olive-drab">Bathrooms</p>
         <p className="text-lg text-gray-900 font-regular">
-           {item2Contents[0].bathrooms || "0"}
+           {item2Contents[0].bathrooms ?? "0"}
         </p>
       </div>
 
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1Contents[0].square || "0"} 
+          {item1Contents[0].square ?? "0"} 
         </p>
         <p className="text-lg font-bold text-olive-drab">Square</p>
         <p className="text-lg text-gray-900 font-regular">
-          {item2Contents[0].square || "0"}
+          {item2Contents[0].square ?? "0"}
         </p>
       </div>
 
       {/* Additional Details */}
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1Contents[0].size || "0"}
+          {item1Contents[0].size ?? "0"}
         </p>
         <p className="text-lg font-bold text-olive-drab">Size</p>
         <p className="text-lg text-gray-900 font-regular">
-           {item2Contents[0].size || "0"}
+           {item2Contents[0].size ?? "0"}
         </p>
       </div>
 
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1Contents[0].pool || "0"}
+          {item1Contents[0].pool ?? "0"}
         </p>
         <p className="text-lg font-bold text-olive-drab">Pools</p>
         <p className="text-lg text-gray-900 font-regular">
-          {item2Contents[0].pool || "0"}
+          {item2Contents[0].pool ?? "0"}
         </p>
       </div>
 
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1Contents[0].parking || "0"} 
+          {item1Contents[0].parking ?? "0"} 
         </p>
         <p className="text-lg font-bold text-olive-drab">Parking</p>
         <p className="text-lg text-gray-900 font-regular">
-           {item2Contents[0].parking || "0"}
+           {item2Contents[0].parking ?? "0"}
         </p>
       </div>
 
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1Contents[0].garden || "0"} 
+          {item1Contents[0].garden ?? "0"} 
         </p>
         <p className="text-lg font-bold text-olive-drab">Garden</p>
         <p className="text-lg text-gray-900 font-regular">
-           {item2Contents[0].garden || "0"}
+           {item2Contents[0].garden ?? "0"}
         </p>
       </div>
     </div>

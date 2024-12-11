@@ -26,7 +26,7 @@ function page() {
         <div className="absolute left-0 sm:left-0 md:left-0 lg:left-0 xl:left-0 bottom-[130px] w-[120px] sm:w-[150px] md:w-[235px] lg:w-[290px] xl:w-[300px] 2xl:w-[550px] h-px bg-white"></div>
       </header>
 
-      <div className="w-full lg:w-[1300px] m-auto  mt-20 px-2 lg:px-0">
+      <div className="w-full lg:w-[1300px] m-auto  mt-4 px-2 lg:px-0">
 
         <Suspense fallback={<div>Loading comparison page...</div>}>
           <ComparisonPage />
