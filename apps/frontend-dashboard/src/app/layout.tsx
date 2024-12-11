@@ -26,7 +26,7 @@ export default function RootLayout({
            <Header/>
            <div className="flex">
               <Sidebar/>
-              <div className="m-[40px] w-[100%] overflow-auto ">
+              <div className="m-[40px] w-[100%] border-2 border-green-950">
               {children}
               </div>
            </div>
