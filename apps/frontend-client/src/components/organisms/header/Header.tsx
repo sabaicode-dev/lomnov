@@ -57,7 +57,7 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`w-full h-[90px] fixed top-0 z-30 transition-colors duration-300 ${scrolled ? " bg-olive-drab" : "bg-transparent"}`}
+      className={`w-full h-[90px] fixed top-0 z-[2000] transition-colors duration-300 ${scrolled ? " bg-olive-drab" : "bg-transparent"}`}
     >
       <ContainerHeader menu={menus} />
     </header>

@@ -122,6 +122,7 @@ export interface IResponseComparePropertes{
   
 }
 export interface IUpdatePropertiesType {
+  _id: string;
   title: Array<{ content: string; language: string }>;
   slug: Array<{ content: string; language: string }>;
   description: Array<{ content: string; language: string }>;

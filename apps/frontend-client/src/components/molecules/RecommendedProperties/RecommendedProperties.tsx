@@ -8,7 +8,6 @@ import ItemCard from "../item-card/ItemCard";
 import { ArrowDown, ArrowUp } from "@/icons";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
-import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar";
 import { toggleCompare } from "@/libs/const/toggleCompare";
 
 async function fetchRelatedProperties(
@@ -16,7 +15,9 @@ async function fetchRelatedProperties(
   address: string,
 ): Promise<RealEstateItem[]> {
   try {
-    const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?category=${category}&address=${address}`);
+    const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?category=${category}`);
+    console.log(res.data);
+    
     return res.data.properties;
   } catch (error) {
     throw new Error("Failed to fetch related properties");
@@ -39,6 +40,8 @@ const RecommendedProperties = ({
     const loadProperties = async () => {
       try {
         const properties = await fetchRelatedProperties(category, address);
+        console.log("Recomment Properties:: ",properties);
+        
         setRelatedProperties(properties);
       } catch (error) {
         console.error(error);
@@ -127,8 +130,6 @@ const RecommendedProperties = ({
           </button>
         )}
       </div>
-      {/* Comparison Bar at the top */}
-      <ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems} /> 
     </animated.div>
   );
 };

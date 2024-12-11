@@ -8,9 +8,12 @@ import "@/app/globals.css";
 import ExclusiveItemCard from "@/components/molecules/exclusive-home-item-card/ExclusiveHomeItemCard";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar";
-import { toggleCompare } from "@/libs/const/toggleCompare"; 
+import { toggleCompare } from "@/libs/const/toggleCompare";
 
 const ExclusiveHomesSlider = ({ items }: { items: RealEstateItem[] }) => {
+  // Filter items based on price
+  const exclusiveItems = items.filter((item) => item.price >= 800000);
+
   // State to manage selected items for comparison
   const [selectedItems, setSelectedItems] = useState<RealEstateItem[]>([]);
 
@@ -52,24 +55,22 @@ const ExclusiveHomesSlider = ({ items }: { items: RealEstateItem[] }) => {
           1024: { slidesPerView: 4 },
         }}
       >
-        {items.map((item) => {
+        {exclusiveItems.map((item) => {
           // Check if the item is in the selectedItems list
-          const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
-          
+          const isSelected = selectedItems.some(
+            (selectedItem) => selectedItem._id === item._id
+          );
+
           return (
             <SwiperSlide key={item._id}>
               {/* Pass handleToggleCompare, isSelected, and the disabled state to ItemCard */}
-              {/* <ItemCard 
-                item={item} 
-                toggleCompare={() => handleToggleCompare([item])}  // Update toggleCompare call
-                isSelected={isSelected} 
-                disabled={selectedItems.length >= 2 && !isSelected} // Disable the button if 2 items are selected
-              /> */}
               <ExclusiveItemCard
-              item={item} 
-              toggleCompare={() => handleToggleCompare([item])}  // Update toggleCompare call
-              isSelected={isSelected} 
-              disabled={selectedItems.length >= 2 && !isSelected} // Disable the button if 2 items are selected
+                item={item}
+                toggleCompare={() => handleToggleCompare([item])} // Update toggleCompare call
+                isSelected={isSelected}
+                disabled={
+                  selectedItems.length >= 2 && !isSelected
+                } // Disable the button if 2 items are selected
               />
             </SwiperSlide>
           );
@@ -78,8 +79,8 @@ const ExclusiveHomesSlider = ({ items }: { items: RealEstateItem[] }) => {
       </Swiper>
 
       {/* Render the ComparisonBar */}
-      <ComparisonBar 
-        selectedItems={selectedItems} 
+      <ComparisonBar
+        selectedItems={selectedItems}
         toggleCompare={setSelectedItems} // Pass the setSelectedItems function directly to update selected items
       />
     </div>

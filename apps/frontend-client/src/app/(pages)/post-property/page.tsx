@@ -209,7 +209,7 @@ export default function Page() {
 
         if (response.status === 200) {
           setSending(false)
-          toast.success('Property created successfully!', { className: "bg-green-700 text-white" });  // Toast on successful form submission
+          toast.success('Property created successfully!', { className: "bg-olive-drab text-white" });  // Toast on successful form submission
 
           /** Go alert to user then clear the state! */
           // Reset form data
@@ -250,7 +250,6 @@ export default function Page() {
       }
     } catch (error: any) {
       if (axios.isAxiosError(error) && error.status === 500) {
-        const message = error.response?.data?.message;
         toast.warning("Please fill the form!!", { className: "bg-yellow-400 text-white" });  // Toast on successful form submission
         setSending(false)
       }

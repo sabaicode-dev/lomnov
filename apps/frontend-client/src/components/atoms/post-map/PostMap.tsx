@@ -81,7 +81,7 @@ export default function PostMap({values,onChange}: {values?: string,onChange: (e
                             <MapContainer
                                 className="w-full h-full"
                                 center={position as LatLngExpression}
-                                zoom={20}
+                                zoom={10}
                                 scrollWheelZoom={false}
                             >
                                 <TileLayer
