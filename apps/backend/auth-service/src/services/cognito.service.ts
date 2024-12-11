@@ -480,7 +480,7 @@ export class CognitoService {
       throw error;
     }
   }
-  public async signout(params: GlobalSignOutCommandInput):Promise<GlobalSignOutCommandOutput> {
+  public async signout(params: GlobalSignOutCommandInput): Promise<GlobalSignOutCommandOutput> {
     try {
       const command = new GlobalSignOutCommand(params);
       const result: GlobalSignOutCommandOutput = await this.cognitoClient.send(command);

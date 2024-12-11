@@ -90,7 +90,7 @@ const ExclusiveItemCard = ({
         <p>{address}</p>
         <div className="bottom-0 w-full">
           <div className="flex items-center">
-            <div className="w-[50%] gap-7 flex items-center">
+            <div className="w-[55%] gap-7 flex items-center">
               <div className="flex justify-between font-helvetica text-helvetica-paragraph">
                 <BathRoom className="text-olive-drab text-[20px] gap-1" />
                 <span className="font-[600] text-[12px] font-helvetica ">{item.detail[0]?.content?.bathrooms} Bath</span>
