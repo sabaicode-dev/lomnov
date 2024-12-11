@@ -204,10 +204,12 @@ export class PropertyController extends Controller {
     @FormField() price?: number,
     @FormField() detail?: string,
     @FormField() status?: boolean,
+    @FormField() coordinate?:string,
     @Request() request?: Express.Request,
   ): Promise<ResponseUpdatePropertyDTO | null> {
     try {
       const cognitoSub = request?.cookies.username!
+      
       if (!cognitoSub) {
         throw new UnauthorizedError()
       }
@@ -234,6 +236,7 @@ export class PropertyController extends Controller {
         transition: parseTransition,
         detail: parsedDetail,
         status,
+        coordinate: coordinate ? JSON.parse(coordinate) : []
       };
 
       return await this.propertyService.updateProperty(

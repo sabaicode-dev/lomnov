@@ -362,6 +362,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                     price: {"in":"formData","name":"price","dataType":"string"},
                     detail: {"in":"formData","name":"detail","dataType":"string"},
                     status: {"in":"formData","name":"status","dataType":"string"},
+                    coordinate: {"in":"formData","name":"coordinate","dataType":"string"},
                     request: {"in":"request","name":"request","dataType":"object"},
             };
 

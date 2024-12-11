@@ -16,7 +16,9 @@ async function fetchRelatedProperties(
   address: string,
 ): Promise<RealEstateItem[]> {
   try {
-    const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?category=${category}&address=${address}`);
+    const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?category=${category}`);
+    console.log(res.data);
+    
     return res.data.properties;
   } catch (error) {
     throw new Error("Failed to fetch related properties");
@@ -39,6 +41,8 @@ const RecommendedProperties = ({
     const loadProperties = async () => {
       try {
         const properties = await fetchRelatedProperties(category, address);
+        console.log("Recomment Properties:: ",properties);
+        
         setRelatedProperties(properties);
       } catch (error) {
         console.error(error);
