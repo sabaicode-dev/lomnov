@@ -51,8 +51,8 @@ const Sidebar = () => {
           </div>
         </Link>
 
-        <Link href="/account-setting">
-          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/account-setting')}`}>
+        <Link href="/account-setting/profile">
+          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/account-setting/profile')} ${isActive('/account-setting/change_password')}`}>
             <AiOutlineProduct />
             <p className="text-[14px] font-normal">Account Setting</p>
           </div>
