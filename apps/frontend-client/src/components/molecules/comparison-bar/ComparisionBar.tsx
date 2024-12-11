@@ -41,13 +41,13 @@ const ComparisonBar = ({ selectedItems, toggleCompare }: ComparisonBarProps) => 
   return (
     <>
       {selectedItems.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-gray-100 flex items-center z-50 shadow-lg justify-end pr-[100px]">
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-2 border-black flex items-center z-50 shadow-lg justify-center pr-[100px]">
           <div className=" flex items-center justify-end">
-            <p className={`px-8 text-lg ${messageClass}`}>{message}</p>
+            <p className={`px-8 text-lg font-bold ${messageClass}`}>{message}</p>
             {/* Selected items */}
             <div className="flex items-center space-x-4 overflow-x-auto">
               {selectedItems.map((item) => (
-                <div key={item._id} className="relative w-16 h-16 rounded-md overflow-hidden m-4 mx-6 shadow-xl shadow-gray-600">
+                <div key={item._id} className="relative w-16 h-16 rounded-md overflow-hidden m-8 mx-6 shadow-lg shadow-gray-600">
                   <Image
                     src={item.thumbnail}
                     alt={item.title[0]?.content || "Property"}
