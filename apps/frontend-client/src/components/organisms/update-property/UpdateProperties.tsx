@@ -19,13 +19,16 @@ import { generateSlug } from '@/libs/functions/generateSlug';
 import { extractLatLngFromUrl } from '@/libs/functions/extractLatLngFromUrl';
 import axiosInstance from '@/libs/axios';
 import { API_ENDPOINTS } from '@/libs/const/api-endpoints';
+import Link from 'next/link';
 export default function UpdateProperties({ item }: { item: IUpdatePropertiesType }) {
 
     const transformedDetail = transformedObjectDetails(item?.detail);
     const itemId = item._id;
+    
     const [_isChecked, setIsChecked] = useState<boolean>(false);
     const [imagePreviews, setImagePreviews] = useState<string[]>(item?.images);
-
+    // @ts-ignore
+    const username = item?.propertyOwner?.userName;
     // / Define Zod validation schema (shown above)
     const propertySchema = z.object({
         title: z.array(z.object({
@@ -264,7 +267,7 @@ export default function UpdateProperties({ item }: { item: IUpdatePropertiesType
                         </div>
                         <div className='w-full h-full flex justify-end items-center py-2'>
                             <div>
-                                <button className='px-4 py-2 rounded-md m-2 font-medium text-slate-800 bg-slate-300'>Cancel</button>
+                                <Link href={`/profile/${username}`} type='reset' className='px-4 py-[11px] rounded-md m-2 font-medium text-slate-800 bg-slate-300'>Back</Link>
                                 <button type="submit" className="px-4 py-2 text-white font-medium rounded-md bg-blue-700">
                                     Update
                                 </button>
