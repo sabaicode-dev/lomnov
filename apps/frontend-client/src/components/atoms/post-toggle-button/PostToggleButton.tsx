@@ -7,7 +7,7 @@ interface IPostToggleButtonProps {
 }
 
 export default function PostToggleButton({ isChecked, onChecked ,values}: IPostToggleButtonProps) {
-  console.log(isChecked);
+  // console.log(isChecked);
   
   return (
     <>

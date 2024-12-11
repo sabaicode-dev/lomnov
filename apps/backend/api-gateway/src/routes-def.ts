@@ -122,7 +122,8 @@ const ROUTE_PATHS: RoutesConfig = {
         path: "/me",
         methods: {
           GET: { authRequired: true, roles: ["user"] },
-          DELETE: { authRequired: true, roles: ['user', 'admin'] }
+          DELETE: { authRequired: true, roles: ['user', 'admin'] },
+          PUT: {authRequired: true,roles:['user', 'admin']}
         },
       },
       {

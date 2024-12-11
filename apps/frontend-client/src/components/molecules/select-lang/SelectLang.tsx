@@ -18,7 +18,6 @@ const options = [
   // Add more options as needed
 ];
 const defaultOption = { label: "English", imgSrc: englishFlage };
-console.log(defaultOption);
 const SelectLang: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<Option>(defaultOption);
   const [isOpen, setIsOpen] = useState(false);

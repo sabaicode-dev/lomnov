@@ -1,5 +1,7 @@
 'use client'
 import Image from 'next/image';
+import { Toaster, toast } from 'sonner'
+
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import banner from "@/images/banner.png";
 import PostPropertiesTitle from '@/components/atoms/post-title/PostPropertiesTitle';
@@ -50,11 +52,25 @@ export default function Page() {
     status: false,
     thumbnail: '',
     images: [''],  // Corrected here
-    coordinate: [{ types: '', coordinates: [0] }],
+    coordinate: { type: "Point", coordinates: [0, 0] },
     address: [{ content: '', language: 'en' }]
   });
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  const [formState, setFormState] = useState<any>();
+  const [formState, setFormState] = useState<{ [key: string]: boolean }>({
+    title: true,
+    description: true,
+    price: true,
+    category: true,
+    location: true,
+    address: true,
+    transition: true,
+    thumbnail: true,
+    images: true,
+    urlmap: true,
+    status: true,
+    coordinate: true,
+  });
+  const [sending, setSending] = useState<boolean>(false);
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target;
     if (files) {
@@ -63,8 +79,8 @@ export default function Page() {
       //@ts-ignore
       setFormData(prevState => ({
         ...prevState,
-        images: selectedFiles,  // Store file objects here
-        thumbnail: selectedFiles[0]  // Store the first image as the thumbnail
+        images: selectedFiles!,  // Store file objects here
+        thumbnail: selectedFiles[0]!  // Store the first image as the thumbnail
       }));
       // Generate preview URLs for image display (optional)
       const imageUrls = selectedFiles.map(file => URL.createObjectURL(file));
@@ -109,10 +125,13 @@ export default function Page() {
     } else {
       if (name === 'urlmap') {
         const result = extractLatLngFromUrl(value);
+
+        const [lat, lng]: [number, number] = result ? result : [0, 0];
+
         setFormData(prevState => ({
           ...prevState,
           urlmap: value,
-          coordinate: [{ types: "Point", coordinates: result }] as IPostPropertiesType | any
+          coordinate: { type: "Point", coordinates: [lng, lat] } as IPostPropertiesType | any
         }));
       } else {
         setFormData(prevState => ({ ...prevState, [name]: value })); // Update non-nested fields
@@ -149,9 +168,12 @@ export default function Page() {
 
     console.log("Flags result:", flags);
     setFormState(flags);
+    console.log(formData)
     const form = new FormData();
     // Append images (actual file objects)
     if (formData.images && formData.images.length > 0) {
+      console.log("Image ...");
+
       formData.images.forEach(image => {
         form.append('images', image);  // Append each image file (not URL)
       });
@@ -159,6 +181,8 @@ export default function Page() {
 
     // Append the thumbnail (first image as thumbnail)
     if (formData.thumbnail) {
+      console.log("thumnail...");
+
       form.append('thumbnail', formData.thumbnail);  // Append the actual file for thumbnail
     }
     // Append other form fields
@@ -171,17 +195,22 @@ export default function Page() {
     form.append('category', JSON.stringify(formData.category));
     form.append('transition', JSON.stringify(formData.transition));
     form.append('detail', JSON.stringify(formData.detail));
+    form.append('coordinate', JSON.stringify(formData.coordinate))
     try {
+      setSending(true);
       const { thumbnail, title, description, urlmap, address, location, price, category, transition } = formState;
       if (thumbnail && title && description && urlmap && address && location && price && category && transition) {
-        console.log("let's go...");
-
         const response = await axiosInstance.post(`${API_ENDPOINTS.PROPERTIES}`, form, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
+        console.log(response);
+
         if (response.status === 200) {
+          setSending(false)
+          toast.success('Property created successfully!', { className: "bg-olive-drab text-white" });  // Toast on successful form submission
+
           /** Go alert to user then clear the state! */
           // Reset form data
           setFormData({
@@ -207,7 +236,7 @@ export default function Page() {
             status: false,
             thumbnail: '',
             images: [''],
-            coordinate: [{ types: '', coordinates: [0] }],
+            coordinate: { type: "Point", coordinates: [0, 0] },
             address: [{ content: '', language: 'en' }]
           });
           // Optionally, reset image previews and other state values
@@ -215,13 +244,17 @@ export default function Page() {
           setIsChecked(false);
 
         }
+      } else {
+        setSending(false)
+        toast.warning("Please fill the form!!", { className: "bg-yellow-400 text-white" });  // Toast on successful form submission
       }
     } catch (error: any) {
       if (axios.isAxiosError(error) && error.status === 500) {
-        console.log("Internal Server Error!");
-        throw error;
+        toast.warning("Please fill the form!!", { className: "bg-yellow-400 text-white" });  // Toast on successful form submission
+        setSending(false)
       }
       console.error(error);
+      setSending(false)
     }
   };
 
@@ -231,6 +264,7 @@ export default function Page() {
   };
   return (
     <main className='w-full bg-[#E6E6E6]'>
+
       {/* banner */}
       <header className="relative w-full h-[300px]">
         <Image
@@ -244,10 +278,12 @@ export default function Page() {
       </header>
       {/* form  */}
       <div className='w-full h-full'>
+        <Toaster position="bottom-right" duration={3000} />
+
         <div className='max-w-full w-[1400px] m-auto mt-16 h-full'>
           <h1 className='font-[600] leading-[5px] text-[20px] font-helvetica text-helvetica-h4'>Create properties</h1>
           <form onSubmit={(e: FormEvent<HTMLFormElement>) => handleFormSubmit(e)} className='w-full h-full p-2' action="">
-            <div className='w-full block justify-between flex-row mt-2 gap-1'>
+            <div className='w-full block justify-between flex-row mt-2 gap-1 '>
               {/* row 1 */}
               <PostPropertiesTitle errorMsg={formState?.title} onChange={handleInputChange} title={formData.title} slug={formData.slug} />
               {/* rich editor */}
@@ -270,7 +306,7 @@ export default function Page() {
                 />
 
               </div>
-              <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'>
+              <div className='w-full  h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'>
                 <PostInputField onChange={handleInputChange} errorMsg={formState?.address} title='Address*' name='address.0.content' placeholder='Properties address' />
                 {/* Category Dropdown (div-based) */}
                 <PostSelectField onChange={handleInputChange} defaultOption={defaultCategory} options={locations} errorMsg={formState?.location} name='location.0.content' title='Location*' />
@@ -292,7 +328,9 @@ export default function Page() {
               <div className='w-full h-full flex justify-end items-center py-2'>
                 <div>
                   <button className='px-4 py-2 rounded-md m-2 font-medium text-slate-800 bg-slate-300'>Cancel</button>
-                  <button type='submit' className='px-4 py-2 text-white font-medium rounded-md cursor-pointer bg-blue-700'>Create</button>
+                  <button type="submit" className="px-4 py-2 text-white font-medium rounded-md bg-blue-700">
+                    {sending ? "Creating..." : "Create"}
+                  </button>
                 </div>
               </div>
             </div>

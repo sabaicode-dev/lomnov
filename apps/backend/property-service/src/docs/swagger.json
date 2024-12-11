@@ -557,6 +557,9 @@
 									},
 									"detail": {
 										"type": "string"
+									},
+									"coordinate": {
+										"type": "string"
 									}
 								},
 								"required": [
@@ -948,6 +951,9 @@
 										"type": "string"
 									},
 									"status": {
+										"type": "string"
+									},
+									"coordinate": {
 										"type": "string"
 									}
 								}
