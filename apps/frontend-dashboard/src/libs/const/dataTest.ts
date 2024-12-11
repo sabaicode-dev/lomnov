@@ -1,4 +1,4 @@
-import img from "@/images/image.png";
+import img from "@/images/image1.png";
 const data = [
     {
       id: 1,
@@ -45,5 +45,24 @@ const data = [
       location: "Phnom Penh",
       price: 700,
     },
+    {
+      id: 6,
+      img: img,
+      name: "House 4",
+      sale: "Sale",
+      category: "villa",
+      location: "Kampot",
+      price: 900,
+    },
+    {
+      id: 7,
+      img: img,
+      name: "House 5",
+      sale: "Rent",
+      category: "apartment",
+      location: "Phnom Penh",
+      price: 700,
+    },
+    
 ]
 export default data;
