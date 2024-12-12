@@ -5,11 +5,10 @@ import Link from 'next/link';
 
 const Login = () => {
   return (
-    <div className="2xl:bg-gray-600 h-[950px]">
+    <div className="2xl:bg-gray-600 w-full h-full">
       <div className="w-[500px] h-[950px] bg-Bg p-[32px] gap-[16px] flex flex-col justify-between">
         <div>
           <Image src={Logo} alt="logo" width={129} height={43.13}  />
-          <p className="mt-[16px]">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         </div>
         <div className='w-[100%]  '>
           {/* Use lowercase `form` for the HTML form element */}
@@ -25,9 +24,6 @@ const Login = () => {
                   <button type="submit">Login</button>
            </Link> 
           </form>
-        </div>
-        <div>
-          <p>Not Authenticated</p>
         </div>
       </div>
     </div>

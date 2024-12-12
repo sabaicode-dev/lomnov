@@ -163,6 +163,7 @@ export class CognitoService {
         cognitoSub: userResponse.Username, // Use Username for cognitoSub
         email: requestBody.email,
         userName: userResponse.UserAttributes?.find(attr => attr.Name === 'name')?.Value || '',
+        role: role
       };
 
       console.log('user payload::: ', userPayload)

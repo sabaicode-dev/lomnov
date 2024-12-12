@@ -1,6 +1,6 @@
 import React from "react";
 import FromGrud from "@/components/molecules/form-grud/FromGrud";
-import administrator from "@/libs/const/administator";
+import administrator from "@/libs/const/mock/administator";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
 import ItemAdminstrator from "@/components/molecules/item-administator/ItemAdminstrator";
 

@@ -1,15 +1,15 @@
 import React from "react";
 import FromGrud from "@/components/molecules/form-grud/FromGrud";
-import agents from "@/libs/const/agents";
+import agents from "@/libs/const/mock/agents";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
 import ItemAgents from "@/components/molecules/item-agengs/ItemAgents";
 
 const dataFromAgents = {
-  data_list : "Agents List",
-  name_data : "Agents",
-  url : "/add_agents",
-  addnew : "+ New Agent",
-  namedata : "Agents",
+  data_list : "data",
+  name_data : "Customer",
+  url : "/add_new_customer",
+  addnew : "+ New Customer",
+  namedata : "Customers",
   data1 : "Address",
   data2 : "Email",
   data3 : "Contact",

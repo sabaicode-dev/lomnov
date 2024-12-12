@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import dataTest from '@/libs/const/dataTest';
+import dataTest from '@/libs/const/mock/dataTest';
 import Pagenation from '@/components/molecules/pagenation/Pagenation';
 import ItemProperty from '@/components/molecules/item-property/ItemProperty';
 import FromDataListProperty from '@/components/molecules/from-data-list/FromDataList';
