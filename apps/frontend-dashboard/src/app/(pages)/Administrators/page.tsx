@@ -2,7 +2,7 @@ import React from "react";
 import FromGrud from "@/components/molecules/form-grud/FromGrud";
 import administrator from "@/libs/const/administator";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
-import ItemAdminstrator from "@/components/molecules/item_administator/ItemAdminstrator";
+import ItemAdminstrator from "@/components/molecules/item-administator/ItemAdminstrator";
 
 const dataFromAgents = {
   data_list : "Administator",
@@ -24,7 +24,7 @@ const page = () => {
       <div>
         <FromGrud item={dataFromAgents} />
         {administrator.length > 0 ? (
-          <div className=" overflow-auto w-[100%] h-[280px]">
+          <div className="">
             {administrator.map((items) => {
               return <ItemAdminstrator item={items} key={items.id} />;
             })}

@@ -27,7 +27,7 @@ const Page = () => {
       <div>
         <FromDataListProperty />
         {data.length > 0 ? (
-          <div className="overflow-auto w-[100%] h-[280px]">
+          <div className="">
             {data.map((item) => {
               return (
                 <DataList

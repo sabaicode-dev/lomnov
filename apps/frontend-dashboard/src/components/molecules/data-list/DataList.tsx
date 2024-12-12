@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import Image, { StaticImageData } from "next/image";
+import { StaticImageData } from "next/image";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { LuPencilLine } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Link from "next/link";
+import CardUser from "@/components/atoms/card-user/CardUser";
 
 // Define item structure
 interface ItemData {
@@ -44,10 +45,8 @@ const DataList = ({ item, onDelete }: PropType) => {
     <div className="w-[100%] h-[68px] px-[12px] py-[8px] flex justify-between border-[0.1px] bg-BgSoftWhite/50 border-Primary/10 relative">
       <div className="flex justify-start items-center w-[20%] gap-[40px]">
         <p>{item.id}</p>
-        <div className="flex justify-start gap-[20px]">
-          <Image src={item.img} alt="img" width={32} height={32}></Image>
-          <p>{item.name}</p>
-        </div>
+        <CardUser usernname={item.name} image={item.img} />
+
       </div>
       <div className="flex justify-between items-center w-[60%]">
         <div className="w-[200px] flex justify-start">
