@@ -6,10 +6,12 @@ import { FiItalic } from "react-icons/fi";
 import { FiUnderline } from "react-icons/fi";
 import { FaStrikethrough } from "react-icons/fa6";
 import { FiBold } from "react-icons/fi";
-const Overview = () => {
+const GeneralInfo = () => {
   return (
-    <div className="w-[70%] mt-[40px] p-[24px] bg-[#F3F4F6] rounded-xls">
+    <div className="w-[100%] mt-[40px] p-[24px] bg-[#F3F4F6] rounded-xls">
+           <p className="text-[20px] font-[600] mb-[20px]">General Info</p>
       <form className="w-[100%] text-Black">
+ 
         <div className="w-[100%]">
           <label>Username*</label>
           <input
@@ -92,4 +94,4 @@ const Overview = () => {
   );
 };
 
-export default Overview;
+export default GeneralInfo;
