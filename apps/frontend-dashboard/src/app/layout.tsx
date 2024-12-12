@@ -8,7 +8,7 @@ import Sidebar from "@/components/organisms/sidebar/Sidebar ";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "LOMNOV",
+  title: "Dashboard | Lomnov",
   description: "This is Deshboard ",
 };
 
@@ -26,7 +26,7 @@ export default function RootLayout({
            <Header/>
            <div className="flex">
               <Sidebar/>
-              <div className="m-[40px] w-[100%] border-2 border-green-950">
+              <div className="m-[40px] w-[100%]">
               {children}
               </div>
            </div>

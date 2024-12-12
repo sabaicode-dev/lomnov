@@ -19,7 +19,7 @@ const dataFromAgents = {
 const page = () => {
   return (
     <div>
-      <p className="text-[30px] font-black ">Agentss</p>
+      <p className="text-[30px] font-black ">Agents</p>
       
       <div>
         <FromGrud item={dataFromAgents} />

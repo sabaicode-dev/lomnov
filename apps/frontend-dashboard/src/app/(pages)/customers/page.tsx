@@ -7,7 +7,7 @@ import ItemAgents from "@/components/molecules/item_agengs/ItemAgents";
 const dataFromAgents = {
   data_list : "data",
   name_data : "Customer",
-  url : "/add_new_customer",
+  url : "/add-new-customer",
   addnew : "+ New Customer",
   namedata : "Customers",
   data1 : "Address",
@@ -19,7 +19,7 @@ const dataFromAgents = {
 const page = () => {
   return (
     <div>
-      <p className="text-[30px] font-black ">Agentss</p>
+      <p className="text-[30px] font-black ">Customers</p>
       
       <div>
         <FromGrud item={dataFromAgents} />
