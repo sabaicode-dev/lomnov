@@ -6,11 +6,9 @@ import { FiItalic } from "react-icons/fi";
 import { FiUnderline } from "react-icons/fi";
 import { FaStrikethrough } from "react-icons/fa6";
 import { FiBold } from "react-icons/fi";
-<<<<<<<< HEAD:apps/frontend-dashboard/src/components/molecules/general_info/GeneralInfo.tsx
-const GeneralInfo = () => {
-========
+
 const OverviewAgent = () => {
->>>>>>>> d5a5588893ae4433e32c784e94825b0e734e9b2a:apps/frontend-dashboard/src/components/molecules/over-view-agents/OverviewAgent.tsx
+
   return (
     <div className="w-[100%] mt-[40px] p-[24px] bg-[#F3F4F6] rounded-xls">
            <p className="text-[20px] font-[600] mb-[20px]">General Info</p>
@@ -98,8 +96,6 @@ const OverviewAgent = () => {
   );
 };
 
-<<<<<<<< HEAD:apps/frontend-dashboard/src/components/molecules/general_info/GeneralInfo.tsx
-export default GeneralInfo;
-========
+
 export default OverviewAgent;
->>>>>>>> d5a5588893ae4433e32c784e94825b0e734e9b2a:apps/frontend-dashboard/src/components/molecules/over-view-agents/OverviewAgent.tsx
+

@@ -1,8 +1,9 @@
 import React from 'react'
-import GeneralInfo from '@/components/molecules/general_info/GeneralInfo';
 import Photo_Attachment from '@/components/molecules/photo_Attachment/Photo_Attachment';
-import AddressMap from '@/components/molecules/address_map/Address_map';
+import AddressMap from '@/components/molecules/address-map/AddressMap';
 import Status from '@/components/molecules/status/Status';
+import GeneralInfo from '@/components/molecules/general_info/GeneralInfo';
+
 const page = () => {
   return (
     <div>
