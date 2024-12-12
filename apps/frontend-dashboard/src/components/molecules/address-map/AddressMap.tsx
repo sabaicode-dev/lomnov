@@ -81,7 +81,7 @@ const AddressMap = () => {
   }, [customMarkerIcon, latLng, map]);
 
   return (
-    <div className="w-[69%] mt-[20px]">
+    <div className="w-[100%] mt-[20px]">
       <div className="w-[100%] mt-[20px] p-[24px] bg-[#F3F4F6] rounded-xls">
         <p className="text-[20px] font-[600]">Address and Map Location</p>
         <form className="w-[100%] mt-[20px] text-[14px]">

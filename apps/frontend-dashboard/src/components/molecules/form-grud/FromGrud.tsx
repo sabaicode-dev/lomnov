@@ -19,7 +19,7 @@ interface Item {
 
 const FromGrud = ({item}:Item) => {
   return (
-    <div className="w-[100%] h-auto bg-BgSoftWhite mt-[40px] rounded-lg">
+    <div className="w-[100%] h-auto bg-BgSoftWhite mt-[40px]">
       <div className="flex justify-between p-[20px] items-center">
         <p className="inter text-[20px] font-simple ">{item.data_list} List</p>
         <Link href={item.url}>

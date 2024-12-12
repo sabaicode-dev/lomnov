@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import dataTest from '@/libs/const/dataTest';
 import Pagenation from '@/components/molecules/pagenation/Pagenation';
-import DataList from '@/components/molecules/data-list/DataList';
+import ItemProperty from '@/components/molecules/item-property/ItemProperty';
 import FromDataListProperty from '@/components/molecules/from-data-list/FromDataList';
 import TotalData from '@/components/molecules/total-data/TotalData';
 
@@ -27,10 +27,10 @@ const Page = () => {
       <div>
         <FromDataListProperty />
         {data.length > 0 ? (
-          <div className="overflow-auto w-[100%] h-[280px]">
+          <div className="">
             {data.map((item) => {
               return (
-                <DataList
+                <ItemProperty
                   onDelete={handleDelete} // Pass the delete function here
                   item={item}
                   key={item.id}

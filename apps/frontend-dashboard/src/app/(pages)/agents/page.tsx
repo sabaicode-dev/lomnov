@@ -2,7 +2,7 @@ import React from "react";
 import FromGrud from "@/components/molecules/form-grud/FromGrud";
 import agents from "@/libs/const/agents";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
-import ItemAgents from "@/components/molecules/item_agengs/ItemAgents";
+import ItemAgents from "@/components/molecules/item-agengs/ItemAgents";
 
 const dataFromAgents = {
   data_list : "Agents List",
