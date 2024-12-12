@@ -3,7 +3,7 @@ import Image from 'next/image';
 import test from '@/icons/image.png';
 import { IoArrowUpSharp } from "react-icons/io5";
 
-const Total_Data = () => {
+const TotalData = () => {
   return (
     <div className='w-[100%] h-[110px] bg-BgSoftWhite rounded-xls p-[24px] mt-[40px] flex justify-between items-center'>
         <div>
@@ -18,4 +18,4 @@ const Total_Data = () => {
   )
 }
 
-export default Total_Data;
+export default TotalData;

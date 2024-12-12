@@ -1,10 +1,10 @@
 "use client";
-import Data_list from '@/components/molecules/data_list/Data_list';
-import From_data_list from '@/components/molecules/from_data_list/From_data_list';
-import Total_Data from '@/components/molecules/total_data/Total_Data';
 import React, { useState } from 'react';
 import dataTest from '@/libs/const/dataTest';
 import Pagenation from '@/components/molecules/pagenation/Pagenation';
+import DataList from '@/components/molecules/data-list/DataList';
+import FromDataListProperty from '@/components/molecules/from-data-list/FromDataList';
+import TotalData from '@/components/molecules/total-data/TotalData';
 
 const Page = () => {
   // State for managing data
@@ -20,17 +20,17 @@ const Page = () => {
     <div>
       <p className="text-[30px] font-black">Property</p>
       <div className="flex justify-between gap-[40px]">
-        <Total_Data />
-        <Total_Data />
-        <Total_Data />
+        <TotalData />
+        <TotalData />
+        <TotalData />
       </div>
       <div>
-        <From_data_list />
+        <FromDataListProperty />
         {data.length > 0 ? (
           <div className="overflow-auto w-[100%] h-[280px]">
             {data.map((item) => {
               return (
-                <Data_list
+                <DataList
                   onDelete={handleDelete} // Pass the delete function here
                   item={item}
                   key={item.id}

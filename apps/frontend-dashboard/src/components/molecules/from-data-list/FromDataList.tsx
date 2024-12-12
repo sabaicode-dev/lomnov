@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Search from "@/components/organisms/search/Search";
 import { LuFilter } from "react-icons/lu";
-const From_data_list_property = () => {
+const FromDataListProperty = () => {
   return (
     <div className="w-[100%] h-auto bg-BgSoftWhite mt-[40px] rounded-lg">
       <div className="flex justify-between p-[20px] items-center">
@@ -32,4 +32,4 @@ const From_data_list_property = () => {
   );
 };
 
-export default From_data_list_property;
+export default FromDataListProperty;

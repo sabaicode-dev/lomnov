@@ -12,8 +12,8 @@ import { FiBold } from "react-icons/fi";
 import Photo_Attachment from "../photo_Attachment/Photo_Attachment";
 import Status from "../status/Status";
 //=============================================
-const Overview_property = () => {
- 
+const OverviewProperty = () => {
+
   const [selectedRole, setSelectedRole] = useState("");
 
 
@@ -187,4 +187,4 @@ const Overview_property = () => {
   );
 };
 
-export default Overview_property;
+export default OverviewProperty;

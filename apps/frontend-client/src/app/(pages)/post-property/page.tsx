@@ -262,6 +262,58 @@ export default function Page() {
     setIsChecked(e.target.checked);
     setFormData(prev => ({ ...prev, status: e.target.checked }))
   };
+  const handleResetForm = () => {
+    // Reset formData to initial values
+    setFormData({
+      title: [{ content: '', language: 'en' }],
+      slug: [{ content: '', language: 'en' }],
+      description: [{ content: '', language: 'en' }],
+      price: 0,
+      category: [{ content: '', language: 'en' }],
+      location: [{ content: '', language: 'en' }],
+      detail: [
+        {
+          content: {
+            bedrooms: '',
+            bathrooms: '',
+            size: '',
+            parking: ''
+          },
+          language: 'en'
+        }
+      ],
+      urlmap: '',
+      transition: [{ content: '', language: 'en' }],
+      status: false,
+      thumbnail: '',
+      images: [''],
+      coordinate: { type: "Point", coordinates: [0, 0] },
+      address: [{ content: '', language: 'en' }]
+    });
+  
+    // Reset image previews
+    setImagePreviews([]);
+    
+    // Reset checkbox state
+    setIsChecked(false);
+  
+    // Reset form validation state
+    setFormState({
+      title: true,
+      description: true,
+      price: true,
+      category: true,
+      location: true,
+      address: true,
+      transition: true,
+      thumbnail: true,
+      images: true,
+      urlmap: true,
+      status: true,
+      coordinate: true,
+    });
+  };
+  
   return (
     <main className='w-full bg-[#E6E6E6]'>
 
@@ -327,7 +379,10 @@ export default function Page() {
               </div>
               <div className='w-full h-full flex justify-end items-center py-2'>
                 <div>
-                  <button className='px-4 py-2 rounded-md m-2 font-medium text-slate-800 bg-slate-300'>Cancel</button>
+                  <button type='button' onClick={handleResetForm} className='px-4 py-2 rounded-md m-2 font-medium text-slate-800 bg-slate-300'>
+                    Cancel
+                  </button>
+
                   <button type="submit" className="px-4 py-2 text-white font-medium rounded-md bg-blue-700">
                     {sending ? "Creating..." : "Create"}
                   </button>

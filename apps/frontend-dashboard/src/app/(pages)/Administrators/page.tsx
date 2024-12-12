@@ -1,5 +1,5 @@
 import React from "react";
-import FromGrud from "@/components/molecules/form-grud/From_grud";
+import FromGrud from "@/components/molecules/form-grud/FromGrud";
 import administrator from "@/libs/const/administator";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
 import ItemAdminstrator from "@/components/molecules/item_administator/ItemAdminstrator";

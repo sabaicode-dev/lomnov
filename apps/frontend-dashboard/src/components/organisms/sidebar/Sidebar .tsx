@@ -1,9 +1,13 @@
-
 "use client";
 import React from 'react';
 import Link from 'next/link';
-import { AiOutlineProduct } from "react-icons/ai";
 import { usePathname } from 'next/navigation';
+import UserAccSettingIcon from '@/components/atoms/icons/UserAccSettingIcon';
+import UserAdministatorIcon from '@/components/atoms/icons/UserAdministatorIcon';
+import UserCustomerIcon from '@/components/atoms/icons/UserCustomerIcon';
+import UserAgentIcon from '@/components/atoms/icons/UserAgentIcon';
+import PropertyHomeIcon from '@/components/atoms/icons/PropertyHomeIcon';
+import GridIcon from '@/components/atoms/icons/GridIcon';
 
 const Sidebar = () => {
   const pathname = usePathname(); // Get the current pathname
@@ -18,42 +22,42 @@ const Sidebar = () => {
       <div className="text-BlackSecondary gap-[10px]">
         <Link href="/dashboard">
           <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/dashboard')}`}>
-            <AiOutlineProduct />
+            <GridIcon />
             <p className="text-[14px] font-normal">Dashboard</p>
           </div>
         </Link>
 
         <Link href="/properties">
           <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/properties')}`}>
-            <AiOutlineProduct />
+            <PropertyHomeIcon />
             <p className="text-[14px] font-normal">Properties</p>
           </div>
         </Link>
 
         <Link href="/agents">
           <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/agents')}`}>
-            <AiOutlineProduct />
+            <UserAgentIcon />
             <p className="text-[14px] font-normal">Agents</p>
           </div>
         </Link>
 
         <Link href="/customers">
           <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/customers')}`}>
-            <AiOutlineProduct />
+            <UserCustomerIcon />
             <p className="text-[14px] font-normal">Customers</p>
           </div>
         </Link>
 
         <Link href="/administrators">
           <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/administrators')}`}>
-            <AiOutlineProduct />
+            <UserAdministatorIcon />
             <p className="text-[14px] font-normal">Administrators</p>
           </div>
         </Link>
 
         <Link href="/account-setting/profile">
           <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/account-setting/profile')} ${isActive('/account-setting/change_password')}`}>
-            <AiOutlineProduct />
+            <UserAccSettingIcon />
             <p className="text-[14px] font-normal">Account Setting</p>
           </div>
         </Link>
