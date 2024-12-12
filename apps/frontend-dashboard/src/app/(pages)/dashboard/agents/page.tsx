@@ -1,13 +1,15 @@
+"use client";
 import React from "react";
 import FromGrud from "@/components/molecules/form-grud/FromGrud";
 import agents from "@/libs/const/mock/agents";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
 import ItemAgents from "@/components/molecules/item-agengs/ItemAgents";
+import { useState } from "react";
 
 const dataFromAgents = {
   data_list : "Agents List",
   name_data : "Agents",
-  url : "/add_agents",
+  url : "/add-new-agents",
   addnew : "+ New Agent",
   namedata : "Agents",
   data1 : "Address",
@@ -16,17 +18,33 @@ const dataFromAgents = {
   data4 : "Joined Date"
 }
 
-const page = () => {
+const Page = () => {
+
+  const [data, setData] = useState(agents);
+
+  // Handle delete item
+  const handleDelete = (id: number) => {
+    const updatedData = data.filter((item) => item.id !== id);
+    setData(updatedData); // Update the state with filtered data
+  };
+
+
   return (
     <div>
       <p className="text-[30px] font-black ">Agentss</p>
       
       <div>
         <FromGrud item={dataFromAgents} />
-        {agents.length > 0 ? (
+        {data.length > 0 ? (
           <div className="">
-            {agents.map((items) => {
-              return <ItemAgents item={items} key={items.id} />;
+            {data.map((item) => {
+              return (
+                <ItemAgents
+                  onDelete={handleDelete} // Pass the delete function here
+                  item={item}
+                  key={item.id}
+                />
+              );
             })}
           </div>
         ) : (
@@ -38,4 +56,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

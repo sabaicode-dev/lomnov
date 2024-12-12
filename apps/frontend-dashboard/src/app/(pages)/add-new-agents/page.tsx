@@ -1,15 +1,17 @@
-import AddressMap from "@/components/molecules/address-map/AddressMap";
-import Overview_property from "@/components/molecules/overview_property/OverviewProperty";
 import React from "react";
+import Photo_Attachment from "@/components/molecules/photo_Attachment/Photo_Attachment";
+import AddressMap from "@/components/molecules/address-map/AddressMap";
 import Status from "@/components/molecules/status/Status";
+import GeneralInfo from "@/components/molecules/general_info/GeneralInfo";
 
 const page = () => {
   return (
-    <div>
-      <p className="text-[30px] font-black ">New Property</p>
+    <div className="">
+      <p className="text-[30px] font-black ">New Agents</p>
       <div className="w-[100%] flex justify-between gap-[20px]">
         <div className="w-[70%]">
-          <Overview_property />
+          <GeneralInfo />
+          <Photo_Attachment />
           <AddressMap />
         </div>
         <div className="w-[30%]">
