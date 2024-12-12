@@ -1,8 +1,8 @@
 import React from "react";
-import FromGrud from "@/components/molecules/form-grud/From_grud";
+import FromGrud from "@/components/molecules/form-grud/FromGrud";
 import agents from "@/libs/const/agents";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
-import Item_agents from "@/components/molecules/item_agengs/Item_agents";
+import ItemAgents from "@/components/molecules/item_agengs/ItemAgents";
 
 const dataFromAgents = {
   data_list : "Agents List",
@@ -24,9 +24,9 @@ const page = () => {
       <div>
         <FromGrud item={dataFromAgents} />
         {agents.length > 0 ? (
-          <div className=" overflow-auto w-[100%] h-[280px]">
+          <div className="">
             {agents.map((items) => {
-              return <Item_agents item={items} key={items.id} />;
+              return <ItemAgents item={items} key={items.id} />;
             })}
           </div>
         ) : (

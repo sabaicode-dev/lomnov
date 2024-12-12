@@ -1,5 +1,5 @@
-import Address_map from '@/components/molecules/address_map/Address_map';
-import Overview_property from '@/components/molecules/overview_property/Overview_property';
+import Address_map from '@/components/molecules/address_map/AddressMap';
+import Overview_property from '@/components/molecules/overview_property/OverviewProperty';
 import React from 'react'
 
 

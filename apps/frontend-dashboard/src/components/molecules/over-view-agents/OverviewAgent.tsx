@@ -6,7 +6,7 @@ import { FiItalic } from "react-icons/fi";
 import { FiUnderline } from "react-icons/fi";
 import { FaStrikethrough } from "react-icons/fa6";
 import { FiBold } from "react-icons/fi";
-const Overview = () => {
+const OverviewAgent = () => {
   return (
     <div className="w-[70%] mt-[40px] p-[24px] bg-[#F3F4F6] rounded-xls">
       <form className="w-[100%] text-Black">
@@ -92,4 +92,4 @@ const Overview = () => {
   );
 };
 
-export default Overview;
+export default OverviewAgent;

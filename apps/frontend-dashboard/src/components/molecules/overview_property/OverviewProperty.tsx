@@ -10,7 +10,7 @@ import { FaStrikethrough } from "react-icons/fa6";
 import { FiBold } from "react-icons/fi";
 import { TiDeleteOutline } from "react-icons/ti";
 //=============================================
-const Overview_property = () => {
+const OverviewProperty = () => {
   const [isPublic, setIsPublic] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
   const [images, setImages] = useState<string[]>([]);
@@ -270,4 +270,4 @@ const Overview_property = () => {
   );
 };
 
-export default Overview_property;
+export default OverviewProperty;

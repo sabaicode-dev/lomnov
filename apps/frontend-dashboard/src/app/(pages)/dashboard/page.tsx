@@ -1,7 +1,7 @@
 import Login_deshboard from '@/components/atoms/login-deshboard/Login_deshboard';
-import AgentsCustomersOverview from '@/components/molecules/chart_data/ChartData';
+import AgentsCustomersOverview from '@/components/molecules/chart-data/ChartData';
 import PropertiesOverview from '@/components/molecules/property_overview/Property_overview';
-import Total_Data from '@/components/molecules/total_data/Total_Data';
+import Total_Data from '@/components/molecules/total-data/TotalData';
 import React from 'react'
 
 

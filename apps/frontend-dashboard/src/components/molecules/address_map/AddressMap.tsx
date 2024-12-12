@@ -78,7 +78,7 @@ const AddressMap = () => {
           .openPopup();
       }
     }
-  }, [latLng, map]);
+  }, [customMarkerIcon, latLng, map]);
 
   return (
     <div className="w-[69%] mt-[20px]">

@@ -23,7 +23,7 @@ interface PropType {
   onDelete: (id: number) => void;
 }
 
-const Data_list = ({ item, onDelete }: PropType) => {
+const DataList = ({ item, onDelete }: PropType) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   // Handle popup visibility
@@ -110,4 +110,4 @@ const Data_list = ({ item, onDelete }: PropType) => {
   );
 };
 
-export default Data_list;
+export default DataList;
