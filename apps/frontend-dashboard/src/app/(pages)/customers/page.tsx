@@ -1,8 +1,8 @@
 import React from "react";
-import FromGrud from "@/components/molecules/form-grud/FromGrud";
-import agents from "@/libs/const/agents";
+import FormCustomerCrud from "@/components/molecules/form-customer-crud/FormCustomerCrud";
+import customer from "@/libs/const/customer";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
-import ItemAgents from "@/components/molecules/item-agengs/ItemAgents";
+import ItemCustomer from "@/components/molecules/item-customers/ItemCustomer";
 
 const dataFromAgents = {
   data_list : "data",
@@ -10,23 +10,22 @@ const dataFromAgents = {
   url : "/add-new-customer",
   addnew : "+ New Customer",
   namedata : "Customers",
-  data1 : "Address",
-  data2 : "Email",
-  data3 : "Contact",
-  data4 : "Joined Date"
+  data1 : "Email",
+  data2 : "Contact",
+  data3 : "Joined Date"
 }
 
 const page = () => {
   return (
     <div>
-      <p className="text-[30px] font-black ">Customers</p>
+      <p className="text-[30px] font-black ">Customer</p>
       
       <div>
-        <FromGrud item={dataFromAgents} />
-        {agents.length > 0 ? (
+        <FormCustomerCrud item={dataFromAgents} />
+        {customer.length > 0 ? (
           <div className="">
-            {agents.map((items) => {
-              return <ItemAgents item={items} key={items.id} />;
+            {customer.map((items) => {
+              return <ItemCustomer item={items} key={items.id} />;
             })}
           </div>
         ) : (
