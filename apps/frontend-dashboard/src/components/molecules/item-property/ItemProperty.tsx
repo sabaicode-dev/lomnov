@@ -23,7 +23,7 @@ interface PropType {
   onDelete: (id: number) => void;
 }
 
-const DataList = ({ item, onDelete }: PropType) => {
+const ItemProperty = ({ item, onDelete }: PropType) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   // Handle popup visibility
@@ -66,10 +66,12 @@ const DataList = ({ item, onDelete }: PropType) => {
         </div>
       </div>
       <div className="flex items-center justify-between gap-[10px] w-[10%]">
-        <div className="p-[4px] w-[24px] h-[24px] bg-Primary/20 rounded-[6px]">
-          <MdOutlineRemoveRedEye className="text-[16px] text-Primary" />
-        </div>
-        <Link href={"/update_property"}>
+        <Link href={"/view-property"}>
+          <div className="p-[4px] w-[24px] h-[24px] bg-Primary/20 rounded-[6px]">
+            <MdOutlineRemoveRedEye className="text-[16px] text-Primary" />
+          </div>
+        </Link>
+        <Link href={"/update-property"}>
           <div className="p-[4px] w-[24px] h-[24px] bg-Positive/20 rounded-[6px]">
             <LuPencilLine className="text-[16px] text-Positive" />
           </div>
@@ -85,9 +87,7 @@ const DataList = ({ item, onDelete }: PropType) => {
       {isPopupVisible && (
         <div className="absolute top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[300px]">
-            <h3 className="text-lg font-bold mb-4">
-              Delete {item.name}?
-            </h3>
+            <h3 className="text-lg font-bold mb-4">Delete {item.name}?</h3>
             <p className="mb-4">Are you sure you would like to do this?</p>
             <div className="flex justify-between">
               <button
@@ -110,4 +110,4 @@ const DataList = ({ item, onDelete }: PropType) => {
   );
 };
 
-export default DataList;
+export default ItemProperty;

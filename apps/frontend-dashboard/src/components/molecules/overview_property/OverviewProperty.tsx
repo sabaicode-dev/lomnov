@@ -9,21 +9,16 @@ import { FiUnderline } from "react-icons/fi";
 import { FaStrikethrough } from "react-icons/fa6";
 import { FiBold } from "react-icons/fi";
 
-import Photo_Attachment from "../photo_Attachment/Photo_Attachment";
-import Status from "../status/Status";
 //=============================================
 const OverviewProperty = () => {
 
   const [selectedRole, setSelectedRole] = useState("");
 
-
-
-
   return (
     <div>
       {/*Over view*/}
       <div className="w-[100%] flex justify-between gap-[20px]">
-        <div className="w-[70%]">
+        <div className="w-[100%]">
           <div className="w-[100%] mt-[40px] p-[24px] bg-[#F3F4F6] rounded-xls">
             <p className="text-[20px] font-[600]">Overview</p>
             <form className="w-[100%] text-Black">
@@ -176,12 +171,7 @@ const OverviewProperty = () => {
               </form>
             </div>
           </div>
-          {/*Up load image*/}
-          <Photo_Attachment/>
         </div>
-
-        {/*status*/}
-       <Status/>
       </div>
     </div>
   );
