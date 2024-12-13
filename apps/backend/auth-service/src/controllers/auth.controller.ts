@@ -144,6 +144,8 @@ export class AuthControllerII extends Controller {
     try {
       const refreshToken = request.cookies['refreshToken'];
       const username = request.cookies['username'];
+      console.log(username,refreshToken);
+      
       if (refreshToken && username) {
         const result = await this.cognitoService.refreshTokens({
           refreshToken: body.refreshToken || refreshToken,

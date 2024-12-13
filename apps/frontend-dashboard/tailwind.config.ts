@@ -10,35 +10,41 @@ export default {
   theme: {
     extend: {
       colors: {
-        "Primary":"#7D7757",
-        "Secondary":"#B5B49E",
-        "Bg":"#E0E0DC",
-        "BgSoftWhite":"#F3F4F6",
-        "Positive":"#5CC184",
-        "PositiuveSofrBig":"#DEF3E6",
-        "Negative":"#E9678A",
-        "NegativeSoftBig":"#FBE1E1",
-        "Black":"#111827",
-        "BlackSecondary":"#333333"
+        "Primary": "#7D7757",
+        "Secondary": "#B5B49E",
+        "Bg": "#E0E0DC",
+        "BgSoftWhite": "#F3F4F6",
+        "Positive": "#5CC184",
+        "PositiuveSofrBig": "#DEF3E6",
+        "Negative": "#E9678A",
+        "NegativeSoftBig": "#FBE1E1",
+        "Black": "#111827",
+        "BlackSecondary": "#333333"
       },
       borderRadius: {
-        "sml":"6px",
-        "sm":"8px",
-        "lg":"10px",
-        "xls":"12px",
-        "full":"50px",
+        "sml": "6px",
+        "sm": "8px",
+        "lg": "10px",
+        "xls": "12px",
+        "full": "50px",
       },
-      fontFamily : {
-        "Inter":"inter",
-        "DM Sans":"DM Sans"
+      fontFamily: {
+        "Inter": "inter",
+        "DM Sans": "DM Sans"
       },
       fontWeight: {
         normal: "500",
-        simple : "600",
+        simple: "600",
         bold: "700",
         black: "900",
       },
-       screens: {
+      // next.config.js
+
+      images: {
+        domains: [], // Add the domain of the external image URL here
+      },
+
+      screens: {
         sm: "640px",
         md: "768px",
         lg: "1024px",
