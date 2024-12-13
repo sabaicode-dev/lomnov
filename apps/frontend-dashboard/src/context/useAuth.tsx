@@ -9,6 +9,7 @@ export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLog
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isErrors, setIsErrors] = useState<string>('')
     const router = useRouter();
     const checkAuthStatus = async () => {
         try {
@@ -41,8 +42,8 @@ export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLog
     }, [isLogin]);
 
     const login = async ({ email, phone_number, password }: LoginRequest) => {
-        console.log(email,password);
-        
+        console.log(email, password);
+
         setLoading(true);
         try {
             const ress = await axiosInstance.post(`${API_ENDPOINTS.SIGN_IN}`, {
@@ -50,7 +51,7 @@ export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLog
                 password
             })
             console.log(ress);
-            
+
             setIsAuthenticated(true);
             // Fetch the user profile data after login
             const res = await axiosInstance.get(API_ENDPOINTS.USER_PROFILE);
@@ -58,13 +59,16 @@ export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLog
             // console.log(res);
             router.push('/dashboard');
         } catch (error) {
-            console.log("Error Athentication:: ",error)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-expect-error
+            setIsErrors(error.response.data.error_message as string)
+            console.log("Error Athentication:: ", error)
             setIsAuthenticated(false);
         } finally {
             setLoading(false);
         }
     }
-
+    
     const signup = async ({ username, email, phone_number, password }: SignupRequest) => {
         setLoading(true);
         try {
@@ -134,7 +138,7 @@ export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLog
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, loading, user, login, logout, signup, verify, siginWithGoogle }
+        <AuthContext.Provider value={{ isAuthenticated, loading,user,isErrors, login, logout, signup, verify, siginWithGoogle }
         }>
             {children}
         </AuthContext.Provider>

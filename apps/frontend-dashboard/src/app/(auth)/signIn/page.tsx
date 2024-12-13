@@ -1,5 +1,4 @@
 'use client'
-
 import { useAuth } from "@/context/useAuth";
 import Logo from "@/images/lomnov-logo.png";
 import Image from "next/image";
@@ -17,7 +16,7 @@ const loginSchema = z.object({
 type LoginData = z.infer<typeof loginSchema>;
 
 const Page = () => {
-  const { login } = useAuth();
+  const { login, isErrors } = useAuth();
   const router = useRouter(); // For routing after successful login
 
   // Initialize react-hook-form with Zod validation
@@ -27,16 +26,15 @@ const Page = () => {
 
   // Handle form submission
   const onSubmit = async (data: LoginData) => {
-    console.log("Data password:: ",data.password);
-    
+    console.log("Data password:: ", data.password);
+
     try {
       // Attempt to log in the user
-      const res = await login({email: data.email,password: data.password});
-      console.log(res);
-      
+      await login({ email: data.email, password: data.password });
       router.push("/dashboard"); // Redirect to dashboard on successful login
     } catch (error) {
-      console.error("Login failed:", error); // Handle login failure
+      console.log("error:",isErrors);
+      console.log(error)
     }
   };
 
