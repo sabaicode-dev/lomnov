@@ -80,9 +80,9 @@ axiosInstance.interceptors.response.use(
         // console.log(error);
 
         const { response, config: originalRequest } = error;
-        // console.log('2.:::', response)
+        console.log('2.:::', response)
         const status = response?.status;
-        // console.log('1.:::', status)
+        console.log('1.:::', status)
         // 1.
         if (status === 401 && !originalRequest._retry) {
             // 1.1

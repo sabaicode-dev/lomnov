@@ -9,12 +9,13 @@ export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLog
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isErrors, setIsErrors] = useState<string>('')
     const router = useRouter();
     const checkAuthStatus = async () => {
         try {
             setLoading(true);
             const res = await axiosInstance.get(API_ENDPOINTS.USER_PROFILE);
-            //console.log("User Profile ::: ",res.data)
+            console.log("User Profile ::: ",res.data)
             //setUser(res.data);
             // Extract the first user from the response
             if (res.data) {
@@ -41,8 +42,7 @@ export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLog
     }, [isLogin]);
 
     const login = async ({ email, phone_number, password }: LoginRequest) => {
-        console.log(email,password);
-        
+        console.log(email, password);
         setLoading(true);
         try {
             const ress = await axiosInstance.post(`${API_ENDPOINTS.SIGN_IN}`, {
@@ -50,15 +50,15 @@ export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLog
                 password
             })
             console.log(ress);
-            
+
             setIsAuthenticated(true);
             // Fetch the user profile data after login
             const res = await axiosInstance.get(API_ENDPOINTS.USER_PROFILE);
             setUser(res.data);
-            // console.log(res);
             router.push('/dashboard');
         } catch (error) {
-            console.log("Error Athentication:: ",error)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            handleError(error);
             setIsAuthenticated(false);
         } finally {
             setLoading(false);
@@ -127,14 +127,29 @@ export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLog
             setUser(null);
             router.push('/');
         } catch (error) {
-            console.error("Logout failed:", error);
+            handleError(error);
         } finally {
             setLoading(false);
         }
     };
-
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const handleError = (error) => {
+        if (error.response) {
+            setIsErrors(error.response.data.error_message || "Something went wrong")
+        } else if (error.request) {
+            // No response received from server
+            setIsErrors('Server did not respond. Please try again later.');
+        } else {
+            // Error during setting up the request
+            setIsErrors('An error occurred while setting up the request.');
+        }
+        console.log(error);
+    }
+    console.log(user);
+    
     return (
-        <AuthContext.Provider value={{ isAuthenticated, loading, user, login, logout, signup, verify, siginWithGoogle }
+        <AuthContext.Provider value={{ isAuthenticated, loading, user, isErrors, login, logout, signup, verify, siginWithGoogle }
         }>
             {children}
         </AuthContext.Provider>

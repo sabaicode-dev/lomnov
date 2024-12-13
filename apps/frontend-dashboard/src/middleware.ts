@@ -8,8 +8,13 @@ export async function middleware(request: NextRequest) {
     const allCookies = cookieStore.getAll().map((cookie) => `${cookie.name}=${cookie.value}`).join("; ");
     const access_token = allCookies.split("; ").find((cookie) => cookie.startsWith("accessToken="))?.split("=")[1];
     const refresh_token = allCookies.split("; ").find((cookie) => cookie.startsWith("refreshToken="))?.split("=")[1];
+    console.log("refresh token::: ", refresh_token);
+
+
     if (!access_token && refresh_token) {
         const refreshResult = await authHelpers.refreshAccessToken(refresh_token);
+        console.log("refresh token::: ", refreshResult);
+
         if (refreshResult) {
             return refreshResult.response;
         } else { return authHelpers.clearAuthAndRedirect(request, "/signIn") };
@@ -22,15 +27,14 @@ export async function middleware(request: NextRequest) {
                 Cookie: allCookies || "",
             },
         });
-        console.log(userInfoResponse.ok);
-        
         if (!userInfoResponse.ok) {
+
             console.error("Error response:", await userInfoResponse.text());
             return authHelpers.clearAuthAndRedirect(request, "/signIn", access_token);
         }
         userInfo = await userInfoResponse.json();
         console.log(userInfo);
-        
+
     }
     if (pathname === "/") {
         return NextResponse.redirect(new URL("/dashboard", request.url));

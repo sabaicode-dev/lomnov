@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider isLogin={!!userCookie}>{children}</AuthProvider>
+        <AuthProvider isLogin={!userCookie}>{children}</AuthProvider>
       </body>
     </html>
   );

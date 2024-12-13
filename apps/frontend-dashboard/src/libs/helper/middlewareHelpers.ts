@@ -1,32 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
+import axiosInstance from "../axios";
 
 export const authHelpers = {
     refreshAccessToken: async (refresh_token: string) => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/auth/refresh-token`, {
-                method: "POST",
+            const response = await axiosInstance.post(`${process.env.NEXT_PUBLIC_API_URL}/v1/auth/refresh-token`, {}, {
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${refresh_token}`
+                    "Authorization": `Bearer ${refresh_token}`,
+                    "Content-Type": "application/json"
                 }
             });
-            if (!response.ok) {
+
+            if (response.status !== 200) {
                 throw new Error('Token refresh failed');
             }
-            const data = await response.json();
+
+            const data = response.data;  // Axios automatically parses JSON
             const nextRes = NextResponse.next();
-            nextRes.cookies.set("access_token", data.access_token, {
+
+            nextRes.cookies.set("accessToken", data.access_token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "lax",
                 path: "/",
             });
-            nextRes.cookies.set("id_token", data.id_token, {
+
+            nextRes.cookies.set("idToken", data.id_token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "lax",
                 path: "/",
             });
+
             return { newTokens: data, response: nextRes };
 
         } catch (error) {
@@ -41,20 +46,22 @@ export const authHelpers = {
     ) => {
         try {
             if (access_token) {
-                await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/auth/logout`, {
-                    method: "POST",
+                await axiosInstance.post(`${process.env.NEXT_PUBLIC_API_URL}/v1/auth/logout`, {}, {
                     headers: {
                         Authorization: `Bearer ${access_token}`,
-                    },
+                    }
                 });
             }
         } catch (error) {
             console.error("Failed to sign out:", error);
         }
+
         const response = NextResponse.redirect(new URL(redirectUrl, req.url));
-        req.cookies.getAll().forEach((cookie) => {
-            response.cookies.set(cookie.name, "", { expires: new Date(0) });
-        });
+
+        // Clear only the authentication-related cookies
+        response.cookies.set("accessToken", "", { expires: new Date(0), path: "/" });
+        response.cookies.set("idToken", "", { expires: new Date(0), path: "/" });
+
         return response;
     }
 }

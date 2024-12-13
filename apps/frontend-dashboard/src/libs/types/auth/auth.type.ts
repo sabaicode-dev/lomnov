@@ -21,6 +21,7 @@ export interface User {
 export interface AuthContextType {
     isAuthenticated: boolean;
     loading: boolean;
+    isErrors: string;
     user: User | null;
     login: ({ email, phone_number, password }: LoginRequest) => Promise<void>;
     logout: () => Promise<void>,
