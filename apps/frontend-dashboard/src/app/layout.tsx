@@ -8,7 +8,7 @@ import { cookies } from "next/headers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "LOMNOV",
+  title: "Dashboard | Lomnov",
   description: "This is Deshboard ",
 };
 const cookieStore = await cookies();

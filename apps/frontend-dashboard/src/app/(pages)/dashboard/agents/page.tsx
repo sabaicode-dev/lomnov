@@ -1,13 +1,12 @@
 "use client";
-import React from "react";
+import React, { useState }  from "react";
 import FromGrud from "@/components/molecules/form-grud/FromGrud";
 import agents from "@/libs/const/mock/agents";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
 import ItemAgents from "@/components/molecules/item-agengs/ItemAgents";
-import { useState } from "react";
 
 const dataFromAgents = {
-  data_list : "Agents List",
+  data_list : "Agents",
   name_data : "Agents",
   url : "/add-new-agents",
   addnew : "+ New Agent",
@@ -31,7 +30,7 @@ const Page = () => {
 
   return (
     <div>
-      <p className="text-[30px] font-black ">Agentss</p>
+      <p className="text-[30px] font-black ">Agents</p>
       
       <div>
         <FromGrud item={dataFromAgents} />

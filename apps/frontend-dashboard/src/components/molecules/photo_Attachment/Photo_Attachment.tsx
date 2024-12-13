@@ -33,7 +33,7 @@ const Photo_Attachment = () => {
               >
               
                 <span className="text-Black w-[100%] text-center text-[14px] mb-[20px] h-[40px] rounded-xls p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[20px] focus:outline-none focus:border-Primary/20">
-                  Click to upload or drag and  <span className="text-Primary">drop</span>
+                  Drag and Drop your files or  <span className="text-Primary">Browse</span>
                 </span>
                 <input
                   id="multi-file-upload"
