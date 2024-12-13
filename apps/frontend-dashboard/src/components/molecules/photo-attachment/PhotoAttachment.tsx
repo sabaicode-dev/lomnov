@@ -1,11 +1,9 @@
 "use client";
-import React from 'react'
-import { useState, ChangeEvent } from "react";
-
+import React,{ useState, ChangeEvent } from 'react'
 import { TiDeleteOutline } from "react-icons/ti";
 
 
-const Photo_Attachment = () => {
+const PhotoAttachment = () => {
     const [images, setImages] = useState<string[]>([]);
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { files } = e.target;
@@ -71,4 +69,4 @@ const Photo_Attachment = () => {
   )
 }
 
-export default Photo_Attachment;
+export default PhotoAttachment;

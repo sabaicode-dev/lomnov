@@ -59,12 +59,12 @@ const ItemAgents = ({ item, onDelete }: PropType) => {
         </div>
       </div>
       <div className="flex items-center justify-between gap-[10px] w-[10%]">
-        <Link href={"/view-agents"}>
+        <Link href={"/dashboard/view-agents"}>
           <div className="p-[4px] w-[24px] h-[24px]  bg-Primary/20 rounded-[6px]">
             <MdOutlineRemoveRedEye className="text-[16px] text-Primary" />
           </div>
         </Link>
-        <Link href={"/update-agents"}>
+        <Link href={"/dashboard/update-agents"}>
           <div className="p-[4px] w-[24px] h-[24px]  bg-Positive/20 rounded-[6px]">
             <LuPencilLine className="text-[16px] text-Positive" />
           </div>

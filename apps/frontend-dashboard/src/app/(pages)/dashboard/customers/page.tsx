@@ -9,7 +9,7 @@ import ItemCustomer from "@/components/molecules/item-customers/ItemCustomer";
 const dataFromCustomer = {
   data_list : "Customers",
   name_data : "Customer",
-  url : "/add-new-customer",
+  url : "/dashboard/add-new-customer",
   addnew : "+ New Customer",
   namedata : "Customers",
   data1 : "Email",
