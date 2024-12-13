@@ -8,7 +8,7 @@ import ItemAgents from "@/components/molecules/item-agengs/ItemAgents";
 const dataFromAgents = {
   data_list : "Agents",
   name_data : "Agents",
-  url : "/add-new-agents",
+  url : "/dashboard/add-new-agents",
   addnew : "+ New Agent",
   namedata : "Agents",
   data1 : "Address",

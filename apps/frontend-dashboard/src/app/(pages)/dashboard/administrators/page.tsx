@@ -7,7 +7,7 @@ import ItemAdminstrator from "@/components/molecules/item-administator/ItemAdmin
 const dataFromAgents = {
   data_list : "Administator",
   name_data : "Administrator",
-  url : "/add_new_administrator",
+  url : "/dashboard/add-new-administrator",
   addnew : "+ New Administrator",
   namedata : "Administrator",
   data1 : "Email",

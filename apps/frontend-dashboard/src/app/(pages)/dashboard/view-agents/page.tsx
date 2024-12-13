@@ -1,5 +1,5 @@
 import React from 'react'
-import Photo_Attachment from "@/components/molecules/photo_Attachment/Photo_Attachment";
+import PhotoAttachment from "@/components/molecules/photo-attachment/PhotoAttachment";
 import AddressMap from "@/components/molecules/address-map/AddressMap";
 import Status from "@/components/molecules/status/Status";
 import GeneralInfo from "@/components/molecules/general_info/GeneralInfo";
@@ -11,7 +11,7 @@ const page = () => {
     <div className="w-[100%] flex justify-between gap-[20px]">
       <div className="w-[70%]">
         <GeneralInfo />
-        <Photo_Attachment />
+        <PhotoAttachment />
         <AddressMap />
       </div>
       <div className="w-[30%]">

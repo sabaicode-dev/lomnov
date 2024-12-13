@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuth } from "@/context/useAuth";
-import Logo from "@/images/lomnov-logo.png";
+import Logo from "@/images/lomnov-logo.png"
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";

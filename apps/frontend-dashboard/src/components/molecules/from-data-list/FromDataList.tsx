@@ -7,7 +7,7 @@ const FromDataListProperty = () => {
     <div className="w-[100%] h-auto bg-BgSoftWhite mt-[40px] rounded-lg">
       <div className="flex justify-between p-[20px] items-center">
         <p className="inter text-[20px] font-simple ">Property List</p>
-        <Link href={"/add-new-property"}>
+        <Link href={"/dashboard/add-new-property"}>
           <button className="bg-Primary py-[8px] px-[16px] rounded-sm text-[16px] text-BgSoftWhite">
             +New Property
           </button>
