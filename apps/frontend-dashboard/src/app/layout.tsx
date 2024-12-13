@@ -22,11 +22,11 @@ export default function RootLayout({
       <body
        className={inter.className}
       >    
-        <div className="flex flex-col">
+        <div className="flex flex-col ">
            <Header/>
            <div className="flex">
               <Sidebar/>
-              <div className="m-[40px] w-[100%]">
+              <div className="m-[40px] w-[100%] border-2 border-black">
               {children}
               </div>
            </div>

@@ -1,11 +1,13 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import FormCustomerCrud from "@/components/molecules/form-customer-crud/FormCustomerCrud";
 import customer from "@/libs/const/customer";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
 import ItemCustomer from "@/components/molecules/item-customers/ItemCustomer";
 
-const dataFromAgents = {
-  data_list : "data",
+const dataFromCustomer = {
+  data_list : "Customers",
   name_data : "Customer",
   url : "/add-new-customer",
   addnew : "+ New Customer",
@@ -16,16 +18,24 @@ const dataFromAgents = {
 }
 
 const page = () => {
+  const [data, setData] = useState(customer);
+
+  // Handle delete item
+  const handleDelete = (id: number) => {
+    const updatedData = data.filter((item) => item.id !== id);
+    setData(updatedData); // Update the state with filtered data
+  };
+
   return (
     <div>
       <p className="text-[30px] font-black ">Customer</p>
       
       <div>
-        <FormCustomerCrud item={dataFromAgents} />
-        {customer.length > 0 ? (
+        <FormCustomerCrud item={dataFromCustomer} />
+        {data.length > 0 ? (
           <div className="">
-            {customer.map((items) => {
-              return <ItemCustomer item={items} key={items.id} />;
+            {data.map((items) => {
+              return <ItemCustomer item={items} key={items.id} onDelete={handleDelete} />;
             })}
           </div>
         ) : (

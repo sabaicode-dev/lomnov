@@ -7,7 +7,7 @@ import ItemAgents from "@/components/molecules/item-agengs/ItemAgents";
 import { useState } from "react";
 
 const dataFromAgents = {
-  data_list : "Agents List",
+  data_list : "Agents",
   name_data : "Agents",
   url : "/add-new-agents",
   addnew : "+ New Agent",
