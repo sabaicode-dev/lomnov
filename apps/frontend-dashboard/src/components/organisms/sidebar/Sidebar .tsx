@@ -27,36 +27,36 @@ const Sidebar = () => {
           </div>
         </Link>
 
-        <Link href="/properties">
-          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/properties')}`}>
+        <Link href="/dashboard/properties">
+          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/dashboard/properties')}`}>
             <PropertyHomeIcon />
             <p className="text-[14px] font-normal">Properties</p>
           </div>
         </Link>
 
-        <Link href="/agents">
-          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/agents')}`}>
+        <Link href="/dashboard/agents">
+          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/dashboard/agents')}`}>
             <UserAgentIcon />
             <p className="text-[14px] font-normal">Agents</p>
           </div>
         </Link>
 
-        <Link href="/customers">
-          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/customers')}`}>
+        <Link href="/dashboard/customers">
+          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/dashboard/customers')}`}>
             <UserCustomerIcon />
             <p className="text-[14px] font-normal">Customers</p>
           </div>
         </Link>
 
-        <Link href="/administrators">
-          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/administrators')}`}>
+        <Link href="/dashboard/administrators">
+          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/dashboard/administrators')}`}>
             <UserAdministatorIcon />
             <p className="text-[14px] font-normal">Administrators</p>
           </div>
         </Link>
 
-        <Link href="/account-setting/profile">
-          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/account-setting/profile')} ${isActive('/account-setting/change_password')}`}>
+        <Link href="/dashboard/account-setting/profile">
+          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/dashboard/account-setting/profile')} ${isActive('/account-setting/change_password')}`}>
             <UserAccSettingIcon />
             <p className="text-[14px] font-normal">Account Setting</p>
           </div>

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import FormCustomerCrud from "@/components/molecules/form-customer-crud/FormCustomerCrud";
-import customer from "@/libs/const/customer";
+import customer from "@/libs/const/mock/customer";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
 import ItemCustomer from "@/components/molecules/item-customers/ItemCustomer";
 

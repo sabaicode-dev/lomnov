@@ -21,7 +21,7 @@ const ROUTE_PATHS: RoutesConfig = {
       },
       {
         path: "/signin",
-        methods: { POST: { authRequired: false, roles: [] } },
+        methods: { POST: { authRequired: false, roles: ['user','admin'] } },
       },
       {
         path: "/logout",
@@ -77,7 +77,7 @@ const ROUTE_PATHS: RoutesConfig = {
       {
         path: "/me",
         methods: {
-          GET: { authRequired: true, roles: ["user"] },
+          GET: { authRequired: true, roles: ["user","admin"] },
           PUT: { authRequired: true, roles: ["user"] },
         },
       },

@@ -1,10 +1,9 @@
 "use client";
-import React from "react";
+import React, { useState }  from "react";
 import FromGrud from "@/components/molecules/form-grud/FromGrud";
-import agents from "@/libs/const/agents";
+import agents from "@/libs/const/mock/agents";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
 import ItemAgents from "@/components/molecules/item-agengs/ItemAgents";
-import { useState } from "react";
 
 const dataFromAgents = {
   data_list : "Agents",
