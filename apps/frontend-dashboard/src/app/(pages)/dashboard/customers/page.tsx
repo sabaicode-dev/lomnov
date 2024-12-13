@@ -1,32 +1,41 @@
-import React from "react";
-import FromGrud from "@/components/molecules/form-grud/FromGrud";
-import agents from "@/libs/const/mock/agents";
-import Pagenation from '@/components/molecules/pagenation/Pagenation'
-import ItemAgents from "@/components/molecules/item-agengs/ItemAgents";
+"use client";
 
-const dataFromAgents = {
-  data_list : "data",
+import React, { useState } from "react";
+import FormCustomerCrud from "@/components/molecules/form-customer-crud/FormCustomerCrud";
+import customer from "@/libs/const/mock/customer";
+import Pagenation from '@/components/molecules/pagenation/Pagenation'
+import ItemCustomer from "@/components/molecules/item-customers/ItemCustomer";
+
+const dataFromCustomer = {
+  data_list : "Customers",
   name_data : "Customer",
-  url : "/add_new_customer",
+  url : "/add-new-customer",
   addnew : "+ New Customer",
   namedata : "Customers",
-  data1 : "Address",
-  data2 : "Email",
-  data3 : "Contact",
-  data4 : "Joined Date"
+  data1 : "Email",
+  data2 : "Contact",
+  data3 : "Joined Date"
 }
 
 const page = () => {
+  const [data, setData] = useState(customer);
+
+  // Handle delete item
+  const handleDelete = (id: number) => {
+    const updatedData = data.filter((item) => item.id !== id);
+    setData(updatedData); // Update the state with filtered data
+  };
+
   return (
     <div>
-      <p className="text-[30px] font-black ">Agentss</p>
+      <p className="text-[30px] font-black ">Customer</p>
       
       <div>
-        <FromGrud item={dataFromAgents} />
-        {agents.length > 0 ? (
+        <FormCustomerCrud item={dataFromCustomer} />
+        {data.length > 0 ? (
           <div className="">
-            {agents.map((items) => {
-              return <ItemAgents item={items} key={items.id} />;
+            {data.map((items) => {
+              return <ItemCustomer item={items} key={items.id} onDelete={handleDelete} />;
             })}
           </div>
         ) : (
