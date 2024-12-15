@@ -9,6 +9,7 @@ import { StaticImageData } from 'next/image';
 import CardUser from '@/components/atoms/card-user/CardUser';
 import CardEmail from '@/components/atoms/card-email/CardEmail';
 import CardDate from '@/components/atoms/card-date/CardDate';
+import { formatDate } from '@/libs/functions/formatDate';
 
 
 //==================================
@@ -52,15 +53,15 @@ const ItemCustomer = ({ item, onDelete }: PropType) => {
       <div className='flex justify-between items-center w-[60%]'>
         <CardEmail email={item.Email} />
         <div className='w-[200px] flex justify-start'><p>{item.Contact}</p></div>
-        <CardDate datetime={item.date} />
+        <CardDate datetime={formatDate(item.date)} />
       </div>
       <div className='flex items-center justify-between gap-[10px] w-[10%]'>
-        <Link href={"/view-customer"}>
+        <Link href={"/dashboard/view-customer"}>
             <div className='p-[4px] w-[24px] h-[24px]  bg-Primary/20 rounded-[6px] cursor-pointer '>
               <MdOutlineRemoveRedEye className='text-[16px] text-Primary' />
             </div>
         </Link>
-        <Link href={"/update-customer"}>
+        <Link href={"/dashboard/update-customer"}>
             <div className='p-[4px] w-[24px] h-[24px]  bg-Positive/20 rounded-[6px] cursor-pointer '>
               <LuPencilLine className='text-[16px] text-Positive' />
             </div>

@@ -3,18 +3,18 @@ const customer = [
     {
       id: 1,
       img: img,
-      name: 'Jame L. Erickson',
-      Email: 'jame.erickson@gmail.com',
+      name: 'Rong L. Erickson',
+      Email: 'rong.erickson@gmail.com',
       Contact: '+855-123-445',
-      date: 'Jan 01, 2024',
+      date: '2024-01-01T00:00:00Z', // ISO format
     },
     {
       id: 2,
       img: img ,
-      name: 'Sophia R. Carter',
-      Email: 'sophia.carter@gmail.com',
+      name: 'SokPhol R. Carter',
+      Email: 'sokphol.carter@gmail.com',
       Contact: '+855-234-556',
-      date: 'Feb 15, 2024',
+      date: '2024-02-15T00:00:00Z', // ISO format
     },
     {
       id: 3,
@@ -22,15 +22,15 @@ const customer = [
       name: 'Teang S. Kennedy',
       Email: 'teang.kennedy@gmail.com',
       Contact: '+855-345-667',
-      date: 'Jan 10, 2024',
+      date: '2024-01-10T00:00:00Z', // ISO format
     },
     {
       id: 4,
       img:img,
-      name: 'Emily K. Anderson',
-      Email: 'emily.anderson@gmail.com',
+      name: 'Tra K. Anderson',
+      Email: 'tra.anderson@gmail.com',
       Contact: '+855-456-778',
-      date: 'Apr 20, 2024',
+      date: '2024-04-20T00:00:00Z', // ISO format
     },
     {
       id: 5,
@@ -38,9 +38,8 @@ const customer = [
       name: 'David W. Martinez',
       Email: 'david.martinez@gmail.com',
       Contact: '+855-567-889',
-      date: 'May 05, 2024',
+      date: '2024-05-05T00:00:00Z', // ISO format
     },
   ];
   
-
 export default customer;

@@ -15,7 +15,7 @@ const page = () => {
           <Status />
         </div>
       </div>
-      <div className="flex justify-start w-[100%] mt-[20px] items-center gap-[4px]">
+      <div className="flex justify-start w-[100%] mt-[20px] items-center gap-4">
         <button className="px-[12px] text-[14px] py-[8px] bg-Primary text-BgSoftWhite rounded-lg">
           Update
         </button>
