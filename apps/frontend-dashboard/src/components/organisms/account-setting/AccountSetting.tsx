@@ -1,16 +1,20 @@
 'use client'
 import ProfileImage from '@/components/atoms/profile-image/ProfileImage'
 import { useAuth } from '@/context/useAuth';
+import { User } from '@/libs/types/auth/auth.type';
 import Link from 'next/link'
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { MdOutlinePersonOutline } from "react-icons/md";
 import { PiLockKeyLight } from "react-icons/pi";
 
 export default function AccountSetting() {
     const {user} = useAuth();
-    const [users,setUser] = useState<string>(user as any)
+    const [users,setUser] = useState<User |null>(null)
+    useEffect(()=> setUser(user as User),[user])
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-
+        const {name ,value} = e.target;
+        console.log(name , value);
+        
     }
     return (
         <>
@@ -41,9 +45,10 @@ export default function AccountSetting() {
                         <label>Username*</label>
                         <input
                             type="text"
-                            value={username}
+                            value={users?.userName}
                             onChange={handleInputChange}
                             placeholder="username"
+                            name='userName'
                             className="text-Black w-[100%] h-[40px] rounded-sm p-[10px] border-2 focus:outline-none focus:border-Primary/20"
                         />
                     </div>
