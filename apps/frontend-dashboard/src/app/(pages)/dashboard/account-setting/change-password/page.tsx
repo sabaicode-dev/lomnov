@@ -25,7 +25,7 @@ const page = () => {
                 <p>Profile</p>
               </div>
             </Link>
-            <Link href={"/account-setting/change_password"}>
+            <Link href={"/account-setting/change-password"}>
               <div className="w-[223px] bg-Primary flex mt-[10px] justify-start gap-[10px] text-BgSoftWhite text-[16px] items-center px-[12px] py-[5px] h-[38px] rounded-sm ">
                 <PiLockKeyLight  className="text-[20px] " />
                 <p>Change Password</p>
