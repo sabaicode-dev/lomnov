@@ -13,11 +13,11 @@ import Link from "next/link";
 //==================================
 type ItemData = {
   id: number;
-  img: string | StaticImageData; // Assuming img is a string for file paths
+  img: string | StaticImageData;
   name: string;
   address: string;
-  Email: string; // Match your data's structure
-  Contact: string; // Match your data's structure
+  Email: string;
+  Contact: string;
   date: string;
 };
 
@@ -37,7 +37,7 @@ const ItemAgents = ({ item, onDelete }: PropType) => {
   };
 
   const handleConfirmDelete = () => {
-    onDelete(item.id); // Call the onDelete callback
+    onDelete(item.id); 
     setIsPopupVisible(false);
   };
 
