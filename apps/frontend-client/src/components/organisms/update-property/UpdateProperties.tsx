@@ -20,7 +20,7 @@ import { extractLatLngFromUrl } from '@/libs/functions/extractLatLngFromUrl';
 import axiosInstance from '@/libs/axios';
 import { API_ENDPOINTS } from '@/libs/const/api-endpoints';
 import Link from 'next/link';
-export default function UpdateProperties({ item }: { item: IUpdatePropertiesType }) {
+export default function UpdateProperties({ item }: Readonly<{ item: IUpdatePropertiesType }>) {
 
     const transformedDetail = transformedObjectDetails(item?.detail);
     const itemId = item._id;
@@ -91,7 +91,7 @@ export default function UpdateProperties({ item }: { item: IUpdatePropertiesType
     });
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         // @ts-ignore
-        const { name, value, files } = e.target;
+        const { name, value } = e.target;
         if (name.includes(".")) {
             const [arrayName, index, key, subkey] = name.split(".");
             if (arrayName === 'detail' as keyof IPostPropertiesType) {

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -18,8 +18,15 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-[243px] h-[900px] bg-Bg p-[10px]">
-      <div className="text-BlackSecondary gap-[10px]">
+    <div className="w-[243px] h-[900px] bg-Bg p-[10px] sm:w-[200px] md:w-[250px] lg:w-[300px] hidden sm:block"> 
+      {/* 
+        - By default, the sidebar is hidden on mobile (`hidden sm:block`).
+        - On small screens and up, it takes a width of 200px (`sm:w-[200px]`).
+        - On medium screens and up, it takes a width of 250px (`md:w-[250px]`).
+        - On large screens, it takes a width of 300px (`lg:w-[300px]`).
+      */}
+
+      <div className="text-BlackSecondary gap-[10px] w-full h-full">
         <Link href="/dashboard">
           <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/dashboard')}`}>
             <GridIcon />

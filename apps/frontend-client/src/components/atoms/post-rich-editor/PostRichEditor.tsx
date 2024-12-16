@@ -10,7 +10,7 @@ import React, { ChangeEventHandler } from 'react'
 
 interface IPostRichEditorProps {
     title?: string;
-    values?: string | number | readonly string[] | undefined;
+    values: string | number | readonly string[] | undefined;
     onChange?: ChangeEventHandler<HTMLTextAreaElement>;
     placeholder?: string;
     className?: string;
@@ -19,7 +19,7 @@ interface IPostRichEditorProps {
     errorMsg?: boolean;
 }
 
-export default function PostRichEditor({ values, onChange, placeholder, className, readonly, name, title, errorMsg = true}: IPostRichEditorProps) {
+export default function PostRichEditor({ values, onChange, placeholder, className, readonly, name, title, errorMsg = true}: Readonly<IPostRichEditorProps>) {
     const named = extractName(name)
     return (
         <div className='w-full mt-7'>
@@ -42,7 +42,7 @@ export default function PostRichEditor({ values, onChange, placeholder, classNam
                     value={values}
                     name={name}
                     className={`${className} w-full h-full border-none focus:ring-0 outline-none`}
-                    placeholder={placeholder || 'Describe your property'}
+                    placeholder={placeholder ?? 'Describe your property'}
                     rows={8}
                     id=""
                 />
