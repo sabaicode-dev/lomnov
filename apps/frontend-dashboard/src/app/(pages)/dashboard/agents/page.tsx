@@ -1,6 +1,6 @@
 "use client";
 import React, { useState }  from "react";
-import FromGrud from "@/components/molecules/form-grud/FromGrud";
+import FormAgentHeader from "@/components/molecules/form-agent-header/FormAgentHeader";
 import agents from "@/libs/const/mock/agents";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
 import ItemAgents from "@/components/molecules/item-agengs/ItemAgents";
@@ -33,7 +33,7 @@ const Page = () => {
       <p className="text-[30px] font-black ">Agents</p>
       
       <div>
-        <FromGrud item={dataFromAgents} />
+        <FormAgentHeader item={dataFromAgents} />
         {data.length > 0 ? (
           <div className="">
             {data.map((item) => {

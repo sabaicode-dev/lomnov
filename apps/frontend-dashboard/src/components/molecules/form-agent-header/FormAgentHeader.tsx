@@ -1,5 +1,6 @@
 import React, {useState, useRef, useEffect} from "react";
 import Link from "next/link";
+import {IoSearch} from "react-icons/io5"
 import Search from "@/components/organisms/search/Search";
 import { LuFilter } from "react-icons/lu";
 
@@ -19,7 +20,7 @@ interface Item {
     item : Data;
 }
 
-const FromGrud = ({item}:Item) => {
+const FormAgentHeader = ({item}:Item) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
   const filterRef = useRef<HTMLDivElement>(null);
@@ -55,7 +56,7 @@ const FromGrud = ({item}:Item) => {
       <div className="bg-Primary/10 w-[100%] flex justify-end gap-[10px] p-[10px] items-center">
         <Search/>
         <div 
-          className="bg-BgSoftWhite rounded-sm w-[40px] h-[40px] flex items-center justify-center"
+          className="bg-BgSoftWhite rounded-sm w-[40px] h-[40px] flex items-center justify-center cursor-pointer"
           onClick={handleFilterClick}
           ref={filterRef}
           > 
@@ -71,19 +72,18 @@ const FromGrud = ({item}:Item) => {
             <p className="text-[16px] font-[600] mb-[20px]">Filters</p>
             <form className="space-y-4">
               <div>
-              <label>Transition*</label>
-                  <select
-                    value={selectedRole}
-                    onChange={(e) => setSelectedRole(e.target.value)}
-                    className="text-Black w-[100%] h-[40px] rounded-xls text-[14px] p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px]  focus:outline-none focus:border-Primary/20"
-                  >
-                    <option value="">Select sale/rent</option>
-                    <option value="For Sale">Sale</option>
-                    <option value="For Rent">Rent</option>
-                  </select>
+              <label>Search Agents*</label>
+              <div className="flex items-center text-Black w-[100%] h-[40px] rounded-xls text-[14px] p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px]  focus:outline-none focus:border-Primary/20">
+                  <IoSearch className="text-gray-500 w-5 h-5 mr-2 " />
+                 <input
+                  type="text"
+                  placeholder="Agent Name/Contact"
+                  className="w-[200px] h-[42px] bg-transparent outline-none text-gray-600 placeholder-gray-400"
+                 />
+                </div>
               </div>
               <div>
-              <label>Location*</label>
+              <label>Address*</label>
                   <select
                     name="role"
                     value={selectedRole}
@@ -120,4 +120,4 @@ const FromGrud = ({item}:Item) => {
   );
 };
 
-export default FromGrud;
+export default FormAgentHeader;
