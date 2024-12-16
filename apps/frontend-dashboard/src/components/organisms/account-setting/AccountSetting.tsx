@@ -9,12 +9,12 @@ import { PiLockKeyLight } from "react-icons/pi";
 
 export default function AccountSetting() {
     const {user} = useAuth();
-    const [users,setUser] = useState<User |null>(null)
-    useEffect(()=> setUser(user as User),[user])
+    const [users, setUsers] = useState<User | null>(null)
+    useEffect(() => setUsers(user as User), [user])
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const {name ,value} = e.target;
-        console.log(name , value);
-        
+        const { name, value } = e.target;
+        console.log(name, value);
+
     }
     return (
         <>
