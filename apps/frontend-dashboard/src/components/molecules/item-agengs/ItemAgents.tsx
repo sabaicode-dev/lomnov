@@ -4,8 +4,10 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { LuPencilLine } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { StaticImageData } from "next/image";
+import { formatDate } from "@/libs/functions/formatDate";
 import CardUser from "@/components/atoms/card-user/CardUser";
 import CardEmail from "@/components/atoms/card-email/CardEmail";
+import CardDate from "@/components/atoms/card-date/CardDate";
 import Link from "next/link";
 
 //==================================
@@ -53,10 +55,7 @@ const ItemAgents = ({ item, onDelete }: PropType) => {
         <div className="w-[200px] flex justify-start">
           <p>{item.Contact}</p>
         </div>
-        <div className="w-[200px] flex justify-start">
-          {" "}
-          <p>{item.date}</p>
-        </div>
+        <CardDate datetime={formatDate(item.date)} />
       </div>
       <div className="flex items-center justify-between gap-[10px] w-[10%]">
         <Link href={"/dashboard/view-agents"}>
@@ -64,7 +63,7 @@ const ItemAgents = ({ item, onDelete }: PropType) => {
             <MdOutlineRemoveRedEye className="text-[16px] text-Primary" />
           </div>
         </Link>
-        <Link href={"/dashboard/update-agents"}>
+        <Link href={`/dashboard/update-agents?id=${item.id}`}>
           <div className="p-[4px] w-[24px] h-[24px]  bg-Positive/20 rounded-[6px]">
             <LuPencilLine className="text-[16px] text-Positive" />
           </div>

@@ -1,5 +1,5 @@
 import AddressMap from "@/components/molecules/address-map/AddressMap";
-import Overview_property from "@/components/molecules/overview_property/OverviewProperty";
+import OverviewProperty from "@/components/molecules/overview_property/OverviewProperty";
 import React from "react";
 import Status from "@/components/molecules/status/Status";
 
@@ -9,7 +9,7 @@ const page = () => {
       <p className="text-[30px] font-black ">New Property</p>
       <div className="w-[100%] flex justify-between gap-[20px]">
         <div className="w-[70%]">
-          <Overview_property />
+          <OverviewProperty />
           <AddressMap />
         </div>
         <div className="w-[30%]">
