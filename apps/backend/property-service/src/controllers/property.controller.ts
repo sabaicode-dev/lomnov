@@ -17,8 +17,9 @@ import {
 } from "tsoa";
 import { IProperty } from "@/src/utils/types/indext";
 import { PropertyService } from "@/src/services/property.service";
-import { RequestPropertyDTO, RequestQueryPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponsePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
+import { RequestPropertyDTO, RequestQueryPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponsePropertyDTO, ResponseUpdatePropertyDTO  } from "@/src/utils/types/indext";
 import { Request as Express } from "express";
+// import { ResponsePropertyByIDP } from "@/src/utils/types/indext";
 
 import { NotFoundError, UnauthorizedError } from "@/src/utils/error/customErrors";
 // ====================================================================
@@ -133,16 +134,32 @@ export class PropertyController extends Controller {
   // Get Detail
   // Controller get single
   @Get("/properties/get/{propertyId}")
-  public async fetchPropertyByID(@Path() propertyId: string): Promise<ResponsePropertyDTO> {
+  public async fetchPropertyByID(
+    @Path() propertyId: string
+  ): Promise<ResponsePropertyDTO> {
     try {
-      const data = await this.propertyService.getPropertyByID(propertyId);
-      // console.log("This is Your Data : " ,data.detail)
+      const data = await this.propertyService.getPropertyByIDP(propertyId);
+ 
       return data;
     } catch (error) {
       console.log(error)
       throw error;
     }
   }
+
+  //get proeprty id by phol
+  // @Get("/properties/{propertyId}")
+  // public async fetchPropertyByIDP(
+  //   @Path() propertyId: string
+  // ): Promise<ResponsePropertyByIDP> {
+  //   try {
+  //     const data = await this.propertyService.getPropertyByIDP(propertyId);
+  //     return data;
+  //   } catch (error) {
+  //     console.log("Error fetching property by ID:", error);
+  //     throw error;  // Optionally rethrow or return a custom error response
+  //   }
+  // }
 
   @Get("/properties/me")
   public async getPropertyMe(
@@ -250,6 +267,8 @@ export class PropertyController extends Controller {
     }
   }
 
+
+  //delete proeprty's user
   @Delete("/properties/me/{propertyId}")
   public async deleteProperty(
     @Path() propertyId: string,
@@ -265,6 +284,21 @@ export class PropertyController extends Controller {
       throw new Error("Failed to delete property");
     }
   }
+
+  //delete every proeprty by id
+  @Delete("/properties/{propertyId}")
+  public async deletePropertyById(
+    @Path() propertyId: string
+  ): Promise<{message : string}> {
+    try {
+      const result = await this.propertyService.deleteEveryPropertyById(propertyId);
+      return {message: result ? "Delete Successfully" : "Property not found"};
+    } catch (error) {
+      this.setStatus(500);
+      throw new Error("Fail to delete property");
+    }
+  }
+
 
   //this method for post view user 
 

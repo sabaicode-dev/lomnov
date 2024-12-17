@@ -172,6 +172,7 @@ export class PropertyRepository {
 
 
 
+
   public async incrementPropertyViews(propertyId: string): Promise<any> {
     try {
       const updatedProperty = await PropertyModel.findByIdAndUpdate(
@@ -241,6 +242,33 @@ export class PropertyRepository {
       return true;
     } catch (error) {
       throw error;
+    }
+  }
+
+  //delete property 
+  public async deleteById(propertyId : string): Promise<boolean> {
+    try {
+      const property = await PropertyModel.findById(propertyId);
+      if(!property){
+        throw new NotFoundError("No Property");
+      }
+      //delete image from s3
+      if(property.thumbnail){
+        await deleteFileFromS3Service.deleteFile(property.thumbnail);
+      }
+
+      if(property.images?.length){
+        await Promise.all(
+          property.images.map((image) => 
+            deleteFileFromS3Service.deleteFile(image)
+        ),
+        )
+      }
+      // delete property
+      await PropertyModel.findByIdAndDelete(propertyId);
+      return true;
+    } catch (error) {
+       throw error;
     }
   }
 

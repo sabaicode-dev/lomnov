@@ -1,50 +1,34 @@
-"use client";
-import React, { useState } from 'react';
-import dataTest from '@/libs/const/mock/dataTest';
-import Pagenation from '@/components/molecules/pagenation/Pagenation';
-import ItemProperty from '@/components/molecules/item-property/ItemProperty';
+import React from 'react'
 import FromDataListProperty from '@/components/molecules/from-data-list/FromDataList';
-import TotalData from '@/components/molecules/total-data/TotalData';
-
-const Page = () => {
-  // State for managing data
-  const [data, setData] = useState(dataTest);
-
-  // Handle delete item
-  const handleDelete = (id: number) => {
-    const updatedData = data.filter((item) => item.id !== id);
-    setData(updatedData); // Update the state with filtered data
-  };
-
+import TotalDatas from '@/components/molecules/total-proeprty/TotalData';
+import PropertyList from '@/components/molecules/item-property-list/ItemPropertyList';
+import { PropertyProvider } from '@/context/property';
+import TotalDataSale from '@/components/molecules/total-property-sell/TotalPropertySell';
+import TotalDataRent from '@/components/molecules/total-proeprty-rent/TotalPropertyRent';
+const page = () => {
+ 
   return (
     <div>
       <p className="text-[30px] font-black">Property</p>
       <div className="flex justify-between gap-[40px]">
-        <TotalData />
-        <TotalData />
-        <TotalData />
+        <PropertyProvider>
+          <TotalDatas/>
+          <TotalDataSale/>
+          <TotalDataRent/>
+        </PropertyProvider>
+       
       </div>
       <div>
         <FromDataListProperty />
-        {data.length > 0 ? (
-          <div className="">
-            {data.map((item) => {
-              return (
-                <ItemProperty
-                  onDelete={handleDelete} // Pass the delete function here
-                  item={item}
-                  key={item.id}
-                />
-              );
-            })}
-          </div>
-        ) : (
-          <p>No Data</p>
-        )}
-        <Pagenation />
+        <div>
+          <PropertyProvider>
+            <PropertyList/>
+          </PropertyProvider>  
+        </div>
+     
       </div>
     </div>
   );
 };
 
-export default Page;
+export default page;
