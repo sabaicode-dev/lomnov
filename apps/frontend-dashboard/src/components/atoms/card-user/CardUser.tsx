@@ -4,11 +4,11 @@ type CardUserProps = {
     image: string | StaticImageData;
     usernname: string;
 }
-export default function CardUser({ image, usernname }: CardUserProps) {
+export default function CardUser({ image, usernname }: Readonly<CardUserProps>) {
     return (
         <div className="flex justify-center items-center gap-[20px]">
             <div className="w-[50px] h-[50px] bg-black rounded-lg overflow-hidden ">
-                <Image src={image} alt="img" width={100} height={100} />
+                <Image src={image} alt="img" width={100} height={100} className='w-full h-full' />
             </div>
             <p>{usernname}</p>
         </div>

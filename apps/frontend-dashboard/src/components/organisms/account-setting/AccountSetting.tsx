@@ -63,7 +63,6 @@ export default function AccountSetting() {
             setLoading(false);
         } catch (error) {
             setLoading(false);
-            console.log(error);
             throw error;
         }
     };

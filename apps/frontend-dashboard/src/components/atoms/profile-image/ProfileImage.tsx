@@ -13,7 +13,7 @@ export default function ProfileImage({profile}:Readonly<{profile: string | strin
                 )}
             </div>
             <div className="w-[58px] h-[58px] bg-Primary flex items-center justify-center rounded-full absolute mt-[200px] ml-[150px]">
-                <input type="file" name="" id="" />
+                <input className=' w-full h-full' type="file" name="" id="" />
                 <p className="text-[33px] text-BgSoftWhite ">+</p>
             </div>
         </>

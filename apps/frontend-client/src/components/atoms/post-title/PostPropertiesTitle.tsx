@@ -6,7 +6,7 @@ interface IPostPropertiesTitleProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   errorMsg?:boolean
 }
-export default function PostPropertiesTitle({ title, slug,errorMsg, onChange}: IPostPropertiesTitleProps) {
+export default function PostPropertiesTitle({ title, slug,errorMsg, onChange}: Readonly<IPostPropertiesTitleProps>) {
 
   return (
     <div className='w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1'>
