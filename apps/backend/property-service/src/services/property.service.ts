@@ -15,6 +15,7 @@ import {
   ResponsePropertyByID,
   ResponseCategoriesDTO,
 } from "@/src/utils/types/indext";
+import { ResponsePropertyByIDP } from "@/src/utils/types/indext";
 import { PropertyRepository } from "../database/repositories/property.repository";
 import { NotFoundError, UnauthorizedError } from "../utils/error/customErrors";
 import { UserServiceClient } from "./userServiceClient";
@@ -251,37 +252,59 @@ export class PropertyService {
     }
   }
 
-  // public async getPropertyByID(id: string): Promise<ResponsePropertyByID> {
-  //   try {
-  //     // Fetch property details
-  //     const property = (await this.propertyRepository.findPropertyByID(
-  //       id
-  //     )) as ResponsePropertyDTO;
-  //     //@ts-ignore
-  //     //console.log({...property._doc});
+  //service delete property of every proeprty
+  public async deleteEveryPropertyById(
+    propertyId: string
+  ): Promise<boolean> {
+    try {
+      return await this.propertyRepository.deleteById(propertyId);
+      
+    } catch (error) {
+      throw new Error("Failed to delete property");
+    }
+  }
 
-  //     if (!property) {
-  //       throw new Error(`Property with ID ${id} not found.`);
-  //     }
-  //     console.log("your property : " , property)
+  //get by phol
+  public async getPropertyByIDP(id: string) : Promise<ResponsePropertyByIDP> {
+    try {
+      const property = await this.propertyRepository.findPropertyByID(id);
+      if(!property){
+        throw new Error(`Property with ID ${id} not found `);
+      }
 
-  //     // Fetch property owner details
-  //     const propertyOwner = await this.userServiceClient.propertyOwnerInfo(
-  //       property.cognitoSub as string
-  //     );
-  //     // Construct the response object
-  //     const responses: ResponsePropertyByID = {
-  //       //@ts-ignore
-  //       ...property,
-  //       propertyOwner,
-  //     };
-  //     console.log("Response Data:: ", responses)
-  //     return responses;
-  //   } catch (error) {
-  //     console.error(`Error fetching property by ID ${id}:`, error);
-  //     throw new Error(`Failed to fetch property with ID ${id}`);
-  //   }
-  // }
+      const detailedContent = property.detail
+      ? property.detail.map((detail: any) => {
+        return {
+          language: detail.language,
+          size: detail.content.get("size"),
+          bedrooms: detail.content?.get("bedrooms"),
+          bathrooms: detail.content?.get("bathrooms"),
+          square: detail.content?.get("square"),
+          fireplace: detail.content?.get("fireplace"),
+          garden: detail.content?.get("garden"),
+          patio: detail.content?.get("patio"),
+          kitchen: detail.content?.get("kitchen"),
+          land_size: detail.content?.get("land_size"),
+          parking: detail.content?.get("parking"),
+          road_size: detail.content?.get("road_size"),
+          pool: detail.content?.get("pool"),
+        }
+      })
+      : [];
+
+      const respone : ResponsePropertyByIDP = {
+        ...property,
+        detail: detailedContent,
+      }
+
+      return respone;
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
   public async getPropertyByID(id: string): Promise<ResponsePropertyByID> {
     try {
       // Fetch property details

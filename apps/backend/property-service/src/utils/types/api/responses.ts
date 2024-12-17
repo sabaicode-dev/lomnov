@@ -166,4 +166,38 @@ export interface ResponsePropertyByID{
   status?: boolean;
   propertyOwner: ResponsePropertyOwner | null;
 }
+export interface ResponsePropertyByIDP{
+  _id: Types.ObjectId
+  cognitoSub: string
+  title?: LocalizedContent[];
+  description?: LocalizedContent[];
+  thumbnail: string;
+  images: string[];
+  urlmap?: string;
+  address?: LocalizedContent[];
+  location: LocalizedContent[],
+  price?: number;
+  category: LocalizedContent[],
+  transition: LocalizedContent[],
+  detail?: Record<string, any>;  // Flexible key-value pairs
+  status?: boolean;
+}
 
+
+
+export interface ResponsePropertyByIDP{
+  _id: Types.ObjectId
+  cognitoSub: string
+  title?: LocalizedContent[];
+  description?: LocalizedContent[];
+  thumbnail: string;
+  images: string[];
+  urlmap?: string;
+  address?: LocalizedContent[];
+  location: LocalizedContent[],
+  price?: number;
+  category: LocalizedContent[],
+  transition: LocalizedContent[],
+  detail?: Record<string, any>;  // Flexible key-value pairs
+  status?: boolean;
+}
