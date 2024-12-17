@@ -78,16 +78,16 @@ const ROUTE_PATHS: RoutesConfig = {
         path: "/me",
         methods: {
           GET: { authRequired: true, roles: ["user","admin"] },
-          PUT: { authRequired: true, roles: ["user"] },
+          PUT: { authRequired: true, roles: ["user","admin"] },
         },
       },
       {
         path: "/my-profile",
-        methods: { DELETE: { authRequired: true, roles: ["user"] } },
+        methods: { DELETE: { authRequired: true, roles: ["user","admin"] } },
       },
       {
         path: "/my-background",
-        methods: { DELETE: { authRequired: true, roles: ["user"] } },
+        methods: { DELETE: { authRequired: true, roles: ["user","admin"] } },
       },
       {
         path: "/favorite",
