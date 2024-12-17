@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import FormCustomerCrud from "@/components/molecules/form-customer-crud/FormCustomerCrud";
+import FormCustomerHeader from "@/components/molecules/form-customer-header/FormCustomerHeader";
 import customer from "@/libs/const/mock/customer";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
 import ItemCustomer from "@/components/molecules/item-customers/ItemCustomer";
@@ -31,7 +31,7 @@ const page = () => {
       <p className="text-[30px] font-black ">Customer</p>
       
       <div>
-        <FormCustomerCrud item={dataFromCustomer} />
+        <FormCustomerHeader item={dataFromCustomer} />
         {data.length > 0 ? (
           <div className="">
             {data.map((items) => {

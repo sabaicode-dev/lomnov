@@ -1,5 +1,7 @@
-import React from "react";
-import FromGrud from "@/components/molecules/form-grud/FromGrud";
+"use client";
+
+import React, { useState } from "react";
+import FormAdminHeader from "@/components/molecules/form-admin-header/FormAdminHeader";
 import administrator from "@/libs/const/mock/administator";
 import Pagenation from '@/components/molecules/pagenation/Pagenation'
 import ItemAdminstrator from "@/components/molecules/item-administator/ItemAdminstrator";
@@ -17,16 +19,23 @@ const dataFromAgents = {
 }
 
 const page = () => {
+  const [data, setData] = useState(administrator)
+
+  // Handle delete item
+  const handleDelete = (id: number) => {
+    const updatedData = data.filter((item) => item.id !== id);
+    setData(updatedData); // Update the state with filtered data
+  };
   return (
     <div>
       <p className="text-[30px] font-black ">Administrator</p>
       
       <div>
-        <FromGrud item={dataFromAgents} />
+        <FormAdminHeader item={dataFromAgents} />
         {administrator.length > 0 ? (
           <div className="">
             {administrator.map((items) => {
-              return <ItemAdminstrator item={items} key={items.id} />;
+              return <ItemAdminstrator item={items} key={items.id} onDelete={handleDelete} />;
             })}
           </div>
         ) : (

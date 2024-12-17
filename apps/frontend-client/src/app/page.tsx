@@ -1,4 +1,3 @@
-// import ItemCardList from "@/components/molecules/item-card-list/ItemCardList";
 import ItemCardPopularLocationList from "@/components/molecules/item-card-popular-location-list/ItemCardPopularLocationList";
 import bannerNearlyLocation from "@/images/banner-nearly-location.jpeg"
 import HeroSection from "@/components/organisms/hero-section/HeroSection";
@@ -7,7 +6,6 @@ import logSkyBar from "@/images/banner-sky-bar.jpg";
 import Slider from "@/components/molecules/slider/Slider";
 import Link from "next/link";
 import ItemCardNearlyLocationList from "@/components/molecules/item-card-nearly-location-list/ItemCardNearlyLocationList";
-import LocationAccess from "@/components/organisms/location-access/LocationAccess";
 
 
 export default function Home() {

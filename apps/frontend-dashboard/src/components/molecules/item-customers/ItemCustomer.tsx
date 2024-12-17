@@ -61,7 +61,7 @@ const ItemCustomer = ({ item, onDelete }: PropType) => {
               <MdOutlineRemoveRedEye className='text-[16px] text-Primary' />
             </div>
         </Link>
-        <Link href={"/dashboard/update-customer"}>
+        <Link href={`/dashboard/update-customer?id=${item.id}`}>
             <div className='p-[4px] w-[24px] h-[24px]  bg-Positive/20 rounded-[6px] cursor-pointer '>
               <LuPencilLine className='text-[16px] text-Positive' />
             </div>

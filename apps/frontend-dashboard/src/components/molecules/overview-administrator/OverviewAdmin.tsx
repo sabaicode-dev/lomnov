@@ -1,14 +1,11 @@
 import React from "react";
 import { TbPhoto } from "react-icons/tb";
 import { MdFormatListBulleted } from "react-icons/md";
-import { FaLink } from "react-icons/fa6";
-import { FiItalic } from "react-icons/fi";
-import { FiUnderline } from "react-icons/fi";
-import { FaStrikethrough } from "react-icons/fa6";
-import { FiBold } from "react-icons/fi";
+import { FaLink, FaStrikethrough } from "react-icons/fa6";
+import { FiItalic, FiUnderline, FiBold } from "react-icons/fi";
 
-//======================
-const OverviewAgent = () => {
+//=============================================
+const OverviewAdmin = () => {
 
   return (
     <div className="w-[100%] mt-[40px] p-[24px] bg-[#F3F4F6] rounded-xls">
@@ -98,4 +95,4 @@ const OverviewAgent = () => {
 };
 
 
-export default OverviewAgent;
+export default OverviewAdmin;
