@@ -72,13 +72,13 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import Link from "next/link";
 import CardUser from "@/components/atoms/card-user/CardUser";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
+import { toSubstring } from "@/libs/functions/toSubstring";
 
 // Define item structure
 
 interface PropType {
   item: RealEstateItem;
   onDelete: (id: string) => void; // Add onDelete prop
-  index: number; // Add index for item numbering
 }
 
 const ItemProperty = ({ item, onDelete}: PropType) => {
@@ -89,8 +89,8 @@ const ItemProperty = ({ item, onDelete}: PropType) => {
   return (
     <div className="w-[100%] h-[68px] px-[12px] py-[8px] flex justify-between border-[0.1px] bg-BgSoftWhite/50 border-Primary/10 relative">
       <div className="flex justify-start items-center w-[20%] gap-[40px]">
-        <p>{item._id}</p>
-        <CardUser usernname={item.title[0].content} image={item.thumbnail} />
+        <p>{toSubstring(item._id,4)}</p>
+        <CardUser usernname={toSubstring(item.title[0].content,12)} image={item.thumbnail} />
       </div>
       <div className="flex justify-between items-center w-[60%]">
         <div className="w-[200px] flex justify-start">
