@@ -19,7 +19,7 @@ interface Item {
     item : Data;
 }
 
-const FromGrud = ({item}:Item) => {
+const FormAdminHeader = ({item}:Item) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
   const filterRef = useRef<HTMLDivElement>(null);
@@ -55,7 +55,7 @@ const FromGrud = ({item}:Item) => {
       <div className="bg-Primary/10 w-[100%] flex justify-end gap-[10px] p-[10px] items-center">
         <Search/>
         <div 
-          className="bg-BgSoftWhite rounded-sm w-[40px] h-[40px] flex items-center justify-center"
+          className="bg-BgSoftWhite rounded-sm w-[40px] h-[40px] flex items-center justify-center cursor-pointer"
           onClick={handleFilterClick}
           ref={filterRef}
           > 
@@ -71,30 +71,28 @@ const FromGrud = ({item}:Item) => {
             <p className="text-[16px] font-[600] mb-[20px]">Filters</p>
             <form className="space-y-4">
               <div>
-              <label>Transition*</label>
+              <label>Status*</label>
                   <select
                     value={selectedRole}
                     onChange={(e) => setSelectedRole(e.target.value)}
                     className="text-Black w-[100%] h-[40px] rounded-xls text-[14px] p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px]  focus:outline-none focus:border-Primary/20"
                   >
-                    <option value="">Select sale/rent</option>
-                    <option value="For Sale">Sale</option>
-                    <option value="For Rent">Rent</option>
+                    <option value="">Select status</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
                   </select>
               </div>
               <div>
-              <label>Location*</label>
+              <label>Role*</label>
                   <select
                     name="role"
                     value={selectedRole}
                     onChange={(e) => setSelectedRole(e.target.value)}
                     className="text-Black w-[100%] h-[40px] rounded-xls text-[14px] p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px]  focus:outline-none focus:border-Primary/20"
                   >
-                    <option value="">Your city/province</option>
-                    <option value="phnom penh">Phnom Penh</option>
-                    <option value="kom pongcham">Kom PongCham</option>
-                    <option value="Svay Reng">Svay Reng</option>
-                    <option value="kep">Kep</option>
+                    <option value="">Select role</option>
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
                   </select>
               </div>
             </form>
@@ -120,4 +118,4 @@ const FromGrud = ({item}:Item) => {
   );
 };
 
-export default FromGrud;
+export default FormAdminHeader;
