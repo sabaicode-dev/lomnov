@@ -175,6 +175,24 @@ export class PropertyRepository {
     }
   }
 
+  //update state admin aprove
+  public async updatestatusAdmin(
+    propertyId : string,
+    statusAdmin : boolean
+  ):Promise<IProperty | null> {
+    try {
+      const updatestatusAdmin = await PropertyModel.findByIdAndUpdate(
+        {_id : propertyId},
+        {$set:{statusAdmin}},
+        {new  : true}
+      );
+      return updatestatusAdmin;
+    } catch (error) {
+      console.error("Error in updatestatusAdmin:" , error)
+      throw error;
+    }
+  }
+
   /**
    * Find a property by its ID
    */

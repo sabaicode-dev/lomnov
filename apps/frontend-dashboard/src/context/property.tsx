@@ -57,16 +57,16 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
       setLoading(true);
       setError(null);
       try {
-        await axiosInstance.put(`${API_ENDPOINTS.PROPERTIES}/${id}/status`, { status: newStatus });
+        await axiosInstance.put(`${API_ENDPOINTS.PROPERTIES}/${id}/statusAdmin`, { statusAdmin: newStatus });
         // Update the local state to reflect the new status
         setProperties((prevProperties) =>
           prevProperties.map((property) =>
-            property._id === id ? { ...property, status: newStatus } : property
+            property._id === id ? { ...property, statusAdmin: newStatus } : property
           )
         );
       } catch (err) {
-        console.error("Error updating property status:", err);
-        setError("Failed to update the property status.");
+        console.error("Error updating property statusAdmin:", err);
+        setError("Failed to update the property statusAdmin.");
       } finally {
         setLoading(false);
       }
