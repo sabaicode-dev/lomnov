@@ -1,20 +1,25 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { extractLatLngFromUrl } from "@/libs/functions/extractLatLngFromUrl";
+import { resolveShortenedUrl } from "@/libs/functions/resolveShortendURL";
 
-// Absolute paths to marker images (place the images in the `public` folder)
 const markerIconUrl = "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png";
-const markerShadowUrl = "/leaflet/marker-shadow.png";
-//iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+const markerShadowUrl = "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png";
 
-const AddressMap = () => {
-  const [mapLink, setMapLink] = useState("");
-  const [latLng, setLatLng] = useState<{ lat: number; lng: number } | null>(null);
+interface IAddressMap {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onMapChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  mapLink?: string;
+}
+
+const AddressMap = ({ onChange, onMapChange, mapLink }: IAddressMap) => {
+  const [position, setPosition] = useState<[number, number] | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [map, setMap] = useState<L.Map | null>(null);
 
-  // Configure the marker icon
   const customMarkerIcon = L.icon({
     iconUrl: markerIconUrl,
     shadowUrl: markerShadowUrl,
@@ -24,105 +29,113 @@ const AddressMap = () => {
     shadowSize: [41, 41],
   });
 
-  const handleMapLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputLink = e.target.value;
-    setMapLink(inputLink);
+  useEffect(() => {
+    async function processUrl() {
+      if (mapLink) {
+        setError(null); // Clear previous errors
+        let urlToProcess = mapLink;
 
-    // Extract latitude and longitude from the Google Maps link
-    const regex = /@([-.\d]+),([-.\d]+)/; // Regex to match "@lat,lng" in the link
-    const match = inputLink.match(regex);
+        // Handle shortened URLs
+        if (mapLink.includes("goo.gl") || mapLink.includes("maps.app.goo.gl")) {
+          const resolvedUrl = await resolveShortenedUrl(mapLink);
+          if (!resolvedUrl) {
+            setError("Failed to resolve shortened URL. Please provide a valid Google Maps link.");
+            return;
+          }
+          urlToProcess = resolvedUrl;
+        }
 
-    if (match) {
-      const lat = parseFloat(match[1]);
-      const lng = parseFloat(match[2]);
-      setLatLng({ lat, lng });
-    } else {
-      setLatLng(null);
+        // Extract coordinates
+        const extractedPosition = extractLatLngFromUrl(urlToProcess);
+        if (extractedPosition) {
+          setPosition(extractedPosition);
+        } else {
+          setError("Invalid Google Maps URL. Please provide a URL with coordinates.");
+        }
+      }
     }
-  };
+    processUrl();
+  }, [mapLink]);
 
   useEffect(() => {
-    if (latLng) {
-      // Initialize the map only once when latLng is set
+    if (position) {
       if (!map) {
-        const newMap = L.map("map").setView([latLng.lat, latLng.lng], 13);
+        // Initialize the map only once
+        const initializedMap = L.map("map").setView(position, 13);
 
-        // Add OpenStreetMap tiles
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
           maxZoom: 19,
           attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(newMap);
+        }).addTo(initializedMap);
 
-        // Add the marker with the custom icon
-        L.marker([latLng.lat, latLng.lng], { icon: customMarkerIcon })
-          .addTo(newMap)
-          .bindPopup("User's Map Location")
+        L.marker(position, { icon: customMarkerIcon })
+          .addTo(initializedMap)
+          .bindPopup("Selected Location")
           .openPopup();
 
-        setMap(newMap);
+        setMap(initializedMap);
       } else {
-        // Update map view and marker position if map already exists
-        map.setView([latLng.lat, latLng.lng], 13);
+        // Update map view and marker
+        map.setView(position, 13);
 
-        // Remove old marker before adding a new one
+        // Remove previous markers
         map.eachLayer((layer) => {
           if (layer instanceof L.Marker) {
-            map.removeLayer(layer); // Remove all markers before adding the new one
+            map.removeLayer(layer);
           }
         });
 
-        // Add the new marker with the custom icon
-        L.marker([latLng.lat, latLng.lng], { icon: customMarkerIcon })
+        // Add new marker
+        L.marker(position, { icon: customMarkerIcon })
           .addTo(map)
           .bindPopup("Updated Location")
           .openPopup();
       }
     }
-  }, [customMarkerIcon, latLng, map]);
+  }, [position, map, customMarkerIcon]);
 
   return (
-    <div className="w-[100%] mt-[20px]">
-      <div className="w-[100%] mt-[20px] p-[24px] bg-[#F3F4F6] rounded-xls">
-        <p className="text-[20px] font-[600]">Address and Map Location</p>
-        <form className="w-[100%] mt-[20px] text-[14px]">
-          <div className="w-[100%] grid gap-4 grid-cols-1 mt-[20px]">
-            <div className="w-[100%] block">
-              <label>Address</label>
+    <div className="w-full mt-5">
+      <div className="w-full p-6 bg-gray-100 rounded-lg">
+        <p className="text-lg font-semibold">Address and Map Location</p>
+        <div className="mt-5">
+          <div className="grid gap-4">
+            <div>
+              <label className="block mb-1 font-medium">Address</label>
               <input
                 type="text"
+                onChange={onChange}
                 placeholder="Your Address"
-                className="text-Black w-[100%] h-[40px] rounded-xls p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px] focus:outline-none focus:border-Primary/20"
+                name="address.0.content"
+                className="w-full h-10 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
               />
             </div>
-            <div className="w-[100%] block">
-              <label>Map Location*</label>
+            <div>
+              <label className="block mb-1 font-medium">Map Location*</label>
               <input
                 type="text"
+                name="urlmap"
                 placeholder="Enter Google Maps Link"
                 value={mapLink}
-                onChange={handleMapLinkChange}
-                className="text-Black w-[100%] h-[40px] rounded-xls p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px] focus:outline-none focus:border-Primary/20"
+                onChange={onMapChange}
+                className="w-full h-10 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
               />
             </div>
-            <div className="w-[100%] mt-4">
-              {latLng ? (
+            <div className="w-full mt-4">
+              {position ? (
                 <div>
-                  <p className="text-[14px] mb-2">
-                    Latitude: {latLng.lat}, Longitude: {latLng.lng}
+                  <p className="text-sm mb-2">
+                    Latitude: {position[0]}, Longitude: {position[1]}
                   </p>
-                  <div
-                    id="map"
-                    className="w-full h-[300px] rounded-xls border"
-                  ></div>
+                  <div id="map" className="w-full h-80 rounded-lg border"></div>
                 </div>
               ) : (
-                <p className="text-gray-500">
-                  Enter a valid Google Maps link to display the map.
-                </p>
+                <p className="text-gray-500">Enter a valid Google Maps link to display the map.</p>
               )}
+              {error && <p className="text-red-500 mt-2">{error}</p>}
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

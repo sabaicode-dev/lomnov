@@ -15,7 +15,7 @@ interface IInputFieldProps {
 export default function Input({ title, id, htmlFor, values, onChange, placeholder, types, className, name, readonly, errorMsg }: Readonly<IInputFieldProps>) {
     return (
         <>
-            <label htmlFor={htmlFor}>{title}</label>
+            <label className='text-sm' htmlFor={htmlFor}>{title}</label>
             <input
                 type={types}
                 id={id}
