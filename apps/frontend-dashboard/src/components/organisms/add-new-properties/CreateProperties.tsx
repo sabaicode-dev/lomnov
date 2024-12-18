@@ -332,7 +332,7 @@ export default function CreateProperties() {
                 <AddressMap onChange={handleInputChange} onMapChange={handleInputChange} mapLink={properties.urlmap} />
                 <Status name='status' onChecked={handleStatusChange} isChecked={isChecked} />
                 <div className="flex justify-start w-[100%] mt-[20px] items-center gap-4">
-                    <button className="px-[12px] text-[14px] py-[8px] bg-BgSoftWhite text-black rounded-lg">
+                    <button type='button' className="px-[12px] text-[14px] py-[8px] bg-BgSoftWhite text-black rounded-lg">
                         Cancel
                     </button>
                     <button type='submit' className="px-[12px] text-[14px] py-[8px] bg-Primary text-BgSoftWhite rounded-lg">
