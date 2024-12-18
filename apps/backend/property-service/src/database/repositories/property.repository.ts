@@ -153,6 +153,45 @@ export class PropertyRepository {
       throw error;
     }
   }
+  //update property status
+
+
+  public async updatePropertyStatus(
+    propertyId: string,
+    status: boolean
+  ): Promise<IProperty | null> {
+    try {
+      // Locate and update the property in the database based only on _id
+      const updatedProperty = await PropertyModel.findByIdAndUpdate(
+        { _id: propertyId },
+        { $set: { status } },
+        { new: true } // Return the updated document
+      );
+  
+      return updatedProperty;
+    } catch (error) {
+      console.error("Error in updatePropertyStatus:", error);
+      throw error;
+    }
+  }
+
+  //update state admin aprove
+  public async updatestatusAdmin(
+    propertyId : string,
+    statusAdmin : boolean
+  ):Promise<IProperty | null> {
+    try {
+      const updatestatusAdmin = await PropertyModel.findByIdAndUpdate(
+        {_id : propertyId},
+        {$set:{statusAdmin}},
+        {new  : true}
+      );
+      return updatestatusAdmin;
+    } catch (error) {
+      console.error("Error in updatestatusAdmin:" , error)
+      throw error;
+    }
+  }
 
   /**
    * Find a property by its ID

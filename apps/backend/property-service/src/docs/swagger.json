@@ -116,6 +116,9 @@
 					},
 					"status": {
 						"type": "boolean"
+					},
+					"statusAdmin": {
+						"type": "boolean"
 					}
 				},
 				"required": [
@@ -401,6 +404,9 @@
 						"$ref": "#/components/schemas/Record_string.any_"
 					},
 					"status": {
+						"type": "boolean"
+					},
+					"statusAdmin": {
 						"type": "boolean"
 					}
 				},
@@ -1000,45 +1006,6 @@
 				]
 			}
 		},
-		"/api/v1/properties/{propertyId}": {
-			"delete": {
-				"operationId": "DeletePropertyById",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"message": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"message"
-									],
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Property Service"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "propertyId",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		},
 		"/api/v1/properties/{propertyId}/views": {
 			"put": {
 				"operationId": "IncrementPropertyViews",
@@ -1085,6 +1052,165 @@
 									},
 									"required": [
 										"views"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "propertyId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/properties/{propertyId}/status": {
+			"put": {
+				"operationId": "UpdatePropertyStatus",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"updatedStatus": {
+											"type": "boolean"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "propertyId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"status": {
+										"type": "boolean"
+									}
+								},
+								"required": [
+									"status"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/properties/{propertyId}/statusAdmin": {
+			"put": {
+				"operationId": "UpdateAdminstatus",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"updatestatusAdmin": {
+											"type": "boolean"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Property Service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "propertyId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"statusAdmin": {
+										"type": "boolean"
+									}
+								},
+								"required": [
+									"statusAdmin"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/properties/{propertyId}": {
+			"delete": {
+				"operationId": "DeletePropertyById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
 									],
 									"type": "object"
 								}

@@ -268,6 +268,81 @@ export class PropertyController extends Controller {
   }
 
 
+    //this method for post view user 
+
+    @Put("/properties/{propertyId}/views")
+    public async incrementPropertyViews(@Path() propertyId: string): Promise<ResponsePropertyDTO> {
+      console.log("Incrementing views for property ID:", propertyId); // Debugging line
+      try {
+        return await this.propertyService.incrementPropertyViews(propertyId);
+      } catch (error) {
+        if (error instanceof NotFoundError) {
+          this.setStatus(404);
+        } else {
+          this.setStatus(500);
+        }
+        throw error;
+      }
+    }
+    //staute update
+@Put("/properties/{propertyId}/status")
+public async updatePropertyStatus(
+  @Path() propertyId: string,
+  @Body() body: { status: boolean }
+): Promise<{ message: string; updatedStatus?: boolean }> {
+  try {
+    // Validate the status field in the request body
+    const { status } = body;
+    if (typeof status !== "boolean") {
+      throw new Error("Invalid status. It must be a boolean value.");
+    }
+
+    // Call the service method to update the property status
+    const updatedProperty = await this.propertyService.updatePropertyStatus(
+      propertyId,
+      status
+    );
+
+    if (!updatedProperty) {
+      throw new NotFoundError("Property not found");
+    }
+
+    return { 
+      message: "Property status updated successfully", 
+      updatedStatus: updatedProperty.status 
+    };
+
+  } catch (error) {
+    console.error("Error updating property status:", error);
+    this.setStatus(500);
+    throw error;
+  }
+}
+
+@Put("/properties/{propertyId}/statusAdmin")
+public async updateAdminstatus(
+  @Path() propertyId : string,
+  @Body() body: {statusAdmin : boolean}
+): Promise<{message: string; updatestatusAdmin?: boolean}>{
+  try {
+    const {statusAdmin} = body;
+    if(typeof statusAdmin !== "boolean"){
+      throw new Error("Invalid statusAdmin. Value must be boolean ");
+    }
+    const updateadminStatus = await this.propertyService.updatestatusAdmin(propertyId , statusAdmin);
+    if(!updateadminStatus){
+      throw new NotFoundError("Property Not Found");
+    }
+    return {
+      message : "Success update status Admin",
+      updatestatusAdmin : updateadminStatus.statusAdmin
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+
   //delete proeprty's user
   @Delete("/properties/me/{propertyId}")
   public async deleteProperty(
@@ -300,22 +375,7 @@ export class PropertyController extends Controller {
   }
 
 
-  //this method for post view user 
 
-  @Put("/properties/{propertyId}/views")
-  public async incrementPropertyViews(@Path() propertyId: string): Promise<ResponsePropertyDTO> {
-    console.log("Incrementing views for property ID:", propertyId); // Debugging line
-    try {
-      return await this.propertyService.incrementPropertyViews(propertyId);
-    } catch (error) {
-      if (error instanceof NotFoundError) {
-        this.setStatus(404);
-      } else {
-        this.setStatus(500);
-      }
-      throw error;
-    }
-  }
 
 
   @Get("/properties/{propertyId}/views")

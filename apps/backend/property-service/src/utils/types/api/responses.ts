@@ -7,7 +7,10 @@ export interface Pagination {
   totalProperty: number;
 }
 
-
+export interface ResponeStatus{
+  _id: Types.ObjectId;
+  status?: boolean;
+}
 
 
 export interface ResponsePropertyDTO {
@@ -82,6 +85,7 @@ export interface ResponseGetPropertyMeDTO {
   transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
+  statusAdmin?: boolean;
   faveMe?: ResponsePropertyDTO[]
 }
 
@@ -100,7 +104,7 @@ export interface ResponseFindPropertyDTO {
   transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
-
+  statusAdmin?: boolean;
 }
 
 
@@ -119,7 +123,7 @@ export interface ResponseUpdatePropertyDTO {
   transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
-
+  statusAdmin?: boolean;
 }
 
 
@@ -164,6 +168,7 @@ export interface ResponsePropertyByID{
   transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
+  statusAdmin?: boolean;
   propertyOwner: ResponsePropertyOwner | null;
 }
 export interface ResponsePropertyByIDP{
@@ -181,23 +186,8 @@ export interface ResponsePropertyByIDP{
   transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
   status?: boolean;
+  statusAdmin?: boolean;
 }
 
 
 
-export interface ResponsePropertyByIDP{
-  _id: Types.ObjectId
-  cognitoSub: string
-  title?: LocalizedContent[];
-  description?: LocalizedContent[];
-  thumbnail: string;
-  images: string[];
-  urlmap?: string;
-  address?: LocalizedContent[];
-  location: LocalizedContent[],
-  price?: number;
-  category: LocalizedContent[],
-  transition: LocalizedContent[],
-  detail?: Record<string, any>;  // Flexible key-value pairs
-  status?: boolean;
-}

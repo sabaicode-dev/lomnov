@@ -43,6 +43,44 @@ export class PropertyService {
     }
   }
 
+  //update status
+  public async updatePropertyStatus(
+    propertyId: string,
+    status: boolean
+  ): Promise<IProperty | null> {
+    try {
+      // Call the repository to update the status
+      const updatedProperty = await this.propertyRepository.updatePropertyStatus(
+        propertyId,
+        status
+      );
+
+      // Return the updated property (or null if not found)
+      return updatedProperty;
+    } catch (error) {
+      console.error("Error in PropertyService - updatePropertyStatus:", error);
+      throw error;
+    }
+  }
+
+  //update status Admin
+  public async updatestatusAdmin(
+    propertyId: string,
+    statusAdmin : boolean
+  ) : Promise<IProperty | null> {
+    try {
+      const updateadmin = await this.propertyRepository.updatestatusAdmin(
+        propertyId,
+        statusAdmin
+      );
+      return updateadmin;
+    } catch (error) {
+      console.error("Error in proeprty service", error);
+      throw error;
+    }
+  }
+
+
   public async getProperties(
     queries: RequestQueryPropertyDTO
   ): Promise<ResponseAllPropertyDTO> {
@@ -239,6 +277,9 @@ export class PropertyService {
       throw new Error("Failed to update property");
     }
   }
+
+
+  
 
   public async deleteProperty(
     propertyId: string,

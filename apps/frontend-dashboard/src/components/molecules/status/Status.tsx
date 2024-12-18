@@ -11,7 +11,7 @@ interface IStatusProps {
 const Status = ({ name, isChecked, values, onChecked }: IStatusProps) => {
   return (
     <div className="w-[100%] mt-[40px] text-[14px]">
-      <div className=" p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-sm">
+      <div className="p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-sm">
         <h2 className="text-lg font-bold text-gray-800">Status</h2>
         <div className="mt-4 flex items-center space-x-3">
           <button
