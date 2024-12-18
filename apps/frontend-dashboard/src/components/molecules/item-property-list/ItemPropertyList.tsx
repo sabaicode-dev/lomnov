@@ -1,4 +1,6 @@
+
 'use client';
+
 import React, { useEffect, useState } from "react";
 import { useProperties } from "@/context/property";
 import Pagination from "../pagenation/Pagenation";
@@ -9,15 +11,24 @@ import FromDataListProperty from "../from-data-list/FromDataList";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 
 const ItemPropertyList = () => {
-  const { properties, loading, error, pagination, fetchProperties, deleteProperty } = useProperties();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [resultsPerPage, setResultsPerPage] = useState(4);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
-  const [propertyToDelete, setPropertyToDelete] = useState<string | null>(null); // ID of the property to delete
-  const [liveSearch, setLiveSearch] = useState("");
-  const [searchState, setSearchState] = useState<RealEstateItem[]>([]);
+  const [liveSearch , setLiveSearch] = useState("");
+  const [searchState , setSearchState] = useState<RealEstateItem[]>([]);
+  const { 
+    properties, 
+    loading, 
+    error, 
+    pagination, 
+    fetchProperties, 
+    deleteProperty ,
+    updatePropertyStatus
+  } = useProperties();
 
-  // Fetch properties on page load or when pagination changes
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [resultsPerPage, setResultsPerPage] = useState<number>(4);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [propertyToDelete, setPropertyToDelete] = useState<string | null>(null);
+
+  // Fetch properties when current page or results per page changes
   useEffect(() => {
     fetchProperties({ page: currentPage, limit: resultsPerPage });
   }, [currentPage, resultsPerPage, fetchProperties]);
@@ -55,27 +66,42 @@ const ItemPropertyList = () => {
     setCurrentPage(1);
   };
 
+  // Open delete confirmation modal
   const openDeleteModal = (id: string) => {
     setPropertyToDelete(id);
     setIsModalOpen(true);
   };
 
+  // Close delete confirmation modal
   const closeDeleteModal = () => {
     setIsModalOpen(false);
     setPropertyToDelete(null);
   };
 
+  // Confirm delete handler
   const confirmDelete = async () => {
     if (propertyToDelete) {
       try {
         await deleteProperty(propertyToDelete);
-        fetchProperties({ page: currentPage, limit: resultsPerPage });
         closeDeleteModal();
+        // Fetch updated properties only after deletion
+        fetchProperties({ page: currentPage, limit: resultsPerPage });
       } catch (err) {
         console.error("Failed to delete property:", err);
       }
     }
   };
+  const handleStatusChange = async (id: string, newStatus: boolean) => {
+    try {
+      // Call your API to update the status (true for public, false for private)
+      await updatePropertyStatus(id, newStatus);
+      // Refetch properties to update the list
+      fetchProperties({ page: currentPage, limit: resultsPerPage });
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
+
 
   return (
     <div>
@@ -92,6 +118,8 @@ const ItemPropertyList = () => {
               key={item._id}
               item={item}
               onDelete={openDeleteModal} // Pass openDeleteModal to handle delete
+              onStatusChange={handleStatusChange}
+
             />
           ))}
 
@@ -102,6 +130,7 @@ const ItemPropertyList = () => {
               totalResults={pagination.totalProperty}
               resultsPerPage={resultsPerPage}
               onPageChange={handlePageChange}
+
               onResultsPerPageChange={handleResultsPerPageChange}
             />
           )}

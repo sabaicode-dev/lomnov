@@ -20,32 +20,34 @@ const FromDataListProperty = ({ liveSearch,onChange}: IFromDataListProperty) => 
       <div className="bg-Primary/10 w-[100%] flex justify-end gap-[10px] p-[10px] items-center">
         <Search liveSearch={liveSearch} onChange={onChange}/>
         <div className="bg-BgSoftWhite rounded-sm w-[40px] h-[40px] flex items-center justify-center">
-          {" "}
+        
           <LuFilter className="w-[20px] h-[18px] text-Primary" />
         </div>
       </div>
       <div className="w-[100%] p-[12px] text-[14px] text-Black font-DM Sans flex justify-between ">
-        <div className="flex justify-start gap-[40px] w-[20%]">
+        <div className="flex justify-start gap-[40px] w-[20%] ">
           <p>#</p>
           <p>Properties Photo & Name</p>
         </div>
-        <div className="flex justify-between items-center  w-[60%] ">
-          <div className="w-[200px] flex justify-start">
-            {" "}
+        <div className="flex justify-between items-center ml-[93px] w-[87%] ">
+          <div className="w-[200px] flex justify-start ">
+     
             <p>Sale/Rent</p>
           </div>
-          <div className="w-[200px] flex justify-start">
+          <div className="w-[200px] flex justify-startm-2">
             <p>Categories</p>
           </div>
           <div className="w-[200px] flex justify-start">
             <p>Location</p>
           </div>
-          <div className="w-[200px] flex justify-start">
-            {" "}
+          <div className="w-[200px] flex justify-start ">
             <p>Price</p>
           </div>
+          <div  className="w-[200px] flex justify-start">
+             <p>Status</p>
+          </div>
         </div>
-        <div className="w-[10%]"></div>
+        <div className="w-[9%]"></div>
       </div>
     </div>
   );
