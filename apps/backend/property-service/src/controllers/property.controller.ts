@@ -138,7 +138,7 @@ export class PropertyController extends Controller {
     @Path() propertyId: string
   ): Promise<ResponsePropertyDTO> {
     try {
-      const data = await this.propertyService.getPropertyByIDP(propertyId);
+      const data = await this.propertyService.getPropertyByID(propertyId);
  
       return data;
     } catch (error) {
