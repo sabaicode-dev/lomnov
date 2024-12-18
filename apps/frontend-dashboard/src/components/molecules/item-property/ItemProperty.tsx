@@ -8,6 +8,7 @@ import Link from "next/link";
 import CardUser from "@/components/atoms/card-user/CardUser";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import { toSubstring } from "@/libs/functions/toSubstring";
+import { LuPencilLine } from "react-icons/lu";
 
 // Define item structure
 interface PropType {
@@ -35,8 +36,8 @@ const ItemProperty = ({ item, onDelete, onStatusChange }: PropType) => {
   };
 
   // Map status to display labels
-  const statusLabel = item.status ? "Public" : "Private";
-  const statusClass = item.status
+  const statusLabel = item.statusAdmin ? "Public" : "Private";
+  const statusClass = item.statusAdmin
     ? "text-Positive bg-Positive/20 border-Positive"
     : "text-Negative bg-Negative/20 border-Negative";
 
@@ -71,9 +72,9 @@ const ItemProperty = ({ item, onDelete, onStatusChange }: PropType) => {
         <div className="w-[200px] flex justify-start gap-[2px]">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="text-Positive px-[4px] bg-Positive/20 rounded-[4px] border-[0.3px] border-Positive text-[14px]"
+            className="text-Positive px-[4px] bg-Positive/20 rounded-[4px] border-[0.3px] border-Positive text-[14px] flex justify-between items-center gap-[5px]"
           >
-            Review
+            <p>{item.statusAdmin === false ? "Aprove" : "Reject"}</p><LuPencilLine/>
           </button>
           <p>|</p>
           <p
@@ -110,7 +111,7 @@ const ItemProperty = ({ item, onDelete, onStatusChange }: PropType) => {
                 onClick={handleApprove}
                 className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
               >
-                Approve
+                Approve 
               </button>
               <button
                 onClick={handleReject}

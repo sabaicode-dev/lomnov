@@ -63,6 +63,23 @@ export class PropertyService {
     }
   }
 
+  //update status Admin
+  public async updatestatusAdmin(
+    propertyId: string,
+    statusAdmin : boolean
+  ) : Promise<IProperty | null> {
+    try {
+      const updateadmin = await this.propertyRepository.updatestatusAdmin(
+        propertyId,
+        statusAdmin
+      );
+      return updateadmin;
+    } catch (error) {
+      console.error("Error in proeprty service", error);
+      throw error;
+    }
+  }
+
 
   public async getProperties(
     queries: RequestQueryPropertyDTO

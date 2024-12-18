@@ -319,6 +319,29 @@ public async updatePropertyStatus(
   }
 }
 
+@Put("/properties/{propertyId}/statusAdmin")
+public async updateAdminstatus(
+  @Path() propertyId : string,
+  @Body() body: {statusAdmin : boolean}
+): Promise<{message: string; updatestatusAdmin?: boolean}>{
+  try {
+    const {statusAdmin} = body;
+    if(typeof statusAdmin !== "boolean"){
+      throw new Error("Invalid statusAdmin. Value must be boolean ");
+    }
+    const updateadminStatus = await this.propertyService.updatestatusAdmin(propertyId , statusAdmin);
+    if(!updateadminStatus){
+      throw new NotFoundError("Property Not Found");
+    }
+    return {
+      message : "Success update status Admin",
+      updatestatusAdmin : updateadminStatus.statusAdmin
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 
   //delete proeprty's user
   @Delete("/properties/me/{propertyId}")

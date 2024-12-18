@@ -51,6 +51,7 @@ const models: TsoaRoute.Models = {
             "transition": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"}},
             "detail": {"ref":"Record_string.any_"},
             "status": {"dataType":"boolean"},
+            "statusAdmin": {"dataType":"boolean"},
         },
         "additionalProperties": false,
     },
@@ -135,6 +136,7 @@ const models: TsoaRoute.Models = {
             "transition": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"},"required":true},
             "detail": {"ref":"Record_string.any_"},
             "status": {"dataType":"boolean"},
+            "statusAdmin": {"dataType":"boolean"},
         },
         "additionalProperties": false,
     },
@@ -454,6 +456,37 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'updatePropertyStatus',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/api/v1/properties/:propertyId/statusAdmin',
+            ...(fetchMiddlewares<RequestHandler>(PropertyController)),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.updateAdminstatus)),
+
+            async function PropertyController_updateAdminstatus(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
+                    body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"statusAdmin":{"dataType":"boolean","required":true}}},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new PropertyController();
+
+              await templateService.apiHandler({
+                methodName: 'updateAdminstatus',
                 controller,
                 response,
                 next,
