@@ -34,10 +34,6 @@ const ItemProperty = ({ item, onDelete, onStatusChange }: PropType) => {
   };
 
   // Map status to display labels
-  const statusLabel = item.status ? "Public" : "Private";
-  const statusClass = item.statusAdmin
-    ? "text-Positive bg-Positive/20 border-Positive"
-    : "text-Negative bg-Negative/20 border-Negative";
 
   return (
     <div className="w-[100%] h-[68px] px-[12px] py-[8px] flex justify-between border-[0.1px] bg-BgSoftWhite/50 border-Primary/10 relative">
