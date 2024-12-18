@@ -147,19 +147,6 @@ export class PropertyController extends Controller {
     }
   }
 
-  //get proeprty id by phol
-  // @Get("/properties/{propertyId}")
-  // public async fetchPropertyByIDP(
-  //   @Path() propertyId: string
-  // ): Promise<ResponsePropertyByIDP> {
-  //   try {
-  //     const data = await this.propertyService.getPropertyByIDP(propertyId);
-  //     return data;
-  //   } catch (error) {
-  //     console.log("Error fetching property by ID:", error);
-  //     throw error;  // Optionally rethrow or return a custom error response
-  //   }
-  // }
 
   @Get("/properties/me")
   public async getPropertyMe(
