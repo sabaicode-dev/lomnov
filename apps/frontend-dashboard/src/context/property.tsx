@@ -19,6 +19,7 @@ interface PropertyContextType {
   pagination: PaginationData | null;
   fetchProperties: (params?: { page?: number; limit?: number }) => Promise<void>;
   deleteProperty: (id: string) => Promise<void>; // Add deleteProperty to the context type
+  updatePropertyStatus: (id: string, newStatus: boolean) => Promise<void>;
 }
 
 const PropertyContext = createContext<PropertyContextType | undefined>(undefined);
@@ -50,6 +51,30 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
     []
   );
 
+  //update status
+  const updatePropertyStatus = useCallback(
+    async (id: string, newStatus: boolean) => {
+      setLoading(true);
+      setError(null);
+      try {
+        await axiosInstance.put(`${API_ENDPOINTS.PROPERTIES}/${id}/status`, { status: newStatus });
+        // Update the local state to reflect the new status
+        setProperties((prevProperties) =>
+          prevProperties.map((property) =>
+            property._id === id ? { ...property, status: newStatus } : property
+          )
+        );
+      } catch (err) {
+        console.error("Error updating property status:", err);
+        setError("Failed to update the property status.");
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+  
+
   // Delete a property by ID
   const deleteProperty = useCallback(
     async (id: string) => {
@@ -80,6 +105,7 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
         pagination,
         fetchProperties,
         deleteProperty, // Provide deleteProperty to the context
+        updatePropertyStatus
       }}
     >
       {children}

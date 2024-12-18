@@ -7,7 +7,10 @@ export interface Pagination {
   totalProperty: number;
 }
 
-
+export interface ResponeStatus{
+  _id: Types.ObjectId;
+  status?: boolean;
+}
 
 
 export interface ResponsePropertyDTO {
