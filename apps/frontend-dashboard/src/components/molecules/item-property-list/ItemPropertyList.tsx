@@ -1,5 +1,5 @@
 
-"use client";
+'use client';
 
 import React, { useEffect, useState } from "react";
 import { useProperties } from "@/context/property";
@@ -7,8 +7,12 @@ import Pagination from "../pagenation/Pagenation";
 import Loading from "@/components/atoms/loading/Loading";
 import ItemProperty from "../item-property/ItemProperty";
 import DeleteConfirmationModal from "@/components/atoms/deletePopUp/Delete-Pop-Up";
+import FromDataListProperty from "../from-data-list/FromDataList";
+import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 
 const ItemPropertyList = () => {
+  const [liveSearch , setLiveSearch] = useState("");
+  const [searchState , setSearchState] = useState<RealEstateItem[]>([]);
   const { 
     properties, 
     loading, 
@@ -27,7 +31,40 @@ const ItemPropertyList = () => {
   // Fetch properties when current page or results per page changes
   useEffect(() => {
     fetchProperties({ page: currentPage, limit: resultsPerPage });
-  }, [currentPage, resultsPerPage]);
+  }, [currentPage, resultsPerPage, fetchProperties]);
+
+  // Update search results on live search input change
+  useEffect(() => {
+    if (liveSearch.trim() === "") {
+      setSearchState(properties); // Show all properties when search is cleared
+    } else {
+      setSearchState(() => {
+        return properties.filter(item => {
+          const title = item.title[0]?.content?.toLowerCase();
+          const category = item.category[0]?.content?.toLowerCase();
+          const price = item?.price.toString();
+          const location = item?.location[0]?.content?.toLowerCase();
+          // Check if either title or category matches the liveSearch query
+          return (title && title.includes(liveSearch.toLowerCase())) ||
+            (category && category.includes(liveSearch.toLowerCase()))
+            || (price && price.includes(liveSearch)) || (location && location.includes(liveSearch.toLowerCase()));
+        });
+      });
+    }
+  }, [liveSearch, properties]); // Re-run the effect when liveSearch or properties change
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLiveSearch(e.target.value); // Update the liveSearch state
+  };
+
+  const handleResultsPerPageChange = (newLimit: number) => {
+    setResultsPerPage(newLimit);
+    setCurrentPage(1);
+  };
 
   // Open delete confirmation modal
   const openDeleteModal = (id: string) => {
@@ -67,46 +104,41 @@ const ItemPropertyList = () => {
 
 
   return (
-    <div className="w-full">
-      {/* Display Error Message */}
-      {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+    <div>
+      {error && <p className="text-red-500">{error}</p>}
 
-      {/* Properties Loading or List */}
-      {loading ? (
-        <div className="w-full flex items-center justify-center">
-          <Loading />
-        </div>
-      ) : properties.length > 0 ? (
+      {/* Search Input */}
+      <FromDataListProperty liveSearch={liveSearch} onChange={handleChange} />
+
+      {/* Properties List */}
+      {!loading && searchState.length > 0 ? (
         <div>
-          {/* Property Items */}
-          <div className="grid gap-4">
-            {properties.map((item, index) => (
-              <ItemProperty
-                key={item._id}
-                item={item}
-                index={index}
-                onDelete={openDeleteModal} // Open delete modal
-                onStatusChange={handleStatusChange}
-              />
-            ))}
-          </div>
+          {searchState.map((item) => (
+            <ItemProperty
+              key={item._id}
+              item={item}
+              onDelete={openDeleteModal} // Pass openDeleteModal to handle delete
+              onStatusChange={handleStatusChange}
 
-          {/* Pagination */}
-          {pagination && (
+            />
+          ))}
+
+          {/* Pagination Component */}
+          {pagination && pagination.currentPage > 0 && (
             <Pagination
               currentPage={currentPage}
               totalResults={pagination.totalProperty}
               resultsPerPage={resultsPerPage}
-              onPageChange={(newPage) => setCurrentPage(newPage)}
-              onResultsPerPageChange={(newLimit) => {
-                setResultsPerPage(newLimit);
-                setCurrentPage(1);
-              }}
+              onPageChange={handlePageChange}
+
+              onResultsPerPageChange={handleResultsPerPageChange}
             />
           )}
         </div>
       ) : (
-        <p className="text-center text-gray-500">No properties available.</p>
+        <div className="w-full flex items-center justify-center mt-10">
+          <Loading />
+        </div>
       )}
 
       {/* Delete Confirmation Modal */}

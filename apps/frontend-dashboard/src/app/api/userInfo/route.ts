@@ -8,8 +8,6 @@ export async function GET(req: Request) {
                 Cookie: req.headers.get("cookie") || "",
             }
         });
-        console.log("get me::", response);
-        
         // If response is 204 No Content, return an empty object
         if (response.status === 204) {
             return NextResponse.json({}, { status: 200 });

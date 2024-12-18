@@ -42,11 +42,10 @@ export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLog
     }, [isLogin]);
 
     const login = async ({ email, phone_number, password }: LoginRequest) => {
-        console.log(email, password);
         setLoading(true);
         try {
             const ress = await axiosInstance.post(`${API_ENDPOINTS.SIGN_IN}`, {
-                [email ? 'email' : 'phone_number']: email || phone_number,
+                [email ? 'email' : 'phone_number']: email ?? phone_number,
                 password
             })
             console.log(ress);

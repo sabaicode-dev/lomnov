@@ -32,8 +32,8 @@ import setCookie from "../middlewares/cookies";
 @Tags("Manual Registration")
 @Route("api/v1")
 export class AuthControllerII extends Controller {
-  private authService: AuthService;
-  private cognitoService: CognitoService;
+  private readonly authService: AuthService;
+  private readonly cognitoService: CognitoService;
   constructor() {
     super();
     this.authService = new AuthService();
@@ -148,8 +148,8 @@ export class AuthControllerII extends Controller {
       
       if (refreshToken && username) {
         const result = await this.cognitoService.refreshTokens({
-          refreshToken: body.refreshToken || refreshToken,
-          username: body.username || username
+          refreshToken: body.refreshToken ?? refreshToken,
+          username: body.username ?? username
         });
         setCookie(request.res!, 'idToken', result.idToken, { httpOnly: true, secure: true, sameSite: 'lax' });
         setCookie(request.res!, 'accessToken', result.accessToken, { httpOnly: true, secure: true, sameSite: 'lax' });

@@ -2,9 +2,13 @@ import React from "react";
 import Link from "next/link";
 import Search from "@/components/organisms/search/Search";
 import { LuFilter } from "react-icons/lu";
-const FromDataListProperty = () => {
+interface IFromDataListProperty {
+  liveSearch: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+}
+const FromDataListProperty = ({ liveSearch,onChange}: IFromDataListProperty) => {
   return (
-    <div className="w-[100%] h-auto bg-BgSoftWhite mt-[40px] rounded-lg">
+    <div className="w-[100%] h-auto bg-BgSoftWhite mt-[40px] rounded-tr-lg rounded-tl-lg">
       <div className="flex justify-between p-[20px] items-center">
         <p className="inter text-[20px] font-simple ">Property List</p>
         <Link href={"/dashboard/add-new-property"}>
@@ -14,7 +18,7 @@ const FromDataListProperty = () => {
         </Link>
       </div>
       <div className="bg-Primary/10 w-[100%] flex justify-end gap-[10px] p-[10px] items-center">
-        <Search />
+        <Search liveSearch={liveSearch} onChange={onChange}/>
         <div className="bg-BgSoftWhite rounded-sm w-[40px] h-[40px] flex items-center justify-center">
         
           <LuFilter className="w-[20px] h-[18px] text-Primary" />
