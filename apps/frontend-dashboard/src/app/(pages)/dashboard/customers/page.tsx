@@ -1,26 +1,15 @@
-import FormCustomerHeader from "@/components/molecules/form-customer-header/FormCustomerHeader";
-import customer from "@/libs/const/mock/customer";
-import ItemCustomerList from "@/components/molecules/item-customers-list/ItemCustomerList";
+import ItemCustomerList from "@/components/molecules/item-customer-list/ItemCustomerList";
+import { CustomerProvider } from "@/context/customer";
 
-const dataFromCustomer = {
-  data_list: "Customers",
-  name_data: "Customer",
-  url: "/dashboard/add-new-customer",
-  addnew: "+ New Customer",
-  namedata: "Customers",
-  data1: "Email",
-  data2: "Contact",
-  data3: "Joined Date",
-};
-
-const Page = () => {
+const page = () => {
   return (
     <div>
-      <p className="text-[30px] font-black">Customer</p>
-      <FormCustomerHeader item={dataFromCustomer} />
-      <ItemCustomerList initialData={customer} />
+      <p className="text-[30px] font-black">Customers</p>
+      <CustomerProvider>
+        <ItemCustomerList />
+      </CustomerProvider>
     </div>
   );
 };
 
-export default Page;
+export default page;

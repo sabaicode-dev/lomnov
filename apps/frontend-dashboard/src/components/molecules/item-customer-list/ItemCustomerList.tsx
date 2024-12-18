@@ -1,52 +1,50 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useAgent } from "@/context/agent";
+import { useCustomers } from "@/context/customer";
 import Pagenation from "@/components/molecules/pagenation/Pagenation";
 import Loading from "@/components/atoms/loading/Loading";
-import ItemAgents from "../item-agengs/ItemAgents";
-import AgentDataList from "../agent-data-list/AgentDataList";
+import ItemCustomer from "../item-customers/ItemCustomer";
+import CustomerDataList from "../customer-data-list/CustomerDataList";
 import DeleteConfirmationModal from "@/components/atoms/deletePopUp/Delete-Pop-Up";
-import { AgentResponseType } from "@/libs/types/api-agents/agent-response";
+import { CustomerResponseType } from "@/libs/types/api-customers/customer-response";
 
-const ItemAgentList = () => {
-    const { agents, loading, error, pagination, fetchAgents, deleteAgent } = useAgent();
+const ItemCustomerList = () => {
+    const { customers, loading, error, pagination, fetchCustomers, deleteCustomer } = useCustomers();
     const [currentPage, setCurrentPage] = useState(1);
     const [resultsPerPage, setResultsPerPage] = useState(10);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [agentToDelete, setAgentToDelete] = useState<string | null>(null);
+    const [customerToDetele, setCustomerToDelete] = useState<string | null>(null);
     const [liveSearch, setLiveSearch] = useState("");
-    const [searchState, setSearchState] = useState<AgentResponseType[]>([]);
+    const [searchState, setSearchState] = useState<CustomerResponseType[]>([]);
 
-    // Fetch agents on page load or when pagination changes
+    // Fetch customers on page load or when pagination changes
     useEffect(() => {
-        fetchAgents({ page: currentPage, limit: resultsPerPage });
-    }, [currentPage, resultsPerPage, fetchAgents]);
+        fetchCustomers({ page: currentPage, limit: resultsPerPage });
+    }, [currentPage, resultsPerPage, fetchCustomers]);
 
     // Update search results on live search input change
     useEffect(() => {
-        if (!agents || agents.length === 0) {
+        if (!customers || customers.length === 0) {
             setSearchState([]);
         } else if (liveSearch.trim() === "") {
-            setSearchState(agents); // Show all agents when search is cleared
+            setSearchState(customers); // Show all customers when search is cleared
         } else {
             setSearchState(() => {
-                return agents.filter((item) => {
+                return customers.filter((item) => {
                     const userName = item.userName?.toLowerCase();
-                    const address = item.address?.toLowerCase();
                     const email = item.email?.toLowerCase();
                     const phoneNumber = item.phoneNumber?.toString();
 
                     return (
                         userName?.includes(liveSearch.toLowerCase()) ||
-                        address?.includes(liveSearch.toLowerCase()) ||
                         email?.includes(liveSearch.toLowerCase()) ||
                         phoneNumber?.includes(liveSearch.toLowerCase())
                     );
                 });
             });
         }
-    }, [liveSearch, agents]);
+    }, [liveSearch, customers]);
 
     const handlePageChange = (newPage: number) => {
         setCurrentPage(newPage);
@@ -62,20 +60,20 @@ const ItemAgentList = () => {
     };
 
     const openDeleteModal = (id: string) => {
-        setAgentToDelete(id);
+        setCustomerToDelete(id);
         setIsModalOpen(true);
     };
 
     const closeDeleteModal = () => {
         setIsModalOpen(false);
-        setAgentToDelete(null);
+        setCustomerToDelete(null);
     };
 
     const confirmDelete = async () => {
-        if (agentToDelete) {
+        if (customerToDetele) {
             try {
-                await deleteAgent(agentToDelete);
-                fetchAgents({ page: currentPage, limit: resultsPerPage });
+                await deleteCustomer(customerToDetele);
+                fetchCustomers({ page: currentPage, limit: resultsPerPage });
                 closeDeleteModal();
             } catch (err) {
                 console.error("Failed to delete agent:", err);
@@ -88,13 +86,13 @@ const ItemAgentList = () => {
             {error && <p className="text-red-500">{error}</p>}
 
             {/* Search Input */}
-            <AgentDataList liveSearch={liveSearch} onChange={handleChange} />
+            <CustomerDataList liveSearch={liveSearch} onChange={handleChange} />
 
             {/* Agents List */}
             {!loading && searchState.length > 0 ? (
                 <div>
                     {searchState.map((item) => (
-                        <ItemAgents
+                        <ItemCustomer
                             key={item._id} // Fixed: Using _id instead of id
                             item={item}
                             onDelete={openDeleteModal} // Pass openDeleteModal to handle delete
@@ -105,7 +103,7 @@ const ItemAgentList = () => {
                     {pagination && pagination.currentPage > 0 && (
                         <Pagenation
                             currentPage={currentPage}
-                            totalResults={pagination.totalAgents}
+                            totalResults={pagination.totalCustomers}
                             resultsPerPage={resultsPerPage}
                             onPageChange={handlePageChange}
                             onResultsPerPageChange={handleResultsPerPageChange}
@@ -128,4 +126,4 @@ const ItemAgentList = () => {
     );
 };
 
-export default ItemAgentList;
+export default ItemCustomerList;

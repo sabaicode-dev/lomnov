@@ -2,18 +2,18 @@ import React from "react";
 import Link from "next/link";
 import Search from "@/components/organisms/search/Search";
 import { LuFilter } from "react-icons/lu";
-interface IAgentDataList {
+interface ICustomerDataList {
     liveSearch: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
-const AgentDataList = ({ liveSearch, onChange }: IAgentDataList) => {
+const CustomerDataList = ({ liveSearch, onChange }: ICustomerDataList) => {
     return (
         <div className="w-[100%] h-auto bg-BgSoftWhite mt-[40px] rounded-tr-lg rounded-tl-lg">
             <div className="flex justify-between p-[20px] items-center">
-                <p className="inter text-[20px] font-simple ">Agents List</p>
+                <p className="inter text-[20px] font-simple ">Customers List</p>
                 <Link href={"/dashboard/add-new-property"}>
                     <button className="bg-Primary py-[8px] px-[16px] rounded-sm text-[16px] text-BgSoftWhite">
-                        +New Agent
+                        +New Customer
                     </button>
                 </Link>
             </div>
@@ -27,13 +27,9 @@ const AgentDataList = ({ liveSearch, onChange }: IAgentDataList) => {
             <div className="w-[100%] p-[12px] text-[14px] text-Black font-DM Sans flex justify-between ">
                 <div className="flex justify-start gap-[40px] w-[20%]">
                     <p>#</p>
-                    <p>Agent Photo & Name</p>
+                    <p>Customer Photo & Name</p>
                 </div>
                 <div className="flex justify-between items-center  w-[65%] ">
-                    <div className="w-[200px] flex justify-start">
-                        {" "}
-                        <p>Address</p>
-                    </div>
                     <div className="w-[200px] flex justify-start">
                         <p>Email</p>
                     </div>
@@ -51,4 +47,4 @@ const AgentDataList = ({ liveSearch, onChange }: IAgentDataList) => {
     );
 };
 
-export default AgentDataList;
+export default CustomerDataList;
