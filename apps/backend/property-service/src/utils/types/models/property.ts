@@ -27,6 +27,7 @@ export interface IProperty {
   transition?: LocalizedContent[];
   detail?: Record<string, any>;
   status?: boolean;
+  statusAdmin? : boolean;
   
 }
 
@@ -49,6 +50,7 @@ export interface Property {
   status?: boolean;
   sortBy?: string;       // Add sortBy
   sortOrder?: 'asc' | 'desc'; // Add sortOrder
+  statusAdmin?: boolean;
 }
 
 

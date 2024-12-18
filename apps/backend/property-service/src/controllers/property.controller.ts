@@ -138,7 +138,7 @@ export class PropertyController extends Controller {
     @Path() propertyId: string
   ): Promise<ResponsePropertyDTO> {
     try {
-      const data = await this.propertyService.getPropertyByIDP(propertyId);
+      const data = await this.propertyService.getPropertyByID(propertyId);
  
       return data;
     } catch (error) {
@@ -147,19 +147,6 @@ export class PropertyController extends Controller {
     }
   }
 
-  //get proeprty id by phol
-  // @Get("/properties/{propertyId}")
-  // public async fetchPropertyByIDP(
-  //   @Path() propertyId: string
-  // ): Promise<ResponsePropertyByIDP> {
-  //   try {
-  //     const data = await this.propertyService.getPropertyByIDP(propertyId);
-  //     return data;
-  //   } catch (error) {
-  //     console.log("Error fetching property by ID:", error);
-  //     throw error;  // Optionally rethrow or return a custom error response
-  //   }
-  // }
 
   @Get("/properties/me")
   public async getPropertyMe(
@@ -315,6 +302,29 @@ public async updatePropertyStatus(
   } catch (error) {
     console.error("Error updating property status:", error);
     this.setStatus(500);
+    throw error;
+  }
+}
+
+@Put("/properties/{propertyId}/statusAdmin")
+public async updateAdminstatus(
+  @Path() propertyId : string,
+  @Body() body: {statusAdmin : boolean}
+): Promise<{message: string; updatestatusAdmin?: boolean}>{
+  try {
+    const {statusAdmin} = body;
+    if(typeof statusAdmin !== "boolean"){
+      throw new Error("Invalid statusAdmin. Value must be boolean ");
+    }
+    const updateadminStatus = await this.propertyService.updatestatusAdmin(propertyId , statusAdmin);
+    if(!updateadminStatus){
+      throw new NotFoundError("Property Not Found");
+    }
+    return {
+      message : "Success update status Admin",
+      updatestatusAdmin : updateadminStatus.statusAdmin
+    }
+  } catch (error) {
     throw error;
   }
 }

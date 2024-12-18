@@ -1,8 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import type { TsoaRoute } from '@tsoa/runtime';
-import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
+import { TsoaRoute, fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { PropertyController } from './../../controllers/property.controller';
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
@@ -51,6 +50,7 @@ const models: TsoaRoute.Models = {
             "transition": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"}},
             "detail": {"ref":"Record_string.any_"},
             "status": {"dataType":"boolean"},
+            "statusAdmin": {"dataType":"boolean"},
         },
         "additionalProperties": false,
     },
@@ -135,6 +135,7 @@ const models: TsoaRoute.Models = {
             "transition": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"},"required":true},
             "detail": {"ref":"Record_string.any_"},
             "status": {"dataType":"boolean"},
+            "statusAdmin": {"dataType":"boolean"},
         },
         "additionalProperties": false,
     },
@@ -186,15 +187,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
     
         app.post('/api/v1/properties',
-            upload.fields([
-                {
-                    name: "thumbnail",
-                    maxCount: 1
-                },
-                {
-                    name: "images",
-                }
-            ]),
+            upload.fields([{"name":"thumbnail","maxCount":1,"multiple":false},{"name":"images","multiple":true}]),
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.createProperty)),
 
@@ -352,15 +345,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.put('/api/v1/properties/me/:propertyId',
-            upload.fields([
-                {
-                    name: "thumbnail",
-                    maxCount: 1
-                },
-                {
-                    name: "images",
-                }
-            ]),
+            upload.fields([{"name":"thumbnail","maxCount":1,"multiple":false},{"name":"images","multiple":true}]),
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.updateProperty)),
 
@@ -454,6 +439,37 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'updatePropertyStatus',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/api/v1/properties/:propertyId/statusAdmin',
+            ...(fetchMiddlewares<RequestHandler>(PropertyController)),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.updateAdminstatus)),
+
+            async function PropertyController_updateAdminstatus(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
+                    body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"statusAdmin":{"dataType":"boolean","required":true}}},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new PropertyController();
+
+              await templateService.apiHandler({
+                methodName: 'updateAdminstatus',
                 controller,
                 response,
                 next,

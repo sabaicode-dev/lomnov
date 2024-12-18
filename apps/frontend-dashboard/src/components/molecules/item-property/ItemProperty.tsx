@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from "react";
@@ -8,13 +7,13 @@ import Link from "next/link";
 import CardUser from "@/components/atoms/card-user/CardUser";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import { toSubstring } from "@/libs/functions/toSubstring";
+import { LuPencilLine } from "react-icons/lu";
 
 // Define item structure
 interface PropType {
   item: RealEstateItem;
   onDelete: (id: string) => void; // Delete handler
   onStatusChange: (id: string, newStatus: boolean) => void; // Handler for status change
- 
 }
 
 const ItemProperty = ({ item, onDelete, onStatusChange }: PropType) => {
@@ -35,16 +34,15 @@ const ItemProperty = ({ item, onDelete, onStatusChange }: PropType) => {
   };
 
   // Map status to display labels
-  const statusLabel = item.status ? "Public" : "Private";
-  const statusClass = item.status
-    ? "text-Positive bg-Positive/20 border-Positive"
-    : "text-Negative bg-Negative/20 border-Negative";
 
   return (
     <div className="w-[100%] h-[68px] px-[12px] py-[8px] flex justify-between border-[0.1px] bg-BgSoftWhite/50 border-Primary/10 relative">
       <div className="flex justify-start items-center w-[20%] gap-[40px]">
-        <p>{toSubstring(item._id,4)}</p>
-        <CardUser usernname={toSubstring(item.title[0].content,12)} image={item.thumbnail} />
+        <p>{toSubstring(item._id, 4)}</p>
+        <CardUser
+          usernname={toSubstring(item.title[0].content, 12)}
+          image={item.thumbnail}
+        />
       </div>
 
       <div className="flex justify-between items-center w-[70%]">
@@ -69,18 +67,37 @@ const ItemProperty = ({ item, onDelete, onStatusChange }: PropType) => {
           <p>{item.price}</p>
         </div>
         <div className="w-[200px] flex justify-start gap-[2px]">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="text-Positive px-[4px] bg-Positive/20 rounded-[4px] border-[0.3px] border-Positive text-[14px]"
-          >
-            Review
-          </button>
+          {item.statusAdmin === true ? (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="text-Positive px-[4px] bg-Positive/20 rounded-[4px] border-[0.3px] border-Positive text-[14px] flex justify-between items-center gap-[5px]"
+            >
+              <p>Aprove</p>
+              <LuPencilLine />
+            </button>
+          ) : (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="text-Negative px-[4px] bg-Negative/20 rounded-[4px] border-[0.3px] border-Negative text-[14px] flex justify-between items-center gap-[5px]"
+            >
+              <p>Reject</p>
+              <LuPencilLine />
+            </button>
+          )}
           <p>|</p>
-          <p
-            className={`${statusClass} px-[4px] rounded-[4px] border-[0.3px] text-[14px]`}
-          >
-            {statusLabel}
-          </p>
+          {item.status === true ? (
+            <button
+              className="text-Positive px-[4px] bg-Positive/20 rounded-[4px] border-[0.3px] border-Positive text-[14px] flex items-center gap-[5px]"
+            >
+              <p>Publish</p>
+            </button>
+          ) : (
+            <button
+              className="text-Negative px-[4px] bg-Negative/20 rounded-[4px] border-[0.3px] border-Negative text-[14px] flex justify-between items-center gap-[5px]"
+            >
+              <p>Private</p>
+            </button>
+          )}
         </div>
       </div>
 
@@ -108,13 +125,13 @@ const ItemProperty = ({ item, onDelete, onStatusChange }: PropType) => {
             <div className="flex justify-center gap-4">
               <button
                 onClick={handleApprove}
-                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                className="px-4 py-2 bg-Positive text-white rounded-md hover:bg-Positive/50"
               >
                 Approve
               </button>
               <button
                 onClick={handleReject}
-                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                className="px-4 py-2 bg-Negative text-white rounded-md hover:bg-Negative/50"
               >
                 Reject
               </button>
