@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/useAuth";
 import { cookies } from "next/headers";
-import { PropertyProvider } from "@/context/property";
+// import { PropertyProvider } from "@/context/property";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,9 +27,7 @@ export default async function RootLayout({
       </head>
       <body className={inter.className}>
         <AuthProvider isLogin={!userCookie}>
-          <PropertyProvider>
             {children}
-          </PropertyProvider>
         </AuthProvider>
       </body>
     </html>

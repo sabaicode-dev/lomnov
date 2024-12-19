@@ -11,20 +11,20 @@ import FromDataListProperty from "../from-data-list/FromDataList";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 
 const ItemPropertyList = () => {
-  const [liveSearch , setLiveSearch] = useState("");
-  const [searchState , setSearchState] = useState<RealEstateItem[]>([]);
-  const { 
-    properties, 
-    loading, 
-    error, 
-    pagination, 
-    fetchProperties, 
-    deleteProperty ,
+  const [liveSearch, setLiveSearch] = useState("");
+  const [searchState, setSearchState] = useState<RealEstateItem[]>([]);
+  const {
+    properties,
+    loading,
+    error,
+    pagination,
+    fetchProperties,
+    deleteProperty,
     updatePropertyStatus
   } = useProperties();
 
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [resultsPerPage, setResultsPerPage] = useState<number>(4);
+  const [resultsPerPage, setResultsPerPage] = useState<number>(10);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [propertyToDelete, setPropertyToDelete] = useState<string | null>(null);
 

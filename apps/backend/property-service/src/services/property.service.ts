@@ -563,4 +563,11 @@ export class PropertyService {
       throw error;
     }
   }
+  public async getCognitoSubProperties():Promise<any>{
+    try {
+      return await this.propertyRepository.getCognitoSubProperties();
+    } catch (error) {
+      throw error;
+    }
+  } 
 }

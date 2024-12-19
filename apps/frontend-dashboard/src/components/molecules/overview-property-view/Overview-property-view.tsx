@@ -27,7 +27,7 @@ const OverviewProperty = ({ item }: ItemProps) => {
 
   return (
     <div>
-        
+
       {/* Overview */}
       <div className="w-full flex justify-between gap-5">
         <div className="w-full">
@@ -48,7 +48,7 @@ const OverviewProperty = ({ item }: ItemProps) => {
                 <InputField
                   label="Slug*"
                   placeholder="Property slug"
-                  
+
                   value={formData.slug || ""}
                   onChange={(e) => handleChange(e, "slug")}
                 />
@@ -79,7 +79,7 @@ const OverviewProperty = ({ item }: ItemProps) => {
 
               {/* Category and Transition */}
               <div className="grid gap-4 grid-cols-2 mt-5">
-                
+
                 <InputField
                   label="Category*"
                   value={formData.category?.[0]?.content || ""}
@@ -167,7 +167,7 @@ const InputField = ({ label, placeholder, value, onChange }: any) => (
       value={value}
       onChange={onChange}
       readOnly
-      className="w-full h-10 p-2 mt-1 text-sm rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:border-blue-400"
+      className="w-full h-10 p-2 mt-1 text-sm rounded-lg bg-gray-50 border border-gray-300 focus:outline-none"
     />
   </div>
 );

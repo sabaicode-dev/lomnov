@@ -1,6 +1,5 @@
-
 import React from "react";
-import { IoIosArrowDown, IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 
 interface PaginationProps {
   currentPage: number;
@@ -20,7 +19,7 @@ const Pagination: React.FC<PaginationProps> = ({
   const totalPages = Math.ceil(totalResults / resultsPerPage);
 
   return (
-    <div className="w-full flex justify-between h-[67px] p-[10px] bg-BgSoftWhite/50">
+    <div className="w-full flex justify-between items-center h-[67px] p-[10px] bg-BgSoftWhite/50">
       {/* Results Info */}
       <div className="flex items-center text-Black font-medium">
         <p>
@@ -31,14 +30,18 @@ const Pagination: React.FC<PaginationProps> = ({
 
       {/* Results Per Page Selector */}
       <div className="flex items-center gap-[10px]">
-        <button
-          className="bg-BgSoftWhite px-[10px] py-[8px] flex items-center gap-[10px] rounded-sm font-medium"
-          onClick={() =>
-            onResultsPerPageChange(resultsPerPage === 10 ? 4 : 10) // Toggle between 4 and 10 items per page
-          }
+        <select
+          id="results-per-page"
+          className="max-w-16 w-full bg-BgSoftWhite border-none outline-none px-[10px] py-[8px] flex items-center gap-[10px] rounded-sm font-medium"
+          value={resultsPerPage}
+          onChange={(e) => onResultsPerPageChange(Number(e.target.value))}
         >
-          {resultsPerPage} <IoIosArrowDown className="font-medium" />
-        </button>
+          <option value={10}>10</option>
+          <option value={25}>25</option>
+          <option value={50}>50</option>
+          <option value={100}>100</option>
+          <option value={150}>150</option>
+        </select>
         <p className="font-medium">per page</p>
       </div>
 
@@ -46,11 +49,10 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className="flex items-center gap-[4px]">
         {/* Previous Page */}
         <button
-          className={`px-[16px] py-[8px] rounded-sm ${
-            currentPage === 1
-              ? "bg-gray-300 cursor-not-allowed"
-              : "bg-Primary text-BgSoftWhite hover:bg-blue-600"
-          }`}
+          className={`px-[16px] py-[8px] rounded-sm ${currentPage === 1
+            ? "bg-gray-300 cursor-not-allowed"
+            : "bg-Primary text-BgSoftWhite hover:bg-blue-600"
+            }`}
           disabled={currentPage === 1}
           onClick={() => onPageChange(currentPage - 1)}
         >
@@ -64,12 +66,11 @@ const Pagination: React.FC<PaginationProps> = ({
 
         {/* Next Page */}
         <button
-          className={`px-[16px] py-[8px] rounded-sm ${
-            currentPage === totalPages
-              ? "bg-gray-300 cursor-not-allowed"
-              : "bg-Primary text-BgSoftWhite hover:bg-Primary/80"
-          }`}
-          disabled={currentPage === totalPages}
+          className={`px-[16px] py-[8px] rounded-sm ${currentPage === totalPages || totalResults === 0
+            ? "bg-gray-300 cursor-not-allowed"
+            : "bg-Primary text-BgSoftWhite hover:bg-Primary/80"
+            }`}
+          disabled={currentPage === totalPages || totalResults === 0}
           onClick={() => onPageChange(currentPage + 1)}
         >
           <IoIosArrowForward />
