@@ -472,4 +472,15 @@ public async updateAdminstatus(
       throw error;
     }
   }
+    /**
+   * This method use for responses only cognito sub 
+   */
+  @Get("/properties/sub")
+  public async getCognitoSubProperties(){
+    try {
+      return await this.propertyService.getCognitoSubProperties();
+    } catch (error) {
+      throw error;
+    }
+  }
 }

@@ -388,5 +388,15 @@ export class PropertyRepository {
       throw error;
     }
   }
+  /**
+   * Return all cognito sub and id
+   */
 
+  public async getCognitoSubProperties():Promise<any>{
+    try {
+      return await PropertyModel.find({}).select(["cognitoSub","_id"]).lean();
+    } catch (error) {
+      throw error;
+    }
+  }
 }
