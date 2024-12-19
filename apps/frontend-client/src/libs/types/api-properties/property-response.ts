@@ -72,6 +72,7 @@ export interface RealEstateItem {
   transition: { content: string; language: string }[]; // Multilingual transitions
   detail: { language: string; content?: RealEstateDetail }[]; // Allow optional content
   status: boolean;
+  statusAdmin: boolean;
   createdAt: string;
   updatedAt: string;
   coordinate: {
@@ -110,6 +111,7 @@ export interface IResponseComparePropertes{
       road_size?: string;
       pool?: string;}[];
     status: boolean;
+    statusAdmin: boolean;
     createdAt: string;
     updatedAt: string;
     coordinate: {
@@ -136,6 +138,7 @@ export interface IUpdatePropertiesType {
   transition: Array<{ content: string; language: string }>,
   detail?: Array<{ language: string;  bedrooms: string, bathrooms: string, size: string, parking: string  }>,
   status?: boolean;
+  statusAdmin?: boolean;
   coordinate: {
     type: "Point"; // The type should be the literal string "Point"
     coordinates: [number, number]; // Longitude, Latitude array (corrected to a tuple of 2 numbers)
