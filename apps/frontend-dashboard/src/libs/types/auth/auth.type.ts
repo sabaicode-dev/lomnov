@@ -71,6 +71,7 @@ export interface SignupRequest {
     email?: string,
     phone_number?: string
     password: string
+    role: string;
 }
 
 export interface VerifyUserRequest {

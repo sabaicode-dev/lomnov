@@ -46,6 +46,7 @@ const models: TsoaRoute.Models = {
             "background": {"dataType":"array","array":{"dataType":"string"}},
             "favorite": {"dataType":"array","array":{"dataType":"refObject","ref":"FavoriteItem"}},
             "role": {"dataType":"string"},
+            "status": {"dataType":"boolean"},
         },
         "additionalProperties": false,
     },
@@ -68,6 +69,7 @@ const models: TsoaRoute.Models = {
             "background": {"dataType":"array","array":{"dataType":"string"}},
             "favorite": {"dataType":"array","array":{"dataType":"string"}},
             "role": {"dataType":"string"},
+            "status": {"dataType":"boolean"},
         },
         "additionalProperties": false,
     },
@@ -119,9 +121,9 @@ const models: TsoaRoute.Models = {
     "RequestPropertyClientQuery": {
         "dataType": "refObject",
         "properties": {
-            "page": {"dataType":"double"},
-            "limit": {"dataType":"double"},
-            "language": {"dataType":"string"},
+            "page": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"undefined"}]},
+            "limit": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            "language": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
         },
         "additionalProperties": false,
     },
@@ -514,12 +516,14 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/users/agents',
+        app.put('/api/v1/users/:userId/status',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
-            ...(fetchMiddlewares<RequestHandler>(UserController.prototype.getUserAgents)),
+            ...(fetchMiddlewares<RequestHandler>(UserController.prototype.updateStatusUser)),
 
-            async function UserController_getUserAgents(request: ExRequest, response: ExResponse, next: any) {
+            async function UserController_updateStatusUser(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    userId: {"in":"path","name":"userId","required":true,"dataType":"string"},
+                    body: {"in":"body","name":"body","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"status":{"dataType":"union","subSchemas":[{"dataType":"boolean"},{"dataType":"string"}],"required":true}}},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -531,7 +535,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                 const controller = new UserController();
 
               await templateService.apiHandler({
-                methodName: 'getUserAgents',
+                methodName: 'updateStatusUser',
                 controller,
                 response,
                 next,

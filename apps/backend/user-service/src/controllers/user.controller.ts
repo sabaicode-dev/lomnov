@@ -252,6 +252,32 @@ export class UserController extends Controller {
             throw error;
         }
     }
+
+  //endpoint status user
+  @Put("/{userId}/status")
+  public async updateStatusUser(
+    @Path() userId: string,
+    @Body() body: { status: boolean | string}
+  ):Promise<{ message: string; updatedStatusUser?: boolean }> {
+      try {
+        const { status } = body;
+        if (typeof status !== "boolean") {
+          throw new Error("Invalid status. It must be a boolean value.");
+        }
+        const updateStatus = await this.userService.updatestatusUser(
+          userId, status
+        )
+        if(!updateStatus){
+          console.log("Error Status ");
+        }
+        return {
+          message : "Update Status user Success",
+          updatedStatusUser : updateStatus?.status
+        }
+      } catch (error) {
+        throw error;
+      }
+  }
     @Tags("Get User Agents")
     @Get("/agents")
     public async getUserAgents(): Promise<any> {

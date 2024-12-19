@@ -30,6 +30,7 @@ const UserSchema = new Schema<User>(
     background: { type: [String], default: [] },
     favorite: { type: [FavoriteSchema] },
     role: { type: String, default: "user" },
+    status: { type: Boolean, default: false },
   },
 
   { timestamps: true },

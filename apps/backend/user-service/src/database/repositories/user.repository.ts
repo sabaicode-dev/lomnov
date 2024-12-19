@@ -18,30 +18,44 @@ import { UserModel } from "../models/user.model";
 
 export class UserRepository {
 
-    public async create(requestBody: RequestUserDTO): Promise<ResponseUserDTO> {
-        try {
-            const { cognitoSub, email, userName, profile, role = 'user' } = requestBody;
-            const usernameExist = await UserModel.find({ userName: userName });
-            if (usernameExist.length > 0) {
-                throw new ValidationError(" Username already existed");
-            }
-            // console.log("the best result" + req.user);
-            if (!cognitoSub || !email || !userName || !role) {
-                throw new ValidationError(
-                    " CognitoSub , firstname, lastname and username are required!",
-                );
-            }
-            const data = { cognitoSub, email, userName, profile, role };
-            const response = await UserModel.create(data);
-            return response;
-        } catch (error: any) {
-            if (error instanceof ValidationError) {
-                throw error;
-            } else {
-                throw new InternalServerError(error.message);
-            }
-        }
+  public async create(requestBody: RequestUserDTO): Promise<ResponseUserDTO> {
+    try {
+      const { cognitoSub, email, userName,profile,role='user' } = requestBody;
+      const usernameExist = await UserModel.find({ userName: userName });
+      if (usernameExist.length > 0) {
+        throw new ValidationError(" Username already existed");
+      }
+      // console.log("the best result" + req.user);
+      if (!cognitoSub ||  !email || !userName|| !role) {
+        throw new ValidationError(
+          " CognitoSub , firstname, lastname and username are required!",
+        );
+      }
+      const data = { cognitoSub, email,userName,profile,role };
+      const response = await UserModel.create(data);
+      return response;
+    } catch (error: any) {
+      if (error instanceof ValidationError) {
+        throw error;
+      } else {
+        throw new InternalServerError(error.message);
+      }
     }
+  }
+  //status user
+
+  public async updateStatus(userId : string , status : boolean) : Promise<ResponseUserDTO | null>{
+    try {
+      const updateStatususer = await UserModel.findByIdAndUpdate(
+        {_id : userId},
+        {$set:{status} },
+        {new : true}
+      )
+      return updateStatususer;
+    } catch (error) {
+      throw error;
+    }
+  }
 
     public async getMet(cognitoSub: string): Promise<ResponseUserDTO | null> {
         try {
