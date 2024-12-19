@@ -35,15 +35,15 @@ export const AgentProvider = ({ children }: { children: ReactNode }) => {
             setError(null);
             try {
                 const queryString = new URLSearchParams(params as Record<string, string>).toString();
-                const response = await axiosInstance.get(`${API_ENDPOINTS.USER}?${queryString}`);
+                const response = await axiosInstance.get(`${API_ENDPOINTS.USER_AGENTS}?${queryString}`);
                 console.log("API Agent Response:", response.data);
 
                 // Correctly set agents and pagination based on API response
-                setAgents(response.data.users || []);
+                setAgents(response.data || []);
                 setPagination({
-                    currentPage: response.data.pagination?.currentPage || 1,
-                    totalPages: response.data.pagination?.totalPages || 1,
-                    totalAgents: response.data.pagination?.totalUsers || 0,
+                    currentPage: response.data?.pagination?.currentPage ?? 1,
+                    totalPages: response.data?.pagination?.totalPages ?? 1,
+                    totalAgents: response.data?.length ?? 0,
                 });
             } catch (err) {
                 console.error("Error fetching agents:", err);
@@ -62,7 +62,7 @@ export const AgentProvider = ({ children }: { children: ReactNode }) => {
             setLoading(true);
             setError(null);
             try {
-                await axiosInstance.delete(`${API_ENDPOINTS.USER}/${id}`);
+                await axiosInstance.delete(`${API_ENDPOINTS.USER_AGENTS}/${id}`);
                 // Update the local state to remove the deleted agent
                 setAgents((prevAgents) => prevAgents.filter((agent) => agent._id !== id));
             } catch (err) {
