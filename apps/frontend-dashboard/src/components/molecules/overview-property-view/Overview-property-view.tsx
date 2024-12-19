@@ -167,7 +167,7 @@ const InputField = ({ label, placeholder, value, onChange }: any) => (
       value={value}
       onChange={onChange}
       readOnly
-      className="w-full h-10 p-2 mt-1 text-sm rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:border-blue-400"
+      className="w-full h-10 p-2 mt-1 text-sm rounded-lg bg-gray-50 border border-gray-300 focus:outline-none"
     />
   </div>
 );

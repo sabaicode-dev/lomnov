@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 
 //=====================
@@ -12,21 +13,21 @@ const PhotoAttachment = ({ initialImages = [], defaultProfile }: IPhotoAttachmen
 
   return (
     <div>
-      <div className="w-[100%] mt-[20px] p-[24px] bg-[#F3F4F6] rounded-xls">
-        <p className="text-[20px] font-[600]">Photo Attachment</p>
+      <div className="w-full mt-5 p-6 bg-gray-100 rounded-lg">
+        <p className="text-lg font-semibold">Photo Attachment</p>
         <div className="w-[100%] border-BgSoftWhite ">
 
           {/* Display Images */}
-          <div className="flex justify-start flex-wrap gap-[20px] mt-[20px]">
+          <div className="flex flex-wrap gap-4 mt-5">
             {images.map((image, index) => (
               <div
                 key={index}
-                className="relative border rounded-md overflow-hidden"
+                className="relative w-[200px] h-[200px] border rounded-lg overflow-hidden"
               >
                 <img
                   src={image}
                   alt={`Uploaded ${index}`}
-                  className="object-cover w-[80px] h-[80px] rounded-xls"
+                  className="object-cover w-full h-full"
                   onError={(e) => (e.currentTarget.src = defaultProfile)}
                 />
               </div>

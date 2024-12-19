@@ -32,7 +32,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className="flex items-center gap-[10px]">
         <select
           id="results-per-page"
-          className="max-w-16 w-full bg-BgSoftWhite border-none outline-none px-[7px] py-[8px] flex items-center gap-[10px] rounded-sm font-medium"
+          className="max-w-16 w-full bg-BgSoftWhite border-none outline-none px-[10px] py-[8px] flex items-center gap-[10px] rounded-sm font-medium"
           value={resultsPerPage}
           onChange={(e) => onResultsPerPageChange(Number(e.target.value))}
         >

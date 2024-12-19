@@ -43,13 +43,17 @@ const page = async ({ params }: { params: { id: string } }) => {
           />
         </div>
         <div className="w-[30%]">
-        <Status status={property.status} />
+        <Status 
+          status={property.status}
+          createdAt={property.createdAt}
+          updatedAt={property.updatedAt}
+        />
         </div>
       </div>
 
       <div className="flex justify-start w-[100%] mt-[20px] items-center gap-[4px]">
         <Link href={"/dashboard/properties"}>
-          <button className="px-[12px] text-[14px] py-[8px] bg-Primary text-BgSoftWhite rounded-lg">
+          <button className="px-[30px] text-[14px] py-[8px] bg-Primary text-BgSoftWhite rounded-lg">
             Back
           </button>
         </Link>
