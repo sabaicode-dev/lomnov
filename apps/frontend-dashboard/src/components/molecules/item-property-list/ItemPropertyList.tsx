@@ -11,7 +11,8 @@ import FromDataListProperty from "../from-data-list/FromDataList";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 
 const ItemPropertyList = () => {
-  const [liveSearch, setLiveSearch] = useState("");
+  const [liveSearch, setLiveSearch] = useState<string>("");
+  const [liveSelect, setLiveSelect] = useState<string>("");
   const [searchState, setSearchState] = useState<RealEstateItem[]>([]);
   const {
     properties,
@@ -27,7 +28,6 @@ const ItemPropertyList = () => {
   const [resultsPerPage, setResultsPerPage] = useState<number>(10);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [propertyToDelete, setPropertyToDelete] = useState<string | null>(null);
-
   // Fetch properties when current page or results per page changes
   useEffect(() => {
     fetchProperties({ page: currentPage, limit: resultsPerPage });
@@ -35,7 +35,7 @@ const ItemPropertyList = () => {
 
   // Update search results on live search input change
   useEffect(() => {
-    if (liveSearch.trim() === "") {
+    if (liveSearch.trim() === "" || liveSelect.trim() === "") {
       setSearchState(properties); // Show all properties when search is cleared
     } else {
       setSearchState(() => {
@@ -44,21 +44,24 @@ const ItemPropertyList = () => {
           const category = item.category[0]?.content?.toLowerCase();
           const price = item?.price.toString();
           const location = item?.location[0]?.content?.toLowerCase();
+
           // Check if either title or category matches the liveSearch query
           return (title && title.includes(liveSearch.toLowerCase())) ||
             (category && category.includes(liveSearch.toLowerCase()))
-            || (price && price.includes(liveSearch)) || (location && location.includes(liveSearch.toLowerCase()));
+            || (price && price.includes(liveSearch)) || (location && location.includes(liveSearch.toLowerCase()) || location && location.includes(liveSelect.toLowerCase()));
         });
       });
     }
-  }, [liveSearch, properties]); // Re-run the effect when liveSearch or properties change
+  }, [liveSearch, liveSelect, properties]); // Re-run the effect when liveSearch or properties change
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLiveSearch(e.target.value); // Update the liveSearch state
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setLiveSearch(e.target.value);
+    // Update the liveSearch state
+    setLiveSelect(e.target.value);
   };
 
   const handleResultsPerPageChange = (newLimit: number) => {
@@ -108,7 +111,7 @@ const ItemPropertyList = () => {
       {error && <p className="text-red-500">{error}</p>}
 
       {/* Search Input */}
-      <FromDataListProperty liveSearch={liveSearch} onChange={handleChange} />
+      <FromDataListProperty liveSearch={liveSearch} onChange={handleChange} setSelectedLocation={handleChange} selectedLocation={liveSelect} />
 
       {/* Properties List */}
       {!loading && searchState.length > 0 ? (
