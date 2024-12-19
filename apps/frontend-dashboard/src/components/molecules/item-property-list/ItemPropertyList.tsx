@@ -11,15 +11,15 @@ import FromDataListProperty from "../from-data-list/FromDataList";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 
 const ItemPropertyList = () => {
-  const [liveSearch , setLiveSearch] = useState("");
-  const [searchState , setSearchState] = useState<RealEstateItem[]>([]);
-  const { 
-    properties, 
-    loading, 
-    error, 
-    pagination, 
-    fetchProperties, 
-    deleteProperty ,
+  const [liveSearch, setLiveSearch] = useState("");
+  const [searchState, setSearchState] = useState<RealEstateItem[]>([]);
+  const {
+    properties,
+    loading,
+    error,
+    pagination,
+    fetchProperties,
+    deleteProperty,
     updatePropertyStatus
   } = useProperties();
 

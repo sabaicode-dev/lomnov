@@ -1,7 +1,9 @@
+"use client";
+
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Search from "@/components/organisms/search/Search";
-import {IoSearch} from "react-icons/io5"
+import { IoSearch } from "react-icons/io5"
 import { LuFilter } from "react-icons/lu";
 
 //=========================
@@ -72,15 +74,29 @@ const FormCustomerHeader = ({ item }: Item) => {
             <p className="text-[16px] font-[600] mb-[20px]">Filters</p>
             <form className="space-y-4">
               <div>
-              <label>Search customer*</label>
-                <div className="flex items-center text-Black w-[100%] h-[40px] rounded-xls text-[14px] p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px]  focus:outline-none focus:border-Primary/20">
+                <label>Search customer*</label>
+                <div className="flex items-center text-Black w-[100%] h-[40px] mb-4 rounded-xls text-[14px] p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px]  focus:outline-none focus:border-Primary/20">
                   <IoSearch className="text-gray-500 w-5 h-5 mr-2 " />
-                 <input
-                  type="text"
-                  placeholder="Customer Name/Contact"
-                  className="w-[200px] h-[42px] bg-transparent outline-none text-gray-600 placeholder-gray-400"
-                 />
+                  <input
+                    type="text"
+                    placeholder="Customer Name/Contact"
+                    className="w-[200px] h-[42px] bg-transparent outline-none text-gray-600 placeholder-gray-400"
+                  />
                 </div>
+                <label>Name*</label>
+                <select
+                  value={selectedRole}
+                  onChange={(e) => setSelectedRole(e.target.value)}
+                  className="text-Black w-[100%] h-[40px] rounded-xls text-[14px] p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px]  focus:outline-none focus:border-Primary/20"
+                >
+                  <option value="">Select A-Z</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                  <option value="D">D</option>
+                  <option value="E">E</option>
+                  <option value="F">F</option>
+                </select>
               </div>
             </form>
           </div>
