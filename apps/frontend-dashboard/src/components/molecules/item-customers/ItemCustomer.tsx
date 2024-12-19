@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react'
+import React from 'react'
 import Link from 'next/link';
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -18,19 +18,11 @@ interface PropType {
 }
 
 const ItemCustomer = ({ item, onDelete }: PropType) => {
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
 
-  const handleDeleteClick = () => {
-    setIsPopupVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsPopupVisible(false);
-  };
-
-  const handleConfirmDelete = () => {
-    onDelete(item._id);
-    setIsPopupVisible(false);
+  const handleDelete = () => {
+    console.log("Username in handle delete:: ", item.userName);
+    
+    onDelete(item.userName);
   };
 
   return (
@@ -45,37 +37,18 @@ const ItemCustomer = ({ item, onDelete }: PropType) => {
         <CardDate datetime={formatDate(item.createdAt)} />
       </div>
       <div className='flex items-center justify-around gap-[10px] w-[5%]'>
-        <Link href={`/dashboard/view-customer/${item._id}`}>
+        <Link href={`/dashboard/view-customer/${item.userName}`}>
           <div className='p-[4px] w-[24px] h-[24px]  bg-Primary/20 rounded-[6px] cursor-pointer '>
             <MdOutlineRemoveRedEye className='text-[16px] text-Primary' />
           </div>
         </Link>
-        <div className='p-[4px] w-[24px] h-[24px]  bg-Negative/20 rounded-[6px] cursor-pointer '>
-          <RiDeleteBin6Line className='text-[16px] text-Negative' onClick={handleDeleteClick} />
-        </div>
+        <button 
+          className="p-[4px] w-[24px] h-[24px]  bg-Negative/20 rounded-[6px] cursor-pointer"
+          onClick={handleDelete}
+        >
+          <RiDeleteBin6Line className='text-[16px] text-Negative' />
+        </button>
       </div>
-      {isPopupVisible && (
-        <div className="absolute top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center z-50">
-          <div className="bg-white p-10 rounded-lg shadow-lg w-[400px]">
-            <h3 className="text-lg font-bold mb-4">Delete {item.userName}?</h3>
-            <p className="mb-4">Are you sure you would like to do this?</p>
-            <div className="flex justify-center gap-4">
-              <button
-                className="px-4 py-2 bg-gray-200 rounded-lg"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded-lg"
-                onClick={handleConfirmDelete}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

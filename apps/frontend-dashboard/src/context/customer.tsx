@@ -56,24 +56,37 @@ export const CustomerProvider = ({ children }: { children: ReactNode }) => {
     );
 
 
-    // Delete an customer by ID
+    // Delete an customer by userName
     const deleteCustomer = useCallback(
-        async (id: string) => {
+        async (username: string) => {
             setLoading(true);
             setError(null);
+    
             try {
-                await axiosInstance.delete(`${API_ENDPOINTS.USER}/${id}`);
-                // Update the local state to remove the deleted customer
-                setCustomers((prevCustomers) => prevCustomers.filter((customer) => customer._id !== id));
-            } catch (err) {
-                console.error("Error deleting customer:", err);
-                setError("Failed to delete the customer.");
+                console.log("Attempting to delete customer with username:", username);
+    
+                // Directly delete the customer by username
+                await axiosInstance.delete(`${API_ENDPOINTS.USER}`, {
+                    params: { username },
+                });
+    
+                // Update local state to reflect deletion
+                setCustomers((prevCustomers) =>
+                    prevCustomers.filter((customer) => customer.userName !== username)
+                );
+    
+                console.log("Customer deleted successfully.");
+            } catch (err: any) {
+                console.error("Error deleting customer:", err.response || err);
+                setError(
+                    err.response?.data?.message || "Failed to delete the customer."
+                );
             } finally {
                 setLoading(false);
             }
         },
         []
-    );
+    );       
 
     return (
         <CustomerContext.Provider

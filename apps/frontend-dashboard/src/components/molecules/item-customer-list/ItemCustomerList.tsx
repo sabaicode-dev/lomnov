@@ -6,7 +6,7 @@ import Pagenation from "@/components/molecules/pagenation/Pagenation";
 import Loading from "@/components/atoms/loading/Loading";
 import ItemCustomer from "../item-customers/ItemCustomer";
 import CustomerDataList from "../customer-data-list/CustomerDataList";
-import DeleteConfirmationModal from "@/components/atoms/deletePopUp/Delete-Pop-Up";
+import UserDeletePopup from "@/components/atoms/user-delete-popup/UserDeletePopup";
 import { CustomerResponseType } from "@/libs/types/api-customers/customer-response";
 
 const ItemCustomerList = () => {
@@ -59,8 +59,8 @@ const ItemCustomerList = () => {
         setCurrentPage(1);
     };
 
-    const openDeleteModal = (id: string) => {
-        setCustomerToDelete(id);
+    const openDeleteModal = (username: string) => {
+        setCustomerToDelete(username);
         setIsModalOpen(true);
     };
 
@@ -117,10 +117,11 @@ const ItemCustomerList = () => {
             )}
 
             {/* Delete Confirmation Modal */}
-            <DeleteConfirmationModal
+            <UserDeletePopup
                 isOpen={isModalOpen}
                 onClose={closeDeleteModal}
                 onDelete={confirmDelete}
+                userName={customerToDetele || undefined}
             />
         </div>
     );
