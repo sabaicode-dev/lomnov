@@ -87,13 +87,13 @@ const ItemProperty = ({ item, onDelete, onStatusChange }: PropType) => {
           <p>|</p>
           {item.status === true ? (
             <button
-              className="text-Positive px-[4px] bg-Positive/20 rounded-[4px] border-[0.3px] border-Positive text-[14px] flex items-center gap-[5px]"
+              className="text-Positive px-[4px] bg-Positive/20 rounded-[4px] cursor-not-allowed border-[0.3px] border-Positive text-[14px] flex items-center gap-[5px]"
             >
               <p>Publish</p>
             </button>
           ) : (
             <button
-              className="text-Negative px-[4px] bg-Negative/20 rounded-[4px] border-[0.3px] border-Negative text-[14px] flex justify-between items-center gap-[5px]"
+              className="text-Negative px-[4px] cursor-not-allowed bg-Negative/20 rounded-[4px] border-[0.3px] border-Negative text-[14px] flex justify-between items-center gap-[5px]"
             >
               <p>Private</p>
             </button>

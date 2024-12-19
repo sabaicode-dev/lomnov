@@ -21,7 +21,10 @@ const Slider =() => {
     const loadProperties = async () => {
       try {
         const fetchedItems = await fetchProperties();
-        setItems(fetchedItems); 
+        const data = fetchedItems.filter((data) => 
+          data.status === true && data.statusAdmin === true
+        );
+        setItems(data); 
       } catch (error) {
         setError('Failed to load properties');
       }finally{

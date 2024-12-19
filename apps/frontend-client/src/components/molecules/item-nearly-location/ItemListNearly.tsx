@@ -127,6 +127,10 @@ const ItemCartNearlyList = () => {
   const handleToggleCompare = (items: RealEstateItem[]) => {
     toggleCompare(items, selectedItems, setSelectedItems);
   };
+
+  const filterstatus = items.filter((data) => 
+    data.status === true && data.statusAdmin === true
+);
   return (
     <div>
       {error && <p>{error}</p>}
@@ -134,7 +138,7 @@ const ItemCartNearlyList = () => {
 
       {!loading && items.length > 0 ? (
         <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
-          {items.map((item) => {
+          {filterstatus.map((item) => {
           const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
           return (
             <ItemCard

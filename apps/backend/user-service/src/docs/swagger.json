@@ -253,7 +253,8 @@
 						"format": "double"
 					},
 					"limit": {
-						"type": "string"
+						"type": "number",
+						"format": "double"
 					},
 					"language": {
 						"type": "string"
@@ -739,7 +740,8 @@
 						"name": "limit",
 						"required": false,
 						"schema": {
-							"type": "string"
+							"format": "double",
+							"type": "number"
 						}
 					},
 					{
@@ -787,6 +789,27 @@
 						}
 					}
 				]
+			}
+		},
+		"/api/v1/users/agents": {
+			"get": {
+				"operationId": "GetUserAgents",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Get User Agents",
+					" User service"
+				],
+				"security": [],
+				"parameters": []
 			}
 		}
 	},
