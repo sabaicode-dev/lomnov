@@ -5,6 +5,8 @@ import { AuthContextType, LoginRequest, SignupRequest, VerifyUserRequest } from 
 import { useRouter } from "next/navigation";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+// Define API endpoints
+
 export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLogin: boolean }) => {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -64,44 +66,98 @@ export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLog
         }
     }
 
-    const signup = async ({ username, email, phone_number, password }: SignupRequest) => {
-        setLoading(true);
-        try {
-            await axiosInstance.post(`${API_ENDPOINTS.SIGN_UP}`, {
-                username,
-                [email ? 'email' : 'phone_number']: email || phone_number,
-                password
-            })
+    // const signup = async ({ username, email, phone_number, password , role  }: SignupRequest) => {
+    //     setLoading(true);
+    //     try {
+    //         await axiosInstance.post(`${API_ENDPOINTS.SIGN_UP}`, {
+    //             username,
+    //             [email ? 'email' : 'phone_number']: email || phone_number,
+    //             password,
+    //             role
+    //         })
 
-            // TODO: redirect to verify page with contact and method (email or phone_number)
-            router.push(`/verify?contact=${email || phone_number}&method=${email ? 'email' : 'phone_number'}`);
-        } catch (error) {
-            //  console.log('This error: ', error)
-            setIsAuthenticated(false);
-            throw error;
-        } finally {
-            setLoading(false);
-        }
+    //         // TODO: redirect to verify page with contact and method (email or phone_number)
+    //         router.push(`/verify?contact=${email || phone_number}&method=${email ? 'email' : 'phone_number'}`);
+    //     } catch (error) {
+    //         //  console.log('This error: ', error)
+    //         setIsAuthenticated(false);
+    //         throw error;
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
+
+
+    // const verify = async ({ email, phone_number, code }: VerifyUserRequest) => {
+    //     setLoading(true);
+    //     try {
+    //         await axiosInstance.post(`${API_ENDPOINTS.VERIFY}`, {
+    //             [email ? 'email' : 'phone_number']: email || phone_number,
+    //             code
+    //         })
+
+    //         router.push('/login');
+    //     } catch (error) {
+    //         console.error('Verify failed:', error);
+    //         setIsAuthenticated(false);
+    //         throw error;
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
+    // Signup function
+  const signup = async ({
+    username,
+    email,
+    phone_number,
+    password,
+    role,
+  }: SignupRequest) => {
+    setLoading(true);
+    try {
+      const contact = email || phone_number;
+      const method = email ? "email" : "phone_number";
+
+      await axiosInstance.post(API_ENDPOINTS.SIGN_UP, {
+        username,
+        [method]: contact,
+        password,
+        role,
+      });
+
+      // Redirect to verify page with contact and method
+    //   router.push(`/verify?contact=${contact}&method=${method}`);
+    } catch (error) {
+      console.error("Signup error:", error);
+      setIsAuthenticated(false);
+      throw error;
+    } finally {
+      setLoading(false);
     }
+  };
 
+  // Verify function
+  const verify = async ({ email, phone_number, code }: VerifyUserRequest) => {
+    setLoading(true);
+    try {
+      const contact = email || phone_number;
+      const method = email ? "email" : "phone_number";
 
-    const verify = async ({ email, phone_number, code }: VerifyUserRequest) => {
-        setLoading(true);
-        try {
-            await axiosInstance.post(`${API_ENDPOINTS.VERIFY}`, {
-                [email ? 'email' : 'phone_number']: email || phone_number,
-                code
-            })
+      await axiosInstance.post(API_ENDPOINTS.VERIFY, {
+        [method]: contact,
+        code,
+      });
 
-            router.push('/login');
-        } catch (error) {
-            console.error('Verify failed:', error);
-            setIsAuthenticated(false);
-            throw error;
-        } finally {
-            setLoading(false);
-        }
+      // Redirect to login after successful verification
+      
+    } catch (error) {
+      console.error("Verification error:", error);
+      setIsAuthenticated(false);
+      throw error;
+    } finally {
+      setLoading(false);
     }
+  };
 
     const siginWithGoogle = async () => {
         setLoading(true);

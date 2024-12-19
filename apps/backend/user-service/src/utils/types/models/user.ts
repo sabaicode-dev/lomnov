@@ -21,4 +21,5 @@ export interface User {
   background?: string[];
   favorite?: FavoriteItem[] | undefined;
   role?: string;
+  status?: boolean;
 }

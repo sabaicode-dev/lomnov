@@ -289,4 +289,17 @@ export class UserService {
       throw error;
     }
   }
+
+  //status user
+  public async updatestatusUser( userId : string , status : boolean) : Promise<ResponseUserDTO | null> {
+    try {
+      const updateStaus = await this.userRepository.updateStatus(userId,status);
+      if(!updateStaus){
+        console.log("Update state False")
+      }
+      return updateStaus;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

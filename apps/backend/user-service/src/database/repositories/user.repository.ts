@@ -42,6 +42,20 @@ export class UserRepository {
       }
     }
   }
+  //status user
+
+  public async updateStatus(userId : string , status : boolean) : Promise<ResponseUserDTO | null>{
+    try {
+      const updateStatususer = await UserModel.findByIdAndUpdate(
+        {_id : userId},
+        {$set:{status} },
+        {new : true}
+      )
+      return updateStatususer;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   public async getMet(cognitoSub: string): Promise<ResponseUserDTO | null> {
     try {
