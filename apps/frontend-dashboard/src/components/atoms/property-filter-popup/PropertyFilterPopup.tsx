@@ -54,7 +54,7 @@ const PropertyFilterPopup = ({onClose,selectedTransition,setSelectedTransition,s
           >
             <option value="">Your city/province</option>
             <option value="Phnom Penh">Phnom Penh</option>
-            <option value="Kom PongCham">Kom PongCham</option>
+            <option value="Kep">Kep</option>
             <option value="Svay Reng">Svay Reng</option>
             <option value="Kep">Kep</option>
           </select>

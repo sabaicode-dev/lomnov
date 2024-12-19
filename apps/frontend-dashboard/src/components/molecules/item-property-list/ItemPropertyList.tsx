@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useEffect, useState } from "react";
@@ -13,54 +12,69 @@ import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 const ItemPropertyList = () => {
   const [liveSearch, setLiveSearch] = useState<string>("");
   const [liveSelect, setLiveSelect] = useState<string>("");
+  const [selectTransition, setSelectedTransition] = useState<string>("");
   const [searchState, setSearchState] = useState<RealEstateItem[]>([]);
-  const {
-    properties,
-    loading,
-    error,
-    pagination,
-    fetchProperties,
-    deleteProperty,
-    updatePropertyStatus
-  } = useProperties();
-
+  const [selectState, setSelectState] = useState<RealEstateItem[]>([]);
+  const { properties, loading, error, pagination, fetchProperties, deleteProperty, updatePropertyStatus } = useProperties();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [resultsPerPage, setResultsPerPage] = useState<number>(10);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [propertyToDelete, setPropertyToDelete] = useState<string | null>(null);
+
   // Fetch properties when current page or results per page changes
   useEffect(() => {
     fetchProperties({ page: currentPage, limit: resultsPerPage });
   }, [currentPage, resultsPerPage, fetchProperties]);
 
-  // Update search results on live search input change
+  // Update search results based on liveSearch input
   useEffect(() => {
-    if (liveSearch.trim() === "" || liveSelect.trim() === "") {
-      setSearchState(properties); // Show all properties when search is cleared
-    } else {
-      setSearchState(() => {
-        return properties.filter(item => {
-          const title = item.title[0]?.content?.toLowerCase();
-          const category = item.category[0]?.content?.toLowerCase();
-          const price = item?.price.toString();
-          const location = item?.location[0]?.content?.toLowerCase();
+    const filteredProperties = properties.filter(item => {
+      const title = item.title[0]?.content?.toLowerCase();
+      const category = item.category[0]?.content?.toLowerCase();
+      const price = item?.price.toString();
+      const location = item?.location[0]?.content?.toLowerCase();
 
-          // Check if either title or category matches the liveSearch query
-          return (title && title.includes(liveSearch.toLowerCase())) ||
-            (category && category.includes(liveSearch.toLowerCase()))
-            || (price && price.includes(liveSearch)) || (location && location.includes(liveSearch.toLowerCase()) || location && location.includes(liveSelect.toLowerCase()));
-        });
-      });
-    }
-  }, [liveSearch, liveSelect, properties]); // Re-run the effect when liveSearch or properties change
+      return (
+        (title && title.includes(liveSearch.toLowerCase())) ||
+        (category && category.includes(liveSearch.toLowerCase())) ||
+        (price && price.includes(liveSearch)) ||
+        (location && location.includes(liveSearch.toLowerCase()))
+      );
+    });
+
+    setSearchState(filteredProperties);
+  }, [liveSearch, properties]);
+  // Update select results based on liveSelect input
+  useEffect(() => {
+    const filteredProperties = properties.filter(item => {
+      const location = item?.location[0]?.content?.toLowerCase().trim() ?? "";
+      const transition = item?.transition[0]?.content?.toLowerCase().trim() ?? "";
+
+      const trimmedLiveSelect = liveSelect.toLowerCase().trim();
+      const trimmedSelectTransition = selectTransition.toLowerCase().trim();
+
+      // // Debugging logs
+      // console.log("Live Select Input (Trimmed):", trimmedLiveSelect);
+      // console.log("Property Location (Trimmed):", location);
+      console.log(trimmedSelectTransition === transition);
+      
+      // Filter by location or transition
+      return location.includes(trimmedLiveSelect) && transition.includes(trimmedSelectTransition)
+    });
+    console.log(filteredProperties);
+    
+    setSelectState(filteredProperties);
+  }, [liveSelect, properties, selectTransition]);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLiveSearch(e.target.value);
-    // Update the liveSearch state
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLiveSelect(e.target.value);
   };
 
@@ -87,42 +101,45 @@ const ItemPropertyList = () => {
       try {
         await deleteProperty(propertyToDelete);
         closeDeleteModal();
-        // Fetch updated properties only after deletion
         fetchProperties({ page: currentPage, limit: resultsPerPage });
       } catch (err) {
         console.error("Failed to delete property:", err);
       }
     }
   };
+
   const handleStatusChange = async (id: string, newStatus: boolean) => {
     try {
-      // Call your API to update the status (true for public, false for private)
       await updatePropertyStatus(id, newStatus);
-      // Refetch properties to update the list
       fetchProperties({ page: currentPage, limit: resultsPerPage });
     } catch (error) {
       console.error("Error updating status:", error);
     }
   };
 
-
   return (
     <div>
       {error && <p className="text-red-500">{error}</p>}
 
-      {/* Search Input */}
-      <FromDataListProperty liveSearch={liveSearch} onChange={handleChange} setSelectedLocation={handleChange} selectedLocation={liveSelect} />
+      {/* Search and Select Filters */}
+      <FromDataListProperty
+        liveSearch={liveSearch}
+        onChange={handleSearchChange}
+        setSelectedLocation={handleSelectChange}
+        selectedLocation={liveSelect}
+        selectedTransition={selectTransition}
+        setSelectedTransition={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedTransition(e.target.value)}
+      />
 
       {/* Properties List */}
-      {!loading && searchState.length > 0 ? (
+      {!loading && (liveSearch ? searchState.length : selectState.length) > 0 ? (
         <div>
-          {searchState.map((item) => (
+          {(liveSearch ? searchState : selectState).map(item => (
             <ItemProperty
               key={item._id}
               item={item}
-              onDelete={openDeleteModal} // Pass openDeleteModal to handle delete
+              onDelete={openDeleteModal}
               onStatusChange={handleStatusChange}
-
             />
           ))}
 
@@ -133,7 +150,6 @@ const ItemPropertyList = () => {
               totalResults={pagination.totalProperty}
               resultsPerPage={resultsPerPage}
               onPageChange={handlePageChange}
-
               onResultsPerPageChange={handleResultsPerPageChange}
             />
           )}
