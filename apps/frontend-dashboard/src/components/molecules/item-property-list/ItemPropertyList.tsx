@@ -24,7 +24,7 @@ const ItemPropertyList = () => {
   } = useProperties();
 
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [resultsPerPage, setResultsPerPage] = useState<number>(4);
+  const [resultsPerPage, setResultsPerPage] = useState<number>(10);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [propertyToDelete, setPropertyToDelete] = useState<string | null>(null);
 

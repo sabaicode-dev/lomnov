@@ -43,7 +43,11 @@ const page = async ({ params }: { params: { id: string } }) => {
           />
         </div>
         <div className="w-[30%]">
-        <Status status={property.status} />
+        <Status 
+          status={property.status}
+          createdAt={property.createdAt}
+          updatedAt={property.updatedAt}
+        />
         </div>
       </div>
 

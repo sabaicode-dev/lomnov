@@ -39,8 +39,8 @@ const ItemAgents = ({ item, onDelete }: PropType) => {
         <CardUser usernname={item.userName} image={item.profile[0]} />
       </div>
       <div className="flex justify-between items-center w-[65%]">
-        <div className="w-[200px] flex justify-start">
-          <p>{item.address}</p>
+        <div className="w-[200px] flex justify-start items-center">
+          <p>{toSubstring(item.address,30)}</p>
         </div>
         <CardEmail email={item.email} />
         <div className="w-[200px] flex justify-start">
