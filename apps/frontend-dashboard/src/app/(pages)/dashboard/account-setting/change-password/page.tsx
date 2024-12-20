@@ -19,13 +19,13 @@ const page = () => {
           <div className="mt-[20px]">
             <p className="text-Black text-[20px] font-[600]">James L. Erickson</p>
             <p className="text-Primary">erich@gmail.com</p>
-            <Link href={"/account-setting/profile"}>
+            <Link href={"/dashboard/account-setting/profile"}>
               <div className="w-[223px] mt-[30px] bg-none flex justify-start gap-[10px] text-Black text-[16px] items-center px-[12px] py-[5px] h-[38px] rounded-sm">
                 <MdOutlinePersonOutline className="text-[20px] " />
                 <p>Profile</p>
               </div>
             </Link>
-            <Link href={"/account-setting/change-password"}>
+            <Link href={"/dashboard/account-setting/change-password"}>
               <div className="w-[223px] bg-Primary flex mt-[10px] justify-start gap-[10px] text-BgSoftWhite text-[16px] items-center px-[12px] py-[5px] h-[38px] rounded-sm ">
                 <PiLockKeyLight  className="text-[20px] " />
                 <p>Change Password</p>
