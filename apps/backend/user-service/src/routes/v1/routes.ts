@@ -121,9 +121,9 @@ const models: TsoaRoute.Models = {
     "RequestPropertyClientQuery": {
         "dataType": "refObject",
         "properties": {
-            "page": {"dataType":"union","subSchemas":[{"dataType":"double"},{"dataType":"undefined"}]},
-            "limit": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
-            "language": {"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"undefined"}]},
+            "page": {"dataType":"double"},
+            "limit": {"dataType":"double"},
+            "language": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -536,6 +536,35 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'updateStatusUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/api/v1/users/agents',
+            ...(fetchMiddlewares<RequestHandler>(UserController)),
+            ...(fetchMiddlewares<RequestHandler>(UserController.prototype.getUserAgents)),
+
+            async function UserController_getUserAgents(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new UserController();
+
+              await templateService.apiHandler({
+                methodName: 'getUserAgents',
                 controller,
                 response,
                 next,

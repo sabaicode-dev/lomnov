@@ -306,10 +306,8 @@ export class UserService {
         try {
             // Step 1: Get all users
             const users = await this.userRepository.findUserAgents();
-
             // Step 2: Get all properties from the property-service
             const subs = await this.httpPropertiesServiceClient.getAllCognitoSubProperties();
-
             // Step 3: Create a map of CognitoSub to properties
             const propertiesMap = subs.reduce((map: Record<string, any[]>, property: any) => {
                 const { cognitoSub } = property; // Adjust this field based on your actual property schema                
