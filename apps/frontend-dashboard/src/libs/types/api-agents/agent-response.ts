@@ -20,4 +20,5 @@ export interface AgentResponseType {
   }>;
   createdAt: string;
   updatedAt: string;
+  status: boolean;
 }

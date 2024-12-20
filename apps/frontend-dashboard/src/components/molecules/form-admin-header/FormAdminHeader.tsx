@@ -1,3 +1,4 @@
+"use client"
 import React, {useState, useRef, useEffect} from "react";
 import Link from "next/link";
 import Search from "@/components/organisms/search/Search";
@@ -15,14 +16,16 @@ interface Data {
     data3 : string;
     data4 : string;
 }
-interface Item {
-    item : Data;
+
+interface IFromDataListProperty {
+  liveSearch: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  item : Data
 }
 
-const FormAdminHeader = ({item}:Item) => {
+const FormAdminHeader = ({item , liveSearch, onChange}:IFromDataListProperty) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
-  const [searchQuery, setSearchQuery] = useState<string>("");
   const filterRef = useRef<HTMLDivElement>(null);
 
   //Toggle filter popup
@@ -42,9 +45,7 @@ const FormAdminHeader = ({item}:Item) => {
   }, []);
 
   // Handle the change of search input
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
+
 
   return (
     <div className="w-[100%] h-auto bg-BgSoftWhite mt-[40px] relative">
@@ -59,7 +60,7 @@ const FormAdminHeader = ({item}:Item) => {
         </Link>
       </div>
       <div className="bg-Primary/10 w-[100%] flex justify-end gap-[10px] p-[10px] items-center">
-        <Search liveSearch={searchQuery} onChange={handleSearchChange}/>
+        <Search liveSearch={liveSearch} onChange={onChange}/>
         <div 
           className="bg-BgSoftWhite rounded-sm w-[40px] h-[40px] flex items-center justify-center cursor-pointer"
           onClick={handleFilterClick}
