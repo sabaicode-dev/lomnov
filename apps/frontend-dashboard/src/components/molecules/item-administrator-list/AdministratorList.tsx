@@ -8,20 +8,20 @@ import ItemAdminstrator from "../item-administator/ItemAdminstrator";
 import { CustomerResponseType } from "@/libs/types/api-customers/customer-response";
 import FormAdminHeader from "@/components/molecules/form-admin-header/FormAdminHeader";
 const AdministratorList = () => {
-   const [liveSearch, setLiveSearch] = useState("");
-    const [searchState, setSearchState] = useState<CustomerResponseType[]>([]);
+  const [liveSearch, setLiveSearch] = useState("");
+  const [searchState, setSearchState] = useState<CustomerResponseType[]>([]);
 
-const dataFromAgents = {
-  data_list : "Administator",
-  name_data : "Administrator",
-  url : "/dashboard/add-new-administrator",
-  addnew : "+ New Administrator",
-  namedata : "Administrator",
-  data1 : "Email",
-  data2 : "Status",
-  data3 : "Role",
-  data4 : "Create At"
-}
+  const dataFromAgents = {
+    data_list: "Administator",
+    name_data: "Administrator",
+    url: "/dashboard/add-new-administrator",
+    addnew: "+ New Administrator",
+    namedata: "Administrator",
+    data1: "Email",
+    data2: "Status",
+    data3: "Role",
+    data4: "Create At",
+  };
 
   const {
     customers, // Fetch customers from context
@@ -31,24 +31,27 @@ const dataFromAgents = {
     fetchCustomers,
   } = useCustomers();
 
-   useEffect(() => {
-      if (liveSearch.trim() === "") {
-        setSearchState(customers, // Fetch customers from context
-        ); // Show all properties when search is cleared
-      } else {
-        setSearchState(() => {
-          return customers.filter(item => {
-            const username = item.userName.toLocaleLowerCase();
-            const role = item.role.toLocaleLowerCase();
-           
-            // Check if either title or category matches the liveSearch query
-            return (username && username.includes(liveSearch.toLowerCase())) ||
-              (role && role.includes(liveSearch.toLowerCase()));
-          });
+  useEffect(() => {
+    if (liveSearch.trim() === "") {
+      setSearchState(
+        customers // Fetch customers from context
+      ); // Show all properties when search is cleared
+    } else {
+      setSearchState(() => {
+        return customers.filter((item) => {
+          const username = item.userName.toLocaleLowerCase();
+          const email = item.email.toLocaleLowerCase();
+
+          // Check if either title or category matches the liveSearch query
+          return (
+            (username && username.includes(liveSearch.toLowerCase())) ||
+            (email && email.includes(liveSearch.toLowerCase()))
+          );
         });
-      }
-    }, [liveSearch, customers]); // Re-run the effect when liveSearch or properties change
-  
+      });
+    }
+  }, [liveSearch, customers]); // Re-run the effect when liveSearch or properties change
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLiveSearch(e.target.value); // Update the liveSearch state
   };
@@ -68,14 +71,18 @@ const dataFromAgents = {
     setResultsPerPage(newLimit);
     setCurrentPage(1);
   };
-  
-  const filtercustomer = searchState.filter((data) =>
-    data.role === "admin" || data.role === "Admin"
+
+  const filtercustomer = searchState.filter(
+    (data) => data.role === "admin" || data.role === "Admin"
   );
 
   return (
     <div>
-        <FormAdminHeader item={dataFromAgents} onChange={handleChange} liveSearch={liveSearch} />
+      <FormAdminHeader
+        item={dataFromAgents}
+        onChange={handleChange}
+        liveSearch={liveSearch}
+      />
       {/* Display error if exists */}
       {error && <p className="text-red-500">{error}</p>}
 
@@ -97,15 +104,15 @@ const dataFromAgents = {
               ))}
 
               {/* Pagination Component */}
-              {pagination && pagination.totalPages > 1 && (
-                <Pagenation
-                  currentPage={currentPage}
-                  totalResults={pagination.totalCustomers}
-                  resultsPerPage={resultsPerPage}
-                  onPageChange={handlePageChange}
-                  onResultsPerPageChange={handleResultsPerPageChange}
-                />
-              )}
+              {pagination && pagination.currentPage > 0 && (
+                        <Pagenation
+                            currentPage={currentPage}
+                            totalResults={pagination.totalCustomers}
+                            resultsPerPage={resultsPerPage}
+                            onPageChange={handlePageChange}
+                            onResultsPerPageChange={handleResultsPerPageChange}
+                        />
+                    )}
             </div>
           ) : (
             <p>No customers found.</p>
