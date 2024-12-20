@@ -20,4 +20,5 @@ export interface CustomerResponseType {
     }>;
     createdAt: string;
     updatedAt: string;
+    status: boolean;
 }

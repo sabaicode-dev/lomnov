@@ -66,46 +66,6 @@ export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLog
         }
     }
 
-    // const signup = async ({ username, email, phone_number, password , role  }: SignupRequest) => {
-    //     setLoading(true);
-    //     try {
-    //         await axiosInstance.post(`${API_ENDPOINTS.SIGN_UP}`, {
-    //             username,
-    //             [email ? 'email' : 'phone_number']: email || phone_number,
-    //             password,
-    //             role
-    //         })
-
-    //         // TODO: redirect to verify page with contact and method (email or phone_number)
-    //         router.push(`/verify?contact=${email || phone_number}&method=${email ? 'email' : 'phone_number'}`);
-    //     } catch (error) {
-    //         //  console.log('This error: ', error)
-    //         setIsAuthenticated(false);
-    //         throw error;
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // }
-
-
-    // const verify = async ({ email, phone_number, code }: VerifyUserRequest) => {
-    //     setLoading(true);
-    //     try {
-    //         await axiosInstance.post(`${API_ENDPOINTS.VERIFY}`, {
-    //             [email ? 'email' : 'phone_number']: email || phone_number,
-    //             code
-    //         })
-
-    //         router.push('/login');
-    //     } catch (error) {
-    //         console.error('Verify failed:', error);
-    //         setIsAuthenticated(false);
-    //         throw error;
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // }
-    // Signup function
   const signup = async ({
     username,
     email,
@@ -125,8 +85,6 @@ export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLog
         role,
       });
 
-      // Redirect to verify page with contact and method
-    //   router.push(`/verify?contact=${contact}&method=${method}`);
     } catch (error) {
       console.error("Signup error:", error);
       setIsAuthenticated(false);
@@ -177,7 +135,7 @@ export const AuthProvider = ({ children, isLogin }: { children: ReactNode, isLog
     const logout = async () => {
         setLoading(true);
         try {
-            await axiosInstance.post(API_ENDPOINTS.LOGOUT); // Call the logout endpoint
+            await axiosInstance.post(API_ENDPOINTS.LOGOUT);
             setIsAuthenticated(false);
             setUser(null);
             router.push('/');
