@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-'use client'
+"use client";
+
 import Input from '@/components/atoms/InputField/Input';
 import ProfileImage from '@/components/atoms/profile-image/ProfileImage';
 import { useAuth } from '@/context/useAuth';
@@ -11,6 +12,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { MdOutlinePersonOutline } from "react-icons/md";
 import { PiLockKeyLight } from "react-icons/pi";
 
+//===================
 export default function AccountSetting() {
     const { user } = useAuth();
     const [users, setUsers] = useState<User | null>(null);

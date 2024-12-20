@@ -64,9 +64,9 @@ const FormAdminHeader = ({
           </button>
         </Link>
       </div>
-      <div className="bg-Primary/10 w-[100%] flex justify-end gap-[10px] p-[10px] items-center">
-        <Search liveSearch={liveSearch} onChange={onChange} />
-        <div
+      <div className="bg-Primary/10 w-[100%] flex justify-end gap-[10px] p-[10px] items-center relative">
+        <Search liveSearch={liveSearch} onChange={onChange}/>
+        <div 
           className="bg-BgSoftWhite rounded-sm w-[40px] h-[40px] flex items-center justify-center cursor-pointer"
           onClick={handleFilterClick}
           ref={filterRef}
