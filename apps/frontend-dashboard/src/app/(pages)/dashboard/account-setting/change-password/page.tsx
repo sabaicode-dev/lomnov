@@ -1,31 +1,44 @@
-import React from "react";
+"use client";
+
+import React,{ useState, useEffect } from "react";
+import { useAuth } from "@/context/useAuth";
 import { MdOutlinePersonOutline } from "react-icons/md";
+import ProfileImage from "@/components/atoms/profile-image/ProfileImage";
 import Link from "next/link";
+import { User } from "@/libs/types/auth/auth.type";
 import { PiLockKeyLight } from "react-icons/pi";
+
+//====================
 const page = () => {
+  const { user } = useAuth();
+      const [users, setUsers] = useState<User | null>(null);
+      // const [loading, setLoading] = useState<boolean>(false)
+      const usernameAtprofile = user?.userName;
+      const mailAtProfile = user?.email;
+      useEffect(() => {
+          if (user) {
+              setUsers(user);
+          }
+      }, [user]);
+
   return (
     <div>
       <p className="text-[30px] font-black ">Account Setting</p>
       <div className="w-[100%] flex justify-between  mt-[50px]">
         <div className="w-[20%]  grid gap-4 grid-cols-1">
           <div className="flex justify-start relative">
-            <div className="bg-BgSoftWhite rounded-[50%] w-[240px] h-[240px] flex items-center justify-center">
-              <MdOutlinePersonOutline className="w-[180px] h-[180px] text-Black  " />
-            </div>
-            <div className="w-[58px] h-[58px] bg-Primary flex items-center justify-center rounded-full absolute mt-[200px] ml-[150px]">
-              <p className="text-[33px] text-BgSoftWhite ">+</p>
-            </div>
+            <ProfileImage profile={users?.profile ?? []}/>
           </div>
           <div className="mt-[20px]">
-            <p className="text-Black text-[20px] font-[600]">James L. Erickson</p>
-            <p className="text-Primary">erich@gmail.com</p>
-            <Link href={"/account-setting/profile"}>
+            <p className="text-Black text-[20px] font-[600]">{usernameAtprofile}</p>
+            <p className="text-Primary">{mailAtProfile}</p>
+            <Link href={"/dashboard/account-setting/profile"}>
               <div className="w-[223px] mt-[30px] bg-none flex justify-start gap-[10px] text-Black text-[16px] items-center px-[12px] py-[5px] h-[38px] rounded-sm">
                 <MdOutlinePersonOutline className="text-[20px] " />
                 <p>Profile</p>
               </div>
             </Link>
-            <Link href={"/account-setting/change-password"}>
+            <Link href={"/dashboard/account-setting/change-password"}>
               <div className="w-[223px] bg-Primary flex mt-[10px] justify-start gap-[10px] text-BgSoftWhite text-[16px] items-center px-[12px] py-[5px] h-[38px] rounded-sm ">
                 <PiLockKeyLight  className="text-[20px] " />
                 <p>Change Password</p>
