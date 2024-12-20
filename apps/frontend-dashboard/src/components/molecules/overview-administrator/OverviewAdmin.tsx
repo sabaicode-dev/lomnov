@@ -1,98 +1,132 @@
-import React from "react";
-import { TbPhoto } from "react-icons/tb";
-import { MdFormatListBulleted } from "react-icons/md";
-import { FaLink, FaStrikethrough } from "react-icons/fa6";
-import { FiItalic, FiUnderline, FiBold } from "react-icons/fi";
+"use client";
+
+import React, { useState } from "react";
+import InputField from "@/components/atoms/input-field/InputField";
+import { CustomerResponseType } from "@/libs/types/api-customers/customer-response";
 
 //=============================================
-const OverviewAdmin = () => {
+interface ItemProps {
+  item: CustomerResponseType;
+}
+
+const OverviewAdministrator = ({ item }: ItemProps) => {
+  const [formData, setFormData] = useState(item);
+
+  // Handler for input changes
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    field: string
+  ) => {
+    const { value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   return (
     <div className="w-[100%] mt-[40px] p-[24px] bg-[#F3F4F6] rounded-xls">
-           <p className="text-[20px] font-[600] mb-[20px]">Overview</p>
-      <form className="w-[100%] text-Black">
- 
+      <p className="text-[20px] font-[600] mb-[20px]">Overview</p>
+      <form className="w-[100%] text-black">
         <div className="w-[100%]">
-          <label>Username*</label>
-          <input
-            type="text"
-            placeholder="username"
-            className="text-Black w-[100%] h-[40px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px] rounded-xls p-[10px]  focus:outline-none focus:border-Primary/20"
+          {/* Username */}
+          <InputField
+            label="Username*"
+            placeholder="Username"
+            value={formData.userName || ""}
+            onChange={(e) => handleChange(e, "userName")}
+            readOnly
           />
         </div>
         <div className="w-[100%] grid gap-4 grid-cols-2 mt-[20px]">
           <div className="w-[100%] block">
-            <label>FirstName</label>
-            <input
-              type="text"
-              placeholder="firstname"
-              className="text-Black w-[100%] h-[40px] rounded-xls p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px]  focus:outline-none focus:border-Primary/20"
+            <InputField
+              label="FirstName*"
+              placeholder="Firstname"
+              value={formData.firstName || ""}
+              onChange={(e) => handleChange(e, "firstName")}
+              readOnly
             />
           </div>
           <div className="w-[100%] block">
-            <label>LastName</label>
-            <input
-              type="text"
-              placeholder="lastname"
-              className="text-Black w-[100%] h-[40px] rounded-xls p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px]  focus:outline-none focus:border-Primary/20"
+            <InputField
+              label="LastName*"
+              placeholder="Lastname"
+              value={formData.lastName || ""}
+              onChange={(e) => handleChange(e, "lastName")}
+              readOnly
             />
           </div>
           <div className="w-[100%] mt-[5px]">
-            <label>Email</label>
-            <input
-              type="email"
-              placeholder="email"
-              className="text-Black w-[100%] h-[40px] rounded-xls p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px] focus:outline-none focus:border-Primary/20"
+            <InputField
+              label="Email*"
+              placeholder="Email"
+              value={formData.email || ""}
+              onChange={(e) => handleChange(e, "email")}
+              readOnly
             />
           </div>
           <div className="w-[100%] mt-[5px]">
-            <label>Contact</label>
-            <input
-              type="number"
-              placeholder="phonenumber"
-              className="text-Black w-[100%] h-[40px] rounded-xls p-[10px]  bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px]  focus:outline-none focus:border-Primary/20"
+            <InputField
+              label="Contact*"
+              placeholder="Phone Number"
+              value={formData.phoneNumber || ""}
+              onChange={(e) => handleChange(e, "phoneNumber")}
+              readOnly
             />
+          </div>
+          <div className="w-[100%] mt-[5px]">
+            <label>Status*</label>
+            <br />
+            <div className="flex justify-start gap-[20px] mt-[20px]">
+              <div>
+                <input
+                  type="radio"
+                  name="status"
+                  checked={item.status === true}
+                  readOnly
+                />
+                Active
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  name="status"
+                  checked={item.status === false}
+                  readOnly
+                />
+                Inactive
+              </div>
+            </div>
+          </div>
+          <div className="w-[100%] mt-[5px]">
+            <label>Role*</label>
+            <br />
+            <div className="flex justify-start gap-[20px] mt-[20px]">
+              <div>
+                <input
+                  type="radio"
+                  name="role"
+                  checked={item.role === "admin"}
+                  readOnly
+                />
+                Admin
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  name="role"
+                  checked={item.role === "user"}
+                  readOnly
+                />
+                User
+              </div>
+            </div>
           </div>
         </div>
       </form>
-      <div className="w-[100%]  mt-[20px]">
-        <label className="block  font-medium text-Black mb-[4px]">
-          Description
-        </label>
-        <div className="border rounded-xls border-gray-300 shadow-sm w-[100%]">
-          <div className="flex items-center space-x-4 p-2 bg-gray-100 border-b border-gray-300">
-            <button className="p-1 text-gray-500 hover:text-gray-700">
-              <FiBold />
-            </button>
-            <button className="p-1 text-gray-500 hover:text-gray-700">
-              <FaStrikethrough />
-            </button>
-            <button className="p-1 text-gray-500 hover:text-gray-700">
-              <FiUnderline />
-            </button>
-            <button className="p-1 text-gray-500 hover:text-gray-700">
-              <FiItalic />
-            </button>
-            <button className="p-1 text-gray-500 hover:text-gray-700">
-              <FaLink />
-            </button>
-            <button className="p-1 text-gray-500 hover:text-gray-700">
-              <MdFormatListBulleted />
-            </button>
-            <button className="p-1 text-gray-500 hover:text-gray-700">
-              <TbPhoto />
-            </button>
-          </div>
-          <textarea
-        
-            placeholder="Type your description here..."
-            className="w-full h-[150px] p-2 border-0 outline-none bg-BgSoftWhite rounded-xls focus:ring-0"
-          />
-        </div>
-      </div>
     </div>
   );
 };
 
-
-export default OverviewAdmin;
+export default OverviewAdministrator;

@@ -28,20 +28,22 @@ const ItemCustomerList = () => {
         if (!customers || customers.length === 0) {
             setSearchState([]);
         } else if (liveSearch.trim() === "") {
-            setSearchState(customers); // Show all customers when search is cleared
+            setSearchState(customers.filter((data) => data.role === "user" || data.role === "User"));
         } else {
             setSearchState(() => {
-                return customers.filter((item) => {
-                    const userName = item.userName?.toLowerCase();
-                    const email = item.email?.toLowerCase();
-                    const phoneNumber = item.phoneNumber?.toString();
+                return customers
+                    .filter((data) => data.role === "user" || data.role === "User")
+                    .filter((item) => {
+                        const userName = item.userName?.toLowerCase();
+                        const email = item.email?.toLowerCase();
+                        const phoneNumber = item.phoneNumber?.toString();
 
-                    return (
-                        userName?.includes(liveSearch.toLowerCase()) ||
-                        email?.includes(liveSearch.toLowerCase()) ||
-                        phoneNumber?.includes(liveSearch.toLowerCase())
-                    );
-                });
+                        return (
+                            userName?.includes(liveSearch.toLowerCase()) ||
+                            email?.includes(liveSearch.toLowerCase()) ||
+                            phoneNumber?.includes(liveSearch.toLowerCase())
+                        );
+                    });
             });
         }
     }, [liveSearch, customers]);
@@ -58,6 +60,10 @@ const ItemCustomerList = () => {
         setResultsPerPage(newLimit);
         setCurrentPage(1);
     };
+
+    const filterCustomer = searchState.filter(
+        (data) => data.role === "user" || data.role === "User"
+      );
 
     const openDeleteModal = (username: string) => {
         setCustomerToDelete(username);
@@ -88,8 +94,9 @@ const ItemCustomerList = () => {
             {/* Search Input */}
             <CustomerDataList liveSearch={liveSearch} onChange={handleChange} />
 
-            {/* Agents List */}
-            {!loading && searchState.length > 0 ? (
+            {/* Customer List */}
+            {!loading && filterCustomer.length > 0 ? (
+                
                 <div>
                     {searchState.map((item) => (
                         <ItemCustomer
@@ -116,7 +123,7 @@ const ItemCustomerList = () => {
                 </div>
             )}
 
-            {/* Delete Confirmation Modal */}
+            {/* Delete User  */}
             <UserDeletePopup
                 isOpen={isModalOpen}
                 onClose={closeDeleteModal}

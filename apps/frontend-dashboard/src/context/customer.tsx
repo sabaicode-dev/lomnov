@@ -76,11 +76,8 @@ export const CustomerProvider = ({ children }: { children: ReactNode }) => {
                 );
     
                 console.log("Customer deleted successfully.");
-            } catch (err: any) {
-                console.error("Error deleting customer:", err.response || err);
-                setError(
-                    err.response?.data?.message || "Failed to delete the customer."
-                );
+            } catch (error) {
+                console.error("Error deleting customer:",error);
             } finally {
                 setLoading(false);
             }

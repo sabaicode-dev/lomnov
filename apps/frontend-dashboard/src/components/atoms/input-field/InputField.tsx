@@ -5,7 +5,7 @@ import React from "react";
 interface InputFieldProps {
     label: string;
     placeholder: string;
-    value: string;
+    value: string ;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     readOnly?: boolean;
 }

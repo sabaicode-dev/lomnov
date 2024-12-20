@@ -29,7 +29,7 @@ const ItemCustomer = ({ item, onDelete }: PropType) => {
     <div className='w-[100%] h-[68px] px-[12px] py-[8px] flex justify-between border-[0.1px] bg-BgSoftWhite/50 border-Primary/10'>
       <div className='flex justify-start items-center w-[20%] gap-[40px]'>
         <p>{toSubstring(item._id, 4)}</p>
-        <CardUser usernname={toSubstring(item.userName,5)} image={item.profile[0]} />
+        <CardUser usernname={item.userName} image={item.profile[0]} />
       </div>
       <div className='flex justify-between items-center w-[65%]'>
         <CardEmail email={item.email} />
