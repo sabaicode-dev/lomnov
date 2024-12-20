@@ -3,24 +3,15 @@
 import React, { useRef, useEffect } from "react";
 
 interface FilterPopupProps {
-  isVisible: boolean;
   onClose: () => void;
   selectedTransition: string;
-  setSelectedTransition: (value: string) => void;
+  setSelectedTransition: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   selectedLocation: string;
-  setSelectedLocation: (value: string) => void;
+  setSelectedLocation: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const PropertyFilterPopup = ({
-  isVisible,
-  onClose,
-  selectedTransition,
-  setSelectedTransition,
-  selectedLocation,
-  setSelectedLocation,
-}: FilterPopupProps) => {
+const PropertyFilterPopup = ({onClose,selectedTransition,setSelectedTransition,selectedLocation,setSelectedLocation}: FilterPopupProps) => {
   const filterRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
@@ -30,9 +21,8 @@ const PropertyFilterPopup = ({
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [onClose]);
+  }, [filterRef, onClose]);
 
-  if (!isVisible) return null;
 
   return (
     <div
@@ -46,7 +36,7 @@ const PropertyFilterPopup = ({
           <select
           id="transition-select"
             value={selectedTransition}
-            onChange={(e) => setSelectedTransition(e.target.value)}
+            onChange={setSelectedTransition}
             className="text-Black w-[100%] h-[40px] rounded-xls text-[14px] p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px] focus:outline-none focus:border-Primary/20"
           >
             <option value="">Select transition</option>
@@ -59,12 +49,12 @@ const PropertyFilterPopup = ({
           <select
           id="location-select"
             value={selectedLocation}
-            onChange={(e) => setSelectedLocation(e.target.value)}
+            onChange={setSelectedLocation}
             className="text-Black w-[100%] h-[40px] rounded-xls text-[14px] p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px] focus:outline-none focus:border-Primary/20"
           >
             <option value="">Your city/province</option>
             <option value="Phnom Penh">Phnom Penh</option>
-            <option value="Kom PongCham">Kom PongCham</option>
+            <option value="Kep">Kep</option>
             <option value="Svay Reng">Svay Reng</option>
             <option value="Kep">Kep</option>
           </select>
