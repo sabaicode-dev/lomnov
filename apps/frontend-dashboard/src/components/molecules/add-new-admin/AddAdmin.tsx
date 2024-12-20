@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +12,12 @@ const signUpSchema = z.object({
     .string()
     .regex(/^[A-Za-z]+$/, "Username must contain only letters (A-Z, a-z)."),
   password: z.string().min(8, "Password must be at least 8 characters long"),
-  role: z.string().nonempty("Role is required"),
+  role: z
+  .string()
+  .nonempty("Role is required")
+  .refine((value) => value === "Admin" || value === "admin", {
+    message: "Role must be either 'Admin' or 'admin'.",
+  }),
 });
 
 type SignupData = z.infer<typeof signUpSchema>;
@@ -43,13 +48,11 @@ const SignUpForm = () => {
       setVerifyMethod("email"); // Assuming email verification
       setIsVerifyPopupOpen(true);
       reset(); // Clear the form upon successful signup
-    } catch (error: any) {
-      if (error.response?.status === 409) {
+    } catch (error) {
+      if (error) {
         setErrorMessage(
-          "This email is already registered. Please use a different email."
+          "This email is already registered. Please use a different email.",
         );
-      } else {
-        setErrorMessage("An error occurred during signup. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -57,7 +60,7 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="w-full mt-10 p-6 bg-gray-100 rounded-md">
+    <div className="w-full mt-10 p-6 bg-BgSoftWhite rounded-md">
       <form onSubmit={handleSubmit(onSubmit)} className="w-full text-black">
         {errorMessage && (
           <p className="text-red-500 text-sm mb-4">{errorMessage}</p>
@@ -68,7 +71,7 @@ const SignUpForm = () => {
             type="text"
             placeholder="Username"
             {...register("username")}
-            className="w-full h-10 bg-white border border-gray-300 mt-2 rounded-md p-2 focus:outline-none focus:border-blue-500"
+            className="w-full h-10 bg-white border border-gray-300 mt-2 rounded-md p-2 focus:outline-none focus:border-Primary"
           />
           {errors.username && (
             <p className="text-red-500 text-sm">{errors.username.message}</p>
@@ -80,7 +83,7 @@ const SignUpForm = () => {
             type="email"
             placeholder="Email"
             {...register("email")}
-            className="w-full h-10 bg-white border border-gray-300 mt-2 rounded-md p-2 focus:outline-none focus:border-blue-500"
+            className="w-full h-10 bg-white border border-gray-300 mt-2 rounded-md p-2 focus:outline-none focus:border-Primary"
           />
           {errors.email && (
             <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -92,7 +95,7 @@ const SignUpForm = () => {
             type="password"
             placeholder="Password"
             {...register("password")}
-            className="w-full h-10 bg-white border border-gray-300 mt-2 rounded-md p-2 focus:outline-none focus:border-blue-500"
+            className="w-full h-10 bg-white border border-gray-300 mt-2 rounded-md p-2 focus:outline-none focus:border-Primary"
           />
           {errors.password && (
             <p className="text-red-500 text-sm">{errors.password.message}</p>
@@ -104,7 +107,7 @@ const SignUpForm = () => {
             type="text"
             placeholder="Role"
             {...register("role")}
-            className="w-full h-10 bg-white border border-gray-300 mt-2 rounded-md p-2 focus:outline-none focus:border-blue-500"
+            className="w-full h-10 bg-white border border-gray-300 mt-2 rounded-md p-2 focus:outline-none focus:border-Primary"
           />
           {errors.role && (
             <p className="text-red-500 text-sm">{errors.role.message}</p>
@@ -112,14 +115,14 @@ const SignUpForm = () => {
         </div>
         <button
           type="submit"
-          className="px-6 py-2 bg-Primary text-white rounded-md hover:bg-Primary/80"
+          className="px-4 py-2 bg-Primary text-white rounded-md hover:bg-Primary/80"
           disabled={loading}
         >
-          {loading ? "Add Admin..." : "Add Admin"}
+          {loading ? "Add ..." : "Add"}
         </button>
         <button
           type="button" // Set the button type to "button" to prevent form submission
-          className="px-6 py-2 bg-gray-600 text-white rounded-md ml-[5px] hover:bg-gray-400"
+          className="px-4 py-2 bg-slate-300 text-[#333333] font-[600px] rounded-md ml-[10px] hover:bg-gray-400"
           onClick={() => reset()} // Call the reset function to clear the form
         >
           Cancel
@@ -149,9 +152,33 @@ const VerifyPopup: React.FC<VerifyPopupProps> = ({
   onClose,
 }) => {
   const { verify } = useAuth();
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState<string[]>(Array(6).fill("")); // Array to hold individual digits
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]); // Refs for input fields
+
+  const handleChange = (value: string, index: number) => {
+    if (!/^\d?$/.test(value)) return; // Allow only digits
+    const newCode = [...code];
+    newCode[index] = value;
+    setCode(newCode);
+
+    // Move to the next input box if value is entered
+    if (value && index < inputRefs.current.length - 1) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleBackspace = (index: number) => {
+    const newCode = [...code];
+    newCode[index] = "";
+    setCode(newCode);
+
+    // Move to the previous input box if empty
+    if (index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
 
   const handleVerify = async () => {
     setLoading(true);
@@ -159,7 +186,7 @@ const VerifyPopup: React.FC<VerifyPopupProps> = ({
     try {
       await verify({
         [method]: contact,
-        code,
+        code: code.join(""), // Join the digits into a single string
       });
       setSuccessMessage("Verification successful!");
       setTimeout(onClose, 2000); // Close the popup after 2 seconds
@@ -179,22 +206,30 @@ const VerifyPopup: React.FC<VerifyPopupProps> = ({
           {`We've sent a verification code to your ${method}: ${contact}. Please enter the code below.`}
         </p>
         <div className="flex justify-between mb-4">
-          {[...Array(6)].map((_, index) => (
+          {code.map((digit, index) => (
             <input
               key={index}
               type="text"
               maxLength={1}
+              value={digit}
+              ref={(el) => {
+                inputRefs.current[index] = el; // Assign ref to the array
+              }}
+              onChange={(e) => handleChange(e.target.value, index)}
+              onKeyDown={(e) => {
+                if (e.key === "Backspace") handleBackspace(index);
+              }}
               className="w-10 h-12 text-center bg-gray-100 border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500"
-              onChange={(e) => setCode((prev) => prev + e.target.value)}
             />
           ))}
         </div>
+
         {successMessage && (
           <p className="text-green-500 text-sm mb-4">{successMessage}</p>
         )}
         <button
           onClick={handleVerify}
-          className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          className="w-full py-2 bg-Primary text-white rounded-md hover:bg-Primary/80"
           disabled={loading}
         >
           {loading ? "Verifying..." : "Verify"}
