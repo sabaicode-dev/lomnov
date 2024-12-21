@@ -1,8 +1,8 @@
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import Image from "next/image";
-import PropertyTypeInfo from "../../../../components/organisms/property-type-info/PropertyTypeInfo";
-import PropertyDescription from "../../../../components/organisms/property-description/PropertyDescription";
-import Map from "../../../../components/molecules/map/Map";
+import PropertyTypeInfo from "@/components/organisms/property-type-info/PropertyTypeInfo";
+import PropertyDescription from "@/components/organisms/property-description/PropertyDescription";
+import Map from "@/components/molecules/map/Map";
 import RecommendedProperties from "@/components/molecules/RecommendedProperties/RecommendedProperties";
 // import UserListed from "@/components/organisms/user-listed-property/UserListed";
 import axiosInstance from "@/libs/axios";
