@@ -32,7 +32,7 @@ const ItemAgents = ({ item }: PropType) => {
         <CardDate datetime={formatDate(item.updatedAt)} />
       </div>
       <div className="flex items-center justify-around gap-[5px] w-[5%]">
-        <Link href={`/dashboard/view-agents/${item._id}`}>
+        <Link href={`/dashboard/view-agents/${item.userName}`}>
         <div className="p-1 w-8 h-8 bg-Primary/20 rounded cursor-pointer hover:bg-Primary/40 transition duration-200 flex items-center justify-center">
           <MdOutlineRemoveRedEye className="text-lg text-Primary hover:text-PrimaryDark transition duration-200" />
         </div>
