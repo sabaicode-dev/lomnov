@@ -1,10 +1,10 @@
 import AddressMap from "@/components/molecules/address-map-view/AddressMapView";
 import OverviewProperty from "@/components/molecules/overview-property-view/Overview-property-view";
-import Status from "@/components/molecules/status/Status";
+import StatusProperty from "@/components/molecules/status-property/StatusProperty";
 import axiosInstance from "@/libs/axios";
 import { IResponseComparePropertes } from "@/libs/types/api-properties/property-response";
 import { API_ENDPOINTS } from "@/libs/const/api-endpionts";
-import PhotoAttachment from "@/components/molecules/photoAtttchment-view/PhotoAttch-view";
+import PhotoAttachmentView from "@/components/molecules/photoAtttchment-view/PhotoAttch-view";
 import Link from "next/link";
 
 //======================
@@ -33,7 +33,7 @@ const page = async ({ params }: { params: { id: string } }) => {
       <div className="w-[100%] flex justify-between gap-[20px]">
         <div className="w-[70%]">
           <OverviewProperty item={property} />
-          <PhotoAttachment initialImages={property.images} />
+          <PhotoAttachmentView initialImages={property.images} />
           <AddressMap
             property={{
               latitude: property?.coordinate?.coordinates[1],
@@ -43,10 +43,8 @@ const page = async ({ params }: { params: { id: string } }) => {
           />
         </div>
         <div className="w-[30%]">
-        <Status 
-          status={property.status}
-          createdAt={property.createdAt}
-          updatedAt={property.updatedAt}
+        <StatusProperty 
+          item={property}
         />
         </div>
       </div>

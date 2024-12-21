@@ -25,11 +25,11 @@ const CustomerDataList = ({ liveSearch, onChange }: ICustomerDataList) => {
                 </div> */}
             </div>
             <div className="w-[100%] p-[12px] text-[14px] text-Black font-DM Sans flex justify-between ">
-                <div className="flex justify-start gap-[40px] w-[20%]">
+                <div className="flex justify-start gap-[40px] w-[20%] mr-6">
                     <p>#</p>
                     <p>Customer Photo & Name</p>
                 </div>
-                <div className="flex justify-between items-center  w-[65%] ">
+                <div className="flex justify-between items-center  w-[60%]">
                     <div className="w-[200px] flex justify-start">
                         <p>Email</p>
                     </div>

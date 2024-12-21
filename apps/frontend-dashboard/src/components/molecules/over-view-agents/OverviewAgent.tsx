@@ -1,98 +1,79 @@
-import React from "react";
-import { TbPhoto } from "react-icons/tb";
-import { MdFormatListBulleted } from "react-icons/md";
-import { FaLink } from "react-icons/fa6";
-import { FiItalic } from "react-icons/fi";
-import { FiUnderline } from "react-icons/fi";
-import { FaStrikethrough } from "react-icons/fa6";
-import { FiBold } from "react-icons/fi";
+"use client";
 
-//======================
-const OverviewAgent = () => {
+import React, { useState } from "react";
+import InputField from "@/components/atoms/input-field/InputField";
+import { AgentResponseType } from "@/libs/types/api-agents/agent-response";
+
+//=============================================
+interface itemProps {
+  item: AgentResponseType;
+}
+
+const OverviewAgent = ({ item }: itemProps) => {
+  const [formData, setFormData] = useState(item);
+  // Handler for input changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: string) => {
+    const { value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   return (
     <div className="w-[100%] mt-[40px] p-[24px] bg-[#F3F4F6] rounded-xls">
-           <p className="text-[20px] font-[600] mb-[20px]">Overview</p>
+      <p className="text-[20px] font-[600] mb-[20px]">Overview</p>
       <form className="w-[100%] text-Black">
- 
+
         <div className="w-[100%]">
-          <label>Username*</label>
-          <input
-            type="text"
-            placeholder="username"
-            className="text-Black w-[100%] h-[40px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px] rounded-xls p-[10px]  focus:outline-none focus:border-Primary/20"
+          {/* Username */}
+          <InputField
+            label="Username*"
+            placeholder="Username"
+            value={formData.userName || ""}
+            onChange={(e) => handleChange(e, "username")}
+            readOnly
           />
         </div>
         <div className="w-[100%] grid gap-4 grid-cols-2 mt-[20px]">
           <div className="w-[100%] block">
-            <label>FirstName</label>
-            <input
-              type="text"
-              placeholder="firstname"
-              className="text-Black w-[100%] h-[40px] rounded-xls p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px]  focus:outline-none focus:border-Primary/20"
+            <InputField
+              label="FirstName*"
+              placeholder="Firstname"
+              value={formData.firstName || ""}
+              onChange={(e) => handleChange(e, "firstname")}
+              readOnly
             />
           </div>
           <div className="w-[100%] block">
-            <label>LastName</label>
-            <input
-              type="text"
-              placeholder="lastname"
-              className="text-Black w-[100%] h-[40px] rounded-xls p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px]  focus:outline-none focus:border-Primary/20"
+            <InputField
+              label="LasrName*"
+              placeholder="Lastname"
+              value={formData.lastName || ""}
+              onChange={(e) => handleChange(e, "lastname")}
+              readOnly
             />
           </div>
           <div className="w-[100%] mt-[5px]">
-            <label>Email</label>
-            <input
-              type="email"
-              placeholder="email"
-              className="text-Black w-[100%] h-[40px] rounded-xls p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px] focus:outline-none focus:border-Primary/20"
+            <InputField
+              label="Email*"
+              placeholder="Email"
+              value={formData.email || ""}
+              onChange={(e) => handleChange(e, "email")}
+              readOnly
             />
           </div>
           <div className="w-[100%] mt-[5px]">
-            <label>Contact</label>
-            <input
-              type="number"
-              placeholder="phonenumber"
-              className="text-Black w-[100%] h-[40px] rounded-xls p-[10px]  bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px]  focus:outline-none focus:border-Primary/20"
+            <InputField
+              label="Contact*"
+              placeholder="Phone Number"
+              value={formData.phoneNumber || ""}
+              onChange={(e) => handleChange(e, "phonenumber")}
+              readOnly
             />
           </div>
         </div>
       </form>
-      <div className="w-[100%]  mt-[20px]">
-        <label className="block  font-medium text-Black mb-[4px]">
-          Description
-        </label>
-        <div className="border rounded-xls border-gray-300 shadow-sm w-[100%]">
-          <div className="flex items-center space-x-4 p-2 bg-gray-100 border-b border-gray-300">
-            <button className="p-1 text-gray-500 hover:text-gray-700">
-              <FiBold />
-            </button>
-            <button className="p-1 text-gray-500 hover:text-gray-700">
-              <FaStrikethrough />
-            </button>
-            <button className="p-1 text-gray-500 hover:text-gray-700">
-              <FiUnderline />
-            </button>
-            <button className="p-1 text-gray-500 hover:text-gray-700">
-              <FiItalic />
-            </button>
-            <button className="p-1 text-gray-500 hover:text-gray-700">
-              <FaLink />
-            </button>
-            <button className="p-1 text-gray-500 hover:text-gray-700">
-              <MdFormatListBulleted />
-            </button>
-            <button className="p-1 text-gray-500 hover:text-gray-700">
-              <TbPhoto />
-            </button>
-          </div>
-          <textarea
-        
-            placeholder="Type your description here..."
-            className="w-full h-[150px] p-2 border-0 outline-none bg-BgSoftWhite rounded-xls focus:ring-0"
-          />
-        </div>
-      </div>
     </div>
   );
 };

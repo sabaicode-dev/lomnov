@@ -1,5 +1,5 @@
 import React from 'react'
-import PhotoAttachment from "@/components/molecules/photo-attachment/PhotoAttachment";
+import PhotoAttachmentViewUser from '@/components/molecules/photo-attach-view-user/PhotoAttachmentViewUser';
 import StatusEdit from '@/components/molecules/status-edit/StatusEdit';
 import OverviewCustomer from '@/components/molecules/overview-customer/OverviewCustomer';
 import { CustomerResponseType } from '@/libs/types/api-customers/customer-response';
@@ -60,7 +60,7 @@ const page = async ({ params }: { params: { username: string } }) => {
       <div className="w-[100%] flex justify-between gap-[20px]">
         <div className="w-[70%]">
           <OverviewCustomer item={customer} />
-          <PhotoAttachment initialImages={customer.profile} defaultProfile={Default_Profile.src} />
+          <PhotoAttachmentViewUser initialImages={customer.profile} defaultProfile={Default_Profile.src} />
         </div>
         <div className="w-[30%]">
           <StatusEdit item={customer} />

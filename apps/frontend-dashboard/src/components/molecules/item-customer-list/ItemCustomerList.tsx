@@ -6,15 +6,12 @@ import Pagenation from "@/components/molecules/pagenation/Pagenation";
 import Loading from "@/components/atoms/loading/Loading";
 import ItemCustomer from "../item-customers/ItemCustomer";
 import CustomerDataList from "../customer-data-list/CustomerDataList";
-import UserDeletePopup from "@/components/atoms/user-delete-popup/UserDeletePopup";
 import { CustomerResponseType } from "@/libs/types/api-customers/customer-response";
 
 const ItemCustomerList = () => {
-    const { customers, loading, error, pagination, fetchCustomers, deleteCustomer } = useCustomers();
+    const { customers, loading, error, pagination, fetchCustomers } = useCustomers();
     const [currentPage, setCurrentPage] = useState(1);
     const [resultsPerPage, setResultsPerPage] = useState(10);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [customerToDetele, setCustomerToDelete] = useState<string | null>(null);
     const [liveSearch, setLiveSearch] = useState("");
     const [searchState, setSearchState] = useState<CustomerResponseType[]>([]);
 
@@ -65,28 +62,6 @@ const ItemCustomerList = () => {
         (data) => data.role === "user" || data.role === "User"
       );
 
-    const openDeleteModal = (username: string) => {
-        setCustomerToDelete(username);
-        setIsModalOpen(true);
-    };
-
-    const closeDeleteModal = () => {
-        setIsModalOpen(false);
-        setCustomerToDelete(null);
-    };
-
-    const confirmDelete = async () => {
-        if (customerToDetele) {
-            try {
-                await deleteCustomer(customerToDetele);
-                fetchCustomers({ page: currentPage, limit: resultsPerPage });
-                closeDeleteModal();
-            } catch (err) {
-                console.error("Failed to delete agent:", err);
-            }
-        }
-    };
-
     return (
         <div>
             {error && <p className="text-red-500">{error}</p>}
@@ -102,7 +77,6 @@ const ItemCustomerList = () => {
                         <ItemCustomer
                             key={item._id} // Fixed: Using _id instead of id
                             item={item}
-                            onDelete={openDeleteModal} // Pass openDeleteModal to handle delete
                         />
                     ))}
 
@@ -122,14 +96,6 @@ const ItemCustomerList = () => {
                     <Loading />
                 </div>
             )}
-
-            {/* Delete User  */}
-            <UserDeletePopup
-                isOpen={isModalOpen}
-                onClose={closeDeleteModal}
-                onDelete={confirmDelete}
-                userName={customerToDetele || undefined}
-            />
         </div>
     );
 };
