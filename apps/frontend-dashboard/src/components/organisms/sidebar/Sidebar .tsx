@@ -51,7 +51,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-[243px] h-[900px] bg-Bg p-[10px] sm:w-[200px] md:w-[250px] lg:w-[300px] hidden sm:block">
+    <div className="w-[243px] bg-Bg p-[10px] sm:w-[200px] md:w-[250px] lg:w-[300px] hidden sm:block">
       <div className="text-BlackSecondary gap-[10px] w-full h-full">
         {routes.map(({ label, paths, icon }) => (
           <Link key={label} href={paths[0]}>
