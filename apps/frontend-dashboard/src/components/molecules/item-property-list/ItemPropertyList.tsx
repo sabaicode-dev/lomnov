@@ -53,9 +53,6 @@ const ItemPropertyList = () => {
       const trimmedLiveSelect = liveSelect.toLowerCase().trim();
       const trimmedSelectTransition = selectTransition.toLowerCase().trim();
 
-      // // Debugging logs
-      // console.log("Live Select Input (Trimmed):", trimmedLiveSelect);
-      // console.log("Property Location (Trimmed):", location);
       console.log(trimmedSelectTransition === transition);
       
       // Filter by location or transition

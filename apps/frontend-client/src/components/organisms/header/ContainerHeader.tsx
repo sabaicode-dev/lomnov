@@ -9,7 +9,7 @@ import logo from "@/images/lomnov-logo.png";
 import SelectLang from "@/components/molecules/select-lang/SelectLang";
 import { Setting, SignOut, User } from "@/icons";
 import { useAuth } from "@/context/user";
-
+import Login from "@/components/atoms/login/Login";
 interface IMenus {
   id?: number;
   name?: string;
@@ -34,15 +34,12 @@ function ContainerHeader({ menu }: MenuProp) {
       setProfileImage(user.profile[user.profile.length - 1]);
     }
   }, [user?.profile]);
-
   const handleClickMenu = () => {
     setIsMenu((prev) => !prev);
   };
-
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
-
   const handleLogout = async () => {
     try {
       await logout();
@@ -50,11 +47,9 @@ function ContainerHeader({ menu }: MenuProp) {
       console.error("Logout failed:", error);
     }
   };
-
   const handleImageError = () => {
     setProfileImage("/images/default-profile.jpg"); // Revert to default on error
   };
-
   return (
     <>
       <div className="xl:w-[1300px] w-full lg:m-auto h-full flex flex-row items-center justify-between py-3 px-3 xl:px-0 z-20">
@@ -152,12 +147,7 @@ function ContainerHeader({ menu }: MenuProp) {
             </div>
           ) : (
             // Login Button
-            <Link
-              href="/signin"
-              className="md:py-[5px] md:px-5 py-[5px] px-4 border-[1px] md:border-[2px] border-[#E5D2B0] rounded-[8px] md:text-[18px] text-white md:font-[600] font-[500] hover:border-white hover:scale-105 active:border-white active:scale-95 transition-transform duration-150"
-            >
-              Login
-            </Link>
+            <Login />
           )}
         </div>
       </div>
