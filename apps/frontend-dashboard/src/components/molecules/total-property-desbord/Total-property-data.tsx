@@ -50,13 +50,6 @@ const Totalpropertydata = () => {
       console.log("property",properties)
     }
   }, [properties, loading]);
-   //calculate persontage
-  // const calculatePercentageChange = () => {
-  //   if (previousMonthProperties === 0) return 0; // Avoid division by zero
-  //   const difference = currentMonthProperties - previousMonthProperties;
-  //   const percentageChange = (difference / previousMonthProperties) * 100;
-  //   return percentageChange;
-  // };
   const calculatePercentageChange = () => {
     if (previousMonthProperties === 0) {
       return currentMonthProperties > 0 ? 100 : 0; // Handle edge case

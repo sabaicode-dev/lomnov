@@ -1,8 +1,12 @@
+
 "use client";
+
+import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import Image from "next/image";
-import test from '@/icons/image.png';
-import sellicon from "@/icons/iconsell.png";
+import testIcon from "@/icons/image.png";
+import sellIcon from "@/icons/iconsell.png";
+import { useProperties } from "@/context/property"; // Import property context
 
 import {
   Chart as ChartJS,
@@ -15,6 +19,7 @@ import {
   ChartOptions,
 } from "chart.js";
 
+// Register Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -25,7 +30,56 @@ ChartJS.register(
 );
 
 const PropertiesOverview = () => {
-  const data = {
+  const { fetchProperties, properties, loading } = useProperties(); // Fetch data from context
+  const [monthlyData, setMonthlyData] = useState({
+    totalSale: Array(12).fill(0),
+    totalRent: Array(12).fill(0),
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await fetchProperties(); // Fetch all properties
+      } catch (err) {
+        console.error("Error fetching properties:", err);
+      }
+    };
+
+    fetchData();
+  }, [fetchProperties]);
+
+  useEffect(() => {
+    if (!loading && properties.length > 0) {
+      const totalSale = Array(12).fill(0); // Array for monthly sales
+      const totalRent = Array(12).fill(0); // Array for monthly rentals
+
+      properties
+        .filter(
+          (property) =>
+            property.status === true && property.statusAdmin === true // Only active properties
+        )
+        .forEach((property) => {
+          const date = new Date(property.createdAt);
+          const month = date.getMonth(); // Get the month (0-11)
+
+          if (property.transition?.[0]?.content === "For Sale") {
+            totalSale[month] += 1;
+          } else if (property.transition?.[0]?.content === "For Rent") {
+            totalRent[month] += 1;
+          }
+        });
+
+      setMonthlyData({ totalSale, totalRent });
+    }
+  }, [properties, loading]);
+
+  // Calculate percentage change between two months
+
+  const currentMonth = new Date().getMonth();
+
+
+
+  const chartData = {
     labels: [
       "Jan",
       "Feb",
@@ -42,16 +96,16 @@ const PropertiesOverview = () => {
     ],
     datasets: [
       {
-        label: "Total Buy",
-        data: [2, 3, 5, 3, 7, 9, 6, 8, 10, 12, 14, 16],
-        borderColor: "#8B5CF6",
+        label: "Total Sale",
+        data: monthlyData.totalSale,
+        borderColor: "#7D7757",
         backgroundColor: "rgba(139, 92, 246, 0.1)",
         fill: true,
         tension: 0.5,
       },
       {
         label: "Total Rent",
-        data: [4, 5, 9, 2, 9, 3, 8, 6, 7, 11, 13, 15],
+        data: monthlyData.totalRent,
         borderColor: "#34D399",
         backgroundColor: "rgba(52, 211, 153, 0.1)",
         fill: true,
@@ -60,18 +114,16 @@ const PropertiesOverview = () => {
     ],
   };
 
-  const options: ChartOptions<"line"> = {
+  const chartOptions: ChartOptions<"line"> = {
     responsive: true,
-    maintainAspectRatio: false, // Allow full width and height scaling
+    maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false,
+        display: false, // Hide legend
       },
       tooltip: {
         callbacks: {
-          label: (context) => {
-            return `${context.dataset.label}: ${context.raw}`;
-          },
+          label: (context) => `${context.dataset.label}: ${context.raw}`,
         },
       },
     },
@@ -97,29 +149,35 @@ const PropertiesOverview = () => {
   return (
     <div className="bg-white rounded-lg shadow-md p-6 w-full h-[461px]">
       {/* Header Section */}
-      <div className="w-[100%]">
-        <h2 className="w-full text-lg font-semibold ">
-          Properties Overview
-        </h2>
-        <div className="flex space-x-6 justify-center items-center gap-[20px] mt-[20px] mb-[20px]">
+      <div className="w-full">
+        <h2 className="text-lg font-semibold">Properties Overview</h2>
+        <div className="flex justify-center items-center gap-6 mt-5 mb-5">
           {/* Total Sale */}
-          <div className="flex items-center justify-center gap-[10px]">
-            <div className="w-[48px] h-[48px] bg-Primary/30 flex items-center justify-center rounded-full">
-              <Image src={test} width={32} height={32} alt="Sell Icon" />
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-Primary/30 flex items-center justify-center rounded-full">
+              <Image src={testIcon} width={32} height={32} alt="Sale Icon" />
             </div>
             <div>
-              <p className="text-[20px] text-Black font-bold ">2345</p>
-              <p className="text-[14px] text-gray-600 font-bold">Total Sale</p>
+              <p className="text-xl font-bold text-black">
+                {monthlyData.totalSale[currentMonth]} {/* Use current month */}
+              </p>
+              <p className="text-sm font-bold text-gray-600">
+                Total Sale
+              </p>
             </div>
           </div>
           {/* Total Rent */}
-          <div className="flex items-center  justify-center gap-[10px]">
-            <div className="w-[48px] h-[48px] bg-Positive/30 flex items-center justify-center rounded-full">
-              <Image src={sellicon} width={32} height={32} alt="Sell Icon" />
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-Positive/30 flex items-center justify-center rounded-full">
+              <Image src={sellIcon} width={32} height={32} alt="Rent Icon" />
             </div>
             <div>
-              <p className="text-[20px] text-Black font-bold ">2345</p>
-              <p className="text-[14px] text-gray-600 font-bold">Total Rent</p>
+              <p className="text-xl font-bold text-black">
+                {monthlyData.totalRent[currentMonth]} {/* Use current month */}
+              </p>
+              <p className="text-sm font-bold text-gray-600">
+                Total Rent
+              </p>
             </div>
           </div>
         </div>
@@ -127,7 +185,7 @@ const PropertiesOverview = () => {
 
       {/* Chart Section */}
       <div className="h-[300px] w-full">
-        <Line data={data} options={options} />
+        <Line data={chartData} options={chartOptions} />
       </div>
     </div>
   );

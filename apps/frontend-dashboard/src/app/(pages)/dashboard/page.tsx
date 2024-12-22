@@ -26,7 +26,10 @@ const page = () => {
         </CustomerProvider>
 
         <div className="col-span-2">
-          <PropertiesOverview />
+          <PropertyProvider>
+            <PropertiesOverview />
+          </PropertyProvider>
+          
         </div>
         <AgentProvider>
           <CustomerProvider>
