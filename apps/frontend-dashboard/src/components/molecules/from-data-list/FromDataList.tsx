@@ -16,8 +16,16 @@ interface IFromDataListProperty {
   selectedLocation?: string;
 }
 
-const FromDataListProperty = ({ liveSearch, onChange, setSelectedLocation, setSelectedTransition, selectedLocation, selectedTransition }: IFromDataListProperty) => {
+const FromDataListProperty = ({
+  liveSearch,
+  onChange,
+  setSelectedLocation,
+  setSelectedTransition,
+  selectedLocation,
+  selectedTransition,
+}: IFromDataListProperty) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+
   const handleFilterClick = () => {
     setIsPopupVisible(!isPopupVisible);
   };
@@ -27,26 +35,27 @@ const FromDataListProperty = ({ liveSearch, onChange, setSelectedLocation, setSe
   };
 
   return (
-    <div className="w-[100%] h-auto bg-BgSoftWhite mt-[40px] rounded-tr-lg rounded-tl-lg relative">
-      <div className="flex justify-between p-[20px] items-center">
-        <p className="inter text-[20px] font-simple">Properties List</p>
-        <Link href={"/dashboard/add-new-property"}>
-          <button className="bg-Primary py-[8px] px-[16px] rounded-sm text-[16px] text-BgSoftWhite">
+    <div className="w-full h-auto bg-BgSoftWhite mt-10 rounded-tr-lg rounded-tl-lg">
+      <div className="flex justify-between items-center p-5">
+        <p className="text-lg font-semibold">Properties List</p>
+        <Link href="/dashboard/add-new-property">
+          <button className="bg-Primary text-white py-2 px-4 rounded hover:bg-PrimaryDark">
             + New Property
           </button>
         </Link>
       </div>
-      <div className="bg-Primary/10 w-[100%] flex justify-end gap-[10px] p-[10px] items-center relative">
-        <Search liveSearch={liveSearch as string} onChange={onChange as (e: React.ChangeEvent<HTMLInputElement>) => void} />
+      <div className="bg-Primary/10 w-full flex justify-end gap-3 items-center p-3 relative">
+        <Search
+          liveSearch={liveSearch as string}
+          onChange={onChange as (e: React.ChangeEvent<HTMLInputElement>) => void}
+        />
         <div
-          className="bg-BgSoftWhite rounded-sm w-[40px] h-[40px] flex items-center justify-center cursor-pointer"
+          className="bg-white rounded shadow w-10 h-10 flex items-center justify-center cursor-pointer hover:bg-gray-100"
           onClick={handleFilterClick}
         >
-          <LuFilter className="w-[20px] h-[18px] text-Primary" />
+          <LuFilter className="text-Primary w-5 h-5" />
         </div>
-
-        {/* Import PropertyFilterPopup Component */}
-        {isPopupVisible &&
+        {isPopupVisible && (
           <PropertyFilterPopup
             onClose={handleClosePopup}
             selectedTransition={selectedTransition as string}
@@ -54,33 +63,33 @@ const FromDataListProperty = ({ liveSearch, onChange, setSelectedLocation, setSe
             selectedLocation={selectedLocation as string}
             setSelectedLocation={setSelectedLocation as (e: React.ChangeEvent<HTMLSelectElement>) => void}
           />
-        }
+        )}
       </div>
-
-      {/* Table Headers */}
-      <div className="w-[100%] p-[12px] text-[14px] text-Black font-DM Sans flex justify-between">
-        <div className="flex justify-start gap-[40px] w-[20%]">
+      <div className="w-full px-4 py-3 bg-gray-100 text-sm font-medium text-gray-700 flex items-center">
+        <div className="flex justify-start w-[20%] gap-6">
           <p>#</p>
           <p>Properties Photo & Name</p>
         </div>
-        <div className="flex justify-between items-center ml-[93px] w-[87%]">
-          <div className="w-[200px] flex justify-start">
+        <div className="flex justify-between w-[70%]">
+          <div className="w-[200px] text-center">
             <p>Sale/Rent</p>
           </div>
-          <div className="w-[200px] flex justify-start">
+          <div className="w-[200px] text-center">
             <p>Categories</p>
           </div>
-          <div className="w-[200px] flex justify-start">
+          <div className="w-[200px] text-center">
             <p>Location</p>
           </div>
-          <div className="w-[200px] flex justify-start">
+          <div className="w-[200px] text-center">
             <p>Price</p>
           </div>
-          <div className="w-[200px] flex justify-start">
+          <div className="w-[200px] text-center">
             <p>Status</p>
           </div>
         </div>
-        <div className="w-[9%]"></div>
+        <div className="w-[14%] text-center">
+        
+        </div>
       </div>
     </div>
   );

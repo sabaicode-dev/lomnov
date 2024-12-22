@@ -16,7 +16,7 @@ import Status from '@/components/molecules/status/Status'
 import axiosInstance from '@/libs/axios'
 import { z } from 'zod';
 import { toast, Toaster } from 'sonner';
-
+import Link from 'next/link'
 import { API_ENDPOINTS } from '@/libs/const/api-endpionts'
 export default function CreateProperties() {
     const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -122,11 +122,11 @@ export default function CreateProperties() {
             }
         }
     }
-    const handleStatusChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const checked = e.target.checked;
+    const handleStatusChange = (name: string, checked: boolean) => {
         setIsChecked(checked);
         setProperties(prev => ({ ...prev, status: checked }));
     };
+    
     /**============================ validation schema  ===============================*/
     const propertySchema = z.object({
         title: z.array(z.object({
@@ -332,9 +332,11 @@ export default function CreateProperties() {
                 <AddressMap onChange={handleInputChange} onMapChange={handleInputChange} mapLink={properties.urlmap} />
                 <Status name='status' onChecked={handleStatusChange} isChecked={isChecked} />
                 <div className="flex justify-start w-[100%] mt-[20px] items-center gap-4">
+                    <Link href={"/dashboard/properties"}>
                     <button type='button' className="px-[12px] text-[14px] py-[8px] bg-BgSoftWhite text-black rounded-lg">
                         Cancel
                     </button>
+                    </Link>
                     <button type='submit' className="px-[12px] text-[14px] py-[8px] bg-Primary text-BgSoftWhite rounded-lg">
                         {sending ? "Creating" : "Create"}
                     </button>

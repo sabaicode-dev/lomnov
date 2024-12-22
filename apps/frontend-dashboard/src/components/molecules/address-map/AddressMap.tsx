@@ -15,7 +15,7 @@ interface IAddressMap {
   mapLink?: string;
 }
 
-const AddressMap = ({ onChange, onMapChange, mapLink }: IAddressMap) => {
+const AddressMapGlobe = ({ onChange, onMapChange, mapLink }: IAddressMap) => {
   const [position, setPosition] = useState<[number, number] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [map, setMap] = useState<L.Map | null>(null);
@@ -141,4 +141,4 @@ const AddressMap = ({ onChange, onMapChange, mapLink }: IAddressMap) => {
   );
 };
 
-export default AddressMap;
+export default AddressMapGlobe;
