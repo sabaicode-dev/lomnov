@@ -37,7 +37,7 @@ export const CustomerProvider = ({ children }: { children: ReactNode }) => {
                 const queryString = new URLSearchParams(params as Record<string, string>).toString();
                 const response = await axiosInstance.get(`${API_ENDPOINTS.USER}?${queryString}`);
                 console.log("API Customer Response:", response.data);
-
+            
                 // Correctly set customers and pagination based on API response
                 setCustomers(response.data.users || []);
                 setPagination({
