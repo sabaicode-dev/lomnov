@@ -1,46 +1,3 @@
-// "use client";
-
-// import React, { useState } from "react";
-
-// //=====================
-// interface IPhotoAttachmentProps {
-//   initialImages?: string[];
-//   defaultProfile: string;
-// }
-
-// const PhotoAttachment = ({ initialImages = [], defaultProfile }: IPhotoAttachmentProps) => {
-//   const [images, setImages] = useState<string[]>(initialImages);
-
-//   return (
-//     <div>
-//       <div className="w-full mt-5 p-6 bg-gray-100 rounded-lg">
-//         <p className="text-lg font-semibold">Photo Attachment</p>
-//         <div className="w-[100%] border-BgSoftWhite ">
-
-//           {/* Display Images */}
-//           <div className="flex flex-wrap gap-4 mt-5">
-//             {images.map((image, index) => (
-//               <div
-//                 key={index}
-//                 className="relative w-[200px] h-[200px] border rounded-lg overflow-hidden"
-//               >
-//                 <img
-//                   src={image}
-//                   alt={`Uploaded ${index}`}
-//                   className="object-cover w-full h-full"
-//                   onError={(e) => (e.currentTarget.src = defaultProfile)}
-//                 />
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default PhotoAttachment;
-
 "use client";
 import Image from 'next/image';
 import React, { ChangeEvent, useState } from 'react'
@@ -66,7 +23,7 @@ const PhotoAttachment = ({OnImageChange, imagePreviews, OnremoveImage}: IPhotoAt
           >
 
             <span className="text-Black w-[100%] text-center text-[14px] mb-[20px] h-[40px] rounded-md p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[20px] focus:outline-none focus:border-Primary/20">
-              Drag and Drop your files or  <span className="text-Primary">Browse</span>
+              Drag and Drop your files or  <span className="text-Primary cursor-pointer">Browse</span>
             </span>
             <input
               id="multi-file-upload"
@@ -94,7 +51,7 @@ const PhotoAttachment = ({OnImageChange, imagePreviews, OnremoveImage}: IPhotoAt
                 />
                 <div
                   onClick={() => OnremoveImage(index)}
-                  className="absolute top-1 right-1 text-Negative text-[20px]"
+                  className="absolute top-1 right-1 text-Negative text-[20px] cursor-pointer"
                 >
                   <TiDeleteOutline />
                 </div>

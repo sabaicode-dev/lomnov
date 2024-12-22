@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import NavigateList from "@/components/molecules/navigate-list/NavigateList";
 import Menu from "@/icons/Menu";
 import Link from "next/link";
@@ -10,6 +10,7 @@ import SelectLang from "@/components/molecules/select-lang/SelectLang";
 import { Setting, SignOut, User } from "@/icons";
 import { useAuth } from "@/context/user";
 import Login from "@/components/atoms/login/Login";
+
 interface IMenus {
   id?: number;
   name?: string;
@@ -26,6 +27,7 @@ function ContainerHeader({ menu }: MenuProp) {
   const [isMenu, setIsMenu] = useState<boolean>(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [profileImage, setProfileImage] = useState<string>("/images/default-profile.jpg");
+  const dropdownRef = useRef<HTMLDivElement>(null); // Reference for the dropdown
 
   // Sync profile image when the user profile updates
   useEffect(() => {
@@ -34,12 +36,15 @@ function ContainerHeader({ menu }: MenuProp) {
       setProfileImage(user.profile[user.profile.length - 1]);
     }
   }, [user?.profile]);
+
   const handleClickMenu = () => {
     setIsMenu((prev) => !prev);
   };
+
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -47,9 +52,23 @@ function ContainerHeader({ menu }: MenuProp) {
       console.error("Logout failed:", error);
     }
   };
+
   const handleImageError = () => {
     setProfileImage("/images/default-profile.jpg"); // Revert to default on error
   };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <>
       <div className="xl:w-[1300px] w-full lg:m-auto h-full flex flex-row items-center justify-between py-3 px-3 xl:px-0 z-20">
@@ -86,7 +105,7 @@ function ContainerHeader({ menu }: MenuProp) {
           </div>
 
           {isAuthenticated ? (
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               {/* User Avatar */}
               <div
                 className="w-[50px] h-[50px] rounded-full bg-black border flex justify-center items-center overflow-hidden relative cursor-pointer"
