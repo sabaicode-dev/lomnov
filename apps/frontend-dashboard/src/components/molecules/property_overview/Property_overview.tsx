@@ -6,7 +6,7 @@ import { Line } from "react-chartjs-2";
 import Image from "next/image";
 import testIcon from "@/icons/image.png";
 import sellIcon from "@/icons/iconsell.png";
-import { useProperties } from "@/context/property"; // Import property context
+import { useProperties } from "@/context/property";
 
 import {
   Chart as ChartJS,
@@ -19,7 +19,6 @@ import {
   ChartOptions,
 } from "chart.js";
 
-// Register Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -30,7 +29,7 @@ ChartJS.register(
 );
 
 const PropertiesOverview = () => {
-  const { fetchProperties, properties, loading } = useProperties(); // Fetch data from context
+  const { fetchProperties, properties, loading } = useProperties();
   const [monthlyData, setMonthlyData] = useState({
     totalSale: Array(12).fill(0),
     totalRent: Array(12).fill(0),
@@ -39,7 +38,7 @@ const PropertiesOverview = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await fetchProperties(); // Fetch all properties
+        await fetchProperties();
       } catch (err) {
         console.error("Error fetching properties:", err);
       }
@@ -50,35 +49,38 @@ const PropertiesOverview = () => {
 
   useEffect(() => {
     if (!loading && properties.length > 0) {
-      const totalSale = Array(12).fill(0); // Array for monthly sales
-      const totalRent = Array(12).fill(0); // Array for monthly rentals
+      setMonthlyData((prevMonthlyData) => {
+        const totalSale = [...prevMonthlyData.totalSale];
+        const totalRent = [...prevMonthlyData.totalRent];
 
-      properties
-        .filter(
-          (property) =>
-            property.status === true && property.statusAdmin === true // Only active properties
-        )
-        .forEach((property) => {
-          const date = new Date(property.createdAt);
-          const month = date.getMonth(); // Get the month (0-11)
+        properties
+          .filter((property) => property.status && property.statusAdmin)
+          .forEach((property) => {
+            const date = new Date(property.createdAt);
+            const month = date.getMonth();
 
-          if (property.transition?.[0]?.content === "For Sale") {
-            totalSale[month] += 1;
-          } else if (property.transition?.[0]?.content === "For Rent") {
-            totalRent[month] += 1;
-          }
-        });
+            const isForSale = ["For Sale", "សម្រាប់លក់"].includes(
+              property.transition[0]?.content
+            );
+            const isForRent = ["For Rent", "សម្រាប់ជួល"].includes(
+              property.transition[0]?.content
+            );
 
-      setMonthlyData({ totalSale, totalRent });
+            if (isForSale) totalSale[month] += 1;
+            if (isForRent) totalRent[month] += 1;
+          });
+
+        return {
+          totalSale,
+          totalRent,
+        };
+      });
     }
   }, [properties, loading]);
 
-  // Calculate percentage change between two months
-
   const currentMonth = new Date().getMonth();
 
-
-
+// const previousMonth = currentMonth === 0 ? 11 : currentMonth - 1;
   const chartData = {
     labels: [
       "Jan",
@@ -119,7 +121,7 @@ const PropertiesOverview = () => {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false, // Hide legend
+        display: false,
       },
       tooltip: {
         callbacks: {
@@ -148,42 +150,34 @@ const PropertiesOverview = () => {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 w-full h-[461px]">
-      {/* Header Section */}
       <div className="w-full">
         <h2 className="text-lg font-semibold">Properties Overview</h2>
         <div className="flex justify-center items-center gap-6 mt-5 mb-5">
-          {/* Total Sale */}
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-Primary/30 flex items-center justify-center rounded-full">
               <Image src={testIcon} width={32} height={32} alt="Sale Icon" />
             </div>
             <div>
               <p className="text-xl font-bold text-black">
-                {monthlyData.totalSale[currentMonth]} {/* Use current month */}
+                {monthlyData.totalSale[currentMonth]}
               </p>
-              <p className="text-sm font-bold text-gray-600">
-                Total Sale
-              </p>
+              <p className="text-sm font-bold text-gray-600">Total Sale</p>
             </div>
           </div>
-          {/* Total Rent */}
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-Positive/30 flex items-center justify-center rounded-full">
               <Image src={sellIcon} width={32} height={32} alt="Rent Icon" />
             </div>
             <div>
               <p className="text-xl font-bold text-black">
-                {monthlyData.totalRent[currentMonth]} {/* Use current month */}
+                {monthlyData.totalRent[currentMonth]}
               </p>
-              <p className="text-sm font-bold text-gray-600">
-                Total Rent
-              </p>
+              <p className="text-sm font-bold text-gray-600">Total Rent</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Chart Section */}
       <div className="h-[300px] w-full">
         <Line data={chartData} options={chartOptions} />
       </div>
