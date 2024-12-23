@@ -28,9 +28,7 @@ const Header = ({ profile }: HeaderProps) => {
         {/* Language Selector and Profile Section */}
         <div className="flex gap-[10px] sm:gap-[15px] items-center">
           {/* Language Selector */}
-          <div className="w-[42px] h-[42px] bg-Primary flex items-center justify-center text-BgSoftWhite rounded-full hidden sm:flex">
-            <p className="text-[12px]">ENG</p>
-          </div>
+         
 
           {/* Profile Picture */}
           <div className="w-[42px] h-[42px] overflow-hidden text-BgSoftWhite flex items-center justify-center bg-Black font-[14px] rounded-full">
