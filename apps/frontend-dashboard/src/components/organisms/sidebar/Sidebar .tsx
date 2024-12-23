@@ -17,22 +17,22 @@ const routes = [
   },
   {
     label: 'Properties',
-    paths: ['/dashboard/properties', '/dashboard/add-new-property', '/dashboard/view-property','/dashboard/update-property'],
+    paths: ['/dashboard/properties', '/dashboard/add-new-property', '/dashboard/view-property/', '/dashboard/update-property'],
     icon: <PropertyHomeIcon />,
   },
   {
     label: 'Agents',
-    paths: ['/dashboard/agents','/dashboard/add-new-agents','/dashboard/view-agents','/dashboard/update-agents'],
+    paths: ['/dashboard/agents', '/dashboard/add-new-agents', '/dashboard/view-agents/', '/dashboard/update-agents'],
     icon: <UserAgentIcon />,
   },
   {
     label: 'Customers',
-    paths: ['/dashboard/customers','/dashboard/add-new-customer','/dashboard/view-customer','/dashboard/update-customer'],
+    paths: ['/dashboard/customers', '/dashboard/add-new-customer', '/dashboard/view-customer/', '/dashboard/update-customer'],
     icon: <UserCustomerIcon />,
   },
   {
     label: 'Administrators',
-    paths: ['/dashboard/administrators','/dashboard/add-new-administrator','/dashboard/update-administrator'],
+    paths: ['/dashboard/administrators', '/dashboard/add-new-administrator', '/dashboard/update-administrator'],
     icon: <UserAdministatorIcon />,
   },
   {
@@ -47,8 +47,16 @@ const Sidebar = () => {
 
   // Function to check if the current route is active
   const isActive = (routePaths: string[]) => {
-    return routePaths.some((route) => pathname === route) ? 'bg-Primary text-BgSoftWhite' : '';
+    return routePaths.some((route) => {
+      // Check if the pathname matches any of the route paths
+      if (route.endsWith('/')) {
+        // If route ends with a slash, we check for partial matches
+        return pathname.startsWith(route);
+      }
+      return pathname === route; // Exact match
+    }) ? 'bg-Primary text-BgSoftWhite' : '';
   };
+
 
   return (
     <div className="w-[243px] bg-Bg p-[10px] sm:w-[200px] md:w-[250px] lg:w-[300px] hidden sm:block">

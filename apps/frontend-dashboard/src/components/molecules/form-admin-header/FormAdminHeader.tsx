@@ -107,6 +107,21 @@ const FormAdminHeader = ({
             </form>
           </div>
         )}
+      
+      </div>
+       {/* Table Headers */}
+       <div className="w-[100%] p-[12px] text-[14px] text-Black font-DM Sans flex justify-between ">
+          <div className="flex justify-start gap-[40px] w-[20%]">
+              <p>#</p>
+              <p>{item.namedata} Photo & Name</p>
+          </div>
+          <div className="flex justify-between items-center  w-[60%] ">
+              <div className='w-[200px] flex justify-start'> <p>{item.data1}</p></div>
+              <div className='w-[200px] flex justify-start'><p>{item.data2}</p></div>
+              <div className='w-[200px] flex justify-start'><p>{item.data3}</p></div>
+              <div className='w-[200px] flex justify-start'> <p>{item.data4}</p></div> 
+          </div>
+          <div className="w-[10%]"></div>
       </div>
     </div>
   );
