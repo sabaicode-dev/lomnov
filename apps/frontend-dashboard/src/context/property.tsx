@@ -32,7 +32,7 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
 
   // Fetch properties with pagination
   const fetchProperties = useCallback(
-    async (params: { page?: number; limit?: number } = { page: 1, limit: 12 }) => {
+    async (params: { page?: number; limit?: number } = { page: 1, limit: 50 }) => {
       setLoading(true);
       setError(null);
       try {

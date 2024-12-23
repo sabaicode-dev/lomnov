@@ -30,7 +30,7 @@ export const CustomerProvider = ({ children }: { children: ReactNode }) => {
 
     // Fetch customers with pagination
     const fetchCustomers = useCallback(
-        async (params: { page?: number; limit?: number } = { page: 1, limit: 10 }) => {
+        async (params: { page?: number; limit?: number } = { page: 1, limit: 50 }) => {
             setLoading(true);
             setError(null);
             try {
