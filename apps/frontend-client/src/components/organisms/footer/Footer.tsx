@@ -9,7 +9,6 @@ export interface FooterProps {
   aboutText?: string;
   contactPhone?: string;
   contactLocation?: string;
-  companyName?: string;
   facebookLink?: string;
   twitterLink?: string;
   instagramLink?: string;
@@ -19,8 +18,9 @@ const Footer: React.FC<FooterProps> = ({
   aboutText,
   contactPhone,
   contactLocation,
-  companyName,
   facebookLink = "",
+  twitterLink = "",
+  instagramLink = "",
 }) => {
   return (
     <footer className="w-full h-auto bg-olive-drab flex flex-col ">
@@ -69,10 +69,10 @@ const Footer: React.FC<FooterProps> = ({
                 <Link href={facebookLink} className="flex ">
                   <span className="text-[14px] text-neutral"> Facebook</span>
                 </Link>
-                <Link href={facebookLink} className="flex ">
+                <Link href={instagramLink} className="flex ">
                   <span className="text-[14px] text-neutral"> Instargram</span>
                 </Link>
-                <Link href={facebookLink} className="flex ">
+                <Link href={twitterLink} className="flex ">
                   <span className="text-[14px] text-neutral"> Twitter</span>
                 </Link>
                 <Link href={facebookLink} className="flex ">

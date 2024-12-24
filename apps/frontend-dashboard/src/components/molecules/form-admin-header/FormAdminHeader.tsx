@@ -54,7 +54,7 @@ const FormAdminHeader = ({
   }, []);
 
   return (
-    <div className="w-[100%] h-auto bg-BgSoftWhite mt-[40px] relative">
+    <div className="w-[100%] h-auto bg-BgSoftWhite mt-[40px] rounded-tr-lg rounded-tl-l relative">
       {/* Header */}
       <div className="flex justify-between p-[20px] items-center">
         <p className="inter text-[20px] font-simple ">{item.data_list} List</p>
@@ -115,7 +115,7 @@ const FormAdminHeader = ({
               <p>#</p>
               <p>{item.namedata} Photo & Name</p>
           </div>
-          <div className="flex justify-between items-center  w-[60%] ">
+          <div className="flex justify-between items-center  w-[65%] ">
               <div className='w-[200px] flex justify-start'> <p>{item.data1}</p></div>
               <div className='w-[200px] flex justify-start'><p>{item.data2}</p></div>
               <div className='w-[200px] flex justify-start'><p>{item.data3}</p></div>

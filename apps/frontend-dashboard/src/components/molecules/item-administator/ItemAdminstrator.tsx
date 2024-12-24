@@ -26,16 +26,16 @@ const ItemAdminstrator = ({ item }: PropType) => {
         <p>{toSubstring(item._id, 4)}</p>
         <CardUser usernname={item.userName} image={item.profile[0]} />
       </div>
-      <div className='flex justify-between items-center w-[60%]'>
+      <div className='flex justify-between items-center w-[65%]'>
         <CardEmail email={toSubstring( item.email , 12)} />
         <CardStatus status={item.status} />
         <CardUserRole role={item.role} />
         <CardDate datetime={formatDate(item.createdAt)} />
       </div>
-      <div className='flex items-center justify-between gap-[10px] w-[10%]'>
+      <div className='flex items-center justify-around gap-[10px] w-[10%]'>
         <Link href={`/dashboard/view-administrator/${item.userName}`}>
-          <div className='p-[4px] w-[24px] h-[24px]  bg-Primary/20 rounded-[6px] cursor-pointer'>
-            <MdOutlineRemoveRedEye className='text-[16px] text-Primary' />
+          <div className="p-1 w-8 h-8 bg-Primary/20 rounded cursor-pointer hover:bg-Primary/40 transition duration-200 flex items-center justify-center">
+            <MdOutlineRemoveRedEye className="text-lg text-Primary hover:text-PrimaryDark transition duration-200"/>
           </div>
         </Link>
       </div>
