@@ -115,7 +115,7 @@ const AdministratorList = () => {
               )}
             </div>
           ) : (
-            <p className="text-center text-Negative text-[22px] mt-[10px]">No Found🥺</p>
+            <p className="text-center text-Negative text-[22px] mt-[10px]">No Found</p>
           )}
         </div>
       )}

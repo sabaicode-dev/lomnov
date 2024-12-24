@@ -60,12 +60,6 @@ const ItemAgentList = () => {
         setResultsPerPage(newLimit);
         setCurrentPage(1);
     };
-
-    const openDeleteModal = (id: string) => {
-        setAgentToDelete(id);
-        setIsModalOpen(true);
-    };
-
     const closeDeleteModal = () => {
         setIsModalOpen(false);
         setAgentToDelete(null);
@@ -97,7 +91,6 @@ const ItemAgentList = () => {
                         <ItemAgents
                             key={item._id} // Fixed: Using _id instead of id
                             item={item}
-                            onDelete={openDeleteModal} // Pass openDeleteModal to handle delete
                         />
                     ))}
 

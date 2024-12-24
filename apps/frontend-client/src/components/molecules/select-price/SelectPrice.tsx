@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "@/hook/useTranslation";
 import { IconDollar } from "@/icons";
 
 import { useState } from "react";
@@ -32,9 +33,10 @@ const price = [
   { name: "250000-500000" },
 ];
 
-const defaultLocation = { name: "Price" };
 
 const SelectPrice: React.FC<SelectPropertiesProps> = ({ onChange,backGroundColor='bg-grayish-white' }) => {
+  const {t} = useTranslation();
+  const defaultLocation = { name: t("price") };
   const [selectedOption, setSelectedOption] = useState<Option | null>(
     defaultLocation,
   );

@@ -6,6 +6,7 @@ import logSkyBar from "@/images/banner-sky-bar.jpg";
 import Slider from "@/components/molecules/slider/Slider";
 import Link from "next/link";
 import ItemCardNearlyLocationList from "@/components/molecules/item-card-nearly-location-list/ItemCardNearlyLocationList";
+import Texts from "@/components/atoms/texts-title/Texts";
 
 
 export default function Home() {
@@ -31,13 +32,8 @@ export default function Home() {
             </div>
             <div className=" lg:w-[30%] h-full  py-10 flex flex-col items-center ">
               <div className=" flex flex-col items-center justify-center mb-40">
-                <h1 className=" text-white font-[600]  text-[30px]">
-                  Nearly Location
-                </h1>
-                <p className=" text-white">
-                  Discover the best properties near you. Find your dream home
-                  from our exclusive listings
-                </p>
+                <Texts className="text-white font-[600]  text-[30px]" translateKey="nearly locations" />
+                <Texts className="text-white" translateKey="discover" />
               </div>
               <Link
                 href={"/nearly-location"}
@@ -46,9 +42,8 @@ export default function Home() {
                   bg-transparent  hover:text-white hover:border-white hover:scale-105
                   active:scale-95  active:text-white"
               >
-                View ALL
+                <Texts translateKey="view-all" />
               </Link>
-
             </div>
           </div>
         </div>

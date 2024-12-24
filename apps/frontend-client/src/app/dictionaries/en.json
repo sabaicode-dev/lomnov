@@ -8,6 +8,48 @@
     "language": {
         "en": "English",
         "kh": "Khmer"
+    },
+    "DISCOVER YOUR DREAM HOME": "DISCOVER YOUR DREAM HOME",
+    "Premier New Properties & Exclusive Luxury Real Estate":"Premier New Properties & Exclusive Luxury Real Estate",
+    "select properties": "Select Properties",
+    "locations": "Locations",
+    "price": "Price",
+    "search": "Search",
+    "poppular locations": "Popular Locations",
+    "nearly locations": "Nearly Locations",
+    "discover": "Discover the best properties near you. Find your dream home from our exclusive listings",
+    "view-all": "View All",
+    "provinces":{
+        "banteay-meanchey": "banteay meanchey" ,
+        "battambang": "battambang" ,
+        "kampong-cham": "kampong cham" ,
+        "kampong-chhang": "kampong chhang" ,
+        "kampong-speu": "kampong speu" ,
+        "kampong-thom": "kampong thom" ,
+        "kampot": "kampot" ,
+        "kandal": "kandal" ,
+        "Kep": "Kep" ,
+        "koh-kong": "koh kong" ,
+        "kratie": "kratié" ,
+        "mondulkiri": "mondulkiri" ,
+        "oddar-meanchey": "Oddar Meanchey" ,
+        "pailin": "pailin" ,
+        "phnom-penh": "Phnom Penh" ,
+        "preah-sihanouk": "Preah Sihanouk" ,
+        "preah-vihear": "preah Vihear" ,
+        "prey-veng": "prey Veng" ,
+        "pursat": "pursat" ,
+        "siem-reap": "Siem Reap" ,
+        "stung-treng": "stung treng" ,
+        "svay-rieng": "svay rieng" ,
+        "takeo": "takéo" ,
+        "tboung-khmum": "tboung khmum"
+    },
+    "poppular-provinces":{
+        "Kep": "Kep" ,
+        "Phnom Penh": "Phnom Penh" ,
+        "Preah Sihanouk": "Preah Sihanouk",
+        "Siem Reap": "Siem Reap" 
     }
   }
   
