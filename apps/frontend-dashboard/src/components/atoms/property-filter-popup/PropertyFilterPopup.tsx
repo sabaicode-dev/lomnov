@@ -12,6 +12,7 @@ interface FilterPopupProps {
 
 const PropertyFilterPopup = ({onClose,selectedTransition,setSelectedTransition,selectedLocation,setSelectedLocation}: FilterPopupProps) => {
   const filterRef = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
