@@ -82,6 +82,9 @@
 					},
 					"role": {
 						"type": "string"
+					},
+					"status": {
+						"type": "boolean"
 					}
 				},
 				"required": [
@@ -149,6 +152,9 @@
 					},
 					"role": {
 						"type": "string"
+					},
+					"status": {
+						"type": "boolean"
 					}
 				},
 				"required": [
@@ -253,7 +259,8 @@
 						"format": "double"
 					},
 					"limit": {
-						"type": "string"
+						"type": "number",
+						"format": "double"
 					},
 					"language": {
 						"type": "string"
@@ -739,7 +746,8 @@
 						"name": "limit",
 						"required": false,
 						"schema": {
-							"type": "string"
+							"format": "double",
+							"type": "number"
 						}
 					},
 					{
@@ -787,6 +795,94 @@
 						}
 					}
 				]
+			}
+		},
+		"/api/v1/users/{userId}/status": {
+			"put": {
+				"operationId": "UpdateStatusUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"updatedStatusUser": {
+											"type": "boolean"
+										},
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					" User service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"status": {
+										"anyOf": [
+											{
+												"type": "boolean"
+											},
+											{
+												"type": "string"
+											}
+										]
+									}
+								},
+								"required": [
+									"status"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/users/agents": {
+			"get": {
+				"operationId": "GetUserAgents",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Get User Agents",
+					" User service"
+				],
+				"security": [],
+				"parameters": []
 			}
 		}
 	},

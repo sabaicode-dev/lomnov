@@ -7,8 +7,10 @@ import SelectLocations from "@/components/molecules/select-locations/SelectLocat
 import SelectPrice from "@/components/molecules/select-price/SelectPrice";
 import { Option } from "@/components/molecules/select-properties/SelectProperties";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "@/hook/useTranslation";
 
 const Search = ({disabled}: {disabled?:boolean}) => {
+  const {t} = useTranslation();
   const [category, setCategory] = useState("");
   const [transition, setTransition] = useState("");
   const [property, setProperty] = useState<Option | null>(null);
@@ -42,7 +44,6 @@ const Search = ({disabled}: {disabled?:boolean}) => {
     if (!isMounted) return;
 
     const params = new URLSearchParams();
-
  
     //search for transition
     if(transition){
@@ -73,7 +74,7 @@ const Search = ({disabled}: {disabled?:boolean}) => {
               }`}
               onClick={() => handleTransitionChange("For Rent")}
             >
-              Rent
+              {t("rent")}
             </button>
             <button
               className={`px-5 text-[18px] font-[600] ${
@@ -81,7 +82,7 @@ const Search = ({disabled}: {disabled?:boolean}) => {
               }`}
               onClick={() => handleTransitionChange("For Sale")}
             >
-              Buy
+              {t("buy")}
             </button>
           </div>
           <div className="w-full lg:w-fit bg-white rounded-r-[18px] rounded-bl-[20px] lg:flex grid grid-cols-2 lg:grid-cols-4 items-center gap-5 p-5">
@@ -95,7 +96,7 @@ const Search = ({disabled}: {disabled?:boolean}) => {
               onClick={handleSearch}
               disabled={disabled}
             >
-              {disabled ? "Searching" : "Search"}
+              {disabled ? t("searching") : t("search")}
               
             </button>
           </div>

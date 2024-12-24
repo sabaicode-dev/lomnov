@@ -32,8 +32,8 @@ import setCookie from "../middlewares/cookies";
 @Tags("Manual Registration")
 @Route("api/v1")
 export class AuthControllerII extends Controller {
-  private authService: AuthService;
-  private cognitoService: CognitoService;
+  private readonly authService: AuthService;
+  private readonly cognitoService: CognitoService;
   constructor() {
     super();
     this.authService = new AuthService();
@@ -80,27 +80,27 @@ export class AuthControllerII extends Controller {
     }
   }
   @Post("/auth/logout")
-  public async logout(@Request() reqeust: Express.Request){
-    try { 
+  public async logout(@Request() reqeust: Express.Request) {
+    try {
       //@ts-ignore
-        const tokens = reqeust.cookies;
-        console.log(tokens);
-        
-        const response = (reqeust as any).res as Response;
-        const clearCookie = (name: string) => {
-          response.cookie(name, "", {
-            expires: new Date(0), // Expire immediately
-            httpOnly: true, // Optional: set to true for security
-            // secure: process.env.NODE_ENV === "production", // Secure in production
-            // path: "/", // Apply to all paths
-          });
-        };
-        await this.authService.signOutUser(tokens.accessToken);
-        let clearToken;
-        for (const token in tokens) {
-          clearToken= clearCookie(token);
-        }
-        return sendResponse({ message: "Signout successfully",data: clearToken });
+      const tokens = reqeust.cookies;
+      console.log(tokens);
+      const accessToken = tokens.accessToken;
+      const response = (reqeust as any).res as Response;
+      const clearCookie = (name: string) => {
+        response.cookie(name, "", {
+          expires: new Date(0), // Expire immediately
+          httpOnly: true, // Optional: set to true for security
+          secure: process.env.NODE_ENV === "production", // Secure in production
+          path: "/", // Apply to all paths
+        });
+      };
+      await this.authService.signOutUser(accessToken);
+      let clearToken;
+      for (const token in tokens) {
+        clearToken = clearCookie(token);
+      }
+      return sendResponse({ message: "Signout successfully", data: clearToken });
     } catch (error) {
       throw error;
     }
@@ -144,19 +144,23 @@ export class AuthControllerII extends Controller {
     try {
       const refreshToken = request.cookies['refreshToken'];
       const username = request.cookies['username'];
+      console.log(username,refreshToken);
+      
       if (refreshToken && username) {
         const result = await this.cognitoService.refreshTokens({
-          refreshToken: body.refreshToken || refreshToken,
-          username: body.username || username
+          refreshToken: body.refreshToken ?? refreshToken,
+          username: body.username ?? username
         });
         setCookie(request.res!, 'idToken', result.idToken, { httpOnly: true, secure: true, sameSite: 'lax' });
         setCookie(request.res!, 'accessToken', result.accessToken, { httpOnly: true, secure: true, sameSite: 'lax' });
-        return sendResponse({ message: "Token refresh succussfully",data: result })
+        return sendResponse({ message: "Token refresh succussfully", data: result })
 
-      }else{
-        return sendResponse({ message: "Missing refresh token or username" ,data:{
-          statusCode: 400
-        }})
+      } else {
+        return sendResponse({
+          message: "Missing refresh token or username", data: {
+            statusCode: 400
+          }
+        })
       }
     } catch (error) {
       //@ts-ignore

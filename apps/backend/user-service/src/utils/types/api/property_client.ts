@@ -4,9 +4,9 @@ export interface LocalizedContent {
     language: string;
   }
 export interface RequestPropertyClientQuery{
-    page?:number | undefined;
-    limit?:string | undefined;
-    language?:string | undefined;
+    page?:number;
+    limit?:number;
+    language?:string;
 }
 export interface ResponsePropertyDTO {
     _id: Types.ObjectId

@@ -2,6 +2,7 @@
 import { categories } from "@/libs/const/category";
 import { Home } from "@/icons";
 import { useState } from "react";
+import { useTranslation } from "@/hook/useTranslation";
 
 export interface Option {
   name: string;
@@ -19,9 +20,10 @@ const properties = [
   { name: "shop" },
  
 ];
-const defaultOption = { name: "Properties" };
 
 const SelectProperties: React.FC<SelectPropertiesProps> = ({ onChange,backGroundColor="bg-grayish-white" }) => {
+  const {t} = useTranslation();
+  const defaultOption = { name: t("select properties") };
   const [selectedOption, setSelectedOption] = useState<Option | null>(
     defaultOption,
   );

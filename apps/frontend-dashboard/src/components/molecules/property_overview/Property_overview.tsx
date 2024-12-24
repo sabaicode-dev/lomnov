@@ -1,5 +1,13 @@
+
 "use client";
-import { Line } from 'react-chartjs-2';
+
+import React, { useEffect, useState } from "react";
+import { Line } from "react-chartjs-2";
+import Image from "next/image";
+import testIcon from "@/icons/image.png";
+import sellIcon from "@/icons/iconsell.png";
+import { useProperties } from "@/context/property";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,71 +16,173 @@ import {
   LineElement,
   Tooltip,
   Legend,
-  TooltipItem,
-} from 'chart.js';
+  ChartOptions,
+} from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend
+);
 
 const PropertiesOverview = () => {
-  const data = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+  const { fetchProperties, properties, loading } = useProperties();
+  const [monthlyData, setMonthlyData] = useState({
+    totalSale: Array(50).fill(0),
+    totalRent: Array(50).fill(0),
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await fetchProperties();
+      } catch (err) {
+        console.error("Error fetching properties:", err);
+      }
+    };
+
+    fetchData();
+  }, [fetchProperties]);
+
+  useEffect(() => {
+    if (!loading && properties.length > 0) {
+      const totalSale = Array(50).fill(0);
+      const totalRent = Array(50).fill(0);
+      console.log("Frist Total Sale::" , totalSale)
+
+      properties
+        .filter(
+          (property) =>
+            property.status === true &&
+            property.statusAdmin === true 
+        
+        )
+        .forEach((property) => {
+          const date = new Date(property.createdAt);
+          const month = date.getMonth();
+
+          const isForSale = ["For Sale", "សម្រាប់លក់"].includes(
+            property.transition[0]?.content
+          );
+          const isForRent = ["For Rent", "សម្រាប់ជួល"].includes(
+            property.transition[0]?.content
+          );
+
+          if (isForSale) totalSale[month] += 1;
+          if (isForRent) totalRent[month] += 1;
+        });
+
+      setMonthlyData({ totalSale, totalRent });
+      console.log("Total ::: " , totalSale);
+    }
+  }, [properties, loading]);
+
+
+  const currentMonth = new Date().getMonth();
+
+  const chartData = {
+    labels: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
     datasets: [
       {
-        label: 'Total Buy',
-        data: [2000, 2205, 1800, 2500, 2300, 2700],
-        borderColor: '#8B5CF6', // Purple line
-        backgroundColor: 'bg-Secondary', // Light purple fill
+        label: "Total Sale",
+        data: monthlyData.totalSale,
+        borderColor: "#7D7757",
+        backgroundColor: "rgba(139, 92, 246, 0.1)",
         fill: true,
-        tension: 0.4, // Smooth curves
+        tension: 0.5,
       },
       {
-        label: 'Total Rent',
-        data: [1500, 1351, 1700, 1900, 2100, 1800],
-        borderColor: '#34D399', // Green line
-        backgroundColor: 'rgba(52, 211, 153, 0.1)', // Light green fill
+        label: "Total Rent",
+        data: monthlyData.totalRent,
+        borderColor: "#34D399",
+        backgroundColor: "rgba(52, 211, 153, 0.1)",
         fill: true,
-        tension: 0.4,
+        tension: 0.5,
       },
     ],
   };
 
-  const options = {
+  const chartOptions: ChartOptions<"line"> = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
+      legend: {
+        display: false,
+      },
       tooltip: {
         callbacks: {
-          label: (context: TooltipItem<'line'>) => {
-            return `${context.dataset.label}: ${context.raw}`;
-          },
+          label: (context) => `${context.dataset.label}: ${context.raw}`,
         },
       },
     },
     scales: {
+      x: {
+        grid: {
+          display: true,
+        },
+      },
       y: {
         beginAtZero: true,
-        ticks: { stepSize: 500 },
+        ticks: {
+          stepSize: 5,
+        },
+        grid: {
+          drawTicks: true,
+          lineWidth: 1,
+        },
       },
     },
   };
 
   return (
-    <div className="bg-BgSoftWhite rounded-lg shadow-md p-6 w-2/3 h-[461.23px] mt-[40px]">
-      <div className="flex justify-between items-center mb-4">
-        <div>
-          <h2 className="text-xl font-semibold">Properties Overview</h2>
-        </div>
-        <div className="flex space-x-4">
-          <div className="flex items-center space-x-1">
-            <div className="h-3 w-3 rounded-full bg-Secondary"></div>
-            <span className="text-sm text-gray-600">Total Sale: 6,512</span>
+    <div className="bg-white rounded-lg shadow-md p-6 w-full h-[461px]">
+      <div className="w-full">
+        <h2 className="text-lg font-semibold">Properties Overview</h2>
+        <div className="flex justify-center items-center gap-6 mt-5 mb-5">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-Primary/30 flex items-center justify-center rounded-full">
+              <Image src={testIcon} width={32} height={32} alt="Sale Icon" />
+            </div>
+            <div>
+              <p className="text-xl font-bold text-black">
+                {monthlyData.totalSale[currentMonth]}
+              </p>
+              <p className="text-sm font-bold text-gray-600">Total Sale</p>
+            </div>
           </div>
-          <div className="flex items-center space-x-1">
-            <div className="h-3 w-3 rounded-full bg-Primary"></div>
-            <span className="text-sm text-gray-600">Total Rent: 2,168</span>
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-Positive/30 flex items-center justify-center rounded-full">
+              <Image src={sellIcon} width={32} height={32} alt="Rent Icon" />
+            </div>
+            <div>
+              <p className="text-xl font-bold text-black">
+                {monthlyData.totalRent[currentMonth]}
+              </p>
+              <p className="text-sm font-bold text-gray-600">Total Rent</p>
+            </div>
           </div>
         </div>
       </div>
-      <Line data={data} options={options} />
+
+      <div className="h-[300px] w-full">
+        <Line data={chartData} options={chartOptions} />
+      </div>
     </div>
   );
 };

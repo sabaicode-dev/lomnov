@@ -15,6 +15,7 @@ import {
   ResponsePropertyByID,
   ResponseCategoriesDTO,
 } from "@/src/utils/types/indext";
+import { ResponsePropertyByIDP } from "@/src/utils/types/indext";
 import { PropertyRepository } from "../database/repositories/property.repository";
 import { NotFoundError, UnauthorizedError } from "../utils/error/customErrors";
 import { UserServiceClient } from "./userServiceClient";
@@ -41,6 +42,44 @@ export class PropertyService {
       throw error;
     }
   }
+
+  //update status
+  public async updatePropertyStatus(
+    propertyId: string,
+    status: boolean
+  ): Promise<IProperty | null> {
+    try {
+      // Call the repository to update the status
+      const updatedProperty = await this.propertyRepository.updatePropertyStatus(
+        propertyId,
+        status
+      );
+
+      // Return the updated property (or null if not found)
+      return updatedProperty;
+    } catch (error) {
+      console.error("Error in PropertyService - updatePropertyStatus:", error);
+      throw error;
+    }
+  }
+
+  //update status Admin
+  public async updatestatusAdmin(
+    propertyId: string,
+    statusAdmin : boolean
+  ) : Promise<IProperty | null> {
+    try {
+      const updateadmin = await this.propertyRepository.updatestatusAdmin(
+        propertyId,
+        statusAdmin
+      );
+      return updateadmin;
+    } catch (error) {
+      console.error("Error in proeprty service", error);
+      throw error;
+    }
+  }
+
 
   public async getProperties(
     queries: RequestQueryPropertyDTO
@@ -72,7 +111,7 @@ export class PropertyService {
   public async getPropertiesMe(
     queries: RequestQueryPropertyMeDTO
   ): Promise<ResponseAllPropertyMeDTO> {
-    const { cognitoSub, language, page = 1, limit = 12, fav_me} = queries;
+    const { cognitoSub, language, page = 1, limit = 12, fav_me } = queries;
 
     if (!cognitoSub) {
       throw new UnauthorizedError();
@@ -239,6 +278,9 @@ export class PropertyService {
     }
   }
 
+
+  
+
   public async deleteProperty(
     propertyId: string,
     cognitoSub: string | undefined
@@ -251,54 +293,75 @@ export class PropertyService {
     }
   }
 
-  // public async getPropertyByID(id: string): Promise<ResponsePropertyByID> {
-  //   try {
-  //     // Fetch property details
-  //     const property = (await this.propertyRepository.findPropertyByID(
-  //       id
-  //     )) as ResponsePropertyDTO;
-  //     //@ts-ignore
-  //     //console.log({...property._doc});
+  //service delete property of every proeprty
+  public async deleteEveryPropertyById(
+    propertyId: string
+  ): Promise<boolean> {
+    try {
+      return await this.propertyRepository.deleteById(propertyId);
+      
+    } catch (error) {
+      throw new Error("Failed to delete property");
+    }
+  }
 
-  //     if (!property) {
-  //       throw new Error(`Property with ID ${id} not found.`);
-  //     }
-  //     console.log("your property : " , property)
+  //get by phol
+  public async getPropertyByIDP(id: string) : Promise<ResponsePropertyByIDP> {
+    try {
+      const property = await this.propertyRepository.findPropertyByID(id);
+      if(!property){
+        throw new Error(`Property with ID ${id} not found `);
+      }
 
-  //     // Fetch property owner details
-  //     const propertyOwner = await this.userServiceClient.propertyOwnerInfo(
-  //       property.cognitoSub as string
-  //     );
-  //     // Construct the response object
-  //     const responses: ResponsePropertyByID = {
-  //       //@ts-ignore
-  //       ...property,
-  //       propertyOwner,
-  //     };
-  //     console.log("Response Data:: ", responses)
-  //     return responses;
-  //   } catch (error) {
-  //     console.error(`Error fetching property by ID ${id}:`, error);
-  //     throw new Error(`Failed to fetch property with ID ${id}`);
-  //   }
-  // }
+      const detailedContent = property.detail
+      ? property.detail.map((detail: any) => {
+        return {
+          language: detail.language,
+          size: detail.content.get("size"),
+          bedrooms: detail.content?.get("bedrooms"),
+          bathrooms: detail.content?.get("bathrooms"),
+          square: detail.content?.get("square"),
+          fireplace: detail.content?.get("fireplace"),
+          garden: detail.content?.get("garden"),
+          patio: detail.content?.get("patio"),
+          kitchen: detail.content?.get("kitchen"),
+          land_size: detail.content?.get("land_size"),
+          parking: detail.content?.get("parking"),
+          road_size: detail.content?.get("road_size"),
+          pool: detail.content?.get("pool"),
+        }
+      })
+      : [];
+
+      const respone : ResponsePropertyByIDP = {
+        ...property,
+        detail: detailedContent,
+      }
+
+      return respone;
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
   public async getPropertyByID(id: string): Promise<ResponsePropertyByID> {
     try {
       // Fetch property details
       const property = await this.propertyRepository.findPropertyByID(id) as ResponsePropertyDTO;
-  
+
       if (!property) {
         throw new Error(`Property with ID ${id} not found.`);
       }
-      console.log("Fetched property:", property);
-  
+
       // Fetch property owner details
       const propertyOwner = await this.userServiceClient.propertyOwnerInfo(property.cognitoSub as string);
-  
-      
+
+
       // Safely map the `detail` field if it exists
       const detailedContent = property.detail
-        ? property.detail.map((detail : any) => {
+        ? property.detail.map((detail: any) => {
           return {
             language: detail.language,
             size: detail.content.get("size"),
@@ -313,26 +376,26 @@ export class PropertyService {
             parking: detail.content?.get("parking"),
             road_size: detail.content?.get("road_size"),
             pool: detail.content?.get("pool"),
-          }})
+          }
+        })
         : [];
-  
+
       // Construct the response object
       const response: ResponsePropertyByID = {
         ...property,
         detail: detailedContent, // Replace detail with mapped data (or empty array if undefined)
         propertyOwner,
       };
-  
-      console.log("Response Data:", response);
+
       return response;
     } catch (error) {
       console.error(`Error fetching property by ID ${id}:`, error);
-  
+
       // Re-throw the error with more context
       throw new Error(`Failed to fetch property with ID ${id}`);
     }
   }
-  
+
 
   public async getPropertyUser(
     cognitoSub: string,
@@ -436,68 +499,75 @@ export class PropertyService {
     }
   }
 
- // Method to find nearby properties
- public async findNearbyProperties(
-  coordinates: { lat: number; lng: number },
-  maxDistance: number,
-  limit: number = 10
-): Promise<IProperty[]> {
-  try {
-    // Build geospatial filter
-    const locationFilter = {
-      coordinate: {
-        $near: {
-          $geometry: {
-            type: "Point",
-            coordinates: [coordinates.lng, coordinates.lat], // Longitude, Latitude
+  // Method to find nearby properties
+  public async findNearbyProperties(
+    coordinates: { lat: number; lng: number },
+    maxDistance: number,
+    limit: number = 10
+  ): Promise<IProperty[]> {
+    try {
+      // Build geospatial filter
+      const locationFilter = {
+        coordinate: {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates: [coordinates.lng, coordinates.lat], // Longitude, Latitude
+            },
+            $maxDistance: maxDistance, // Maximum distance in meters
           },
-          $maxDistance: maxDistance, // Maximum distance in meters
         },
-      },
-    };
+      };
 
-    // Query repository for nearby properties
-    const properties = await this.propertyRepository.findNearbyProperties(
-      locationFilter,
-      limit
-    );
+      // Query repository for nearby properties
+      const properties = await this.propertyRepository.findNearbyProperties(
+        locationFilter,
+        limit
+      );
 
-    return properties;
-  } catch (error) {
-    console.error("Error finding nearby properties:", error);
-    throw new Error("Failed to fetch nearby properties");
-  }
-}
-
-// Method to add coordinates to a property
-public async addCoordinatesToProperty(
-  propertyId: string,
-  coordinates: { lat: number; lng: number }
-): Promise<ResponsePropertyDTO | null> {
-  try {
-    const updatedProperty = await this.propertyRepository.addCoordinates(
-      propertyId,
-      coordinates
-    );
-
-    if (!updatedProperty) {
-      throw new NotFoundError("Property not found");
+      return properties;
+    } catch (error) {
+      console.error("Error finding nearby properties:", error);
+      throw new Error("Failed to fetch nearby properties");
     }
-
-    return updatedProperty;
-  } catch (error) {
-    console.error("Error adding coordinates to property:", error);
-    throw error;
   }
-}
 
-  
+  // Method to add coordinates to a property
+  public async addCoordinatesToProperty(
+    propertyId: string,
+    coordinates: { lat: number; lng: number }
+  ): Promise<ResponsePropertyDTO | null> {
+    try {
+      const updatedProperty = await this.propertyRepository.addCoordinates(
+        propertyId,
+        coordinates
+      );
 
-  public async getCategories(): Promise <ResponseCategoriesDTO[]>{
+      if (!updatedProperty) {
+        throw new NotFoundError("Property not found");
+      }
+
+      return updatedProperty;
+    } catch (error) {
+      console.error("Error adding coordinates to property:", error);
+      throw error;
+    }
+  }
+
+
+
+  public async getCategories(): Promise<ResponseCategoriesDTO[]> {
     try {
       return await this.propertyRepository.getCategories();
     } catch (error) {
       throw error;
     }
   }
+  public async getCognitoSubProperties():Promise<any>{
+    try {
+      return await this.propertyRepository.getCognitoSubProperties();
+    } catch (error) {
+      throw error;
+    }
+  } 
 }

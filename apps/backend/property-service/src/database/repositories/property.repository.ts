@@ -153,6 +153,45 @@ export class PropertyRepository {
       throw error;
     }
   }
+  //update property status
+
+
+  public async updatePropertyStatus(
+    propertyId: string,
+    status: boolean
+  ): Promise<IProperty | null> {
+    try {
+      // Locate and update the property in the database based only on _id
+      const updatedProperty = await PropertyModel.findByIdAndUpdate(
+        { _id: propertyId },
+        { $set: { status } },
+        { new: true } // Return the updated document
+      );
+  
+      return updatedProperty;
+    } catch (error) {
+      console.error("Error in updatePropertyStatus:", error);
+      throw error;
+    }
+  }
+
+  //update state admin aprove
+  public async updatestatusAdmin(
+    propertyId : string,
+    statusAdmin : boolean
+  ):Promise<IProperty | null> {
+    try {
+      const updatestatusAdmin = await PropertyModel.findByIdAndUpdate(
+        {_id : propertyId},
+        {$set:{statusAdmin}},
+        {new  : true}
+      );
+      return updatestatusAdmin;
+    } catch (error) {
+      console.error("Error in updatestatusAdmin:" , error)
+      throw error;
+    }
+  }
 
   /**
    * Find a property by its ID
@@ -169,6 +208,7 @@ export class PropertyRepository {
       throw error;
     }
   }
+
 
 
 
@@ -241,6 +281,33 @@ export class PropertyRepository {
       return true;
     } catch (error) {
       throw error;
+    }
+  }
+
+  //delete property 
+  public async deleteById(propertyId : string): Promise<boolean> {
+    try {
+      const property = await PropertyModel.findById(propertyId);
+      if(!property){
+        throw new NotFoundError("No Property");
+      }
+      //delete image from s3
+      if(property.thumbnail){
+        await deleteFileFromS3Service.deleteFile(property.thumbnail);
+      }
+
+      if(property.images?.length){
+        await Promise.all(
+          property.images.map((image) => 
+            deleteFileFromS3Service.deleteFile(image)
+        ),
+        )
+      }
+      // delete property
+      await PropertyModel.findByIdAndDelete(propertyId);
+      return true;
+    } catch (error) {
+       throw error;
     }
   }
 
@@ -321,5 +388,15 @@ export class PropertyRepository {
       throw error;
     }
   }
+  /**
+   * Return all cognito sub and id
+   */
 
+  public async getCognitoSubProperties():Promise<any>{
+    try {
+      return await PropertyModel.find({}).select(["cognitoSub","_id"]).lean();
+    } catch (error) {
+      throw error;
+    }
+  }
 }

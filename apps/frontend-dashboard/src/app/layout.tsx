@@ -1,38 +1,34 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/organisms/header/Header";
-import Sidebar from "@/components/organisms/sidebar/Sidebar ";
-
+import { AuthProvider } from "@/context/useAuth";
+import { cookies } from "next/headers";
+// import { PropertyProvider } from "@/context/property";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "LOMNOV",
-  description: "This is Deshboard ",
+  title: "Dashboard | Lomnov",
+  description: "This is Dashboard",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Move cookies logic inside the component function
+  const cookieStore = await cookies();
+  const userCookie = cookieStore.get("idToken");
   return (
     <html lang="en">
-      <body
-       className={inter.className}
-      >    
-        <div className="flex flex-col">
-           <Header/>
-           <div className="flex">
-              <Sidebar/>
-              <div className="m-[40px] w-[100%] overflow-auto ">
-              {children}
-              </div>
-           </div>
-        </div>  
-      
-      
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
+      <body className={inter.className}>
+        <AuthProvider isLogin={!userCookie}>
+            {children}
+        </AuthProvider>
       </body>
     </html>
   );

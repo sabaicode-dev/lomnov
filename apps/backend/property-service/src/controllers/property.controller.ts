@@ -17,8 +17,9 @@ import {
 } from "tsoa";
 import { IProperty } from "@/src/utils/types/indext";
 import { PropertyService } from "@/src/services/property.service";
-import { RequestPropertyDTO, RequestQueryPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponsePropertyDTO, ResponseUpdatePropertyDTO } from "@/src/utils/types/indext";
+import { RequestPropertyDTO, RequestQueryPropertyDTO, RequestUpdatePropertyDTO, ResponseAllPropertyDTO, ResponseCreatePropertyDTO, ResponsePropertyDTO, ResponseUpdatePropertyDTO  } from "@/src/utils/types/indext";
 import { Request as Express } from "express";
+// import { ResponsePropertyByIDP } from "@/src/utils/types/indext";
 
 import { NotFoundError, UnauthorizedError } from "@/src/utils/error/customErrors";
 // ====================================================================
@@ -58,13 +59,9 @@ export class PropertyController extends Controller {
     @Request() request?: Express.Request
   ): Promise<ResponseCreatePropertyDTO> {
 
-    console.log(coordinate);
-    
     try {
 
       const cognitoSub = request?.cookies.username!;
-      console.log(cognitoSub);
-
       if (!cognitoSub) {
         throw new UnauthorizedError();
       }
@@ -137,28 +134,18 @@ export class PropertyController extends Controller {
   // Get Detail
   // Controller get single
   @Get("/properties/get/{propertyId}")
-  public async fetchPropertyByID(@Path() propertyId: string): Promise<ResponsePropertyDTO> {
+  public async fetchPropertyByID(
+    @Path() propertyId: string
+  ): Promise<ResponsePropertyDTO> {
     try {
       const data = await this.propertyService.getPropertyByID(propertyId);
-      // console.log("This is Your Data : " ,data.detail)
+ 
       return data;
     } catch (error) {
       console.log(error)
       throw error;
     }
   }
-
-//  @Get("/properties/get/{proertyIdDetail}")
-//  public async fetchPropertyByIDdetail(@Path() propertyId : string): Promise<ResponsePropertyDTO> {
-//   try {
-//     const data = await this.propertyService.getPropertyByID(propertyId);
-//     console.log("This is Your Data : " ,data.detail)
-//     return data.detail;
-//   } catch (error) {
-//     console.log(error)
-//     throw error;
-//   }
-//  }
 
 
   @Get("/properties/me")
@@ -221,10 +208,12 @@ export class PropertyController extends Controller {
     @FormField() price?: number,
     @FormField() detail?: string,
     @FormField() status?: boolean,
+    @FormField() coordinate?:string,
     @Request() request?: Express.Request,
   ): Promise<ResponseUpdatePropertyDTO | null> {
     try {
       const cognitoSub = request?.cookies.username!
+      
       if (!cognitoSub) {
         throw new UnauthorizedError()
       }
@@ -251,6 +240,7 @@ export class PropertyController extends Controller {
         transition: parseTransition,
         detail: parsedDetail,
         status,
+        coordinate: coordinate ? JSON.parse(coordinate) : []
       };
 
       return await this.propertyService.updateProperty(
@@ -264,6 +254,83 @@ export class PropertyController extends Controller {
     }
   }
 
+
+    //this method for post view user 
+
+    @Put("/properties/{propertyId}/views")
+    public async incrementPropertyViews(@Path() propertyId: string): Promise<ResponsePropertyDTO> {
+      console.log("Incrementing views for property ID:", propertyId); // Debugging line
+      try {
+        return await this.propertyService.incrementPropertyViews(propertyId);
+      } catch (error) {
+        if (error instanceof NotFoundError) {
+          this.setStatus(404);
+        } else {
+          this.setStatus(500);
+        }
+        throw error;
+      }
+    }
+    //staute update
+@Put("/properties/{propertyId}/status")
+public async updatePropertyStatus(
+  @Path() propertyId: string,
+  @Body() body: { status: boolean }
+): Promise<{ message: string; updatedStatus?: boolean }> {
+  try {
+    // Validate the status field in the request body
+    const { status } = body;
+    if (typeof status !== "boolean") {
+      throw new Error("Invalid status. It must be a boolean value.");
+    }
+
+    // Call the service method to update the property status
+    const updatedProperty = await this.propertyService.updatePropertyStatus(
+      propertyId,
+      status
+    );
+
+    if (!updatedProperty) {
+      throw new NotFoundError("Property not found");
+    }
+
+    return { 
+      message: "Property status updated successfully", 
+      updatedStatus: updatedProperty.status 
+    };
+
+  } catch (error) {
+    console.error("Error updating property status:", error);
+    this.setStatus(500);
+    throw error;
+  }
+}
+
+@Put("/properties/{propertyId}/statusAdmin")
+public async updateAdminstatus(
+  @Path() propertyId : string,
+  @Body() body: {statusAdmin : boolean}
+): Promise<{message: string; updatestatusAdmin?: boolean}>{
+  try {
+    const {statusAdmin} = body;
+    if(typeof statusAdmin !== "boolean"){
+      throw new Error("Invalid statusAdmin. Value must be boolean ");
+    }
+    const updateadminStatus = await this.propertyService.updatestatusAdmin(propertyId , statusAdmin);
+    if(!updateadminStatus){
+      throw new NotFoundError("Property Not Found");
+    }
+    return {
+      message : "Success update status Admin",
+      updatestatusAdmin : updateadminStatus.statusAdmin
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+  //delete proeprty's user
   @Delete("/properties/me/{propertyId}")
   public async deleteProperty(
     @Path() propertyId: string,
@@ -280,22 +347,22 @@ export class PropertyController extends Controller {
     }
   }
 
-  //this method for post view user 
-
-  @Put("/properties/{propertyId}/views")
-  public async incrementPropertyViews(@Path() propertyId: string): Promise<ResponsePropertyDTO> {
-    console.log("Incrementing views for property ID:", propertyId); // Debugging line
+  //delete every proeprty by id
+  @Delete("/properties/{propertyId}")
+  public async deletePropertyById(
+    @Path() propertyId: string
+  ): Promise<{message : string}> {
     try {
-      return await this.propertyService.incrementPropertyViews(propertyId);
+      const result = await this.propertyService.deleteEveryPropertyById(propertyId);
+      return {message: result ? "Delete Successfully" : "Property not found"};
     } catch (error) {
-      if (error instanceof NotFoundError) {
-        this.setStatus(404);
-      } else {
-        this.setStatus(500);
-      }
-      throw error;
+      this.setStatus(500);
+      throw new Error("Fail to delete property");
     }
   }
+
+
+
 
 
   @Get("/properties/{propertyId}/views")
@@ -401,6 +468,17 @@ export class PropertyController extends Controller {
   public async getCategories() {
     try {
       return await this.propertyService.getCategories();
+    } catch (error) {
+      throw error;
+    }
+  }
+    /**
+   * This method use for responses only cognito sub 
+   */
+  @Get("/properties/sub")
+  public async getCognitoSubProperties(){
+    try {
+      return await this.propertyService.getCognitoSubProperties();
     } catch (error) {
       throw error;
     }

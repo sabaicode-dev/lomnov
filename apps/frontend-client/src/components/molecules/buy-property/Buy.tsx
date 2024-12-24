@@ -42,6 +42,10 @@ const BuyProperty = () => {
     data.transition.some((t) => t.content === "For Sale")
   );
 
+  const filterstatus = filterPropertyBuy.filter((data) => 
+    data.status === true && data.statusAdmin === true
+  )
+
   // Handle comparison toggling using the imported toggleCompare function
   const handleToggleCompare = (items: RealEstateItem[]) => {
     toggleCompare(items, selectedItems, setSelectedItems);
@@ -54,8 +58,8 @@ const BuyProperty = () => {
 
       {error && <p>{error}</p>}
       {!loading && filterPropertyBuy.length > 0 ? (
-        <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
-          {filterPropertyBuy.map((item) => {
+        <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 mb-[40px]">
+          {filterstatus.map((item) => {
             const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
             return (
               <ItemCard key={item._id} item={item} toggleCompare={() => handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />

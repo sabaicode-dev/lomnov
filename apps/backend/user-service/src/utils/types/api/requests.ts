@@ -14,6 +14,7 @@ export interface RequestUserDTO {
   background?: string[];
   favorite?: string[];
   role?: string;
+  status?: boolean;
 }
 
 export interface GetAllUsersQueryDTO {
@@ -22,6 +23,7 @@ export interface GetAllUsersQueryDTO {
   firstName?: string;
   lastName?: string;
   userName?: string;
+  status?: boolean;
   role?: string;
 }
 

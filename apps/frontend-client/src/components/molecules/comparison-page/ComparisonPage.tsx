@@ -1,13 +1,16 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { IResponseComparePropertes } from '@/libs/types/api-properties/property-response';
 import Image from 'next/image';
+import { FaArrowLeft } from 'react-icons/fa';
 import {fetchComparePropertyById} from "@/libs/fetch-data/api"
+import Loading from '@/components/atoms/loading/Loading';
 
 const ComparisonPage = () => {
   const searchParams = useSearchParams(); 
+  const router = useRouter();
   const [item1, setItem1] = useState<IResponseComparePropertes | null>(null);
   const [item2, setItem2] = useState<IResponseComparePropertes | null>(null);
   const [loading, setLoading] = useState(true);
@@ -51,8 +54,8 @@ const ComparisonPage = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-10">
-        <p className="text-xl">Loading comparison...</p>
+      <div className="flex item-center py-4">
+        <Loading />
       </div>
     );
   }
@@ -68,12 +71,21 @@ const ComparisonPage = () => {
 const item1Contents = item1?.detail;
 const item2Contents = item2?.detail;
 
-// Log the details to confirm
-console.log("Item 1 Details Content: ", item1Contents);
-console.log("Item 2 Details Content: ", item2Contents);
-
 return (
-  <div className="max-w-screen-xl mx-auto p-6 sm:p-8 md:p-10">
+  <div className="max-w-screen-xl mx-auto p-2 sm:p-8 md:p-10">
+ {/* Back to Comparison Bar Button */}
+    <div className="mb-6 flex items-center">
+      <button
+        onClick={() => router.push('/')} // Adjust path as needed
+        className="mr-4 bg-transparent hover:bg-gray-200 border border-gray-300 rounded-md shadow-sm text-gray-700"
+      >
+        <span className="flex items-center justify-center w-8 h-8 border border-gray-500 rounded">
+          <FaArrowLeft size={12} className="text-gray-600" />
+        </span>
+      </button>
+        <span className="text-lg font-medium">Compare listed</span>
+    </div>
+
     {/* Property Images */}
     <div className="flex flex-col sm:flex-row sm:space-x-6 mb-8">
       <div className="w-full sm:w-1/2 mb-6 sm:mb-0">
@@ -107,85 +119,96 @@ return (
     </div>
 
     {/* Comparison Details */}
-    <div className="space-y-8">
+    <div className="space-y-8 mt-12">
+    <div className="flex justify-between border-gray-500 border-b-[1px]">
+        <p className="text-lg text-gray-900 font-regular">
+          {item1?.category[0].content ?? "0"} 
+        </p>
+        <p className="text-lg font-bold text-olive-drab">Property Type</p>
+        <p className="text-lg text-gray-900 font-regular">
+          {item2?.category[0].content ?? "0"}
+        </p>
+      </div>
+      
+
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1?.price ? `$${item1.price}` : "Not Available"} 
+          {item1?.price ? `$${item1.price}` : "0"} 
         </p>
         <p className="text-lg font-bold text-olive-drab">Price</p>
         <p className="text-lg text-gray-900 font-regular">
-          {item2?.price ? `$${item2.price}` : "Not Available"}
+          {item2?.price ? `$${item2.price}` : "0"}
         </p>
       </div>
 
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1Contents[0].bedrooms || "Not Available"}
+          {item1Contents[0].bedrooms ?? "0"}
         </p>
         <p className="text-lg font-bold text-olive-drab">Bedrooms</p>
         <p className="text-lg text-gray-900 font-regular">
-          {item2Contents[0].bedrooms || "Not Available"}
+          {item2Contents[0].bedrooms ?? "0"}
         </p>
       </div>
 
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1Contents[0].bathrooms || "Not Available"}
+          {item1Contents[0].bathrooms ?? "0"}
         </p>
         <p className="text-lg font-bold text-olive-drab">Bathrooms</p>
         <p className="text-lg text-gray-900 font-regular">
-           {item2Contents[0].bathrooms || "Not Available"}
+           {item2Contents[0].bathrooms ?? "0"}
         </p>
       </div>
 
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1Contents[0].square || "Not Available"} 
+          {item1Contents[0].square ?? "0"} 
         </p>
         <p className="text-lg font-bold text-olive-drab">Square</p>
         <p className="text-lg text-gray-900 font-regular">
-          {item2Contents[0].square || "Not Available"}
+          {item2Contents[0].square ?? "0"}
         </p>
       </div>
 
       {/* Additional Details */}
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1Contents[0].size || "Not Available"}
+          {item1Contents[0].size ?? "0"}
         </p>
         <p className="text-lg font-bold text-olive-drab">Size</p>
         <p className="text-lg text-gray-900 font-regular">
-           {item2Contents[0].size || "Not Available"}
+           {item2Contents[0].size ?? "0"}
         </p>
       </div>
 
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1Contents[0].pool || "Not Available"}
+          {item1Contents[0].pool ?? "0"}
         </p>
         <p className="text-lg font-bold text-olive-drab">Pools</p>
         <p className="text-lg text-gray-900 font-regular">
-          {item2Contents[0].pool || "Not Available"}
+          {item2Contents[0].pool ?? "0"}
         </p>
       </div>
 
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1Contents[0].parking || "Not Available"} 
+          {item1Contents[0].parking ?? "0"} 
         </p>
         <p className="text-lg font-bold text-olive-drab">Parking</p>
         <p className="text-lg text-gray-900 font-regular">
-           {item2Contents[0].parking || "Not Available"}
+           {item2Contents[0].parking ?? "0"}
         </p>
       </div>
 
       <div className="flex justify-between border-gray-500 border-b-[1px]">
         <p className="text-lg text-gray-900 font-regular">
-          {item1Contents[0].garden || "Not Available"} 
+          {item1Contents[0].garden ?? "0"} 
         </p>
         <p className="text-lg font-bold text-olive-drab">Garden</p>
         <p className="text-lg text-gray-900 font-regular">
-           {item2Contents[0].garden || "Not Available"}
+           {item2Contents[0].garden ?? "0"}
         </p>
       </div>
     </div>

@@ -4,8 +4,13 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useProperties } from "@/context/property";
-
-export const provinceImg = [
+import { useTranslation } from "@/hook/useTranslation";
+type ProvinceTypes = {
+  id: string | number;
+  name: string;
+  img: string;
+}
+export const poppularLocationList: ProvinceTypes[] = [
   {
     id: 1,
     name: "Phnom Penh",
@@ -29,8 +34,9 @@ export const provinceImg = [
 ];
 
 const ItemCardPopularLocationList = () => {
-  const { properties, loading, error, fetchProperties } = useProperties();
-  const [currentPage, setCurrentPage] = useState(1);
+  const {t} = useTranslation();
+  const { properties, loading, fetchProperties } = useProperties();
+  const [currentPage, _setCurrentPage] = useState(1);
   const [groupedData, setGroupedData] = useState<{
     address: string;
     forSale: number;
@@ -71,7 +77,7 @@ const ItemCardPopularLocationList = () => {
 
       const sortedGroupedData = Object.values(addressGroups)
         .map((group) => {
-          const province = provinceImg.find((p) => p.name === group.address);
+          const province = poppularLocationList.find((p) => p.name === group.address);
           return {
             ...group,
             img: province ? province.img : "",
@@ -83,12 +89,13 @@ const ItemCardPopularLocationList = () => {
       setGroupedData(sortedGroupedData);
     }
   }, [properties, loading]);
-
+  console.log(groupedData);
+  
   return (
     <div className="flex flex-col gap-5 mb-10">
       <div className="flex flex-row justify-center items-center">
         <h1 className="text-[18px] lg:text-[26px] font-[600] text-center text-olive-drab">
-          Popular Locations
+          {t("poppular locations")}
         </h1>
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -109,15 +116,15 @@ const ItemCardPopularLocationList = () => {
               />
             </div>
             <div className="h-[20%] flex flex-col justify-center items-center">
-              <p className="font-[700] text-[18px] underline text-olive-drab">{group.address}</p>
+              <p className="font-[700] text-[18px] underline text-olive-drab">{t(`poppular-provinces.${group.address}`)}</p>
               <section className="flex flex-row gap-5 justify-center items-center w-full h-[60px]">
                 <div className="font-[600]">
                   <span className="text-[14px]">{group.forRent}</span>
-                  <span className="text-[14px]"> Rent</span>
+                  <span className="text-[14px]"> {t("rent")}</span>
                 </div>
                 <div className="font-[600]">
                   <span className="text-[14px]">{group.forSale}</span>
-                  <span className="text-[14px]"> Sell</span>
+                  <span className="text-[14px]"> {t("buy")}</span>
                 </div>
               </section>
             </div>

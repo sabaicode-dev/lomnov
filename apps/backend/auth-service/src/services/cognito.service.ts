@@ -163,6 +163,7 @@ export class CognitoService {
         cognitoSub: userResponse.Username, // Use Username for cognitoSub
         email: requestBody.email,
         userName: userResponse.UserAttributes?.find(attr => attr.Name === 'name')?.Value || '',
+        role: role
       };
 
       console.log('user payload::: ', userPayload)
@@ -480,7 +481,7 @@ export class CognitoService {
       throw error;
     }
   }
-  public async signout(params: GlobalSignOutCommandInput):Promise<GlobalSignOutCommandOutput> {
+  public async signout(params: GlobalSignOutCommandInput): Promise<GlobalSignOutCommandOutput> {
     try {
       const command = new GlobalSignOutCommand(params);
       const result: GlobalSignOutCommandOutput = await this.cognitoClient.send(command);

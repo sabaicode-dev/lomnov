@@ -1,26 +1,44 @@
-import Login_deshboard from '@/components/atoms/login-deshboard/Login_deshboard';
-import AgentsCustomersOverview from '@/components/molecules/chart_data/ChartData';
-import PropertiesOverview from '@/components/molecules/property_overview/Property_overview';
-import Total_Data from '@/components/molecules/total_data/Total_Data';
-import React from 'react'
-
+import AgentsCustomersOverview from "@/components/molecules/chart-data/ChartData";
+import PropertiesOverview from "@/components/molecules/property_overview/Property_overview";
+import Totalagentsregister from "@/components/molecules/total-agents-register/Total-agents-register";
+import Totalcustomerregister from "@/components/molecules/total-customer-register/Total-customer-register";
+import Totalpropertydata from "@/components/molecules/total-property-desbord/Total-property-data";
+import { AgentProvider } from "@/context/agent";
+import { CustomerProvider } from "@/context/customer";
+import { PropertyProvider } from "@/context/property";
+import React from "react";
+//===================================================
 
 const page = () => {
   return (
-    <div className=''>
-       <p className='pb-[40px] text-[30px] font-black '>Dashboard</p>
-       <Login_deshboard/>
-       <div className='flex justify-between gap-[40px]'>
-            <Total_Data/>
-            <Total_Data/>
-            <Total_Data/>
-       </div>
-       <div className='flex justify-between gap-[40px]'>
-          <PropertiesOverview/>
-          <AgentsCustomersOverview/>
-       </div>
+    <div className="">
+      <p className=" text-[30px] font-black ">Dashboard</p>
+      <div className="grid grid-cols-3 gap-[40px]">
+        <PropertyProvider>
+          <Totalpropertydata />
+        </PropertyProvider>
+
+        <AgentProvider>
+          <Totalagentsregister />
+        </AgentProvider>
+        <CustomerProvider>
+          <Totalcustomerregister />
+        </CustomerProvider>
+
+        <div className="col-span-2">
+          <PropertyProvider>
+            <PropertiesOverview />
+          </PropertyProvider>
+          
+        </div>
+        <AgentProvider>
+          <CustomerProvider>
+            <AgentsCustomersOverview />
+          </CustomerProvider>
+        </AgentProvider>
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default page;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import extractName from '@/libs/functions/extractName';
 
 type ISelectOptionTypes = {
     name: string;
@@ -33,6 +34,7 @@ export default function PostSelectField({
         onChange({ target: { name: name || '', value: optionName } } as React.ChangeEvent<HTMLInputElement>);  // Call the onChange handler
         setIsOpen(false);  // Close the dropdown after selection
     };
+    const named = extractName(name);
 
     return (
         <div className={` ${zIndex ? `z-${zIndex}` : 'z-10'} w-full h-[80%] flex flex-1 gap-9 justify-between items-center mt-1`}>
@@ -78,7 +80,7 @@ export default function PostSelectField({
                         </div>
                     )}
                 </div>
-                {errorMsg ? '' : <span className='text-red-700 font-helvetica leading-3 tracking-widest my-3 text-[15px] text-helvetica-paragraph'>{`${name} are required value*`}</span>}
+                {errorMsg ? '' : <span className='text-red-700 font-helvetica leading-3 tracking-widest my-3 text-[15px] text-helvetica-paragraph'>{`${named} are required value*`}</span>}
             </div>
         </div>
     );

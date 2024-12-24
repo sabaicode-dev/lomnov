@@ -8,7 +8,7 @@ import { errorHandler } from './utils/error/errorHanler';
 import cookieParser from 'cookie-parser';
 
 import cors from "cors";
-import { corsOption } from './middlewares/corsOption';
+import corsOptions from './middlewares/corsOption';
 
 // Dynamically load swagger.json
 const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, 'docs/swagger.json'), 'utf8'));
@@ -18,7 +18,7 @@ const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, 'docs/sw
 // ========================
 const app = express();
 
-app.use(cors(corsOption));
+app.use(cors(corsOptions));
 app.use(cookieParser());
 
 // ========================

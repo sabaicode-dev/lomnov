@@ -1,8 +1,7 @@
-import { RealEstateItem } from '@/libs/types/api-properties/property-response';
+import { RealEstateItem, IResponseComparePropertes } from '@/libs/types/api-properties/property-response';
 import { IMenus } from '@/libs/types/api-menus/menu-response';
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
-import { IResponseComparePropertes } from '@/libs/types/api-properties/property-response';
 
 export async function fetchMenus(): Promise<IMenus[]> {
   const res = await fetch("https://lomnov.onrender.com/api/v1/menus?lang=eng");
@@ -20,7 +19,6 @@ export const fetchPropertyById = async (id: string): Promise<RealEstateItem> => 
     if (response.status !== 200) {
       throw new Error('Failed to fetch property');
     }
-    console.log("API response data:: ", response.data);
     
     // Ensure we return the data
     return response.data;
@@ -37,7 +35,6 @@ export const fetchComparePropertyById = async (id: string): Promise<IResponseCom
     if (response.status !== 200) {
       throw new Error('Failed to fetch property');
     }
-    console.log("API response data:: ", response.data);
     
     // Ensure we return the data
     return response.data;
