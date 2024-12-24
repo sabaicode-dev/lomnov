@@ -54,18 +54,8 @@ export default function Home() {
       </section>
       <div className=" flex flex-col lg:flex-row justify-between gap-20 xl:w-[1300px] m-auto py-20 lg:py-40 px-2 lg:px-20">
         <div>
-          <h2 className=" text-[28px] font-[600] text-olive-drab">
-            Unleash Your Creativity at Home
-          </h2>
-          <p className=" text-olive-drab">
-            Your home is a canvas waiting for your unique touch. Explore the
-            endless possibilities with our expertly curated properties, each
-            offering a perfect blend of style and functionality. Whether you
-            dream of a cozy reading nook, an elegant home office, or a vibrant
-            playroom, we have the spaces that inspire. Let us help you create a
-            home that reflects your personality and lifestyle. Start your
-            journey with us and transform your living space into a masterpiece.
-          </p>
+          <Texts className=" text-[28px] font-[600] text-olive-drab" translateKey="Unleash Your Creativity at Home" />
+          <Texts className="text-olive-drab" translateKey="exclusive-description" />
         </div>
         <div className=" flex justify-end">
           <div className="w-[300px] h-[200px] rounded-2xl overflow-hidden">

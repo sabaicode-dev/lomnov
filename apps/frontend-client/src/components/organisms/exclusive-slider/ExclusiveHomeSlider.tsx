@@ -9,8 +9,10 @@ import ExclusiveItemCard from "@/components/molecules/exclusive-home-item-card/E
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
 import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar";
 import { toggleCompare } from "@/libs/const/toggleCompare";
+import { useTranslation } from "@/hook/useTranslation";
 
 const ExclusiveHomesSlider = ({ items }: { items: RealEstateItem[] }) => {
+  const {t} = useTranslation();
   // Filter items based on price
   const exclusiveItems = items.filter((item) => item.price >= 800000);
 
@@ -25,7 +27,7 @@ const ExclusiveHomesSlider = ({ items }: { items: RealEstateItem[] }) => {
   return (
     <div className="exclusive-homes-slider py-5 w-full">
       <h2 className="text-center text-3xl mb-6 text-[26px] font-[600] text-olive-drab">
-        Exclusive Homes
+       {t("exclusive")}
       </h2>
       <Swiper
         className="h-[430px] bg"
