@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
-
+import { locations } from "@/libs/const/locations";
 interface FilterPopupProps {
   onClose: () => void;
   selectedTransition: string;
@@ -53,10 +53,7 @@ const PropertyFilterPopup = ({onClose,selectedTransition,setSelectedTransition,s
             className="text-Black w-[100%] h-[40px] rounded-xls text-[14px] p-[10px] bg-BgSoftWhite border-[1.5px] border-[#D9D9D9] mt-[4px] focus:outline-none focus:border-Primary/20"
           >
             <option value="">Your city/province</option>
-            <option value="Phnom Penh">Phnom Penh</option>
-            <option value="Kep">Kep</option>
-            <option value="Svay Reng">Svay Reng</option>
-            <option value="Kep">Kep</option>
+            {locations.map((location, index) => (<option key={index} value={location.name}>{location.name}</option>))}
           </select>
         </div>
       </form>

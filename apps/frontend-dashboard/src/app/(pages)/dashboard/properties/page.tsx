@@ -12,7 +12,6 @@ const page = () => {
       <div className="flex justify-between gap-[40px]">
 
         <PropertyProvider>
-
           <TotalDatas />
           <TotalDataSale />
           <TotalDataRent />

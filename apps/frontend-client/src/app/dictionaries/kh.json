@@ -8,6 +8,48 @@
     "language": {
         "en": "អង់គ្លេស",
         "kh": "ខ្មែរ"
+    },
+    "DISCOVER YOUR DREAM HOME": "ស្វែងយល់ពីផ្ទះសុបិន្តរបស់អ្នក",
+    "Premier New Properties & Exclusive Luxury Real Estate":"Premier អចលនទ្រព្យថ្មី & អចលនទ្រព្យប្រណីតផ្តាច់មុខ",
+    "select properties": "ជ្រើសរើសអចលនទ្រព្យ",
+    "locations": "ទីតាំង",
+    "price": "តម្លៃ",
+    "search": "ស្វែងរក",
+    "poppular locations": "ទីតាំងដែលពេញនិយម",
+    "nearly locations": "ទីតាំងដែលនៅជិតអ្នក",
+    "discover": "ស្វែងរកអចលនទ្រព្យល្អបំផុតនៅជិតអ្នក។ ស្វែងរកផ្ទះក្នុងក្តីស្រមៃរបស់អ្នកពីបញ្ជីផ្តាច់មុខរបស់យើង។",
+    "view-all": "មើលទាំងអស់",
+    "provinces":{
+        "banteay-meanchey": "បន្ទាយមានជ័យ" ,
+        "battambang": "បាត់ដំបង" ,
+        "kampong-cham": "កំពង់ចាម" ,
+        "kampong-chhang": "កំពង់ឆ្នាំង" ,
+        "kampong-speu": "កំពង់ស្ពឺ" ,
+        "kampong-thom": "កំពង់ធំ" ,
+        "kampot": "កំពត" ,
+        "kandal": "កណ្តាល" ,
+        "kep": "កែប" ,
+        "koh-kong": "កោះកុង" ,
+        "kratie": "ក្រចេះ" ,
+        "mondulkiri": "មណ្ឌលគិរី" ,
+        "oddar-meanchey": "ឧត្តរមានជ័យ" ,
+        "pailin": "ប៉ៃលិន" ,
+        "phnom-penh": "ភ្នំពេញ" ,
+        "preah-sihanouk": "ព្រះសីហនុ" ,
+        "preah-vihear": "ព្រះវិហារ" ,
+        "prey-veng": "ព្រៃវែង" ,
+        "pursat": "ពោធិ៍សាត់" ,
+        "siem-reap": "សៀមរាប" ,
+        "stung-treng": "ស្ទឹងត្រែង" ,
+        "svay-rieng": "ស្វាយរៀង" ,
+        "takeo": "តាកែវ" ,
+        "tboung-khmum": "ត្បូងឃ្មុំ"
+    },
+    "poppular-provinces":{
+        "Kep": "កែប" ,
+        "Phnom Penh": "ភ្នំពេញ" ,
+        "Preah Sihanouk": "ព្រះសីហនុ",
+        "Siem Reap": "សៀមរាប" 
     }
   }
   

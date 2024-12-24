@@ -29,7 +29,7 @@ const ItemAgents = ({ item }: PropType) => {
         <div className="w-[200px] flex justify-start">
           <p>{item.phoneNumber}</p>
         </div>
-        <CardDate datetime={formatDate(item.updatedAt)} />
+        <CardDate datetime={formatDate(item.createdAt)} />
       </div>
       <div className="flex items-center justify-around gap-[5px] w-[5%]">
         <Link href={`/dashboard/view-agents/${item.userName}`}>
