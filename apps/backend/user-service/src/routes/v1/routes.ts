@@ -165,20 +165,20 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
     const upload = opts?.multer ||  multer({"limits":{"fileSize":8388608}});
 
     
+        const argsUserController_register: Record<string, TsoaRoute.ParameterSchema> = {
+                requestBody: {"in":"body","name":"requestBody","required":true,"ref":"RequestUserDTO"},
+        };
         app.post('/api/v1/users',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.register)),
 
             async function UserController_register(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"RequestUserDTO"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_register, request, response });
 
                 const controller = new UserController();
 
@@ -195,25 +195,25 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_getAllUser: Record<string, TsoaRoute.ParameterSchema> = {
+                page: {"default":1,"in":"query","name":"page","dataType":"double"},
+                limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
+                firstName: {"in":"query","name":"firstName","dataType":"string"},
+                lastName: {"in":"query","name":"lastName","dataType":"string"},
+                userName: {"in":"query","name":"userName","dataType":"string"},
+                role: {"in":"query","name":"role","dataType":"string"},
+        };
         app.get('/api/v1/users',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.getAllUser)),
 
             async function UserController_getAllUser(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    page: {"default":1,"in":"query","name":"page","dataType":"double"},
-                    limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
-                    firstName: {"in":"query","name":"firstName","dataType":"string"},
-                    lastName: {"in":"query","name":"lastName","dataType":"string"},
-                    userName: {"in":"query","name":"userName","dataType":"string"},
-                    role: {"in":"query","name":"role","dataType":"string"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_getAllUser, request, response });
 
                 const controller = new UserController();
 
@@ -230,20 +230,20 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_findUsernameExite: Record<string, TsoaRoute.ParameterSchema> = {
+                username: {"in":"path","name":"username","required":true,"dataType":"string"},
+        };
         app.get('/api/v1/users/username/:username',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.findUsernameExite)),
 
             async function UserController_findUsernameExite(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    username: {"in":"path","name":"username","required":true,"dataType":"string"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_findUsernameExite, request, response });
 
                 const controller = new UserController();
 
@@ -260,20 +260,20 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_getMe: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"request","name":"request","required":true,"dataType":"object"},
+        };
         app.get('/api/v1/users/me',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.getMe)),
 
             async function UserController_getMe(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_getMe, request, response });
 
                 const controller = new UserController();
 
@@ -290,6 +290,19 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_updateMe: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"request","name":"request","required":true,"dataType":"object"},
+                profileFiles: {"in":"formData","name":"profileFiles","dataType":"array","array":{"dataType":"file"}},
+                backgroundFiles: {"in":"formData","name":"backgroundFiles","dataType":"array","array":{"dataType":"file"}},
+                firstName: {"in":"formData","name":"firstName","dataType":"string"},
+                lastName: {"in":"formData","name":"lastName","dataType":"string"},
+                userName: {"in":"formData","name":"userName","dataType":"string"},
+                phoneNumber: {"in":"formData","name":"phoneNumber","dataType":"string"},
+                address: {"in":"formData","name":"address","dataType":"string"},
+                gender: {"in":"formData","name":"gender","dataType":"string"},
+                dateOfBirth: {"in":"formData","name":"dateOfBirth","dataType":"string"},
+                location: {"in":"formData","name":"location","dataType":"string"},
+        };
         app.put('/api/v1/users/me',
             upload.fields([
                 {
@@ -303,25 +316,12 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.updateMe)),
 
             async function UserController_updateMe(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
-                    profileFiles: {"in":"formData","name":"profileFiles","dataType":"array","array":{"dataType":"file"}},
-                    backgroundFiles: {"in":"formData","name":"backgroundFiles","dataType":"array","array":{"dataType":"file"}},
-                    firstName: {"in":"formData","name":"firstName","dataType":"string"},
-                    lastName: {"in":"formData","name":"lastName","dataType":"string"},
-                    userName: {"in":"formData","name":"userName","dataType":"string"},
-                    phoneNumber: {"in":"formData","name":"phoneNumber","dataType":"string"},
-                    address: {"in":"formData","name":"address","dataType":"string"},
-                    gender: {"in":"formData","name":"gender","dataType":"string"},
-                    dateOfBirth: {"in":"formData","name":"dateOfBirth","dataType":"string"},
-                    location: {"in":"formData","name":"location","dataType":"string"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_updateMe, request, response });
 
                 const controller = new UserController();
 
@@ -338,21 +338,21 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_deleteMyProfile: Record<string, TsoaRoute.ParameterSchema> = {
+                profileId: {"in":"path","name":"profileId","required":true,"dataType":"double"},
+                request: {"in":"request","name":"request","required":true,"dataType":"object"},
+        };
         app.delete('/api/v1/users/my-profile/:profileId',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.deleteMyProfile)),
 
             async function UserController_deleteMyProfile(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    profileId: {"in":"path","name":"profileId","required":true,"dataType":"double"},
-                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_deleteMyProfile, request, response });
 
                 const controller = new UserController();
 
@@ -369,21 +369,21 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_deleteMyBackground: Record<string, TsoaRoute.ParameterSchema> = {
+                backgroundId: {"in":"path","name":"backgroundId","required":true,"dataType":"double"},
+                request: {"in":"request","name":"request","required":true,"dataType":"object"},
+        };
         app.delete('/api/v1/users/my-background/:backgroundId',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.deleteMyBackground)),
 
             async function UserController_deleteMyBackground(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    backgroundId: {"in":"path","name":"backgroundId","required":true,"dataType":"double"},
-                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_deleteMyBackground, request, response });
 
                 const controller = new UserController();
 
@@ -400,21 +400,21 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_toggleFavorite: Record<string, TsoaRoute.ParameterSchema> = {
+                propertyId: {"in":"path","name":"propertyId","required":true,"ref":"mongoose.Types.ObjectId"},
+                request: {"in":"request","name":"request","required":true,"dataType":"object"},
+        };
         app.put('/api/v1/users/favorite/:propertyId',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.toggleFavorite)),
 
             async function UserController_toggleFavorite(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    propertyId: {"in":"path","name":"propertyId","required":true,"ref":"mongoose.Types.ObjectId"},
-                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_toggleFavorite, request, response });
 
                 const controller = new UserController();
 
@@ -431,20 +431,20 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_getUserFavorites: Record<string, TsoaRoute.ParameterSchema> = {
+                request: {"in":"request","name":"request","required":true,"dataType":"object"},
+        };
         app.get('/api/v1/users/me/favorites',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.getUserFavorites)),
 
             async function UserController_getUserFavorites(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_getUserFavorites, request, response });
 
                 const controller = new UserController();
 
@@ -461,21 +461,21 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_getProfileUser: Record<string, TsoaRoute.ParameterSchema> = {
+                cognitoSub: {"in":"path","name":"cognitoSub","required":true,"dataType":"string"},
+                queries: {"in":"queries","name":"queries","required":true,"ref":"RequestPropertyClientQuery"},
+        };
         app.get('/api/v1/users/profile-user/:cognitoSub',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.getProfileUser)),
 
             async function UserController_getProfileUser(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    cognitoSub: {"in":"path","name":"cognitoSub","required":true,"dataType":"string"},
-                    queries: {"in":"queries","name":"queries","required":true,"ref":"RequestPropertyClientQuery"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_getProfileUser, request, response });
 
                 const controller = new UserController();
 
@@ -492,20 +492,20 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsUserController_getPropertyOwnerInfo: Record<string, TsoaRoute.ParameterSchema> = {
+                cognitoSub: {"in":"path","name":"cognitoSub","required":true,"dataType":"string"},
+        };
         app.get('/api/v1/users/profile-info/:cognitoSub',
             ...(fetchMiddlewares<RequestHandler>(UserController)),
             ...(fetchMiddlewares<RequestHandler>(UserController.prototype.getPropertyOwnerInfo)),
 
             async function UserController_getPropertyOwnerInfo(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    cognitoSub: {"in":"path","name":"cognitoSub","required":true,"dataType":"string"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsUserController_getPropertyOwnerInfo, request, response });
 
                 const controller = new UserController();
 

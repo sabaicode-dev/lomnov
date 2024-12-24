@@ -185,6 +185,21 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
     const upload = opts?.multer ||  multer({"limits":{"fileSize":8388608}});
 
     
+        const argsPropertyController_createProperty: Record<string, TsoaRoute.ParameterSchema> = {
+                thumbnail: {"in":"formData","name":"thumbnail","required":true,"dataType":"file"},
+                images: {"in":"formData","name":"images","required":true,"dataType":"array","array":{"dataType":"file"}},
+                title: {"in":"formData","name":"title","required":true,"dataType":"string"},
+                description: {"in":"formData","name":"description","required":true,"dataType":"string"},
+                urlmap: {"in":"formData","name":"urlmap","dataType":"string"},
+                address: {"in":"formData","name":"address","dataType":"string"},
+                location: {"in":"formData","name":"location","dataType":"string"},
+                price: {"in":"formData","name":"price","dataType":"string"},
+                category: {"in":"formData","name":"category","dataType":"string"},
+                transition: {"in":"formData","name":"transition","dataType":"string"},
+                detail: {"in":"formData","name":"detail","dataType":"string"},
+                coordinate: {"in":"formData","name":"coordinate","dataType":"string"},
+                request: {"in":"request","name":"request","dataType":"object"},
+        };
         app.post('/api/v1/properties',
             upload.fields([
                 {
@@ -199,27 +214,12 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.createProperty)),
 
             async function PropertyController_createProperty(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    thumbnail: {"in":"formData","name":"thumbnail","required":true,"dataType":"file"},
-                    images: {"in":"formData","name":"images","required":true,"dataType":"array","array":{"dataType":"file"}},
-                    title: {"in":"formData","name":"title","required":true,"dataType":"string"},
-                    description: {"in":"formData","name":"description","required":true,"dataType":"string"},
-                    urlmap: {"in":"formData","name":"urlmap","dataType":"string"},
-                    address: {"in":"formData","name":"address","dataType":"string"},
-                    location: {"in":"formData","name":"location","dataType":"string"},
-                    price: {"in":"formData","name":"price","dataType":"string"},
-                    category: {"in":"formData","name":"category","dataType":"string"},
-                    transition: {"in":"formData","name":"transition","dataType":"string"},
-                    detail: {"in":"formData","name":"detail","dataType":"string"},
-                    coordinate: {"in":"formData","name":"coordinate","dataType":"string"},
-                    request: {"in":"request","name":"request","dataType":"object"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPropertyController_createProperty, request, response });
 
                 const controller = new PropertyController();
 
@@ -236,32 +236,32 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPropertyController_getProperty: Record<string, TsoaRoute.ParameterSchema> = {
+                cognitoSub: {"in":"query","name":"cognitoSub","dataType":"string"},
+                title: {"in":"query","name":"title","dataType":"string"},
+                description: {"in":"query","name":"description","dataType":"string"},
+                address: {"in":"query","name":"address","dataType":"string"},
+                location: {"in":"query","name":"location","dataType":"string"},
+                category: {"in":"query","name":"category","dataType":"string"},
+                transition: {"in":"query","name":"transition","dataType":"string"},
+                price: {"in":"query","name":"price","dataType":"double"},
+                language: {"in":"query","name":"language","dataType":"string"},
+                price_gte: {"in":"query","name":"price_gte","dataType":"double"},
+                price_lte: {"in":"query","name":"price_lte","dataType":"double"},
+                page: {"default":1,"in":"query","name":"page","dataType":"double"},
+                limit: {"default":12,"in":"query","name":"limit","dataType":"double"},
+        };
         app.get('/api/v1/properties',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.getProperty)),
 
             async function PropertyController_getProperty(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    cognitoSub: {"in":"query","name":"cognitoSub","dataType":"string"},
-                    title: {"in":"query","name":"title","dataType":"string"},
-                    description: {"in":"query","name":"description","dataType":"string"},
-                    address: {"in":"query","name":"address","dataType":"string"},
-                    location: {"in":"query","name":"location","dataType":"string"},
-                    category: {"in":"query","name":"category","dataType":"string"},
-                    transition: {"in":"query","name":"transition","dataType":"string"},
-                    price: {"in":"query","name":"price","dataType":"double"},
-                    language: {"in":"query","name":"language","dataType":"string"},
-                    price_gte: {"in":"query","name":"price_gte","dataType":"double"},
-                    price_lte: {"in":"query","name":"price_lte","dataType":"double"},
-                    page: {"default":1,"in":"query","name":"page","dataType":"double"},
-                    limit: {"default":12,"in":"query","name":"limit","dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPropertyController_getProperty, request, response });
 
                 const controller = new PropertyController();
 
@@ -278,20 +278,20 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPropertyController_fetchPropertyByID: Record<string, TsoaRoute.ParameterSchema> = {
+                propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
+        };
         app.get('/api/v1/properties/get/:propertyId',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.fetchPropertyByID)),
 
             async function PropertyController_fetchPropertyByID(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPropertyController_fetchPropertyByID, request, response });
 
                 const controller = new PropertyController();
 
@@ -308,33 +308,33 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPropertyController_getPropertyMe: Record<string, TsoaRoute.ParameterSchema> = {
+                title: {"in":"query","name":"title","dataType":"string"},
+                description: {"in":"query","name":"description","dataType":"string"},
+                address: {"in":"query","name":"address","dataType":"string"},
+                location: {"in":"query","name":"location","dataType":"string"},
+                category: {"in":"query","name":"category","dataType":"string"},
+                transition: {"in":"query","name":"transition","dataType":"string"},
+                price: {"in":"query","name":"price","dataType":"double"},
+                language: {"in":"query","name":"language","dataType":"string"},
+                price_gte: {"in":"query","name":"price_gte","dataType":"double"},
+                price_lte: {"in":"query","name":"price_lte","dataType":"double"},
+                page: {"default":1,"in":"query","name":"page","dataType":"double"},
+                limit: {"default":12,"in":"query","name":"limit","dataType":"double"},
+                fav_me: {"in":"query","name":"fav_me","dataType":"string"},
+                request: {"in":"request","name":"request","dataType":"object"},
+        };
         app.get('/api/v1/properties/me',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.getPropertyMe)),
 
             async function PropertyController_getPropertyMe(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    title: {"in":"query","name":"title","dataType":"string"},
-                    description: {"in":"query","name":"description","dataType":"string"},
-                    address: {"in":"query","name":"address","dataType":"string"},
-                    location: {"in":"query","name":"location","dataType":"string"},
-                    category: {"in":"query","name":"category","dataType":"string"},
-                    transition: {"in":"query","name":"transition","dataType":"string"},
-                    price: {"in":"query","name":"price","dataType":"double"},
-                    language: {"in":"query","name":"language","dataType":"string"},
-                    price_gte: {"in":"query","name":"price_gte","dataType":"double"},
-                    price_lte: {"in":"query","name":"price_lte","dataType":"double"},
-                    page: {"default":1,"in":"query","name":"page","dataType":"double"},
-                    limit: {"default":12,"in":"query","name":"limit","dataType":"double"},
-                    fav_me: {"in":"query","name":"fav_me","dataType":"string"},
-                    request: {"in":"request","name":"request","dataType":"object"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPropertyController_getPropertyMe, request, response });
 
                 const controller = new PropertyController();
 
@@ -351,6 +351,22 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPropertyController_updateProperty: Record<string, TsoaRoute.ParameterSchema> = {
+                propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
+                thumbnail: {"in":"formData","name":"thumbnail","dataType":"file"},
+                images: {"in":"formData","name":"images","dataType":"array","array":{"dataType":"file"}},
+                title: {"in":"formData","name":"title","dataType":"string"},
+                description: {"in":"formData","name":"description","dataType":"string"},
+                urlmap: {"in":"formData","name":"urlmap","dataType":"string"},
+                address: {"in":"formData","name":"address","dataType":"string"},
+                location: {"in":"formData","name":"location","dataType":"string"},
+                category: {"in":"formData","name":"category","dataType":"string"},
+                transition: {"in":"formData","name":"transition","dataType":"string"},
+                price: {"in":"formData","name":"price","dataType":"string"},
+                detail: {"in":"formData","name":"detail","dataType":"string"},
+                status: {"in":"formData","name":"status","dataType":"string"},
+                request: {"in":"request","name":"request","dataType":"object"},
+        };
         app.put('/api/v1/properties/me/:propertyId',
             upload.fields([
                 {
@@ -365,28 +381,12 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.updateProperty)),
 
             async function PropertyController_updateProperty(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
-                    thumbnail: {"in":"formData","name":"thumbnail","dataType":"file"},
-                    images: {"in":"formData","name":"images","dataType":"array","array":{"dataType":"file"}},
-                    title: {"in":"formData","name":"title","dataType":"string"},
-                    description: {"in":"formData","name":"description","dataType":"string"},
-                    urlmap: {"in":"formData","name":"urlmap","dataType":"string"},
-                    address: {"in":"formData","name":"address","dataType":"string"},
-                    location: {"in":"formData","name":"location","dataType":"string"},
-                    category: {"in":"formData","name":"category","dataType":"string"},
-                    transition: {"in":"formData","name":"transition","dataType":"string"},
-                    price: {"in":"formData","name":"price","dataType":"string"},
-                    detail: {"in":"formData","name":"detail","dataType":"string"},
-                    status: {"in":"formData","name":"status","dataType":"string"},
-                    request: {"in":"request","name":"request","dataType":"object"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPropertyController_updateProperty, request, response });
 
                 const controller = new PropertyController();
 
@@ -403,21 +403,21 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPropertyController_deleteProperty: Record<string, TsoaRoute.ParameterSchema> = {
+                propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
+                request: {"in":"request","name":"request","dataType":"object"},
+        };
         app.delete('/api/v1/properties/me/:propertyId',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.deleteProperty)),
 
             async function PropertyController_deleteProperty(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
-                    request: {"in":"request","name":"request","dataType":"object"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPropertyController_deleteProperty, request, response });
 
                 const controller = new PropertyController();
 
@@ -434,20 +434,20 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPropertyController_incrementPropertyViews: Record<string, TsoaRoute.ParameterSchema> = {
+                propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
+        };
         app.put('/api/v1/properties/:propertyId/views',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.incrementPropertyViews)),
 
             async function PropertyController_incrementPropertyViews(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPropertyController_incrementPropertyViews, request, response });
 
                 const controller = new PropertyController();
 
@@ -464,20 +464,20 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPropertyController_getPropertyViews: Record<string, TsoaRoute.ParameterSchema> = {
+                propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
+        };
         app.get('/api/v1/properties/:propertyId/views',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.getPropertyViews)),
 
             async function PropertyController_getPropertyViews(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPropertyController_getPropertyViews, request, response });
 
                 const controller = new PropertyController();
 
@@ -494,21 +494,21 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPropertyController_getPropertyUser: Record<string, TsoaRoute.ParameterSchema> = {
+                cognitoSub: {"in":"path","name":"cognitoSub","required":true,"dataType":"string"},
+                queries: {"in":"queries","name":"queries","required":true,"ref":"RequestQueryPropertyDTO"},
+        };
         app.get('/api/v1/properties/user/:cognitoSub',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.getPropertyUser)),
 
             async function PropertyController_getPropertyUser(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    cognitoSub: {"in":"path","name":"cognitoSub","required":true,"dataType":"string"},
-                    queries: {"in":"queries","name":"queries","required":true,"ref":"RequestQueryPropertyDTO"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPropertyController_getPropertyUser, request, response });
 
                 const controller = new PropertyController();
 
@@ -525,21 +525,21 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPropertyController_addCoordinatesToProperty: Record<string, TsoaRoute.ParameterSchema> = {
+                propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
+                coordinates: {"in":"body","name":"coordinates","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"lng":{"dataType":"double","required":true},"lat":{"dataType":"double","required":true}}},
+        };
         app.post('/api/v1/properties/:propertyId/coordinates',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.addCoordinatesToProperty)),
 
             async function PropertyController_addCoordinatesToProperty(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
-                    coordinates: {"in":"body","name":"coordinates","required":true,"dataType":"nestedObjectLiteral","nestedProperties":{"lng":{"dataType":"double","required":true},"lat":{"dataType":"double","required":true}}},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPropertyController_addCoordinatesToProperty, request, response });
 
                 const controller = new PropertyController();
 
@@ -556,23 +556,23 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPropertyController_findNearbyProperties: Record<string, TsoaRoute.ParameterSchema> = {
+                lat: {"default":0,"in":"query","name":"lat","dataType":"double"},
+                lng: {"default":0,"in":"query","name":"lng","dataType":"double"},
+                maxDistance: {"default":1000,"in":"query","name":"maxDistance","dataType":"double"},
+                limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
+        };
         app.get('/api/v1/properties/nearby',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.findNearbyProperties)),
 
             async function PropertyController_findNearbyProperties(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    lat: {"default":0,"in":"query","name":"lat","dataType":"double"},
-                    lng: {"default":0,"in":"query","name":"lng","dataType":"double"},
-                    maxDistance: {"default":1000,"in":"query","name":"maxDistance","dataType":"double"},
-                    limit: {"default":10,"in":"query","name":"limit","dataType":"double"},
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPropertyController_findNearbyProperties, request, response });
 
                 const controller = new PropertyController();
 
@@ -589,19 +589,19 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPropertyController_getCategories: Record<string, TsoaRoute.ParameterSchema> = {
+        };
         app.get('/api/v1/properties/category',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.getCategories)),
 
             async function PropertyController_getCategories(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-            };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsPropertyController_getCategories, request, response });
 
                 const controller = new PropertyController();
 
