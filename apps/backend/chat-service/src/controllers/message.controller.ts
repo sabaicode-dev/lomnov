@@ -2,6 +2,7 @@ import {Body,Controller,Get,Path,Post,Queries,Request,Route} from "tsoa";
 import express from "express";
 import { MessageService } from "../services/message.service";
 import {query,QueryGetUserConversations} from "./types/message.controller.types";
+import { MessageRequest } from "../services/types/messages.service.types";
 
 @Route("v1/messages")
 export class MessageController extends Controller {
@@ -11,19 +12,13 @@ export class MessageController extends Controller {
     try {
       const { message } = reqBody;
 
-      const cookieHeader = request.headers.cookie;
+      const cookieHeader = request.headers.cookie!;
       const currentUser = JSON.parse(request.headers.user as string) as {
         username?: string;//
         roles?: string[];
       };
-
-      const result = await this.MessageService.sendMessaage(
-        message,
-        cookieHeader!,
-        receiverId,
-        currentUser
-      );
-
+      const requestData: MessageRequest = {message, cookieHeader, receiverId, currentUser};
+      const result = await this.MessageService.sendMessaage(requestData);
       return result;
     } catch (error) {
       console.error("error:::", error);

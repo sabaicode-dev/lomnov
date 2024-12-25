@@ -2,10 +2,11 @@ import express from "express";
 import { MessageRepository } from "../database/repositories/message.repository";
 import {
   GetMessageRespond,
-  messages,
+  SendMessageResponse,
   query,
   QueryGetUserConversations,
   RespondGetConversations,
+  MessageRequest,
 } from "./types/messages.service.types";
 
 // type ParticipantsType = [
@@ -14,16 +15,9 @@ import {
 
 export class MessageService {
   MessageRepository = new MessageRepository();
-  async sendMessaage(
-    message: string,
-    cookieHeader: string,
-    receiverId: string,
-    currentUser: {
-      username?: string;
-      roles?: string[];
-    }
-  ): Promise<{ message: string; data: messages }> {
+  public async sendMessaage(request: MessageRequest): Promise<SendMessageResponse> {
     try {
+      const { message, receiverId, currentUser,cookieHeader } = request;
       const cookies = deCookies(cookieHeader);
       const senderId = cookies.username;
       const senderRole = currentUser.roles![0] === "user" ? "user" : "admin";

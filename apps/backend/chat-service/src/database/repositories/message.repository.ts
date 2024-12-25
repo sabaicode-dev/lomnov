@@ -6,7 +6,7 @@ import configs from "@/src/config";
 import axios from "axios";
 
 export class MessageRepository {
-  async sendMessage(makeMessage: {senderId: string;receiverId: string;message: string;participants: { participantType: string;participantId: string;}[];roomId: string}): Promise<createdMessage> {
+  public async sendMessage(makeMessage: {senderId: string;receiverId: string;message: string;participants: { participantType: string;participantId: string;}[];roomId: string}): Promise<createdMessage> {
     try {
       const { senderId, receiverId, message, participants, roomId } = makeMessage;
       //find or create
@@ -16,7 +16,7 @@ export class MessageRepository {
         { new: true, upsert: true }
       );
 
-      const newMessage = await new MessageModel({
+      const newMessage = new MessageModel({
         senderId,
         receiverId,
         message,

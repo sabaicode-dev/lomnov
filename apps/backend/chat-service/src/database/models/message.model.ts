@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 interface IMessage {
-  senderId: string;
-  receiverId: string;
+  senderId: string;// sub
+  receiverId: string;// sub
   message: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -10,26 +10,10 @@ interface IMessage {
 
 const messageSchema = new mongoose.Schema<IMessage>(
   {
-    senderId: {
-      type: String,
-      ref: "user",
-      require: true,
-      unique: false,
-    },
-    receiverId: {
-      type: String,
-      ref: "user",
-      require: true,
-      unique: false,
-    },
-    message: {
-      type: String,
-      require: true,
-    },
-    conversationId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Conversation",
-    },
+    senderId: {type: String,ref: "users",require: true,unique: false},
+    receiverId: {type: String,ref: "users",require: true,unique: false},
+    message: {type: String,require: true,},
+    conversationId: {type: mongoose.Schema.Types.ObjectId,ref: "Conversation"},
   },
   //createAt,updateAt
   {
