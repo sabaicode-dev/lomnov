@@ -1,36 +1,20 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Path,
-  Post,
-  Queries,
-  Request,
-  Route,
-} from "tsoa";
+import {Body,Controller,Get,Path,Post,Queries,Request,Route} from "tsoa";
 import express from "express";
 import { MessageService } from "../services/message.service";
-import {
-  query,
-  QueryGetUserConversations,
-} from "./types/message.controller.types";
+import {query,QueryGetUserConversations} from "./types/message.controller.types";
 
 @Route("v1/messages")
 export class MessageController extends Controller {
   MessageService = new MessageService();
   @Post("/send/{receiverId}")
-  public async sendMessage(
-    @Path() receiverId: string,
-    @Body() reqBody: { message: string },
-    @Request() request: express.Request
-  ) {
+  public async sendMessage(@Path() receiverId: string,@Body() reqBody: { message: string },@Request() request: express.Request) {
     try {
       const { message } = reqBody;
 
       const cookieHeader = request.headers.cookie;
-      const currentUser = JSON.parse(request.headers.currentuser as string) as {
-        username?: string;
-        role?: string[];
+      const currentUser = JSON.parse(request.headers.user as string) as {
+        username?: string;//
+        roles?: string[];
       };
 
       const result = await this.MessageService.sendMessaage(

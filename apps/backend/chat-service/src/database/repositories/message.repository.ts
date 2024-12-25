@@ -1,33 +1,14 @@
 import mongoose from "mongoose";
 import ConversationModel from "../models/conversation.model";
 import MessageModel from "../models/message.model";
-import {
-  conversation,
-  GetConversation,
-  conversationRespond,
-  createdMessage,
-  query,
-  RespondGetConversations,
-  RespondGetConversationsPagination,
-  messType,
-} from "./types/messages.repository.types";
+import {conversation,GetConversation,conversationRespond,createdMessage,query,RespondGetConversations,RespondGetConversationsPagination,messType} from "./types/messages.repository.types";
 import configs from "@/src/config";
 import axios from "axios";
 
 export class MessageRepository {
-  async sendMessage(makeMessage: {
-    senderId: string;
-    receiverId: string;
-    message: string;
-    participants: {
-      participantType: string;
-      participantId: string;
-    }[];
-    roomId: string;
-  }): Promise<createdMessage> {
+  async sendMessage(makeMessage: {senderId: string;receiverId: string;message: string;participants: { participantType: string;participantId: string;}[];roomId: string}): Promise<createdMessage> {
     try {
-      const { senderId, receiverId, message, participants, roomId } =
-        makeMessage;
+      const { senderId, receiverId, message, participants, roomId } = makeMessage;
       //find or create
       let conversation = await ConversationModel.findOneAndUpdate(
         { roomId },

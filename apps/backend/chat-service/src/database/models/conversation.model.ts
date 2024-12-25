@@ -1,7 +1,7 @@
 import mongoose, { Document } from "mongoose";
 interface Conversation extends Document {
   participants: {
-    participantId: mongoose.Schema.Types.ObjectId;
+    participantId: string;
     participantType: string;
   };
   messages: mongoose.Schema.Types.ObjectId[];
@@ -17,12 +17,12 @@ const conversationSchema = new mongoose.Schema<Conversation>(
         participantType: {
           type: String,
           required: true,
-          enum: ["User", "Company"], // Allowed collections for participants
+          enum: ["user", "admin"], // Allowed collections for participants
         },
         participantId: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: String,
           required: true,
-          refPath: "participants.participantType", // Dynamically reference User or Company based on participantType
+          refPath: "participants.user", // Dynamically reference User or Company based on participantType
         },
         _id: false,
       },

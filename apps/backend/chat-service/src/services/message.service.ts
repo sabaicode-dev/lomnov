@@ -20,14 +20,14 @@ export class MessageService {
     receiverId: string,
     currentUser: {
       username?: string;
-      role?: string[];
+      roles?: string[];
     }
   ): Promise<{ message: string; data: messages }> {
     try {
       const cookies = deCookies(cookieHeader);
-      const senderId = cookies.user_id;
-      const senderRole = currentUser.role![0] === "user" ? "User" : "Company";
-      const receiverRole = currentUser.role![0] === "user" ? "Company" : "User";
+      const senderId = cookies.username;
+      const senderRole = currentUser.roles![0] === "user" ? "user" : "admin";
+      const receiverRole = currentUser.roles![0] === "user" ? "admin" : "user";
 
       const participants = [
         {
