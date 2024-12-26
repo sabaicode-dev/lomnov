@@ -22,7 +22,8 @@
     "start:property-service": " concurrently \"yarn workspace property-service run dev\"",
     "start:notification-service": "concurrently \"yarn workspace notification-service run dev \"",
     "start:api-gateway": " concurrently \"yarn workspace api-gateway run dev\"",
-    "start:all": "concurrently \"yarn workspace ms-ui-components watch\" \"yarn workspace frontend-client dev\" \"yarn workspace frontend-dashboard dev\" \"yarn workspace auth-service run dev\" \"yarn workspace user-service run dev\" \"yarn workspace property-service run dev\" \"yarn workspace notification-service run dev\" \"yarn workspace api-gateway run dev\""
+    "start:all": "concurrently \"yarn workspace ms-ui-components watch\" \"yarn workspace frontend-client dev\" \"yarn workspace frontend-dashboard dev\" \"yarn workspace auth-service run dev\" \"yarn workspace user-service run dev\" \"yarn workspace property-service run dev\" \"yarn workspace notification-service run dev\" \"yarn workspace api-gateway run dev\"",
+    "start:chat-service":"concurrently \"yarn workspace chat-service run dev\""
   },
   "devDependencies": {
     "@types/multer": "^1.4.12",

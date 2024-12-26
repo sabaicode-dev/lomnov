@@ -14,9 +14,7 @@ export default function Home() {
     <main className="w-full">
       <HeroSection />
       <section className="w-full xl:w-[1300px] m-auto py-10 px-2 xl:px-0 flex flex-col justify-center items-center">
-
         <ItemCardPopularLocationList />
-
       </section>
       <section className="w-full  bg-gray-500 h-[1200px] lg:h-[720px] relative ">
         <Image
