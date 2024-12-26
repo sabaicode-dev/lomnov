@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 import ConversationModel from "../models/conversation.model";
 import MessageModel from "../models/message.model";
-import {conversation,GetConversation,conversationRespond,createdMessage,query,RespondGetConversations,RespondGetConversationsPagination,messType} from "./types/messages.repository.types";
-import configs from "@/src/config";
-import axios from "axios";
-
+// import {conversation,GetConversation,conversationRespond,createdMessage,query,RespondGetConversations,RespondGetConversationsPagination,messType} from "./types/messages.repository.types";
+// import configs from "@/src/config";
+// import axios from "axios";
+import { createdMessage } from "./types/messages.repository.types";
 export class MessageRepository {
   public async sendMessage(makeMessage: {senderId: string;receiverId: string;message: string;participants: { participantType: string;participantId: string;}[];roomId: string}): Promise<createdMessage> {
     try {
@@ -40,7 +40,7 @@ export class MessageRepository {
     }
   }
   //todo: reduce / structure type
-  async getMessage(
+ /*  async getMessage(
     userToChatId: string,
     senderId: string,
     query: query,
@@ -149,8 +149,8 @@ export class MessageRepository {
       console.error("getMessage() message.service error:::", error);
       throw error;
     }
-  }
-  async getConversationById(conversationId: string): Promise<conversation> {
+  }*/
+/*  async getConversationById(conversationId: string): Promise<conversation> {
     try {
       const conversation = await ConversationModel.findById(conversationId);
 
@@ -158,8 +158,8 @@ export class MessageRepository {
     } catch (error) {
       throw error;
     }
-  }
-  async getUserConversations(
+  }*/
+  /*async getUserConversations(
     senderId: string,
     senderRole: string,
     page: number,
@@ -288,5 +288,5 @@ export class MessageRepository {
     } catch (error) {
       throw error;
     }
-  }
+  }*/
 }

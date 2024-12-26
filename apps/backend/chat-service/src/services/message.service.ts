@@ -1,11 +1,11 @@
 import express from "express";
 import { MessageRepository } from "../database/repositories/message.repository";
 import {
-  GetMessageRespond,
+  // GetMessageRespond,
   SendMessageResponse,
-  query,
-  QueryGetUserConversations,
-  RespondGetConversations,
+  // query,
+  // QueryGetUserConversations,
+  // RespondGetConversations,
   MessageRequest,
 } from "./types/messages.service.types";
 
@@ -31,7 +31,7 @@ export class MessageService {
         { participantType: receiverRole, participantId: receiverId },
       ];
 
-      const roomId = [senderId, receiverId].sort().join("_");
+      const roomId = [senderId, receiverId].sort().join("_");//
 
       const result = await this.MessageRepository.sendMessage({
         senderId,
@@ -46,7 +46,7 @@ export class MessageService {
       throw error;
     }
   }
-  async getMessage(
+ /* async getMessage(
     userToChatId: string,
     cookieHeader: string,
     query: query,
@@ -75,9 +75,9 @@ export class MessageService {
       console.error("error:::", error);
       throw error;
     }
-  }
+  }*/
   //todo::Type of return (no need for now)
-  async getConversationById(conversationId: string): Promise<any> {
+ /* async getConversationById(conversationId: string): Promise<any> {
     try {
       const result =
         await this.MessageRepository.getConversationById(conversationId);
@@ -111,7 +111,7 @@ export class MessageService {
     } catch (error) {
       throw error;
     }
-  }
+  }*/
 }
 const deCookies = (cookies: express.Request["headers"]["cookie"]) => {
   const decodedCookie = cookies

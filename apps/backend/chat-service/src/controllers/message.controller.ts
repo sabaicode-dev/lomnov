@@ -1,18 +1,21 @@
-import {Body,Controller,Get,Path,Post,Queries,Request,Route} from "tsoa";
+import {Body,Controller,Path,Post,Request,Route} from "tsoa";
 import express from "express";
 import { MessageService } from "../services/message.service";
-import {query,QueryGetUserConversations} from "./types/message.controller.types";
+// import {query,QueryGetUserConversations} from "./types/message.controller.types";
 import { MessageRequest } from "../services/types/messages.service.types";
 
-@Route("v1/messages")
+@Route("/api/v1/chat")
 export class MessageController extends Controller {
   MessageService = new MessageService();
   @Post("/send/{receiverId}")
   public async sendMessage(@Path() receiverId: string,@Body() reqBody: { message: string },@Request() request: express.Request) {
     try {
       const { message } = reqBody;
-
+      console.log(request.headers);
+      
       const cookieHeader = request.headers.cookie!;
+      // console.log(cookieHeader);
+      
       const currentUser = JSON.parse(request.headers.user as string) as {
         username?: string;//
         roles?: string[];
@@ -25,7 +28,7 @@ export class MessageController extends Controller {
       throw error;
     }
   }
-  @Get("{userToChatId}")
+ /* @Get("{userToChatId}")
   public async getMessages(
     @Path() userToChatId: string,
     @Request() request: express.Request,
@@ -102,5 +105,5 @@ export class MessageController extends Controller {
     } catch (error) {
       throw error;
     }
-  }
+  }*/
 }
