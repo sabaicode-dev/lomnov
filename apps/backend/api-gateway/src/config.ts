@@ -11,6 +11,7 @@ type Config = {
   authServiceUrl: string;
   awsCognitoUserPoolId: string;
   awsCognitoClientId: string;
+  chatServiceUrl: string;
 };
 
 // Function to load and validate environment variables
@@ -30,6 +31,7 @@ function loadConfig(): Config {
     PROPERTY_SERVICE_URL: Joi.string().required(),
     AWS_COGNITO_USER_POOL_ID: Joi.string().required(),
     AWS_COGNITO_CLIENT_ID: Joi.string().required(),
+    CHAT_SERVICE_URL: Joi.string().required(),
   })
     .unknown()
     .required();
@@ -49,6 +51,7 @@ function loadConfig(): Config {
     authServiceUrl: envVars.AUTH_SERVICE_URL,
     awsCognitoUserPoolId: envVars.AWS_COGNITO_USER_POOL_ID,
     awsCognitoClientId: envVars.AWS_COGNITO_CLIENT_ID,
+    chatServiceUrl: envVars.CHAT_SERVICE_URL
   };
 }
 
