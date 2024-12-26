@@ -1,11 +1,12 @@
 import express from "express";
 import { MessageRepository } from "../database/repositories/message.repository";
 import {
-  GetMessageRespond,
-  messages,
-  query,
-  QueryGetUserConversations,
-  RespondGetConversations,
+  // GetMessageRespond,
+  SendMessageResponse,
+  // query,
+  // QueryGetUserConversations,
+  // RespondGetConversations,
+  MessageRequest,
 } from "./types/messages.service.types";
 
 // type ParticipantsType = [
@@ -14,20 +15,13 @@ import {
 
 export class MessageService {
   MessageRepository = new MessageRepository();
-  async sendMessaage(
-    message: string,
-    cookieHeader: string,
-    receiverId: string,
-    currentUser: {
-      username?: string;
-      role?: string[];
-    }
-  ): Promise<{ message: string; data: messages }> {
+  public async sendMessaage(request: MessageRequest): Promise<SendMessageResponse> {
     try {
+      const { message, receiverId, currentUser,cookieHeader } = request;
       const cookies = deCookies(cookieHeader);
-      const senderId = cookies.user_id;
-      const senderRole = currentUser.role![0] === "user" ? "User" : "Company";
-      const receiverRole = currentUser.role![0] === "user" ? "Company" : "User";
+      const senderId = cookies.username;
+      const senderRole = currentUser.roles![0] === "user" ? "user" : "admin";
+      const receiverRole = currentUser.roles![0] === "user" ? "admin" : "user";
 
       const participants = [
         {
@@ -37,7 +31,7 @@ export class MessageService {
         { participantType: receiverRole, participantId: receiverId },
       ];
 
-      const roomId = [senderId, receiverId].sort().join("_");
+      const roomId = [senderId, receiverId].sort().join("_");//
 
       const result = await this.MessageRepository.sendMessage({
         senderId,
@@ -52,7 +46,7 @@ export class MessageService {
       throw error;
     }
   }
-  async getMessage(
+ /* async getMessage(
     userToChatId: string,
     cookieHeader: string,
     query: query,
@@ -81,9 +75,9 @@ export class MessageService {
       console.error("error:::", error);
       throw error;
     }
-  }
+  }*/
   //todo::Type of return (no need for now)
-  async getConversationById(conversationId: string): Promise<any> {
+ /* async getConversationById(conversationId: string): Promise<any> {
     try {
       const result =
         await this.MessageRepository.getConversationById(conversationId);
@@ -117,7 +111,7 @@ export class MessageService {
     } catch (error) {
       throw error;
     }
-  }
+  }*/
 }
 const deCookies = (cookies: express.Request["headers"]["cookie"]) => {
   const decodedCookie = cookies

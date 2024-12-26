@@ -8,9 +8,9 @@ type Config = {
   mongodbUrl: string;
   clientUrl: string;
   MessageUrl: string;
-  corporatorApiEndpoint: string;
+  // corporatorApiEndpoint: string;
   userUrl: string;
-  corporatorUrl: string;
+  // corporatorUrl: string;
 };
 
 // Function to load and validate environment variables
@@ -26,9 +26,9 @@ function loadConfig(): Config {
     PORT: Joi.number().default(3000),
     MONGODB_URL: Joi.string().required(),
     CLIENT_URL: Joi.string().required(),
-    CORPORATOR_URL: Joi.string().required(),
+    // CORPORATOR_URL: Joi.string().required(),
     SENDMESSAGE_API_ENDPOINT: Joi.string().required(),
-    CORPORATOR_API_ENDPOINT: Joi.string().required(),
+    // CORPORATOR_API_ENDPOINT: Joi.string().required(),
     USERS_API_ENDPOINT: Joi.string().required(),
   })
     .unknown()
@@ -46,9 +46,9 @@ function loadConfig(): Config {
     mongodbUrl: envVars.MONGODB_URL,
     clientUrl: envVars.CLIENT_URL,
     MessageUrl: envVars.SENDMESSAGE_API_ENDPOINT,
-    corporatorApiEndpoint: envVars.CORPORATOR_API_ENDPOINT,
+    // corporatorApiEndpoint: envVars.CORPORATOR_API_ENDPOINT,
     userUrl: envVars.USERS_API_ENDPOINT,
-    corporatorUrl: envVars.CORPORATOR_URL,
+    // corporatorUrl: envVars.CORPORATOR_URL,
   };
 }
 

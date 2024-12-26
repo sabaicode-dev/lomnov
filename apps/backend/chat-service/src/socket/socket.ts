@@ -1,37 +1,37 @@
-import { Server, Socket } from "socket.io";
+// Import necessary modules
+import { Server, Socket } from "socket.io";// Import Server and Socket types from socket.io
+// Import axios for making HTTP requests
 import axios from "axios";
+// Import configuration settings
 import configs from "../config";
-interface Message {
-  _id?: string;
-  senderId: string;
-  receiverId: string;
-  message: string;
-  conversationId?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+// Import Message type or class from socket.message.ts
+import { Message } from "./socket.message";
+// Create a map to store user socket connections
+const userSocketMap: { [key: string]: string } = {};
 
-const userSocketMap: { [key: string]: string } = {}; //{userId:value}
-
+// Setup socket.io connection Server
+// 1st arg is the socket.io server instance
 const setupSocketIO = (io: Server) => {
   const online = Object.keys(userSocketMap);
+  // Emit the event list of online users to all connected clients
   io.emit("getOnlineUsers", online);
+  // Listen for event connections
   io.on("connection", (socket: Socket) => {
     // console.log("user socket id:::", socket.id);
-
+    // Get cookies from the socket handshake headers
     const cookies = socket.handshake.headers["cookie"];
 
     if (cookies) {
-      const userIdCookie = cookies
+      const usernameCookie = cookies
         .split("; ")
-        .find((cookie) => cookie.startsWith("user_id="));
-      if (userIdCookie) {
-        const userId = userIdCookie.split("=")[1];
+        .find((cookie) => cookie.startsWith("username="));// cognito sub
+      if (usernameCookie) {
+        const username = usernameCookie.split("=")[1];
 
-        socket.data.userId = userId;
-        userSocketMap[userId] = socket.id;
+        socket.data.username = username;
+        userSocketMap[username] = socket.id;
       } else {
-        console.error("user_id cookie not found.");
+        console.error("username/sub cookie not found.");
         return socket.disconnect(true);
       }
     } else {
@@ -39,8 +39,8 @@ const setupSocketIO = (io: Server) => {
       return socket.disconnect(true);
     }
 
-    const userId = socket.data.userId;
-    if (userId) {
+    const username = socket.data.username;
+    if (username) {
       const online = Object.keys(userSocketMap);
       io.emit("getOnlineUsers", online);
       console.log("user is online:::", online);
@@ -50,11 +50,7 @@ const setupSocketIO = (io: Server) => {
       const cookies = socket.handshake.headers["cookie"];
       try {
         if (cookies) {
-          const response = await axios.post(
-            `${configs.MessageUrl}/send/${data.receiverId}`,
-            {
-              message: data.message,
-            },
+          const response = await axios.post(`${configs.MessageUrl}/send/${data.receiverId}`,{message: data.message},
             {
               withCredentials: true,
               headers: {
@@ -79,8 +75,8 @@ const setupSocketIO = (io: Server) => {
     });
 
     socket.on("disconnect", () => {
-      if (userId) {
-        delete userSocketMap[userId];
+      if (username) { // username/sub
+        delete userSocketMap[username]; // username/sub
         const online = Object.keys(userSocketMap);
         console.log("after dis::", online);
 

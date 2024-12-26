@@ -62,3 +62,14 @@ export interface QueryGetUserConversations {
   page?: number;
   limit?: number;
 }
+//
+export interface SendMessageResponse {
+  message: string;
+  data: messages;
+}
+export interface MessageRequest{
+  message: string;
+  cookieHeader: string;
+  receiverId: string;
+  currentUser: { username?: string; roles?: string[] };
+}

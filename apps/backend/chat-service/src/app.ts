@@ -38,7 +38,7 @@ RegisterRoutes(app);
 // ========================
 // API Documentations
 // ========================
-app.use("/v1/chat/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api/v1/chat/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // ========================
 // ERROR Handler
