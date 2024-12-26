@@ -10,6 +10,7 @@ type Config = {
   MessageUrl: string;
   // corporatorApiEndpoint: string;
   userUrl: string;
+  apiUrl: string;
   // corporatorUrl: string;
 };
 
@@ -30,6 +31,7 @@ function loadConfig(): Config {
     SENDMESSAGE_API_ENDPOINT: Joi.string().required(),
     // CORPORATOR_API_ENDPOINT: Joi.string().required(),
     USERS_API_ENDPOINT: Joi.string().required(),
+    API_URL: Joi.string().required()
   })
     .unknown()
     .required();
@@ -49,6 +51,7 @@ function loadConfig(): Config {
     // corporatorApiEndpoint: envVars.CORPORATOR_API_ENDPOINT,
     userUrl: envVars.USERS_API_ENDPOINT,
     // corporatorUrl: envVars.CORPORATOR_URL,
+    apiUrl: envVars.API_URL
   };
 }
 

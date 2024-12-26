@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 import ConversationModel from "../models/conversation.model";
 import MessageModel from "../models/message.model";
-// import {conversation,GetConversation,conversationRespond,createdMessage,query,RespondGetConversations,RespondGetConversationsPagination,messType} from "./types/messages.repository.types";
+import { conversation, conversationRespond, createdMessage, query, messType } from "./types/messages.repository.types";
+import axios from "axios";
 // import configs from "@/src/config";
 // import axios from "axios";
-import { createdMessage } from "./types/messages.repository.types";
 export class MessageRepository {
-  public async sendMessage(makeMessage: {senderId: string;receiverId: string;message: string;participants: { participantType: string;participantId: string;}[];roomId: string}): Promise<createdMessage> {
+  public async sendMessage(makeMessage: { senderId: string; receiverId: string; message: string; participants: { participantType: string; participantId: string; }[]; roomId: string }): Promise<createdMessage> {
     try {
       const { senderId, receiverId, message, participants, roomId } = makeMessage;
       //find or create
@@ -40,17 +40,9 @@ export class MessageRepository {
     }
   }
   //todo: reduce / structure type
- /*  async getMessage(
-    userToChatId: string,
-    senderId: string,
-    query: query,
-    senderRole: "User" | "Company",
-    receiverRole: "User" | "Company"
-  ): Promise<null | conversationRespond> {
+  async getMessage(userToChatId: string, senderId: string, query: query, senderRole: "user" | "admin", receiverRole: "user" | "admin"): Promise<null | conversationRespond> {
     const { limit = 12, page = 1 } = query;
-
     const skip = (page - 1) * limit;
-
     try {
       const conversation = await ConversationModel.findOne({
         participants: {
@@ -70,16 +62,10 @@ export class MessageRepository {
       console.log("1::::");
 
       if (!conversation) {
-        const endpoint =
-          senderRole === "User"
-            ? `${configs.corporatorApiEndpoint}/getMulti/Profile?companiesId=`
-            : `${configs.userUrl}/`;
-        const data = (await axios.get(`${endpoint}${userToChatId}`)).data;
-
-        const receiverData = data.companiesProfile || data.usersProfile;
-        console.log("2::::");
-
-        if (!receiverData) {
+        // const endpoint = senderRole === "user" ? `${configs.userUrl}/` : `${configs.userUrl}/`;
+        // get user profiles!
+        const dataUser = (await axios.get(`http://localhost:4000/api/v1/users/profile-info/${userToChatId}`)).data;
+        if (!dataUser) {
           return {
             conversation: [],
             currentPage: page,
@@ -149,16 +135,16 @@ export class MessageRepository {
       console.error("getMessage() message.service error:::", error);
       throw error;
     }
-  }*/
-/*  async getConversationById(conversationId: string): Promise<conversation> {
-    try {
-      const conversation = await ConversationModel.findById(conversationId);
-
-      return conversation as unknown as conversation;
-    } catch (error) {
-      throw error;
-    }
-  }*/
+  }
+  /*  async getConversationById(conversationId: string): Promise<conversation> {
+      try {
+        const conversation = await ConversationModel.findById(conversationId);
+  
+        return conversation as unknown as conversation;
+      } catch (error) {
+        throw error;
+      }
+    }*/
   /*async getUserConversations(
     senderId: string,
     senderRole: string,

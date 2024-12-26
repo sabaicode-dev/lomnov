@@ -1,12 +1,13 @@
 import express from "express";
 import { MessageRepository } from "../database/repositories/message.repository";
+import { UserServiceClient } from "./user-service.client";
 import {
-  // GetMessageRespond,
+  GetMessageRespond,
   SendMessageResponse,
-  // query,
   // QueryGetUserConversations,
   // RespondGetConversations,
   MessageRequest,
+  query,
 } from "./types/messages.service.types";
 
 // type ParticipantsType = [
@@ -15,13 +16,18 @@ import {
 
 export class MessageService {
   MessageRepository = new MessageRepository();
+  userServiceClient = new UserServiceClient();
   public async sendMessaage(request: MessageRequest): Promise<SendMessageResponse> {
     try {
-      const { message, receiverId, currentUser,cookieHeader } = request;
+      const { message, receiverId, currentUser, cookieHeader } = request;
       const cookies = deCookies(cookieHeader);
       const senderId = cookies.username;
+
       const senderRole = currentUser.roles![0] === "user" ? "user" : "admin";
-      const receiverRole = currentUser.roles![0] === "user" ? "admin" : "user";
+      // get reciever role
+      const responseRole = await this.userServiceClient.getUserRole(receiverId); // receiverId = sub
+      // console.log("userServiceClient:: ", responseRole);
+      const receiverRole = responseRole!.role === "user" ? "user" : "admin";
 
       const participants = [
         {
@@ -46,25 +52,16 @@ export class MessageService {
       throw error;
     }
   }
- /* async getMessage(
-    userToChatId: string,
-    cookieHeader: string,
-    query: query,
-    currentUser: {
-      username?: string;
-      role?: string[];
-    }
-  ): Promise<GetMessageRespond | undefined> {
+  async getMessage(userToChatId: string, cookieHeader: string, query: query, currentUser: { username?: string; roles?: string }): Promise<GetMessageRespond | undefined> {
     try {
       const cookies = deCookies(cookieHeader);
-      const senderId = cookies.user_id;
-      const senderRole =
-        currentUser.role![0] === "company" ? "Company" : "User";
-      const receiverRole = senderRole === "User" ? "Company" : "User";
+      const senderName = cookies.username;
+      const senderRole = currentUser.roles! === "user" ? "user" : "admin";
+      const receiverRole = senderRole === "user" ? "user" : "admin";
 
       const result = await this.MessageRepository.getMessage(
         userToChatId,
-        senderId,
+        senderName,
         query,
         senderRole,
         receiverRole
@@ -75,52 +72,51 @@ export class MessageService {
       console.error("error:::", error);
       throw error;
     }
-  }*/
-  //todo::Type of return (no need for now)
- /* async getConversationById(conversationId: string): Promise<any> {
-    try {
-      const result =
-        await this.MessageRepository.getConversationById(conversationId);
-      return result;
-    } catch (error) {
-      throw error;
-    }
   }
-  async getUserConversations(
-    cookieHeader: string,
-    currentUser: { username?: string; role?: string[] },
-    query: QueryGetUserConversations
-  ): Promise<RespondGetConversations> {
-    const { page = 1, limit = 8 } = query;
-    const skip = (page - 1) * limit;
-    try {
-      const cookies = deCookies(cookieHeader);
-      const senderId = cookies.user_id;
-      console.log("user", senderId);
-
-      const senderRole =
-        currentUser.role![0] === "company" ? "Company" : "User";
-      const result = await this.MessageRepository.getUserConversations(
-        senderId,
-        senderRole,
-        page,
-        limit,
-        skip
-      );
-      return result as unknown as RespondGetConversations;
-    } catch (error) {
-      throw error;
-    }
-  }*/
+  //todo::Type of return (no need for now)
+  /* async getConversationById(conversationId: string): Promise<any> {
+     try {
+       const result =
+         await this.MessageRepository.getConversationById(conversationId);
+       return result;
+     } catch (error) {
+       throw error;
+     }
+   }
+   async getUserConversations(
+     cookieHeader: string,
+     currentUser: { username?: string; role?: string[] },
+     query: QueryGetUserConversations
+   ): Promise<RespondGetConversations> {
+     const { page = 1, limit = 8 } = query;
+     const skip = (page - 1) * limit;
+     try {
+       const cookies = deCookies(cookieHeader);
+       const senderId = cookies.user_id;
+       console.log("user", senderId);
+ 
+       const senderRole =
+         currentUser.role![0] === "company" ? "Company" : "User";
+       const result = await this.MessageRepository.getUserConversations(
+         senderId,
+         senderRole,
+         page,
+         limit,
+         skip
+       );
+       return result as unknown as RespondGetConversations;
+     } catch (error) {
+       throw error;
+     }
+   }*/
 }
 const deCookies = (cookies: express.Request["headers"]["cookie"]) => {
-  const decodedCookie = cookies
-    ? Object.fromEntries(
-        cookies.split("; ").map((c) => {
-          const [key, value] = c.split("=");
-          return [key, decodeURIComponent(value)];
-        })
-      )
+  const decodedCookie = cookies ? Object.fromEntries(
+      cookies.split("; ").map((c) => {
+        const [key, value] = c.split("=");
+        return [key, decodeURIComponent(value)];
+      })
+    )
     : {};
   return decodedCookie;
 };

@@ -3,12 +3,12 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 import ROUTE_PATHS from "@/src/routes-def";
 import express from "express";
 import createProxyOptions from "@/src/middleware/createProxyOption";
-import { ProxyConfig } from "@/src/utils/types/interface";
+import { ProxyConfig, RouteConfig } from "@/src/utils/types/interface";
 
 const proxyConfigs: ProxyConfig = {};
 
 Object.keys(ROUTE_PATHS).forEach((key) => {
-  const routeConfig = ROUTE_PATHS[key];
+  const routeConfig = ROUTE_PATHS[key] as RouteConfig;
   const proxyOption = createProxyOptions(routeConfig);
 
   proxyConfigs[routeConfig.path] = proxyOption;

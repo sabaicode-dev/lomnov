@@ -242,6 +242,8 @@ export class UserController extends Controller {
     public async getPropertyOwnerInfo(@Path() cognitoSub: string): Promise<ViewUserProfileDTO | null> {
         try {
             const res = await this.userService.getProperyOwnerInfo(cognitoSub);
+            console.log(res);
+
 
             if (!res) {
                 console.log("controller: ", res);
@@ -253,36 +255,46 @@ export class UserController extends Controller {
         }
     }
 
-  //endpoint status user
-  @Put("/{userId}/status")
-  public async updateStatusUser(
-    @Path() userId: string,
-    @Body() body: { status: boolean | string}
-  ):Promise<{ message: string; updatedStatusUser?: boolean }> {
-      try {
-        const { status } = body;
-        if (typeof status !== "boolean") {
-          throw new Error("Invalid status. It must be a boolean value.");
+    //endpoint status user
+    @Put("/{userId}/status")
+    public async updateStatusUser(
+        @Path() userId: string,
+        @Body() body: { status: boolean | string }
+    ): Promise<{ message: string; updatedStatusUser?: boolean }> {
+        try {
+            const { status } = body;
+            if (typeof status !== "boolean") {
+                throw new Error("Invalid status. It must be a boolean value.");
+            }
+            const updateStatus = await this.userService.updatestatusUser(
+                userId, status
+            )
+            if (!updateStatus) {
+                console.log("Error Status ");
+            }
+            return {
+                message: "Update Status user Success",
+                updatedStatusUser: updateStatus?.status
+            }
+        } catch (error) {
+            throw error;
         }
-        const updateStatus = await this.userService.updatestatusUser(
-          userId, status
-        )
-        if(!updateStatus){
-          console.log("Error Status ");
-        }
-        return {
-          message : "Update Status user Success",
-          updatedStatusUser : updateStatus?.status
-        }
-      } catch (error) {
-        throw error;
-      }
-  }
+    }
     @Tags("Get User Agents")
     @Get("/agents")
     public async getUserAgents(): Promise<any> {
         try {
             const res = this.userService.getUserAgents();
+            return res;
+        } catch (error) {
+            throw error;
+        }
+    }
+    @Tags("Get User Role by cognito sub i,e (user, admin)")
+    @Get("/role/{cognitoSub}")
+    public async getUserRole(@Path() cognitoSub: string): Promise<{ role: string } | null> {
+        try {
+            const res = await this.userService.getUserRole(cognitoSub);
             return res;
         } catch (error) {
             throw error;
