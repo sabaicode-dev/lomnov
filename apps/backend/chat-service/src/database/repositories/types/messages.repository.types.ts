@@ -33,7 +33,7 @@ export interface conversation {
     conversationId: mongoose.Types.ObjectId;
   }[];
   participants: {
-    participantType: "User" | "Company";
+    participantType: "user" | "admin";
     participantId: string;
   }[];
   //mongoose.Types.ObjectId[];//
@@ -57,7 +57,7 @@ export interface GetConversation {
   createdAt: Date;
   messages: string[];
   participants: {
-    participantType: "User" | "Company";
+    participantType: "user" | "admin";
     participantId: string;
   }[];
   //mongoose.Types.ObjectId[];//
@@ -68,7 +68,7 @@ export interface AllConversations {
   receiver: string;
   messages: string[];
   updatedAt: Date;
-  role: "User" | "Company";
+  role: "user" | "admin";
 }
 [];
 export interface RespondGetConversationsPagination {
@@ -84,6 +84,12 @@ export interface RespondGetConversations {
   receiver: string;
   messages: string[];
   updatedAt: Date;
-  role: "User" | "Company";
+  role: "user" | "admin";
+}[];
+export type RequestgetUserConversations = {
+  senderId?: string,
+  senderRole?: string,
+  page?: number,
+  limit?: number,
+  skip?: number
 }
-[];

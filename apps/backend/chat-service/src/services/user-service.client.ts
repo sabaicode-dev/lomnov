@@ -1,7 +1,4 @@
 import axios from "axios";
-import configs from "../config";
-console.log(configs.apiUrl);
-
 export class UserServiceClient {
     public async getUserRole(sub: string): Promise<{ role: string } | null> {
         try {

@@ -3,7 +3,7 @@ import express from "express";
 import { MessageService } from "../services/message.service";
 // import {query,QueryGetUserConversations} from "./types/message.controller.types";
 import { MessageRequest } from "../services/types/messages.service.types";
-import { query } from "./types/message.controller.types";
+import { query, QueryGetUserConversations } from "./types/message.controller.types";
 
 @Route("/api/v1/chat")
 export class MessageController extends Controller {
@@ -70,29 +70,30 @@ export class MessageController extends Controller {
       } catch (error) {
         throw error;
       }
-    }
-    @Get("/get/conversations")
-    //get all conversations with user Id
-    public async getUserConversations(
-      @Request() request: express.Request,
-      @Queries() query: QueryGetUserConversations
-    ) {
-      try {
-        const cookieHeader = request.headers.cookie;
-  
-        const currentUser = JSON.parse(request.headers.currentuser as string) as {
-          username?: string;
-          role?: string[];
-        };
-  
-        const result = await this.MessageService.getUserConversations(
-          cookieHeader!,
-          currentUser,
-          query
-        );
-        return result;
-      } catch (error) {
-        throw error;
-      }
     }*/
+  @Get("/conversation/me")
+  //get all conversations with user Id
+  public async getUserConversations(
+    @Request() request: express.Request,
+    @Queries() query: QueryGetUserConversations
+  ) {
+    try {
+      const cookieHeader = request.headers.cookie;
+      const currentUser = JSON.parse(request.headers.currentuser as string) as {
+        username?: string;
+        role?: string[];
+      };
+      if (!currentUser.username) {
+        throw new Error("Authurize User!!")
+      }
+      const result = await this.MessageService.getUserConversations(
+        cookieHeader!,
+        currentUser,
+        query
+      );
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

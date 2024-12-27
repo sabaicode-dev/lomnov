@@ -165,6 +165,14 @@ const ROUTE_PATHS: RoutesConfig = {
                 methods: {
                     GET: { authRequired: true, roles: ['admin', 'user'] }
                 }
+            },
+            {
+                path: "/conversation/me",
+                methods: {
+                    GET: {
+                        authRequired: true, roles: ['admin', 'user']
+                    }
+                }
             }
         ]
     }
