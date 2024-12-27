@@ -10,6 +10,8 @@ import SelectLang from "@/components/molecules/select-lang/SelectLang";
 import { Setting, SignOut, User } from "@/icons";
 import { useAuth } from "@/context/user";
 import Login from "@/components/atoms/login/Login";
+import { BsMessenger } from "react-icons/bs";
+import { useRouter } from "next/navigation";
 
 interface IMenus {
   id?: number;
@@ -28,6 +30,7 @@ function ContainerHeader({ menu }: MenuProp) {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [profileImage, setProfileImage] = useState<string>("/images/default-profile.jpg");
   const dropdownRef = useRef<HTMLDivElement>(null); // Reference for the dropdown
+  const router = useRouter();
 
   // Sync profile image when the user profile updates
   useEffect(() => {
@@ -69,6 +72,10 @@ function ContainerHeader({ menu }: MenuProp) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleMessengerClick = () => {
+    router.push("/chat"); // Navigate to the chat page
+  };
+
   return (
     <>
       <div className="xl:w-[1300px] w-full lg:m-auto h-full flex flex-row items-center justify-between py-3 px-3 xl:px-0 z-20">
@@ -98,8 +105,19 @@ function ContainerHeader({ menu }: MenuProp) {
           </div>
         </div>
 
+          {/* Chat Icon */}
+        {/* <div className="">
+          <button className="py-2 px-4  text-white rounded-md flex items-center gap-2">
+            <PiMessengerLogo size={20} />
+          </button>
+        </div> */}
+
         {/* User Actions */}
         <div className="w-[50%] md:w-[30%] xl:w-[20%] flex gap-3 items-center justify-end">
+          <button onClick={handleMessengerClick} className=" px-2  text-white rounded-md flex items-center gap-2">
+            <BsMessenger size={40} />
+          </button>
+
           <div className="hidden md:flex w-[150px]">
             <SelectLang />
           </div>

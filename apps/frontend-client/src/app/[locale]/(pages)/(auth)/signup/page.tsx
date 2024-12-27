@@ -1,5 +1,5 @@
 import React from "react";
-import SignupForm from "../../../../components/organisms/auth/form-register/SignupForm";
+import SignupForm from "@/components/organisms/auth/form-register/SignupForm";
 import { Facebook, Google } from "@/icons";
 import Image from "next/image";
 import banner from "@/images/banner.png";
