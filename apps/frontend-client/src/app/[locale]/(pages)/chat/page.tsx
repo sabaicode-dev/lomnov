@@ -70,8 +70,8 @@ const ChatPage: React.FC = () => {
 
   const fetchConversations = useCallback(async () => {
     try {
-      const response = await axiosInstance.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/v1/messages/get/conversations`
+      const response = await axiosInstance.get(`${API_ENDPOINTS.CONVERSATION}`
+        // `${process.env.NEXT_PUBLIC_API_URL}/v1/messages/get/conversations`
       );
       setConversations(response.data.conversations);
     } catch (error) {
@@ -89,14 +89,15 @@ const ChatPage: React.FC = () => {
   }, []);
 
   const fetchMessages = async (
-    conversationId: string,
+    userToChatId: string,
     pageNum: number,
     isNewConversation: boolean = false
   ) => {
     try {
       setLoading(true);
       const response = await axiosInstance.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/v1/messages/${conversationId}?page=${pageNum}&limit=14`
+        `${API_ENDPOINTS.GET_MESSAGES}/${userToChatId}?page=${pageNum}&limit=14`
+        // `${process.env.NEXT_PUBLIC_API_URL}/v1/messages/${conversationId}?page=${pageNum}&limit=14`
       );
       const newMessages = response.data.conversation.messages;
 
