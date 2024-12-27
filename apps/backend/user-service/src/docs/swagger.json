@@ -316,6 +316,9 @@
 							"type": "string"
 						},
 						"type": "array"
+					},
+					"role": {
+						"type": "string"
 					}
 				},
 				"required": [
@@ -883,6 +886,47 @@
 				],
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/api/v1/users/role/{cognitoSub}": {
+			"get": {
+				"operationId": "GetUserRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"role": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"role"
+									],
+									"type": "object",
+									"nullable": true
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Get User Role by cognito sub i,e (user, admin)",
+					" User service"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "cognitoSub",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		}
 	},

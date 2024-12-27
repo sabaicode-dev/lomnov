@@ -1,53 +1,42 @@
-import {Body,Controller,Path,Post,Request,Route} from "tsoa";
+import { Body, Controller, Get, Path, Post, Queries, Request, Route } from "tsoa";
 import express from "express";
 import { MessageService } from "../services/message.service";
 // import {query,QueryGetUserConversations} from "./types/message.controller.types";
 import { MessageRequest } from "../services/types/messages.service.types";
+import { query, QueryGetUserConversations } from "./types/message.controller.types";
 
 @Route("/api/v1/chat")
 export class MessageController extends Controller {
   MessageService = new MessageService();
   @Post("/send/{receiverId}")
-  public async sendMessage(@Path() receiverId: string,@Body() reqBody: { message: string },@Request() request: express.Request) {
+  public async sendMessage(@Path() receiverId: string, @Body() reqBody: { message: string }, @Request() request: express.Request) {
     try {
       const { message } = reqBody;
-      console.log(request.headers);
-      
       const cookieHeader = request.headers.cookie!;
-      // console.log(cookieHeader);
-      
-      const currentUser = JSON.parse(request.headers.user as string) as {
+      // sender 
+      const currentUser = JSON.parse(request.headers.currentuser as string) as {
         username?: string;//
         roles?: string[];
       };
-      const requestData: MessageRequest = {message, cookieHeader, receiverId, currentUser};
-      const result = await this.MessageService.sendMessaage(requestData);
-      return result;
+      const requestData: MessageRequest = { message, cookieHeader, receiverId, currentUser };
+      return await this.MessageService.sendMessaage(requestData);
     } catch (error) {
       console.error("error:::", error);
       throw error;
     }
   }
- /* @Get("{userToChatId}")
-  public async getMessages(
-    @Path() userToChatId: string,
-    @Request() request: express.Request,
-    @Queries() query: query
-  ) {
+  @Get("/get-messages/{userToChatId}")
+  public async getMessages(@Path() userToChatId: string, @Request() request: express.Request, @Queries() query: query) {
     try {
       const cookieHeader = request.headers.cookie;
       const currentUser = JSON.parse(request.headers.currentuser as string) as {
         username?: string;
         role?: string[];
       };
+      console.log(currentUser);
 
       // Fetch the result from the service
-      const result = await this.MessageService.getMessage(
-        userToChatId,
-        cookieHeader!,
-        query,
-        currentUser
-      );
+      const result = await this.MessageService.getMessage(userToChatId, cookieHeader!, query, currentUser);
 
       // Modify the messages array to move the specific message to the last index
       if (result?.conversation?.messages) {
@@ -71,18 +60,18 @@ export class MessageController extends Controller {
       throw error;
     }
   }
-
-  @Get("/conversation/{conversationId}")
-  public async getConversationById(@Path() conversationId: string) {
-    try {
-      const result =
-        await this.MessageService.getConversationById(conversationId);
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  }
-  @Get("/get/conversations")
+  /*
+    @Get("/conversation/{conversationId}")
+    public async getConversationById(@Path() conversationId: string) {
+      try {
+        const result =
+          await this.MessageService.getConversationById(conversationId);
+        return result;
+      } catch (error) {
+        throw error;
+      }
+    }*/
+  @Get("/conversation/me")
   //get all conversations with user Id
   public async getUserConversations(
     @Request() request: express.Request,
@@ -90,12 +79,13 @@ export class MessageController extends Controller {
   ) {
     try {
       const cookieHeader = request.headers.cookie;
-
       const currentUser = JSON.parse(request.headers.currentuser as string) as {
         username?: string;
         role?: string[];
       };
-
+      if (!currentUser.username) {
+        throw new Error("Authurize User!!")
+      }
       const result = await this.MessageService.getUserConversations(
         cookieHeader!,
         currentUser,
@@ -105,5 +95,5 @@ export class MessageController extends Controller {
     } catch (error) {
       throw error;
     }
-  }*/
+  }
 }

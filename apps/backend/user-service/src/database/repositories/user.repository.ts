@@ -152,7 +152,7 @@ export class UserRepository {
     }
     public async findViewProfileOfUser(cognitoSub: string): Promise<ViewUserProfileDTO> {
         try {
-            const user = await UserModel.findOne({ cognitoSub: cognitoSub }).select('-favorite -role');
+            const user = await UserModel.findOne({ cognitoSub: cognitoSub }).select('-favorite');
             if (!user)
                 throw new NotFoundError("Users not found");
             return user!;
@@ -171,6 +171,20 @@ export class UserRepository {
             console.log(error);
             throw new Error("Method findUserAgents() Error:: ");
 
+        }
+    }
+    public async getUserRoleBySub(cognitoSub: string): Promise<{role: string}| null>{
+        try {
+            const userRole = await UserModel.findOne({cognitoSub}).select("role");
+            if(!userRole){
+                return null;
+            }
+            if (!userRole || !userRole.role) {
+                return null;
+            }
+            return { role: userRole.role };
+        } catch (error) {
+            throw error;
         }
     }
 }

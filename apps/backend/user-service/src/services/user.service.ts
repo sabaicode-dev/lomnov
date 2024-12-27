@@ -290,18 +290,18 @@ export class UserService {
         }
     }
 
-  //status user
-  public async updatestatusUser( userId : string , status : boolean) : Promise<ResponseUserDTO | null> {
-    try {
-      const updateStaus = await this.userRepository.updateStatus(userId,status);
-      if(!updateStaus){
-        console.log("Update state False")
-      }
-      return updateStaus;
-    } catch (error) {
-      throw error;
+    //status user
+    public async updatestatusUser(userId: string, status: boolean): Promise<ResponseUserDTO | null> {
+        try {
+            const updateStaus = await this.userRepository.updateStatus(userId, status);
+            if (!updateStaus) {
+                console.log("Update state False")
+            }
+            return updateStaus;
+        } catch (error) {
+            throw error;
+        }
     }
-  }
     public async getUserAgents(): Promise<ResponseUserDTO[]> {
         try {
             // Step 1: Get all users
@@ -317,7 +317,7 @@ export class UserService {
                 map[cognitoSub].push(property);
                 return map;
             }, {});
-            
+
             // Step 4: Filter users that have at least one property
             const usersWithProperties = users.filter(user => {
                 const userProperties = propertiesMap[user.cognitoSub];
@@ -326,6 +326,13 @@ export class UserService {
             return usersWithProperties;
         } catch (error) {
             console.error("Error in getUserAgents:", error);
+            throw error;
+        }
+    }
+    public async getUserRole(cognitoSub: string): Promise<{ role: string } | null> {
+        try {
+            return this.userRepository.getUserRoleBySub(cognitoSub);
+        } catch (error) {
             throw error;
         }
     }

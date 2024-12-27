@@ -102,7 +102,8 @@ const ROUTE_PATHS: RoutesConfig = {
                 methods: { GET: { authRequired: false, roles: [] } }
             },
             { path: "/profile-info", methods: { GET: { authRequired: false, roles: [] } } },
-            { path: "/agents", methods: { GET: { authRequired: true, roles: ["admin"] } } }
+            { path: "/agents", methods: { GET: { authRequired: true, roles: ["admin"] } } },
+            { path: "/role", methods: { GET: { authRequired: false, roles: [] } } }
         ],
     },
     PROPERTY_SERVICE: {
@@ -143,7 +144,7 @@ const ROUTE_PATHS: RoutesConfig = {
         path: "/api/v1/chat",
         target: configs.chatServiceUrl,
         methods: {
-            GET: { authRequired: false, roles: [] },
+            GET: { authRequired: true, roles: ["admin", "user"] },
             POST: { authRequired: true, roles: ["admin", "user"] },
             // DELETE: { authRequired: true, roles: ['admin', 'user'] },
             PUT: { authRequired: true, roles: ['admin', 'user'] }
@@ -159,6 +160,20 @@ const ROUTE_PATHS: RoutesConfig = {
                     POST: { authRequired: true, roles: ["admin", "user"] },
                 },
             },
+            {
+                path: "/get-messages",
+                methods: {
+                    GET: { authRequired: true, roles: ['admin', 'user'] }
+                }
+            },
+            {
+                path: "/conversation/me",
+                methods: {
+                    GET: {
+                        authRequired: true, roles: ['admin', 'user']
+                    }
+                }
+            }
         ]
     }
 };
