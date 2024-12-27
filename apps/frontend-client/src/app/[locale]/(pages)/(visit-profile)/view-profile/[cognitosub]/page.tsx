@@ -20,7 +20,6 @@ async function fetchUserDetails(cognitosub: string) {
 }
 const ProfilePage = async ({ params }: { params: { cognitosub: string } }) => {
   const user = await fetchUserDetails(params.cognitosub);
-  // console.log("user :: ", user); // Check what the user object looks like
   if (!user) {
     return <div>User not found</div>;
   }
