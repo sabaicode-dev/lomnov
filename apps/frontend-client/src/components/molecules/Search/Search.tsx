@@ -1,6 +1,4 @@
-
 'use client';
-
 import React, { useState, useEffect } from "react";
 import SelectProperties from "@/components/molecules/select-properties/SelectProperties";
 import SelectLocations from "@/components/molecules/select-locations/SelectLocations";
@@ -11,7 +9,7 @@ import { useTranslation } from "@/hook/useTranslation";
 
 const Search = ({disabled}: {disabled?:boolean}) => {
   const {t} = useTranslation();
-  const [category, setCategory] = useState("");
+  const [category, _setCategory] = useState("");
   const [transition, setTransition] = useState("");
   const [property, setProperty] = useState<Option | null>(null);
   const [address, setAddress] = useState<Option | null>(null);
@@ -60,8 +58,6 @@ const Search = ({disabled}: {disabled?:boolean}) => {
       params.append("price_lte", price_lte.toString());
     }
     router.push(`/search?${params.toString()}`)
-    // Redirect to the search page with the query string
-    //window.location.href = `/search?${params.toString()}`;
   };
   return (
     <div className="absolute left-0 top-0 w-full h-full">
@@ -89,7 +85,6 @@ const Search = ({disabled}: {disabled?:boolean}) => {
             <SelectProperties onChange={handlePropertyChange} />
             <SelectLocations onChange={handleLocationChange} />
             <SelectPrice onChange={handlePriceChange} />
-
             <button
               className={`bg-neutral text-white font-[600] px-5 py-2 rounded-md lg:w-[120px]
                 hover:bg-olive-green hover:scale-105 active:bg-olive-green active:scale-95 transition-transform duration-150 ${disabled ? 'cursor-not-allowed':''}`}
@@ -97,7 +92,6 @@ const Search = ({disabled}: {disabled?:boolean}) => {
               disabled={disabled}
             >
               {disabled ? t("searching") : t("search")}
-              
             </button>
           </div>
         </div>

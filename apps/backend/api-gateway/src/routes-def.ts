@@ -102,7 +102,8 @@ const ROUTE_PATHS: RoutesConfig = {
                 methods: { GET: { authRequired: false, roles: [] } }
             },
             { path: "/profile-info", methods: { GET: { authRequired: false, roles: [] } } },
-            { path: "/agents", methods: { GET: { authRequired: true, roles: ["admin"] } } }
+            { path: "/agents", methods: { GET: { authRequired: true, roles: ["admin"] } } },
+            { path: "/role", methods: { GET: { authRequired: false, roles: [] } } }
         ],
     },
     PROPERTY_SERVICE: {
@@ -139,6 +140,42 @@ const ROUTE_PATHS: RoutesConfig = {
             { path: "/sub", methods: { GET: { authRequired: false, roles: [] } } }
         ],
     },
+    CHAT_SERVICE: {
+        path: "/api/v1/chat",
+        target: configs.chatServiceUrl,
+        methods: {
+            GET: { authRequired: true, roles: ["admin", "user"] },
+            POST: { authRequired: true, roles: ["admin", "user"] },
+            // DELETE: { authRequired: true, roles: ['admin', 'user'] },
+            PUT: { authRequired: true, roles: ['admin', 'user'] }
+        },
+        nestedRoutes: [
+            {
+                path: "/api-docs",
+                methods: { GET: { authRequired: false, roles: [] } },
+            },
+            {
+                path: "/send",
+                methods: {
+                    POST: { authRequired: true, roles: ["admin", "user"] },
+                },
+            },
+            {
+                path: "/get-messages",
+                methods: {
+                    GET: { authRequired: true, roles: ['admin', 'user'] }
+                }
+            },
+            {
+                path: "/conversation/me",
+                methods: {
+                    GET: {
+                        authRequired: true, roles: ['admin', 'user']
+                    }
+                }
+            }
+        ]
+    }
 };
 
 export default ROUTE_PATHS;

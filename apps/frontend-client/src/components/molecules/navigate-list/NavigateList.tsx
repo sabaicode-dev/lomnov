@@ -27,9 +27,8 @@ function NavigateList({ menu }: MenuProp) {
           <li key={index} className="list-none group relative">
             <Link href={href} legacyBehavior>
               <a
-                className={`capitalize text-white hover:font-semibold ${
-                  isActive ? "text-white font-semibold" : ""
-                }`}
+                className={`capitalize text-white hover:font-semibold ${isActive ? "text-white font-semibold" : ""
+                  }`}
                 aria-current={isActive ? "page" : undefined}
               >
                 {t(item.name || "")}

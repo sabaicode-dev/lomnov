@@ -17,7 +17,8 @@ declare module "express-serve-static-core" {
 // Middleware to authorize user roles
 const authorizeRole = (req: Request, _res: Response, next: NextFunction) => {
   const { methods } = req.routeConfig || {};
-  const { method } = req;
+  const { method} = req;
+  
   const methodConfig = methods && methods[method];
   // Skip authorization if authRequired is false
   if (methodConfig && !methodConfig.authRequired) {

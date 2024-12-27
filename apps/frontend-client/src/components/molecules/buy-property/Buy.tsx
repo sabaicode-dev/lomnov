@@ -55,7 +55,6 @@ const BuyProperty = () => {
     <div>
       {/* Comparison Bar at the top */}
       <ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems} /> {/* Show comparison bar */}
-
       {error && <p>{error}</p>}
       {!loading && filterPropertyBuy.length > 0 ? (
         <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 mb-[40px]">

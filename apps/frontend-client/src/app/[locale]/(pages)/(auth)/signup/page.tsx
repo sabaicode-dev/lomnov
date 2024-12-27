@@ -12,7 +12,7 @@ const signup = () => {
         <header className="relative w-full h-[400px]">
           <Image
             src={banner}
-            alt="banner"
+            alt="banner"  
             layout="fill"
             objectFit="cover"
             className="brightness-75"

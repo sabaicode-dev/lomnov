@@ -117,6 +117,7 @@ export interface ViewUserProfileDTO {
   dateOfBirth?: string;
   profile?: string[];
   background?: string[];
+  role?: string;
 }
 export interface LocalizedContent {
   content: string;

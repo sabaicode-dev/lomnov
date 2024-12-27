@@ -22,7 +22,8 @@
     "start:property-service": " concurrently \"yarn workspace property-service run dev\"",
     "start:notification-service": "concurrently \"yarn workspace notification-service run dev \"",
     "start:api-gateway": " concurrently \"yarn workspace api-gateway run dev\"",
-    "start:all": "concurrently \"yarn workspace ms-ui-components watch\" \"yarn workspace frontend-client dev\" \"yarn workspace frontend-dashboard dev\" \"yarn workspace auth-service run dev\" \"yarn workspace user-service run dev\" \"yarn workspace property-service run dev\" \"yarn workspace notification-service run dev\" \"yarn workspace api-gateway run dev\""
+    "start:all": "concurrently \"yarn workspace ms-ui-components watch\" \"yarn workspace frontend-client dev\" \"yarn workspace frontend-dashboard dev\" \"yarn workspace auth-service run dev\" \"yarn workspace user-service run dev\" \"yarn workspace property-service run dev\" \"yarn workspace notification-service run dev\" \"yarn workspace api-gateway run dev\"",
+    "start:chat-service":"concurrently \"yarn workspace chat-service run dev\""
   },
   "devDependencies": {
     "@types/multer": "^1.4.12",
@@ -37,9 +38,9 @@
     "@mui/icons-material": "^6.1.7",
     "@react-google-maps/api": "^2.20.3",
     "@storybook/testing-library": "^0.2.2",
-    "@types/express": "^4.17.21",
+    "@types/express": "^5.0.0",
     "@types/leaflet": "^1.9.14",
-    "chartjs-plugin-datalabels": "^2.2.0",
+    "express": "^4.21.2",
     "graphql": "^16.9.0",
     "leaflet": "^1.9.4",
     "msw": "^2.3.4",
@@ -55,6 +56,7 @@
     "react-rte": "^0.16.5",
     "resend": "^4.0.1-alpha.0",
     "swiper": "^11.1.8",
+    "typescript": "^5.7.2",
     "yup": "^1.4.0"
   },
   "msw": {

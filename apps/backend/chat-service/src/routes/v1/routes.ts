@@ -33,6 +33,15 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "SendMessageResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"string","required":true},
+            "data": {"ref":"messages","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "conversation": {
         "dataType": "refObject",
         "properties": {
@@ -118,7 +127,7 @@ export function RegisterRoutes(app: Router) {
 
 
     
-        app.post('/v1/messages/send/:receiverId',
+        app.post('/api/v1/chat/send/:receiverId',
             ...(fetchMiddlewares<RequestHandler>(MessageController)),
             ...(fetchMiddlewares<RequestHandler>(MessageController.prototype.sendMessage)),
 
@@ -150,7 +159,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/v1/messages/:userToChatId',
+        app.get('/api/v1/chat/get-messages/:userToChatId',
             ...(fetchMiddlewares<RequestHandler>(MessageController)),
             ...(fetchMiddlewares<RequestHandler>(MessageController.prototype.getMessages)),
 
@@ -182,37 +191,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/v1/messages/conversation/:conversationId',
-            ...(fetchMiddlewares<RequestHandler>(MessageController)),
-            ...(fetchMiddlewares<RequestHandler>(MessageController.prototype.getConversationById)),
-
-            async function MessageController_getConversationById(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    conversationId: {"in":"path","name":"conversationId","required":true,"dataType":"string"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new MessageController();
-
-              await templateService.apiHandler({
-                methodName: 'getConversationById',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/v1/messages/get/conversations',
+        app.get('/api/v1/chat/conversation/me',
             ...(fetchMiddlewares<RequestHandler>(MessageController)),
             ...(fetchMiddlewares<RequestHandler>(MessageController.prototype.getUserConversations)),
 

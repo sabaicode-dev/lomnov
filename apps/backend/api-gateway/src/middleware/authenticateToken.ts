@@ -27,25 +27,28 @@ const verifier = CognitoJwtVerifier.create({
 
 const authenticateToken = async (req: Request, _res: Response, next: NextFunction) => {
   const { routeConfig } = req;
+  
   if (routeConfig && routeConfig.methods && !routeConfig.methods[req.method]?.authRequired) {
     return next();
   }
   const token = req.cookies?.["accessToken"];
   // console.log('req cookie:: ', req.cookies)
-  // console.log('token:: ',token)
+  console.log('token:: ',token)
   if (!token) {
     return next(new UnauthorizedError());
   }
 
   try {
     const payload = await verifier.verify(token);
-    // console.log('payload:: ', payload)
+    //  console.log('payload:: ', payload)
     if (!payload || typeof payload.username !== "string") {
       return next(new UnauthorizedError("Invalid token payload."));
     }
     req.user = {
       username: payload.username, roles: payload["cognito:groups"] || [], // Ensure roles is always an array
     };
+    console.log("Request.User::: ",req.user);
+    
     // console.log('user:: ',req.user)
     next();
   } catch (error: any) {

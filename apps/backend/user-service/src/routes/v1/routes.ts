@@ -145,6 +145,7 @@ const models: TsoaRoute.Models = {
             "dateOfBirth": {"dataType":"string"},
             "profile": {"dataType":"array","array":{"dataType":"string"}},
             "background": {"dataType":"array","array":{"dataType":"string"}},
+            "role": {"dataType":"string"},
         },
         "additionalProperties": false,
     },
@@ -573,6 +574,36 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'getUserAgents',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/api/v1/users/role/:cognitoSub',
+            ...(fetchMiddlewares<RequestHandler>(UserController)),
+            ...(fetchMiddlewares<RequestHandler>(UserController.prototype.getUserRole)),
+
+            async function UserController_getUserRole(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    cognitoSub: {"in":"path","name":"cognitoSub","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new UserController();
+
+              await templateService.apiHandler({
+                methodName: 'getUserRole',
                 controller,
                 response,
                 next,
