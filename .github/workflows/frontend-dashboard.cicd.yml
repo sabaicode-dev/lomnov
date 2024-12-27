@@ -1,0 +1,38 @@
+name: CI/CD Pipeline for Frontend-Dashboard (Next.js)
+
+on: 
+    pull_request:
+        branches:
+            -main
+        path:
+            -"apps/frontend-dashboard/**"
+    push:
+        branches:
+            - main
+        paths: 
+            - "apps/frontend-dashboard/**"
+    defaults: 
+        run: 
+            working-directory: apps/frontend-dashboard
+
+    jobs: 
+        build:
+            runs-on: ubuntu-latest
+
+        steps: 
+            - name: Checkout repository
+              uses: actions/setup-node@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with: 
+                node-version: "20"
+            
+            - name: Install dependencies
+              run: yarn install --no-immutable
+
+            - name: Upload build artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                name: frontend-
+
