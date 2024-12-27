@@ -139,6 +139,28 @@ const ROUTE_PATHS: RoutesConfig = {
             { path: "/sub", methods: { GET: { authRequired: false, roles: [] } } }
         ],
     },
+    CHAT_SERVICE: {
+        path: "/api/v1/chat",
+        target: configs.chatServiceUrl,
+        methods: {
+            GET: { authRequired: false, roles: [] },
+            POST: { authRequired: true, roles: ["admin", "user"] },
+            // DELETE: { authRequired: true, roles: ['admin', 'user'] },
+            PUT: { authRequired: true, roles: ['admin', 'user'] }
+        },
+        nestedRoutes: [
+            {
+                path: "/api-docs",
+                methods: { GET: { authRequired: false, roles: [] } },
+            },
+            {
+                path: "/send",
+                methods: {
+                    POST: { authRequired: true, roles: ["admin", "user"] },
+                },
+            },
+        ]
+    }
 };
 
 export default ROUTE_PATHS;
