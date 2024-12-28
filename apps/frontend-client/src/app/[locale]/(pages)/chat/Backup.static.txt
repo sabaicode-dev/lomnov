@@ -1,0 +1,195 @@
+
+//mocked code
+"use client";
+
+import React, { useState, useRef } from "react";
+import { MessageCircle, Search } from "lucide-react";
+import { ChatInput } from "@/components/organisms/chat/chat-input/ChatInput";
+import { ChatHeader } from "@/components/organisms/chat/chat-header/ChatHeader";
+import { ConversationList } from "@/components/organisms/chat/conversation-list/ConversationList";
+import { ChatMessageList } from "@/components/organisms/chat/chat-message-list/ChatMessageList";
+import { ChatPropertyInfo } from "@/components/organisms/chat/chat-property-info/ChatPropertyInfo";
+import { Input } from "@/components/atoms/input/Input";
+
+const mockConversations = [
+  {
+    _id: "1",
+    receiver: "user1",
+    messages: ["Hi there!", "How much is the property?"],
+    updatedAt: "2023-12-25T10:43:00.000Z",
+    role: "buyer",
+    profile: "/images/profile1.jpg",
+    name: "Chann Sopheak",
+    propertyDetails: {
+      image: "/images/property1.jpg",
+      type: "Villa",
+      bedroom: "3 Rooms",
+      bathroom: "2 Rooms",
+      spacious: "1800 Sq",
+      parking: "1 Parking",
+    },
+  },
+  {
+    _id: "2",
+    receiver: "user2",
+    messages: ["Thank you!"],
+    updatedAt: "2023-12-24T15:00:00.000Z",
+    role: "buyer",
+    profile: "/images/profile2.jpg",
+    name: "Sok Sovann",
+    propertyDetails: {
+      image: "/images/property2.jpg",
+      type: "Apartment",
+      bedroom: "2 Rooms",
+      bathroom: "1 Room",
+      spacious: "1200 Sq",
+      parking: "No Parking",
+    },
+  },
+];
+
+const mockMessages = [
+  {
+    _id: "msg1",
+    senderId: "user1",
+    receiverId: "user2",
+    message: "Hello bong, how much?",
+    conversationId: "1",
+    createdAt: "2023-12-25T10:43:00.000Z",
+    updatedAt: "2023-12-25T10:43:00.000Z",
+  },
+];
+
+const ChatPage: React.FC = () => {
+  const [conversations, setConversations] = useState(mockConversations);
+  const [selectedConversation, setSelectedConversation] =
+    useState<typeof mockConversations[0] | null>(null);
+  const [messages, setMessages] = useState(mockMessages);
+  const [messageInput, setMessageInput] = useState("");
+  const [showPropertyInfo, setShowPropertyInfo] = useState(false);
+  const messageRef = useRef<HTMLDivElement>(null);
+
+  const handleSelectConversation = (conversation: typeof mockConversations[0]) => {
+    setSelectedConversation(conversation);
+    setMessages(mockMessages);
+    setShowPropertyInfo(!!conversation.propertyDetails); // Show property info if it exists
+  };
+
+  const handleSendMessage = () => {
+    if (!messageInput.trim()) return;
+
+    const newMessage = {
+      _id: Date.now().toString(),
+      senderId: "user1",
+      receiverId: selectedConversation?.receiver || "",
+      message: messageInput,
+      conversationId: selectedConversation?._id || "",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    setMessages((prev) => [...prev, newMessage]);
+    setMessageInput("");
+    setTimeout(() => {
+      messageRef.current?.scrollTo({
+        top: messageRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }, 100);
+  };
+
+  return (
+    <div className="flex h-screen bg-[#D9D9D9]">
+      {/* Conversations Sidebar */}
+      <div className="h-full bg-[#D9D9D9] w-[20%] p-4 border-r-[1px] border-gray-400">
+        <div className="mb-4 mt-20">
+          <h2 className="text-xl font-bold">Chats</h2>
+          <div className="mt-4 relative">
+            <input
+              type="text"
+              placeholder="Search chat"
+              className="w-full bg-[#d9d9d9] rounded-md py-2 pl-10 pr-4 focus:outline-none" 
+            />
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"> 
+              <Search className="text-gray-400" size={20} />
+            </div>
+          </div>
+        </div>
+        <div className="overflow-y-auto h-[calc(100%-100px)]">
+          {conversations.map((conversation) => (
+            <ConversationList
+              key={conversation._id}
+              id={conversation._id}
+              name={conversation.name}
+              profile={conversation.profile}
+              isSelected={selectedConversation?._id === conversation._id}
+              isOnline={true} // Mock online status
+              onClick={() => handleSelectConversation(conversation)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Chat Window */}
+      <div className={`flex flex-col ${showPropertyInfo ? "w-[55%]" : "w-[80%]"}`}>
+        {selectedConversation ? (
+          <>
+            <ChatHeader
+              name={selectedConversation.name}
+              profile={selectedConversation.profile}
+              onBack={() => setSelectedConversation(null)}
+              isOnline={true} // Mock online status
+            />
+            <div
+              className="flex-1 h-full p-4 space-y-4 overflow-y-auto chat-container"
+              ref={messageRef}
+            >
+              {messages.map((message) => (
+                <ChatMessageList
+                  key={message._id}
+                  message={message.message}
+                  timestamp={message.createdAt}
+                  isCurrentUser={message.senderId === "user1"} // Mock current user
+                  profile={selectedConversation.profile}
+                />
+              ))}
+            </div>
+            <ChatInput
+              value={messageInput}
+              onChange={setMessageInput}
+              onSend={handleSendMessage}
+            />
+          </>
+        ) : (
+          <div className="flex items-center justify-center flex-grow text-gray-500">
+            <div className="text-center">
+              <MessageCircle size={64} className="mx-auto mb-4 text-[#b8a852]" />
+              <h2 className="text-xl font-semibold">Welcome to Messages</h2>
+              <p className="mt-2 text-gray-400">
+                Select a conversation to start chatting
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Property Sidebar */}
+      {showPropertyInfo && selectedConversation?.propertyDetails && (
+        <div className="w-[25%] border-l-[1px] border-gray-400">
+          <ChatPropertyInfo
+            propertyDetails={selectedConversation.propertyDetails}
+            userDetails={{
+              name: selectedConversation.name,
+              email: "example@example.com",
+              phone: "012-345-678",
+              address: "Phnom Penh, Cambodia",
+              profileImage: selectedConversation.profile,
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ChatPage;

@@ -8,6 +8,7 @@ import LocationAccess from "@/components/organisms/location-access/LocationAcces
 import { PropertyProvider } from "@/context/property";
 import { TranslationProvider } from "@/context/translationProvider";
 import { getDictionary } from "./dictionaries";
+import { SocketContextProvider } from "@/context/socketContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +30,9 @@ export default async function RootLayout({
             <PropertyProvider>
               <Header />
               <LocationAccess />
+              <SocketContextProvider>
               {children}
+              </SocketContextProvider>
               <Footer />
             </PropertyProvider>
           </AuthProvider>
