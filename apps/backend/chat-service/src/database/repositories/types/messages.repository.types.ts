@@ -87,9 +87,20 @@ export interface RespondGetConversations {
   role: "user" | "admin";
 }[];
 export type RequestgetUserConversations = {
-  senderId?: string,
+  cognitoSub?: string,
   senderRole?: string,
   page?: number,
   limit?: number,
   skip?: number
 }
+export type Conversation = {
+  _id: string;
+  roomId: string;
+  createdAt: string;
+  messages: string[];
+  participants: {
+      participantType: string;
+      participantId: string;
+  }[];
+  updatedAt: string;
+};

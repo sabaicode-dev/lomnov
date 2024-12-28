@@ -4,6 +4,7 @@ import { MessageService } from "../services/message.service";
 // import {query,QueryGetUserConversations} from "./types/message.controller.types";
 import { MessageRequest } from "../services/types/messages.service.types";
 import { query, QueryGetUserConversations } from "./types/message.controller.types";
+import { UserRequestChat } from "./types/user.request";
 
 @Route("/api/v1/chat")
 export class MessageController extends Controller {
@@ -29,15 +30,9 @@ export class MessageController extends Controller {
   public async getMessages(@Path() userToChatId: string, @Request() request: express.Request, @Queries() query: query) {
     try {
       const cookieHeader = request.headers.cookie;
-      const currentUser = JSON.parse(request.headers.currentuser as string) as {
-        username?: string;
-        role?: string[];
-      };
-      console.log(currentUser);
-
+      const currentUser = JSON.parse(request.headers.currentuser as string) as UserRequestChat
       // Fetch the result from the service
-      const result = await this.MessageService.getMessage(userToChatId, cookieHeader!, query, currentUser);
-
+      const result = await this.MessageService.getMessage(userToChatId, cookieHeader!, query, currentUser!);
       // Modify the messages array to move the specific message to the last index
       if (result?.conversation?.messages) {
         const messages = result.conversation.messages;
@@ -60,37 +55,18 @@ export class MessageController extends Controller {
       throw error;
     }
   }
-  /*
-    @Get("/conversation/{conversationId}")
-    public async getConversationById(@Path() conversationId: string) {
-      try {
-        const result =
-          await this.MessageService.getConversationById(conversationId);
-        return result;
-      } catch (error) {
-        throw error;
-      }
-    }*/
+
   @Get("/conversation/me")
   //get all conversations with user Id
-  public async getUserConversations(
-    @Request() request: express.Request,
-    @Queries() query: QueryGetUserConversations
-  ) {
+  public async getUserConversations(@Request() request: express.Request, @Queries() query: QueryGetUserConversations) {
     try {
-      const cookieHeader = request.headers.cookie;
-      const currentUser = JSON.parse(request.headers.currentuser as string) as {
-        username?: string;
-        role?: string[];
-      };
-      if (!currentUser.username) {
+      const currentUser = JSON.parse(request.headers.currentuser as string) as UserRequestChat;
+      console.log(currentUser);
+      const cognitoSub = currentUser.username
+      if (!cognitoSub) {
         throw new Error("Authurize User!!")
       }
-      const result = await this.MessageService.getUserConversations(
-        cookieHeader!,
-        currentUser,
-        query
-      );
+      const result = await this.MessageService.getUserConversations(cognitoSub!, currentUser!, query);
       return result;
     } catch (error) {
       throw error;

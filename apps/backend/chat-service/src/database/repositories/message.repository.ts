@@ -156,14 +156,12 @@ export class MessageRepository {
           {
             $elemMatch: {
               participantType: request.senderRole!,
-              participantId: request.senderId!,
+              participantId: request.cognitoSub!,
             }
           }
         ]
       }
-    }).sort({ updatedAt: -1 })
-      .limit(request.limit!)
-      .skip(request.skip!)
+    }).sort({ updatedAt: -1 }).limit(request.limit!).skip(request.skip!)
     return conversation;
   }
   public async countConversation(request: RequestgetUserConversations) {
@@ -173,7 +171,7 @@ export class MessageRepository {
           {
             $elemMatch: {
               participantType: request.senderRole!,
-              participantId: request.senderId!,
+              participantId: request.cognitoSub!,
             },
           },
         ],
@@ -181,107 +179,23 @@ export class MessageRepository {
     });
     return count;
   }
-  /**
-   *  To get user conversation::
-   *    - step1: get the cognito sub or username of the current user
-   *    - step2: fetch the conversation of user from document with cognitosub
-   */
   public async getUserConversations(request: RequestgetUserConversations): Promise<RespondGetConversationsPagination | any> {
     try {
       //find conversation
-      const conversation = await this.findConversation(request);
-      return conversation;
+      const { page = 1, limit = 10 } = request;
+      const skip = (page - 1) * limit;
+      const conversation = await this.findConversation({ ...request, skip, limit });
+      // Count total conversations
+      const totalConversation = await this.countConversation(request);
+      const totalPages = Math.ceil(totalConversation / limit);
+      return {
+        conversations: conversation,
+        totalConversation: totalConversation,
+        currentPage: page,
+        totalPage: totalPages
+      };
     } catch (error) {
       throw error;
     }
   }
-  /*  public async getUserConversations(request: RequestgetUserConversations): Promise<RespondGetConversationsPagination> {
-      try {
-        //find conversation
-        const conversation = await this.findConversation(request);
-        //count conversation
-        const totalConversations = await this.countConversation(request);
-        //filter conversations
-        const returnConversations = (conversation as unknown as GetConversation[]).map((con: GetConversation) => {
-          const participant = con.participants.filter((part) => part.participantType !== request.senderRole && part.participantId !== request.senderId)[0];
-          const conversation = {
-            _id: con._id,
-            receiver: participant.participantId,
-            messages: con.messages,
-            updatedAt: con.updatedAt,
-            role: participant.participantType,
-            profile: "",
-            name: "",
-          };
-          return conversation;
-        });
-        //convert participantId to  string
-        const participantsId = returnConversations.length === 0 ? "" : returnConversations.map((con) => con.receiver).join(",");
-        //declare endpoint and query to get participant Profile Detail from endpoint
-        let fetchQuery: string = "";
-        let api_endpoint: string = "";
-        if (request.senderRole === "User") {
-          fetchQuery =
-            participantsId.length === 0 ? "" : `?companiesId=${participantsId}`;
-          api_endpoint = `${configs.corporatorApiEndpoint}/getMulti/Profile`;
-        } else if (request.senderRole === "Company") {
-          fetchQuery =
-            participantsId.length === 0 ? "" : `?usersId=${participantsId}`;
-          api_endpoint = `${configs.userUrl}/getMulti/Profile`;
-        }
-  
-        const res = await fetch(`${api_endpoint}${fetchQuery}`);
-  
-        const data = await res.json();
-  
-        //declare
-        let participantsProfile:
-          | {
-            _id: string;
-            profile: string;
-            name: string;
-          }[]
-          | [];
-        if (data.companiesProfile) {
-          participantsProfile = data.companiesProfile;
-        } else if (data.usersProfile) {
-          participantsProfile = data.usersProfile;
-        }
-  
-        //check compare the participant from db and fetching must be match to ensure correctly
-        if (participantsProfile! && participantsProfile.length !== 0) {
-          for (let i = 0; i < participantsProfile!.length; i++) {
-            const participantId = new mongoose.Types.ObjectId(
-              participantsProfile![i]._id
-            );
-            for (let j = 0; j < returnConversations.length; j++) {
-              if (
-                participantId.toString() ===
-                returnConversations[j].receiver.toString()
-              ) {
-                returnConversations[j].profile = participantsProfile![i].profile;
-                returnConversations[j].name = participantsProfile![i].name;
-                break;
-              }
-            }
-          }
-        }
-        //
-        const totalPage = Math.ceil(totalConversations / request.limit!);
-        const paginationConversations: RespondGetConversationsPagination = {
-          conversations:
-            returnConversations as unknown as RespondGetConversations,
-          currentPage: request.page!,
-          limit: request.limit!,
-          skip: request.skip!,
-          totalConversation: totalConversations,
-          totalPage: totalPage,
-        };
-        //
-        return paginationConversations as unknown as RespondGetConversationsPagination;
-      } catch (error) {
-        throw error;
-      }
-    }*/
-
 }
