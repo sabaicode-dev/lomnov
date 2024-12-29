@@ -46,17 +46,18 @@ export interface GetMessageRespond {
 export interface AllConversations {
   _id: string;
   receiver: string;
+  roomId: string
   messages: string[];
   updatedAt: Date;
 }
 [];
 export interface RespondGetConversations {
-  conversations: AllConversations;
+  conversations: AllConversations[];
   totalConversation: number;
   currentPage: number;
   totalPage: number;
-  limit: number;
-  skip: number;
+  limit?: number;
+  skip?: number;
 }
 export interface QueryGetUserConversations {
   page?: number;
@@ -67,9 +68,47 @@ export interface SendMessageResponse {
   message: string;
   data: messages;
 }
-export interface MessageRequest{
+export interface MessageRequest {
   message: string;
   cookieHeader: string;
   receiverId: string;
   currentUser: { username?: string; roles?: string[] };
 }
+export type UserConversations = {
+  users: {
+    _id: string;
+    cognitoSub: string;
+    userName: string;
+    message: string[]; // last message 
+    profile: string[];
+    email: string;
+    role: string;
+  }[],
+}
+export type ResponseConversationMe = {
+  conversationUser: UserConversations,
+  currentPage: number;
+  totalPage: number;
+  totalConversation: number;
+}
+export type User = {
+  _id: string;
+  cognitoSub: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  phoneNumber: string;
+  location: string;
+  address: string;
+  age: number | null;
+  gender: string;
+  dateOfBirth: string;
+  profile: string[];
+  background: string[];
+  role: string;
+  favorite: any[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
