@@ -15,8 +15,8 @@ async function fetchProperties(): Promise<RealEstateItem[]> {
 
 const Slider =() => {
   const [items, setItems] = useState<RealEstateItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [_loading, setLoading] = useState(true);
+  const [_error, setError] = useState<string | null>(null);
   useEffect(() => {
     const loadProperties = async () => {
       try {
