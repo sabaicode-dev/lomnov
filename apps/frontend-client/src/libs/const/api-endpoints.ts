@@ -22,6 +22,9 @@ export const API_ENDPOINTS = {
   GET_PROPERTY_BY_ID: `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}/get`,
   MY_PROPERTY: `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}/me`,
   CATEGORIES: `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}/category`,
-  NEARLY : `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}/nearby`
+  NEARLY : `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}/nearby`,
+  //CHAT SERVICE
+  CONVERSATION: `${process.env.NEXT_PUBLIC_CHAT_ENDPOINT}/conversation/me`,
+  GET_MESSAGES: `${process.env.NEXT_PUBLIC_CHAT_ENDPOINT}/get-messages`,
 };
             

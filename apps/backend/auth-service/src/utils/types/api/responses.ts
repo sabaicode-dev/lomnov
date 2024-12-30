@@ -13,6 +13,7 @@ export interface AuthenticationResult {
   IdToken?: string;
   RefreshToken?: string;
   TokenType?: string;
+  userId?:string;
 }
 
 export interface ResponseSignInUserDTO {

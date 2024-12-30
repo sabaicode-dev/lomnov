@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import NavigateList from "@/components/molecules/navigate-list/NavigateList";
 import Menu from "@/icons/Menu";
 import Link from "next/link";
@@ -9,6 +9,9 @@ import logo from "@/images/lomnov-logo.png";
 import SelectLang from "@/components/molecules/select-lang/SelectLang";
 import { Setting, SignOut, User } from "@/icons";
 import { useAuth } from "@/context/user";
+import Login from "@/components/atoms/login/Login";
+import { BsMessenger } from "react-icons/bs";
+import { useRouter } from "next/navigation";
 
 interface IMenus {
   id?: number;
@@ -26,6 +29,8 @@ function ContainerHeader({ menu }: MenuProp) {
   const [isMenu, setIsMenu] = useState<boolean>(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [profileImage, setProfileImage] = useState<string>("/images/default-profile.jpg");
+  const dropdownRef = useRef<HTMLDivElement>(null); // Reference for the dropdown
+  const router = useRouter();
 
   // Sync profile image when the user profile updates
   useEffect(() => {
@@ -53,6 +58,22 @@ function ContainerHeader({ menu }: MenuProp) {
 
   const handleImageError = () => {
     setProfileImage("/images/default-profile.jpg"); // Revert to default on error
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleMessengerClick = () => {
+    router.push("/chat"); // Navigate to the chat page
   };
 
   return (
@@ -84,14 +105,25 @@ function ContainerHeader({ menu }: MenuProp) {
           </div>
         </div>
 
+          {/* Chat Icon */}
+        {/* <div className="">
+          <button className="py-2 px-4  text-white rounded-md flex items-center gap-2">
+            <PiMessengerLogo size={20} />
+          </button>
+        </div> */}
+
         {/* User Actions */}
         <div className="w-[50%] md:w-[30%] xl:w-[20%] flex gap-3 items-center justify-end">
+          <button onClick={handleMessengerClick} className=" px-2  text-white rounded-md flex items-center gap-2">
+            <BsMessenger size={40} />
+          </button>
+
           <div className="hidden md:flex w-[150px]">
             <SelectLang />
           </div>
 
           {isAuthenticated ? (
-            <div className="relative">
+            <div className="relative" ref={dropdownRef}>
               {/* User Avatar */}
               <div
                 className="w-[50px] h-[50px] rounded-full bg-black border flex justify-center items-center overflow-hidden relative cursor-pointer"
@@ -152,12 +184,7 @@ function ContainerHeader({ menu }: MenuProp) {
             </div>
           ) : (
             // Login Button
-            <Link
-              href="/signin"
-              className="md:py-[5px] md:px-5 py-[5px] px-4 border-[1px] md:border-[2px] border-[#E5D2B0] rounded-[8px] md:text-[18px] text-white md:font-[600] font-[500] hover:border-white hover:scale-105 active:border-white active:scale-95 transition-transform duration-150"
-            >
-              Login
-            </Link>
+            <Login />
           )}
         </div>
       </div>

@@ -43,7 +43,6 @@ const ItemCard = ({
     } catch (error) {
       console.error("Error toggling favorite", error);
     }
-    console.log("ID:: ", id);
   };
 
   // Fetch the current view count for the property
@@ -63,7 +62,8 @@ const ItemCard = ({
   }, [item._id]);
 
   const title = item.title[0]?.content || "Untitled";
-  const description = item.description[0]?.content || "No description available.";
+  const maxLength = 25;
+  const truncatedTitle = title.length > maxLength ? title.substring(0,maxLength) + '...' : title
   const address = item.address[0]?.content || "No address available.";
 
   return (
@@ -119,7 +119,7 @@ const ItemCard = ({
       </div>
 
       <div className={flexRow ? "flex flex-col text-[18px] gap-1 w-[50%]" : "flex flex-col gap-1 py-2"}>
-        <p className="capitalize font-[600] text-olive-drab text-[18px]">{title}</p>
+        <p className="capitalize font-[600] text-olive-drab text-[18px]">{truncatedTitle}</p>
         <p className={flexRow ? "mb-5" : ""}>{address}</p>
         <div className="bottom-0 w-full">
           <div className="flex items-center">

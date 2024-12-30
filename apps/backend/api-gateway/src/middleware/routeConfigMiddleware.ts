@@ -4,10 +4,7 @@ import { NotFoundError } from "@/src/utils/error/customErrors";
 import { RouteConfig } from "@/src/utils/types/interface";
 
 
-const findRouteConfig = (
-  path: string,
-  routeConfigs: RouteConfig
-): RouteConfig | null => {
+const findRouteConfig = (path: string,routeConfigs: RouteConfig): RouteConfig | null => {
   // Normalize path and ensure there's a leading slash
   const trimmedPath = path.replace(/\/+$/, ""); // Remove trailing slash, if any
 

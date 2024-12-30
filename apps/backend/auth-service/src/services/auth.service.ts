@@ -78,12 +78,10 @@ export class AuthService {
     const data = { email, password };
     try {
       const response = await this.cognitoService.signInUser(data);
-
       setCookie(request.res!, "accessToken", response.authResult!.AccessToken!);
       setCookie(request.res!, "refreshToken", response.authResult!.RefreshToken!); // 30 days
       setCookie(request.res!, "idToken", response.authResult!.IdToken!); // No maxAge, expires with session
       setCookie(request.res!, "username", response.sub!, { maxAge: 30 * 24 * 60 * 60 * 1000 }); // 30 days
-
     } catch (error) {
       throw error;
     }

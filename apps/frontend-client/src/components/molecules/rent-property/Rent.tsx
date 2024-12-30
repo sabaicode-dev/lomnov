@@ -44,6 +44,9 @@ const RentPropertyList = () => {
   const filterPropertyRent = items.filter((data) =>
     data.transition.some((t) => t.content === "For Rent")
   );
+  const filterStatus = filterPropertyRent.filter((data) => 
+    data.status === true && data.statusAdmin === true
+  );
 
   // Handle comparison toggling using the imported toggleCompare function
   const handleToggleCompare = (items: RealEstateItem[]) => {
@@ -56,8 +59,8 @@ const RentPropertyList = () => {
     <div>
       {error && <p>{error}</p>}
       {!loading && filterPropertyRent.length > 0 ? (
-        <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
-          {filterPropertyRent.map((item) => {            
+        <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 mb-[40px]">
+          {filterStatus.map((item) => {            
             const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
             return (
               <ItemCard key={item._id} item={item} toggleCompare={()=> handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />

@@ -85,11 +85,15 @@ function ItemCardPopularList() {
   const handleToggleCompare = (items: RealEstateItem[]) => {
     toggleCompare(items, selectedItems, setSelectedItems);
   };
+
+  const filterstatus = datas.filter((data) => 
+      data.status === true && data.statusAdmin === true
+  );
   return (
     <main>
       {/* Banner */}
-      <div className="w-[1300px] m-auto grid grid-cols-4 gap-5 mt-[100px] z-0">
-        {datas.map((item) => {
+      <div className="w-[1300px] m-auto grid grid-cols-4 gap-5 mt-[100px] z-0 mb-[40px]">
+        {filterstatus.map((item) => {
           const isSelected = selectedItems.some((selectedItem) => selectedItem._id === item._id);
           return (
           <PropertyCardWithModal key={item._id} item={item} flexRow={false} toggleCompare={() => handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />

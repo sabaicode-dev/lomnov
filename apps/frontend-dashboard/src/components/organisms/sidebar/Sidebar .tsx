@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -9,58 +9,68 @@ import UserAgentIcon from '@/components/atoms/icons/UserAgentIcon';
 import PropertyHomeIcon from '@/components/atoms/icons/PropertyHomeIcon';
 import GridIcon from '@/components/atoms/icons/GridIcon';
 
+const routes = [
+  {
+    label: 'Dashboard',
+    paths: ['/dashboard'],
+    icon: <GridIcon />,
+  },
+  {
+    label: 'Properties',
+    paths: ['/dashboard/properties', '/dashboard/add-new-property', '/dashboard/view-property/', '/dashboard/update-property'],
+    icon: <PropertyHomeIcon />,
+  },
+  {
+    label: 'Agents',
+    paths: ['/dashboard/agents', '/dashboard/add-new-agents', '/dashboard/view-agents/', '/dashboard/update-agents'],
+    icon: <UserAgentIcon />,
+  },
+  {
+    label: 'Customers',
+    paths: ['/dashboard/customers', '/dashboard/add-new-customer', '/dashboard/view-customer/', '/dashboard/update-customer'],
+    icon: <UserCustomerIcon />,
+  },
+  {
+    label: 'Administrators',
+    paths: ['/dashboard/administrators', '/dashboard/add-new-administrator', '/dashboard/update-administrator'],
+    icon: <UserAdministatorIcon />,
+  },
+  {
+    label: 'Account Setting',
+    paths: ['/dashboard/account-setting/profile', '/dashboard/account-setting/change-password'],
+    icon: <UserAccSettingIcon />,
+  },
+];
+
 const Sidebar = () => {
   const pathname = usePathname(); // Get the current pathname
 
   // Function to check if the current route is active
-  const isActive = (route: string) => {
-    return pathname === route ? 'bg-Primary text-BgSoftWhite' : '';
+  const isActive = (routePaths: string[]) => {
+    return routePaths.some((route) => {
+      // Check if the pathname matches any of the route paths
+      if (route.endsWith('/')) {
+        // If route ends with a slash, we check for partial matches
+        return pathname.startsWith(route);
+      }
+      return pathname === route; // Exact match
+    }) ? 'bg-Primary text-BgSoftWhite' : '';
   };
 
+
   return (
-    <div className="w-[243px] h-[900px] bg-Bg p-[10px]">
-      <div className="text-BlackSecondary gap-[10px]">
-        <Link href="/dashboard">
-          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/dashboard')}`}>
-            <GridIcon />
-            <p className="text-[14px] font-normal">Dashboard</p>
-          </div>
-        </Link>
-
-        <Link href="/properties">
-          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/properties')}`}>
-            <PropertyHomeIcon />
-            <p className="text-[14px] font-normal">Properties</p>
-          </div>
-        </Link>
-
-        <Link href="/agents">
-          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/agents')}`}>
-            <UserAgentIcon />
-            <p className="text-[14px] font-normal">Agents</p>
-          </div>
-        </Link>
-
-        <Link href="/customers">
-          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/customers')}`}>
-            <UserCustomerIcon />
-            <p className="text-[14px] font-normal">Customers</p>
-          </div>
-        </Link>
-
-        <Link href="/administrators">
-          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/administrators')}`}>
-            <UserAdministatorIcon />
-            <p className="text-[14px] font-normal">Administrators</p>
-          </div>
-        </Link>
-
-        <Link href="/account-setting/profile">
-          <div className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive('/account-setting/profile')} ${isActive('/account-setting/change_password')}`}>
-            <UserAccSettingIcon />
-            <p className="text-[14px] font-normal">Account Setting</p>
-          </div>
-        </Link>
+    <div className="w-[243px] bg-Bg p-[10px] sm:w-[200px] md:w-[250px] lg:w-[300px] hidden sm:block">
+      <div className="text-BlackSecondary gap-[10px] w-full h-full">
+        {routes.map(({ label, paths, icon }) => (
+          <Link key={label} href={paths[0]}>
+            <div
+              className={`flex gap-[12px] items-center w-[223px] h-[38px] rounded-sm px-[12px] py-[5px] mb-[10px] ${isActive(paths)}`}
+            >
+              <div>{icon}</div>
+              <p className="text-[14px] font-normal">{label}</p>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   );

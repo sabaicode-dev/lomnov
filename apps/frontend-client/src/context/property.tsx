@@ -1,5 +1,4 @@
 'use client';
-
 import React, { createContext, ReactNode, useContext, useEffect, useState, useCallback } from "react";
 import axiosInstance from "@/libs/axios";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response"; 
@@ -38,9 +37,11 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
       try {
         const queryString = new URLSearchParams(params as Record<string, string>).toString();
         const response = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?${queryString}`);
-        console.log("API Response:", response.data);
-        setProperties(response.data.properties);
-        setPagination(response.data.pagination);
+        // Filter properties with status === true and statusAdmin === true
+        const filteredProperties = response.data.properties.filter(
+          (property: RealEstateItem) => property.status === true && property.statusAdmin === true
+        );
+        setProperties(filteredProperties);
       } catch (err) {
         console.error("Error fetching properties:", err);
         setError("Failed to load properties.");
@@ -60,7 +61,11 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
         const response = await axiosInstance.get(
           `${API_ENDPOINTS.NEARLY}?lat=${lat}&lng=${lng}&maxDistance=${maxDistance}&limit=${limit}`
         );
-        setNearbyProperties(response.data.properties || []); // Assuming response.data contains properties
+        // Filter nearby properties with status === true and statusAdmin === true
+        const filteredNearbyProperties = response.data.properties.filter(
+          (property: RealEstateItem) => property.status === true && property.statusAdmin === true
+        );
+        setNearbyProperties(filteredNearbyProperties);
       } catch (err) {
         console.error("Error fetching nearby properties:", err);
         setError("Failed to load nearby properties.");

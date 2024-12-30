@@ -17,11 +17,20 @@ const createProxyOptions = (
   },
   on: {
     proxyReq: (
-      _proxyReq: ClientRequest,
-      req: IncomingMessage,
+      proxyReq: ClientRequest,
+      req: IncomingMessage & {
+        user?: {
+          username: string;
+          roles?: string[];
+        }
+      },
       res: ServerResponse,
     ) => {
       const nestedPath = `${routeConfig.target}${req.url}`;
+      console.log("create Proxy Option:: ", req.user);
+      if (req.user) {
+        proxyReq.setHeader("currentUser", JSON.stringify(req.user)); // Another header as specified
+      }
       loggingMiddleware(req, res, nestedPath, "Proxy Request");
     },
     proxyRes: (
@@ -39,7 +48,6 @@ const createProxyOptions = (
     ) => {
       if (res instanceof ServerResponse) {
         res.statusCode = 500;
-
         res.end("Proxy error");
       } else {
         res.destroy();

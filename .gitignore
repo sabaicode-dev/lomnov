@@ -126,3 +126,5 @@ development
 yarn.lock
 
 /scripts/lomnov.pem
+
+.yarn

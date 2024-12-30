@@ -18,6 +18,7 @@ export interface ResponseUserDTO {
   background?: string[];
   favorite?: FavoriteItem[];
   role?: string;
+  status?: boolean;
 }
 
 export interface ResponseFindUserBySubDTO {
@@ -37,6 +38,7 @@ export interface ResponseFindUserBySubDTO {
   background?: string[];
   favorite?: FavoriteItem[];
   role?: string;
+  status?: boolean;
 }
 
 export interface ResponseUpdateUserDTO {
@@ -56,6 +58,7 @@ export interface ResponseUpdateUserDTO {
   background?: string[];
   favorite?: FavoriteItem[];
   role?: string;
+  status?: boolean;
 }
 
 interface PaginationDTO {
@@ -114,6 +117,7 @@ export interface ViewUserProfileDTO {
   dateOfBirth?: string;
   profile?: string[];
   background?: string[];
+  role?: string;
 }
 export interface LocalizedContent {
   content: string;

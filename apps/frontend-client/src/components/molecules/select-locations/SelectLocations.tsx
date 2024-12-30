@@ -3,6 +3,7 @@
 import { IconLocation } from "@/icons";
 import { useState } from "react";
 import { locations } from "@/libs/const/location";
+import { useTranslation } from "@/hook/useTranslation";
 interface Option {
   name: string;
 }
@@ -17,9 +18,10 @@ interface SelectPropertiesProps {
   backGroundColor?:"bg-white" | "bg-grayish-white";
 }
 
-const defaultLocation = { name: "Locations" };
 
 const SelectLocations: React.FC<SelectPropertiesProps> = ({ onChange ,backGroundColor='bg-grayish-white'}) => {
+  const {t} = useTranslation();
+  const defaultLocation = { name: t("locations") };
   const [selectedOption, setSelectedOption] = useState<Option | null>(
     defaultLocation,
   );

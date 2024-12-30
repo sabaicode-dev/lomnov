@@ -50,6 +50,7 @@ const PropertyList: React.FC<PropertyListProps> = ({ toggleCompare, selectedProp
     <div>
       {loading && <p>Loading properties...</p>}
       {error && <p>{error}</p>}
+      
       {!loading && items.length > 0 ? (
         <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
           {items.map((item) => {

@@ -71,10 +71,6 @@ const ComparisonPage = () => {
 const item1Contents = item1?.detail;
 const item2Contents = item2?.detail;
 
-// Log the details to confirm
-console.log("Item 1 Details Content: ", item1Contents);
-console.log("Item 2 Details Content: ", item2Contents);
-
 return (
   <div className="max-w-screen-xl mx-auto p-2 sm:p-8 md:p-10">
  {/* Back to Comparison Bar Button */}

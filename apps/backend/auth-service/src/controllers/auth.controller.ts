@@ -32,8 +32,8 @@ import setCookie from "../middlewares/cookies";
 @Tags("Manual Registration")
 @Route("api/v1")
 export class AuthControllerII extends Controller {
-  private authService: AuthService;
-  private cognitoService: CognitoService;
+  private readonly authService: AuthService;
+  private readonly cognitoService: CognitoService;
   constructor() {
     super();
     this.authService = new AuthService();
@@ -106,10 +106,7 @@ export class AuthControllerII extends Controller {
     }
   }
   @Post("/auth/change-password")
-  public async changeNewPassword(
-    @Request() request: Express.Request,
-    @Body() requestBody: RequestchangePasswordDTO,
-  ): Promise<ResponseChangeNewPasswordDTO> {
+  public async changeNewPassword(@Request() request: Express.Request, @Body() requestBody: RequestchangePasswordDTO): Promise<ResponseChangeNewPasswordDTO> {
     try {
       return await this.authService.authChangePassword(request, requestBody);
     } catch (error) {
@@ -118,9 +115,7 @@ export class AuthControllerII extends Controller {
   }
 
   @Post("/auth/reset-password")
-  public async initiatePasswordReset(
-    @Body() requestBody: RequestInitiatePasswordResetDTO,
-  ): Promise<ResponseInitiatePasswordReset> {
+  public async initiatePasswordReset(@Body() requestBody: RequestInitiatePasswordResetDTO): Promise<ResponseInitiatePasswordReset> {
     try {
       return await this.authService.authPasswordReset(requestBody);
     } catch (error) {
@@ -129,9 +124,7 @@ export class AuthControllerII extends Controller {
   }
 
   @Post("/auth/confirm-password")
-  public async confirmPasswordReset(
-    @Body() requestBody: RequestConfirmPasswordResetDTO,
-  ): Promise<ResponseConfirmPasswordResetDTO> {
+  public async confirmPasswordReset(@Body() requestBody: RequestConfirmPasswordResetDTO): Promise<ResponseConfirmPasswordResetDTO> {
     try {
       return await this.authService.authConfirmPassword(requestBody);
     } catch (error) {
@@ -144,10 +137,12 @@ export class AuthControllerII extends Controller {
     try {
       const refreshToken = request.cookies['refreshToken'];
       const username = request.cookies['username'];
+      console.log(username, refreshToken);
+
       if (refreshToken && username) {
         const result = await this.cognitoService.refreshTokens({
-          refreshToken: body.refreshToken || refreshToken,
-          username: body.username || username
+          refreshToken: body.refreshToken ?? refreshToken,
+          username: body.username ?? username
         });
         setCookie(request.res!, 'idToken', result.idToken, { httpOnly: true, secure: true, sameSite: 'lax' });
         setCookie(request.res!, 'accessToken', result.accessToken, { httpOnly: true, secure: true, sameSite: 'lax' });
