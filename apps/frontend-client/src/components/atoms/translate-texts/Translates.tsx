@@ -5,13 +5,13 @@ type TextsProps = {
     className?: string;
     translateKey: string;
 }
-function Texts({ className ,translateKey}: TextsProps) {
+function Translates({ className ,translateKey}: TextsProps) {
     const { t } = useTranslation();
     return (
-        <p className={className}>
+        <span className={className}>
             {t(translateKey)}
-        </p>
+        </span>
     )
 }
 
-export default Texts
+export default Translates

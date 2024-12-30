@@ -55,6 +55,16 @@
     },
     "exclusive": "Exclusive Homes",
     "Unleash Your Creativity at Home": "Unleash Your Creativity at Home",
-    "exclusive-description": " Your home is a canvas waiting for your unique touch. Explore the endless possibilities with our expertly curated properties, eachoffering a perfect blend of style and functionality. Whether you dream of a cozy reading nook, an elegant home office, or a vibrantplayroom, we have the spaces that inspire. Let us help you create ahome that reflects your personality and lifestyle. Start your journey with us and transform your living space into a masterpiece."
+    "exclusive-description": " Your home is a canvas waiting for your unique touch. Explore the endless possibilities with our expertly curated properties, eachoffering a perfect blend of style and functionality. Whether you dream of a cozy reading nook, an elegant home office, or a vibrantplayroom, we have the spaces that inspire. Let us help you create ahome that reflects your personality and lifestyle. Start your journey with us and transform your living space into a masterpiece.",
+    "about": {
+        "desc":"is a trusted real estate provider specializing in buying, selling, renting, and investing in properties. Our team is committed to offering exceptional service, with a focus on transparency, trust, and integrity. We help clients navigate the real estate market with ease, offering tailored solutions for residential and commercial properties.",
+        "goal":{
+            "our-goal":"Our Goal",
+            "1":"Provide seamless and efficient real estate solutions.",
+            "2":"Help clients buy, sell, or rent with confidence and ease.",
+            "3":"Offer personalized services tailored to each client`s needs",
+            "4":"Build long-term relationships based on trust, transparency, and satisfaction."
+        }
+    }
   }
   

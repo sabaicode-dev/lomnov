@@ -3,7 +3,7 @@ import Image from "next/image";
 import banner from "@/images/banner.png";
 import Search from "@/components/molecules/Search/Search";
 import RentPropertyList from "@/components/molecules/rent-property/Rent";
-import Texts from "@/components/atoms/texts-title/Texts";
+import Translates from "@/components/atoms/translate-texts/Translates";
 
 
 // ==============================================================
@@ -23,7 +23,7 @@ function page() {
 
         <div className="absolute left-0 top-0 w-full h-full bg-[#0000004e]"></div>
         <div className="absolute left-[24%] bottom-[150px] font-helvetica text-helvetica-h2 font-bold text-white">
-          <Texts translateKey="Find Your Perfect Property" />
+          <Translates translateKey="Find Your Perfect Property" />
 
         </div>
         <div className="absolute left-0 sm:left-0 md:left-0 lg:left-0 xl:left-0 bottom-[130px] w-[120px] sm:w-[150px] md:w-[235px] lg:w-[290px] xl:w-[300px] 2xl:w-[550px] h-px bg-white"></div>

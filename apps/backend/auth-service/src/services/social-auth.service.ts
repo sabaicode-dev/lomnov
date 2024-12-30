@@ -60,8 +60,12 @@ class SocialAuthService {
 
             //Step 1:: Get the token from Cognito
             const cognitoDomain = this.awsCognitoDomain(`/oauth2/token`);
+            console.log("cognitoDomain:: ", cognitoDomain);
+
             // Sent http request to cognito to get the token and user data if the request success
             const response = await axios.post(cognitoDomain, params.toString(), { headers });
+            console.log("Response::: ", response);
+            
             const token = {
                 accessToken: response.data.access_token,
                 idToken: response.data.id_token,
