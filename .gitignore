@@ -35,6 +35,11 @@ node_modules/
 /apps/backend/notification-service/build/
 /apps/backend/notification-service/src/configs/.env.production
 /apps/backend/notification-service/src/configs/.env.development
+#chat-service
+/apps/backend/chat-service/node_modules/
+/apps/backend/notification-service/build/
+/apps/backend/notification-service/src/configs/.env.production
+/apps/backend/chat-service/src/configs/.env.development
 
 # Next.js
 /.next/
