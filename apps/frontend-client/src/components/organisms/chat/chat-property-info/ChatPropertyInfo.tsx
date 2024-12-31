@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Mail, Phone, MapPin, Home, Bed, Bath, ParkingCircle } from "lucide-react";
 import { FaArrowsUpDownLeftRight } from "react-icons/fa6";
+import Image from "next/image";
 
 interface PropertyDetails {
   image: string;
@@ -56,7 +57,7 @@ export function ChatPropertyInfo({
       {activeTab === "user" && userDetails ? (
         <div>
             <div className="flex flex-col items-center space-x-3 mb-10">
-                <img
+                <Image
                 src={userDetails.profileImage || "/images/default-profile.jpg"}
                 alt="User Profile"
                 className="w-20 h-20 rounded-full object-cover bg-black mb-2"
@@ -80,7 +81,7 @@ export function ChatPropertyInfo({
         </div>
       ) : activeTab === "property" && propertyDetails ? (
         <div>
-          <img
+          <Image
             src={propertyDetails.image}
             alt="Property"
             className="w-full h-40 rounded-lg object-cover mb-4 bg-black"

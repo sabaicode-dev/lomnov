@@ -7,27 +7,12 @@ import Email from "@/icons/Email";
 import Phone from "@/icons/Phone";
 import Location from "@/icons/Location";
 import Address from "@/icons/Home";
-import axiosInstance from "@/libs/axios";
-import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
-import logo from "@/images/logo-main.png";
 import Image from "next/image";
 import Chat from "@/components/molecules/Chat.tsx/Chat";
 import { formatDate } from "@/libs/functions/formatDate";
+import { fetchUserDetails } from "../fetch-data";
 
-async function fetchUserDetails(cognitosub: string) {
-  try {
-    const res = await axiosInstance.get(`${API_ENDPOINTS.GET_PROFILE_USER}/${cognitosub}`);
-    return res.data;
-  } catch (error) {
-    throw new Error("Failed to fetch user details");
-  }
-}
-
-const SavedPropertiesPage = async ({
-  params,
-}: {
-  params: { cognitosub: string };
-}) => {
+const SavedPropertiesPage = async ({params,}: {params: { cognitosub: string };}) => {
   const user = await fetchUserDetails(params.cognitosub);
 
   if (!user) {
@@ -53,7 +38,7 @@ const SavedPropertiesPage = async ({
             </div>
 
               <span className="font-helvetica text-helvetica-h4 font-bold text-charcoal capitalize flex justify-center">
-                {user?.user?.userName || "Unknown"}
+                {user?.user?.userName ?? "Unknown"}
               </span>
               <span className="flex justify-center items-center mt-[10px]">
                 Joined
@@ -70,7 +55,7 @@ const SavedPropertiesPage = async ({
               <Email props="w-[23px] h-[20px] text-olive-green" />
               <label className="font-bold text-base">Email</label>
               <span className="text-sm sm:text-base font-medium text-gray-800">
-                {user.user.email}
+                {user?.user?.email ?? ""}
               </span>
             </div>
 
@@ -79,7 +64,7 @@ const SavedPropertiesPage = async ({
               <Phone props="w-[23px] h-[20px] text-olive-green" />
               <label className="font-bold text-base">Phone number</label>
               <span className="text-sm sm:text-base font-medium text-gray-800">
-                {user.user.phoneNumber}
+                {user?.user?.phoneNumber??""}
               </span>
             </div>
 
@@ -88,7 +73,7 @@ const SavedPropertiesPage = async ({
               <Location className="w-[23px] h-[20px] text-olive-green" />
               <label className="font-bold text-base">Location</label>
               <span className="text-sm sm:text-base font-medium text-gray-800">
-                {user.user.location}
+                {user?.user?.location??""}
               </span>
             </div>
 
@@ -97,7 +82,7 @@ const SavedPropertiesPage = async ({
               <Address props="w-[23px] h-[20px] text-olive-green" />
               <label className="font-bold text-base">Address</label>
               <span className="text-sm sm:text-base font-medium text-gray-800">
-                {user.user.address}
+                {user?.user?.address??""}
               </span>
             </div>
           </div>

@@ -44,7 +44,6 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
         setProperties(filteredProperties);
       } catch (err) {
         console.error("Error fetching properties:", err);
-        setError("Failed to load properties.");
       } finally {
         setLoading(false);
       }
@@ -68,7 +67,6 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
         setNearbyProperties(filteredNearbyProperties);
       } catch (err) {
         console.error("Error fetching nearby properties:", err);
-        setError("Failed to load nearby properties.");
       } finally {
         setLoading(false);
       }
