@@ -20,7 +20,7 @@ export const SocketContextProvider = ({
 }) => {
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const { user } = useAuth();
-  const userId = user?._id;
+  const userId = user?.cognitoSub;
 
   useEffect(() => {
     // Only initialize socket connection if user is authenticated

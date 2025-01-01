@@ -12,10 +12,7 @@ import Loading from "@/components/atoms/loading/Loading";
 import ComparisonBar from "@/components/molecules/comparison-bar/ComparisionBar";
 import { toggleCompare } from "@/libs/const/toggleCompare";
 
-async function fetchProperties(searchParams: { [key: string]: string | string[] | undefined }): Promise<{
-  properties: RealEstateItem[];
-  pagination: { totalPages: number; currentPage: number };
-}> {
+async function fetchProperties(searchParams: { [key: string]: string | string[] | undefined }): Promise<{ properties: RealEstateItem[]; pagination: { totalPages: number; currentPage: number } }> {
   const queryString = new URLSearchParams(searchParams as Record<string, string>).toString();
   const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?${queryString}`);
 
@@ -36,6 +33,7 @@ async function fetchProperties(searchParams: { [key: string]: string | string[] 
 }
 
 function Page({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+
   const [datas, setDatas] = useState<RealEstateItem[]>([]);
   const [pagination, setPagination] = useState({ totalPages: 1, currentPage: 1 });
   const [loading, setLoading] = useState(false);
@@ -117,7 +115,7 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
             datas.map((item) => {
               const isSelected = selectedItems.some((selectedItem) => selectedItem._id);
               return (
-                <ItemCard key={item._id} item={item} flexRow={false} toggleCompare={()=> handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />
+                <ItemCard key={item._id} item={item} flexRow={false} toggleCompare={() => handleToggleCompare([item])} isSelected={isSelected} disabled={selectedItems.length >= 2 && !isSelected} />
               )
             }
             )
@@ -156,7 +154,7 @@ function Page({ searchParams }: { searchParams: { [key: string]: string | string
       )}
 
       {/* comparison bar */}
-      < ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems}/>
+      < ComparisonBar selectedItems={selectedItems} toggleCompare={setSelectedItems} />
     </main>
   );
 }
