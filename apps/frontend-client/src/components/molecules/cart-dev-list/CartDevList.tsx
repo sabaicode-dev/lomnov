@@ -1,5 +1,5 @@
 import React from "react";
-import data from "@/app/(pages)/data-developer/DataDev";
+import data from "@/app/[locale]/(pages)/data-developer/DataDev";
 import CartDev from "../cart-dev/CartDev";
 
 const CartDevList = () => {

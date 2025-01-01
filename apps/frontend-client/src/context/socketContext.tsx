@@ -3,7 +3,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import socket from "@/libs/const/socketClient"; // Assuming this is a singleton that manages socket connections
 import { Socket } from "socket.io-client";
 import { useAuth } from "./user";
-
 interface SocketContextType {
   onlineUsers: string[];
   socket: Socket | null;
@@ -20,13 +19,17 @@ export const SocketContextProvider = ({
 }) => {
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const { user } = useAuth();
-  const userId = user?._id;
-
+  const userId = user?.cognitoSub;
+  console.log("userId:", userId);
+  console.log(user);
+  
+  
   useEffect(() => {
     // Only initialize socket connection if user is authenticated
     if (userId) {
       // Ensure socket is connected
       if (!socket.connected) {
+        console.log("Connecting socket...");
         socket.connect();
       }
 

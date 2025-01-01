@@ -6,7 +6,7 @@ import logSkyBar from "@/images/banner-sky-bar.jpg";
 import Slider from "@/components/molecules/slider/Slider";
 import Link from "next/link";
 import ItemCardNearlyLocationList from "@/components/molecules/item-card-nearly-location-list/ItemCardNearlyLocationList";
-import Texts from "@/components/atoms/texts-title/Texts";
+import Translates from "@/components/atoms/translate-texts/Translates";
 
 
 export default function Home() {
@@ -30,8 +30,8 @@ export default function Home() {
             </div>
             <div className=" lg:w-[30%] h-full  py-10 flex flex-col items-center ">
               <div className=" flex flex-col items-center justify-center mb-40">
-                <Texts className="text-white font-[600]  text-[30px]" translateKey="nearly locations" />
-                <Texts className="text-white" translateKey="discover" />
+                <Translates className="text-white font-[600]  text-[30px]" translateKey="nearly locations" />
+                <Translates className="text-white" translateKey="discover" />
               </div>
               <Link
                 href={"/nearly-location"}
@@ -40,7 +40,7 @@ export default function Home() {
                   bg-transparent  hover:text-white hover:border-white hover:scale-105
                   active:scale-95  active:text-white"
               >
-                <Texts translateKey="view-all" />
+                <Translates translateKey="view-all" />
               </Link>
             </div>
           </div>
@@ -52,8 +52,8 @@ export default function Home() {
       </section>
       <div className=" flex flex-col lg:flex-row justify-between gap-20 xl:w-[1300px] m-auto py-20 lg:py-40 px-2 lg:px-20">
         <div>
-          <Texts className=" text-[28px] font-[600] text-olive-drab" translateKey="Unleash Your Creativity at Home" />
-          <Texts className="text-olive-drab" translateKey="exclusive-description" />
+          <Translates className=" text-[28px] font-[600] text-olive-drab" translateKey="Unleash Your Creativity at Home" /><br/>
+          <Translates className="text-olive-drab" translateKey="exclusive-description" />
         </div>
         <div className=" flex justify-end">
           <div className="w-[300px] h-[200px] rounded-2xl overflow-hidden">

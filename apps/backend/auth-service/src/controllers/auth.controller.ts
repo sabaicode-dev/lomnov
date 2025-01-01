@@ -106,10 +106,7 @@ export class AuthControllerII extends Controller {
     }
   }
   @Post("/auth/change-password")
-  public async changeNewPassword(
-    @Request() request: Express.Request,
-    @Body() requestBody: RequestchangePasswordDTO,
-  ): Promise<ResponseChangeNewPasswordDTO> {
+  public async changeNewPassword(@Request() request: Express.Request, @Body() requestBody: RequestchangePasswordDTO): Promise<ResponseChangeNewPasswordDTO> {
     try {
       return await this.authService.authChangePassword(request, requestBody);
     } catch (error) {
@@ -118,9 +115,7 @@ export class AuthControllerII extends Controller {
   }
 
   @Post("/auth/reset-password")
-  public async initiatePasswordReset(
-    @Body() requestBody: RequestInitiatePasswordResetDTO,
-  ): Promise<ResponseInitiatePasswordReset> {
+  public async initiatePasswordReset(@Body() requestBody: RequestInitiatePasswordResetDTO): Promise<ResponseInitiatePasswordReset> {
     try {
       return await this.authService.authPasswordReset(requestBody);
     } catch (error) {
@@ -129,9 +124,7 @@ export class AuthControllerII extends Controller {
   }
 
   @Post("/auth/confirm-password")
-  public async confirmPasswordReset(
-    @Body() requestBody: RequestConfirmPasswordResetDTO,
-  ): Promise<ResponseConfirmPasswordResetDTO> {
+  public async confirmPasswordReset(@Body() requestBody: RequestConfirmPasswordResetDTO): Promise<ResponseConfirmPasswordResetDTO> {
     try {
       return await this.authService.authConfirmPassword(requestBody);
     } catch (error) {
@@ -144,8 +137,8 @@ export class AuthControllerII extends Controller {
     try {
       const refreshToken = request.cookies['refreshToken'];
       const username = request.cookies['username'];
-      console.log(username,refreshToken);
-      
+      console.log(username, refreshToken);
+
       if (refreshToken && username) {
         const result = await this.cognitoService.refreshTokens({
           refreshToken: body.refreshToken ?? refreshToken,

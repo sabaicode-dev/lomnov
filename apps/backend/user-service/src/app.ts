@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { RequestHandler } from 'express';
 import cookieParser from "cookie-parser";
 import swaggerUi from "swagger-ui-express";
 import { RegisterRoutes } from '@/src/routes/v1/routes';
@@ -16,7 +16,7 @@ const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, 'docs/sw
 // ========================
 const app = express();
 
-app.use(cookieParser());
+app.use(cookieParser()as unknown as express.Handler);
 app.use(cors({
   origin: ['http://localhost:3000','http://localhost:3001'], // Your frontend URL
   credentials: true, // Allow credentials (cookies)
@@ -38,7 +38,7 @@ RegisterRoutes(app)
 // ========================
 // API Documentations
 // ========================
-app.use("/api/v1/users/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api/v1/users/api-docs", swaggerUi.serve as unknown as RequestHandler, swaggerUi.setup(swaggerDocument) as unknown as RequestHandler);
 
 // ========================
 // ERROR Handler

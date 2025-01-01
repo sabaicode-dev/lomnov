@@ -9,6 +9,9 @@ import { UserRequestChat } from "./types/user.request";
 @Route("/api/v1/chat")
 export class MessageController extends Controller {
   MessageService = new MessageService();
+  /**
+   * Send new Message to someone with username or cognito sub as a ReceiverId
+   */
   @Post("/send/{receiverId}")
   public async sendMessage(@Path() receiverId: string, @Body() reqBody: { message: string }, @Request() request: express.Request) {
     try {
@@ -26,6 +29,9 @@ export class MessageController extends Controller {
       throw error;
     }
   }
+  /**
+   * 
+   */
   @Get("/get-messages/{userToChatId}")
   public async getMessages(@Path() userToChatId: string, @Request() request: express.Request, @Queries() query: query) {
     try {

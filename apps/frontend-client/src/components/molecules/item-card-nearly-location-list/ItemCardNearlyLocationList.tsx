@@ -12,7 +12,7 @@ import ComparisonBar from "../comparison-bar/ComparisionBar";
 async function fetchProperties(): Promise<RealEstateItem[]> {
   const page = 1;
   const limit = 3;
-  const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}?page=${page}&limit=${limit}`);
+  const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}`, { params: { page: page, limit: limit } });
   if (res.status !== 200) {
     throw new Error("Failed to fetch");
   }
@@ -33,7 +33,7 @@ function ItemCardNearlyLocationList() {
         console.error("Error fetching properties:", error);
       }
     };
-    
+
     loadProperties(); // Call the async function
   }, []); // Empty dependency array ensures this runs only once when the component mounts
 
