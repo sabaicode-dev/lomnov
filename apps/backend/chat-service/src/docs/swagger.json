@@ -201,6 +201,84 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"UserConversations": {
+				"properties": {
+					"users": {
+						"items": {
+							"properties": {
+								"role": {
+									"type": "string"
+								},
+								"email": {
+									"type": "string"
+								},
+								"profile": {
+									"items": {
+										"type": "string"
+									},
+									"type": "array"
+								},
+								"message": {
+									"items": {
+										"type": "string"
+									},
+									"type": "array"
+								},
+								"userName": {
+									"type": "string"
+								},
+								"cognitoSub": {
+									"type": "string"
+								},
+								"_id": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"role",
+								"email",
+								"profile",
+								"message",
+								"userName",
+								"cognitoSub",
+								"_id"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"users"
+				],
+				"type": "object"
+			},
+			"ResponseConversationMe": {
+				"properties": {
+					"totalConversation": {
+						"type": "number",
+						"format": "double"
+					},
+					"totalPage": {
+						"type": "number",
+						"format": "double"
+					},
+					"currentPage": {
+						"type": "number",
+						"format": "double"
+					},
+					"conversationUser": {
+						"$ref": "#/components/schemas/UserConversations"
+					}
+				},
+				"required": [
+					"totalConversation",
+					"totalPage",
+					"currentPage",
+					"conversationUser"
+				],
+				"type": "object"
+			},
 			"QueryGetUserConversations": {
 				"properties": {
 					"page": {
@@ -242,6 +320,7 @@
 						}
 					}
 				},
+				"description": "Send new Message to someone with username or cognito sub as a ReceiverId",
 				"security": [],
 				"parameters": [
 					{
@@ -327,7 +406,9 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/ResponseConversationMe"
+								}
 							}
 						}
 					}
