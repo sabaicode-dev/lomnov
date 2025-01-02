@@ -9,14 +9,14 @@ import Location from "@/icons/Location";
 import Address from "@/icons/Home";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
-import logo from "@/images/logo-main.png";
-import Image from "next/image";
-import Chat from "@/components/molecules/Chat.tsx/Chat";
-import { formatDate } from "@/libs/functions/formatDate";
+import { ChatContextProvider } from "@/context/chatContext";
+
 
 async function fetchUserDetails(cognitosub: string) {
   try {
-    const res = await axiosInstance.get(`${API_ENDPOINTS.GET_PROFILE_USER}/${cognitosub}`);
+    const res = await axiosInstance.get(
+      `${API_ENDPOINTS.GET_PROFILE_USER}/${cognitosub}`
+    );
     return res.data;
   } catch (error) {
     throw new Error("Failed to fetch user details");
@@ -36,90 +36,66 @@ const SavedPropertiesPage = async ({
 
   return (
     <Layout>
-      <VisitProfileHeader user={user} />
+      <ChatContextProvider>
+         <VisitProfileHeader user={user} />
+      </ChatContextProvider>
+     
 
       <div className="max-w-[1500px] mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 rounded-lg">
+        
+            <div className="bg-white w-[80%] h-auto sm:h-[257px] mt-5 p-5 rounded-lg ">
+              <h3 className="font-bold text-lg mb-5">Contact info</h3>
+              <div className="space-y-4">
+                {/* Email */}
+                <div className="flex items-center space-x-3">
+                  <Email props="w-[23px] h-[20px] text-olive-green" />
+                  <label className="font-bold text-base">Email</label>
+                  <span className="text-sm sm:text-base font-medium text-gray-800">
+                    {user.user.email}
+                  </span>
+                </div>
 
-        <div className="bg-white rounded-bl-lg rounded-tl-lg">
-          <Chat params={params}/>
-        </div>
+                {/* Phone */}
+                <div className="flex items-center space-x-3">
+                  <Phone props="w-[23px] h-[20px] text-olive-green" />
+                  <label className="font-bold text-base">Phone number</label>
+                  <span className="text-sm sm:text-base font-medium text-gray-800">
+                    {user.user.phoneNumber}
+                  </span>
+                </div>
 
-        <div className="bg-[#BCBCBC] sm:h-[700px] rounded-br-lg rounded-tr-lg">
-          <div className="flex flex-col items-center">
+                {/* Location */}
+                <div className="flex items-center space-x-3">
+                  <Location className="w-[23px] h-[20px] text-olive-green" />
+                  <label className="font-bold text-base">Location</label>
+                  <span className="text-sm sm:text-base font-medium text-gray-800">
+                    {user.user.location}
+                  </span>
+                </div>
 
-
-            <div className="flex justify-center mt-14 mb-3">
-              <Image src={user?.user?.profile?.length ? user.user.profile[user?.user.profile.length - 1] : '/default-profile.jpeg'} alt="user" width={125} height={125} className="rounded-full" />
+                {/* Address */}
+                <div className="flex items-center space-x-3">
+                  <Address props="w-[23px] h-[20px] text-olive-green" />
+                  <label className="font-bold text-base">Address</label>
+                  <span className="text-sm sm:text-base font-medium text-gray-800">
+                    {user.user.address}
+                  </span>
+                </div>
+              </div>
             </div>
-
-              <span className="font-helvetica text-helvetica-h4 font-bold text-charcoal capitalize flex justify-center">
-                {user?.user?.userName || "Unknown"}
-              </span>
-              <span className="flex justify-center items-center mt-[10px]">
-                Joined
-                <div className="w-[5px] h-[5px] mx-[5px] rounded-full bg-olive-gray"></div>
-                {user?.user?.createdAt ? formatDate(user?.user?.createdAt) : 'Unknown date'}
-              </span>
-
-
-          <div className="bg-white w-[80%] h-auto sm:h-[257px] mt-5 p-5 rounded-lg ">
-          <h3 className="font-bold text-lg mb-5">Contact info</h3>
-          <div className="space-y-4">
-            {/* Email */}
-            <div className="flex items-center space-x-3">
-              <Email props="w-[23px] h-[20px] text-olive-green" />
-              <label className="font-bold text-base">Email</label>
-              <span className="text-sm sm:text-base font-medium text-gray-800">
-                {user.user.email}
-              </span>
-            </div>
-
-            {/* Phone */}
-            <div className="flex items-center space-x-3">
-              <Phone props="w-[23px] h-[20px] text-olive-green" />
-              <label className="font-bold text-base">Phone number</label>
-              <span className="text-sm sm:text-base font-medium text-gray-800">
-                {user.user.phoneNumber}
-              </span>
-            </div>
-
-            {/* Location */}
-            <div className="flex items-center space-x-3">
-              <Location className="w-[23px] h-[20px] text-olive-green" />
-              <label className="font-bold text-base">Location</label>
-              <span className="text-sm sm:text-base font-medium text-gray-800">
-                {user.user.location}
-              </span>
-            </div>
-
-            {/* Address */}
-            <div className="flex items-center space-x-3">
-              <Address props="w-[23px] h-[20px] text-olive-green" />
-              <label className="font-bold text-base">Address</label>
-              <span className="text-sm sm:text-base font-medium text-gray-800">
-                {user.user.address}
-              </span>
-            </div>
-          </div>
-          </div>
-          </div>
-
-
-          </div>
-
-
-</div>
-</Layout>
-);
+        
+      </div>
+    </Layout>
+  );
 };
 
 // This function gets called at build time
 export async function generateStaticParams() {
-// Replace this with the actual logic to get the list of usernames
-const usernames = ['user1', 'user2', 'user3']; // Example usernames
-return usernames.map((username) => ({
-username,
-}));
+  // Replace this with the actual logic to get the list of usernames
+  const usernames = ["user1", "user2", "user3"]; // Example usernames
+  return usernames.map((username) => ({
+    username,
+  }));
 }
 
 export default SavedPropertiesPage;

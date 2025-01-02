@@ -7,6 +7,7 @@ import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
 import { VisitProfileHeaderProps } from "@/libs/types/user-types/user";
 import UserPostedProperties from "@/components/organisms/user-posted-properties/UserPostedProperties";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response";
+import { ChatContextProvider } from "@/context/chatContext";
 
 
 async function fetchUserDetails(cognitosub: string) {
@@ -27,8 +28,12 @@ const ProfilePage = async ({ params }: { params: { cognitosub: string } }) => {
   return (
     <Layout>
       <div className="">
-        <VisitProfileHeader user={user} />
+            <ChatContextProvider>
+               <VisitProfileHeader user={user} />
+            </ChatContextProvider>
+       
         <div className="max-w-[1300px] mx-auto">
+         
           <UserPostedProperties items={user.properties as RealEstateItem[]} />
         </div>
       </div>
