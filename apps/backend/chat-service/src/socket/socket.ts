@@ -6,6 +6,7 @@ import axios from "axios";
 import configs from "../config";
 // Import Message type or class from socket.message.ts
 import { Message } from "./socket.message";
+import { log } from "console";
 // Create a map to store user socket connections
 const userSocketMap: { [key: string]: string } = {};
 
@@ -20,7 +21,7 @@ const setupSocketIO = (io: Server) => {
     // console.log("user socket id:::", socket.id);
     // Get cookies from the socket handshake headers
     const cookies = socket.handshake.headers["cookie"];
-
+    log("cookies:::", cookies);
     if (cookies) {
       const usernameCookie = cookies
         .split("; ")

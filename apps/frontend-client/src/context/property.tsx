@@ -1,6 +1,5 @@
 
 'use client';
-
 import React, { createContext, ReactNode, useContext, useEffect, useState, useCallback } from "react";
 import axiosInstance from "@/libs/axios";
 import { RealEstateItem } from "@/libs/types/api-properties/property-response"; 

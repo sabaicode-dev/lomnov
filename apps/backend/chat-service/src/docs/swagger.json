@@ -320,6 +320,7 @@
 						}
 					}
 				},
+				"description": "Send new Message to someone with username or cognito sub as a ReceiverId",
 				"security": [],
 				"parameters": [
 					{

@@ -88,9 +88,7 @@ const ItemCardPopularLocationList = () => {
 
       setGroupedData(sortedGroupedData);
     }
-  }, [properties, loading]);
-  console.log(groupedData);
-  
+  }, [properties, loading]);  
   return (
     <div className="flex flex-col gap-5 mb-10">
       <div className="flex flex-row justify-center items-center">

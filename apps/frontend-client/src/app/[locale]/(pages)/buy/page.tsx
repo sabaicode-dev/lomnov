@@ -3,7 +3,7 @@ import Image from "next/image";
 import banner from "@/images/banner.png";
 import Search from "@/components/molecules/Search/Search";
 import BuyProperty from "@/components/molecules/buy-property/Buy";
-import Texts from "@/components/atoms/texts-title/Texts";
+import Texts from "@/components/atoms/translate-texts/Translates";
 
 // ===================================================================
 function page() {

@@ -4,9 +4,9 @@ import PropertyTypeInfo from "@/components/organisms/property-type-info/Property
 import PropertyDescription from "@/components/organisms/property-description/PropertyDescription";
 import Map from "@/components/molecules/map/Map";
 import RecommendedProperties from "@/components/molecules/RecommendedProperties/RecommendedProperties";
-// import UserListed from "@/components/organisms/user-listed-property/UserListed";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import CommentPanel from "@/components/molecules/comment-panel/CommentPanel";
 
 async function fetchProperty(id: string): Promise<RealEstateItem> {
   try {
@@ -39,8 +39,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   const property = await fetchProperty(params.id);
   console.log("Your Property :::" , property)
 
-  return (
-    <>
+  return (    
       <div className="w-full mb-[50px] mx-auto relative">
         <div className="w-full relative bg-grayish-white h-[300px] sm:h-[400px] md:h-[450px] lg:h-[600px] xl:h-[700px] 2xl:h-[850px] overflow-hidden text-olive-green">
           {/* IMAGE THUMBNAIL */}
@@ -95,6 +94,11 @@ const page = async ({ params }: { params: { id: string } }) => {
           }} />
         </div>
 
+        {/* Comment Section */}
+        <div className="w-full mt-[50px] max-w-[1300px] mx-auto">
+          <CommentPanel />
+        </div>
+
         {/* Recommend Properties */}
         <div className="w-full mt-[50px]">
           <RecommendedProperties
@@ -103,7 +107,6 @@ const page = async ({ params }: { params: { id: string } }) => {
           />
         </div>
       </div>
-    </>
   );
 };
 

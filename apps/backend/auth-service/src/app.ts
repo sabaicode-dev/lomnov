@@ -1,4 +1,4 @@
-import express from "express";
+import express, { RequestHandler } from "express";
 import swaggerUi from "swagger-ui-express";
 import { RegisterRoutes } from "@/src/routes/v1/routes";
 import fs from "fs";
@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 // import { loggingMiddleware } from "./utils/request-response-logger/logger";
 import { errorHandler } from "./utils/error/errorHanler";
-const { randomBytes } = require("crypto");
+import { randomBytes } from "crypto";
 import corsOptions from "./middlewares/cors";
 // LOAD SWAAGER DOCUMENTATION JSON FILE
 const swaggerDocument = JSON.parse(
@@ -25,14 +25,14 @@ const app = express();
 // ========================
 // SECURITIES MIDDLEWARES
 // ========================
-app.use(cookieParser());
+app.use(cookieParser() as unknown as express.Handler);
 app.use(
   session({
     secret: randomBytes(64).toString("hex"),
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }, // Set to false for local development without HTTPS
-  })
+  }) as unknown as express.Handler
 );
 
 // ========================
@@ -52,8 +52,8 @@ RegisterRoutes(app);
 // ========================
 app.use(
   "/api/v1/auth/api-docs",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument)
+  swaggerUi.serve as unknown as RequestHandler,
+  swaggerUi.setup(swaggerDocument) as unknown as RequestHandler,
 );
 
 // ========================
