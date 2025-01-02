@@ -5,56 +5,66 @@ import { Socket } from "socket.io-client";
 import { useAuth } from "./user";
 
 interface SocketContextType {
-  onlineUsers: string[];
+  onlineUsers: { [key: string]: boolean }; // Map user IDs to online status
   socket: Socket | null;
 }
 
 const SocketContext = createContext<SocketContextType | null>(null);
 
-export const useSocketContext = () => useContext(SocketContext);
+export const useSocketContext = () => {
+  const context = useContext(SocketContext);
+  if (!context) {
+    throw new Error("useSocketContext must be used within a SocketContextProvider");
+  }
+  return context;
+};
 
 export const SocketContextProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
+  const [onlineUsers, setOnlineUsers] = useState<{ [key: string]: boolean }>({});
   const { user } = useAuth();
   const userId = user?._id;
 
   useEffect(() => {
-    // Only initialize socket connection if user is authenticated
     if (userId) {
-      // Ensure socket is connected
       if (!socket.connected) {
         socket.connect();
       }
 
-      // Set up event listener for online users
+      // Listen for online users
       socket.on("getOnlineUsers", (users: string[]) => {
-        console.log("socket online users:", users);
-        setOnlineUsers(users);
+        const onlineStatus = users.reduce<{ [key: string]: boolean }>((acc, id) => {
+          acc[id] = true;
+          return acc;
+        }, {});
+        setOnlineUsers(onlineStatus);
       });
 
-      // Cleanup when component unmounts or user changes
+      // Notify server the user is online
+      socket.emit("userOnline", userId);
+
+      // Cleanup
       return () => {
-        socket.off("getOnlineUsers"); // Unsubscribe from event listener when unmount
+        socket.off("getOnlineUsers");
         if (socket.connected) {
+          socket.emit("userOffline", userId);
           socket.disconnect();
         }
       };
     } else {
-      // If the user is not authenticated, ensure the socket disconnects
       if (socket.connected) {
         socket.disconnect();
       }
     }
   }, [userId]);
 
-  console.log("online users:", onlineUsers);
+  console.log("Online users:", onlineUsers);
 
   return (
-    <SocketContext.Provider value={{ socket: socket, onlineUsers }}>
+    <SocketContext.Provider value={{ socket, onlineUsers }}>
       {children}
     </SocketContext.Provider>
   );

@@ -77,6 +77,16 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UserConversations": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"users":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"role":{"dataType":"string","required":true},"email":{"dataType":"string","required":true},"profile":{"dataType":"array","array":{"dataType":"string"},"required":true},"message":{"dataType":"array","array":{"dataType":"string"},"required":true},"userName":{"dataType":"string","required":true},"cognitoSub":{"dataType":"string","required":true},"_id":{"dataType":"string","required":true}}},"required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ResponseConversationMe": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"totalConversation":{"dataType":"double","required":true},"totalPage":{"dataType":"double","required":true},"currentPage":{"dataType":"double","required":true},"conversationUser":{"ref":"UserConversations","required":true}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "QueryGetUserConversations": {
         "dataType": "refObject",
         "properties": {
