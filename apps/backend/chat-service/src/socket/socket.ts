@@ -1,4 +1,5 @@
 // Import necessary modules
+/*
 import { Server, Socket } from "socket.io";// Import Server and Socket types from socket.io
 // Import axios for making HTTP requests
 import axios from "axios";
@@ -88,4 +89,69 @@ const setupSocketIO = (io: Server) => {
   });
 };
 
+export default setupSocketIO;*/
+import { Server, Socket } from "socket.io";
+import axios from "axios";
+import configs from "../config";
+import { Message } from "./socket.message";
+import cookie from "cookie"; // Use this to parse cookies
+
+const userSocketMap: { [key: string]: string } = {};
+
+const setupSocketIO = (io: Server) => {
+  const broadcastOnlineUsers = () => {
+    io.emit("getOnlineUsers", Object.keys(userSocketMap));
+  };
+
+  io.on("connection", (socket: Socket) => {
+    try {
+      const cookies = cookie.parse(socket.handshake.headers.cookie || "");
+      const username = cookies["username"];
+
+      if (!username) throw new Error("Username cookie not found");
+
+      socket.data.username = username;
+      userSocketMap[username] = socket.id;
+
+      broadcastOnlineUsers();
+
+      socket.on("sendMessage", async (data: Message) => {
+        console.log("Sending message:", data.receiverId, data.message);
+        
+        try {
+          const response = await axios.post(
+            `${configs.MessageUrl}/send/${data.receiverId}`,
+            { message: data.message },
+            {
+              withCredentials: true,
+              headers: {
+                Cookie: socket.handshake.headers["cookie"] || "",
+              },
+            }
+          );
+
+          const savedMessage = response.data.data;
+          const receiverSocketId = userSocketMap[data.receiverId];
+
+          if (receiverSocketId) {
+            io.to(receiverSocketId).emit("receiveMessage", savedMessage);
+          }
+        } catch (err) {
+          socket.emit("error", "Failed to send message");
+          console.error(err);
+        }
+      });
+
+      socket.on("disconnect", () => {
+        if (socket.data.username) delete userSocketMap[socket.data.username];
+        broadcastOnlineUsers();
+      });
+    } catch (err: unknown | any) {
+      console.error(err.message);
+      socket.disconnect();
+    }
+  });
+};
+
 export default setupSocketIO;
+
