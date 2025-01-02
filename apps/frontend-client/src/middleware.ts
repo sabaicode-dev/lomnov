@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const locales = ["kh", "en"]; // Supported locales
+const locales = ["km", "en"]; // Supported locales
 
 function getPreferredLocale(request: NextRequest): string {
   const acceptLanguage = request.headers.get("accept-language");
   if (acceptLanguage) {
     const preferredLocales = acceptLanguage.split(",").map((lang) => lang.split(";")[0]);
-    preferredLocales.push("kh");
+
+    console.log("Preferred Locales:: ", preferredLocales);
     for (const locale of preferredLocales) {
       if (locales.includes(locale)) {
         console.log("1=============:: ", locale);
@@ -19,7 +20,7 @@ function getPreferredLocale(request: NextRequest): string {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  console.log("PathName:: ",pathname);
+ // console.log("PathName:: ",pathname);
   
   console.log("Incoming Pathname:: ", pathname);
 
@@ -35,7 +36,7 @@ export function middleware(request: NextRequest) {
 
   // Determine preferred locale
   const locale = getPreferredLocale(request);
-  console.log("Preferred Locale:: ", locale);
+  //console.log("Preferred Locale:: ", locale);
 
   // Redirect to localized path
   const url = new URL(request.url);

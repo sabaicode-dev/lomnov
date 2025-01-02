@@ -10,7 +10,7 @@ import { FaShareAlt } from "react-icons/fa";
 import { VisitProfileHeaderProps } from "@/libs/types/user-types/user";
 import { formatDate } from "@/libs/functions/formatDate";
 import SharesToSocial from "@/components/atoms/shares-social/SharesToSocial";
-import { useChatContext } from "@/context/chatContext";
+import { useChatContext } from "@/hook/useChat";
 import { useAuth } from "@/context/user";
 
 const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
@@ -57,8 +57,8 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
 
   // Send Message Handler
   const handleSendMessage = async () => {
-    if (message.trim() && user?.user?._id && currentUser?._id) {
-      await sendMessage(user.user._id, message); // Ensure senderId is set in the backend
+    if (message.trim() && user?.user?.cognitoSub && currentUser?.cognitoSub) {
+      await sendMessage(user.user.cognitoSub, message); // Ensure senderId is set in the backend
       setMessage(""); // Clear the input after sending
     }
   };
@@ -112,7 +112,7 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
               Chat Now
             </button>
             <button
-              onClick={() => window.open(`tel:`)}
+              onClick={() => window.open(`tel:${user?.user?.phoneNumber ?? ""}`)}
               className="py-[5px] px-[24px] flex items-center justify-center rounded-[8px] bg-olive-drab text-white hover:bg-neutral hover:text-gray-600 transition-all duration-200 ease-in-out"
             >
               <IoCall className="w-5 h-5 mr-[8px]" />
@@ -125,7 +125,7 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
                 onClick={toggleDropdown}
               >
                 <FaShareAlt className="mr-[8px]" />
-                Share {currentUser?._id}
+                Share
               </button>
               {isDropdownOpen && (
                 <SharesToSocial linkURL={window.location.href} />

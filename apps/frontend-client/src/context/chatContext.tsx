@@ -13,16 +13,9 @@ interface ChatContextType {
 }
 
 // Create the context
-const ChatContext = createContext<ChatContextType | null>(null);
+export const ChatContext = createContext<ChatContextType | null>(null);
 
 // Custom hook to use ChatContext
-export const useChatContext = () => {
-  const context = useContext(ChatContext);
-  if (!context) {
-    throw new Error("useChatContext must be used within a ChatContextProvider");
-  }
-  return context;
-};
 
 // Provider implementation
 export const ChatContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -88,6 +81,7 @@ export const ChatContextProvider = ({ children }: { children: React.ReactNode })
    */
   useEffect(() => {
     fetchConversations();
+    
   }, []);
 
   return (

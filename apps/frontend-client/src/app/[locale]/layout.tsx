@@ -9,6 +9,7 @@ import { PropertyProvider } from "@/context/property";
 import { TranslationProvider } from "@/context/translationProvider";
 import { getDictionary } from "./dictionaries";
 import { SocketContextProvider } from "@/context/socketContext";
+import { ChatContextProvider } from "@/context/chatContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,19 +22,21 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
   params,
-}: Readonly<{ children: React.ReactNode; params: { locale: "en" | "kh" } }>) {
+}: Readonly<{ children: React.ReactNode; params: { locale: "en" | "km" } }>) {
   return (
     <html lang={params.locale}>
       <body className={inter.className}>
         <TranslationProvider dictionary={await getDictionary(params.locale)}>
           <AuthProvider>
             <PropertyProvider>
-              <Header />
-              <LocationAccess />
               <SocketContextProvider>
-              {children}
+                <ChatContextProvider>
+                  <Header />
+                  <LocationAccess />
+                  {children}
+                  <Footer />
+                </ChatContextProvider>
               </SocketContextProvider>
-              <Footer />
             </PropertyProvider>
           </AuthProvider>
         </TranslationProvider>

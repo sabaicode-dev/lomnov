@@ -79,7 +79,7 @@ const Search = ({ disabled }: { disabled?: boolean }) => {
     const localeMatch = currentPath.split("/")[1] || "en";
     console.log("localeMatch::: ", localeMatch);
     
-    const locale = ["en", "kh"].includes(localeMatch) ? localeMatch : "en"; // Default fallback
+    const locale = ["en", "km"].includes(localeMatch) ? localeMatch : "en"; // Default fallback
   
     // Build the final URL with the locale
     const finalURL = `/${locale}/search?${params.toString()}`;
