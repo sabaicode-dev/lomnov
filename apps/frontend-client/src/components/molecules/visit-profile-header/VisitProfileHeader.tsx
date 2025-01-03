@@ -12,15 +12,24 @@ import { formatDate } from "@/libs/functions/formatDate";
 import SharesToSocial from "@/components/atoms/shares-social/SharesToSocial";
 import { useChatContext } from "@/hook/useChat";
 import { useAuth } from "@/context/user";
+import { ChatMessageList } from "@/components/organisms/chat/chat-message-list/ChatMessageList";
+import { Messages, User, UserConversation } from "@/libs/types/chat/user-conversation";
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import { ConversationList } from "@/components/organisms/chat/conversation-list/ConversationList";
 
 const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [message, setMessage] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const { fetchMessages, messages, sendMessage } = useChatContext();
+  const [userConversation, setUserConversation] = useState<UserConversation>();
+  const { fetchMessages,messages,  sendMessage } = useChatContext();
   const { user: currentUser } = useAuth();
+  const [selectedConversation, setSelectedConversation] = useState<User | null>(null);
+  const [messagess , setMessages] = useState<Messages>();
+    const [showPropertyInfo, setShowPropertyInfo] = useState(false);
+  //=========================================
 
   // Toggle Dropdown
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
@@ -28,10 +37,45 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
   // Toggle Chat Popup
   const toggleChat = async () => {
     setIsChatOpen((prev) => !prev);
-    if (!isChatOpen && user?.user?._id) {
-      await fetchMessages(user.user._id);
+    if (!isChatOpen && currentUser?._id) {
+    
+      
+    
     }
   };
+
+    const handleSelectConversation = (conversation: User) => {
+      setSelectedConversation(conversation);
+      setShowPropertyInfo(!!conversation.propertyDetails); // Show property info if it exists
+    };
+
+  useEffect(() => {
+    const handleFechedConversations = async () => {
+      try {
+        const res = await axiosInstance.get(API_ENDPOINTS.CONVERSATION);
+        if (res.status === 200) {
+          setUserConversation(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const handleFetchedMessages = async () => {
+      if (selectedConversation) {
+        try {
+          const res = await axiosInstance.get(`${API_ENDPOINTS.GET_MESSAGES}/${selectedConversation.cognitoSub}`);
+          console.log("messages:", res.data);
+          setMessages(res.data as Messages);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+
+    handleFechedConversations();
+    handleFetchedMessages();
+  }, [selectedConversation]);
 
   // Handle Outside Clicks for Dropdown
   const handleClickOutside = (event: MouseEvent) => {
@@ -42,6 +86,37 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
       setIsDropdownOpen(false);
     }
   };
+  useEffect(() => {
+    const handleFechedConversations = async () => {
+      try {
+        const res = await axiosInstance.get(API_ENDPOINTS.CONVERSATION);
+        if (res.status === 200) {
+          setUserConversation(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const handleFetchedMessages = async () => {
+      if (selectedConversation) {
+        try {
+          const res = await axiosInstance.get(`${API_ENDPOINTS.GET_MESSAGES}/${selectedConversation.cognitoSub}`);
+          console.log("messages:", res.data);
+          setMessages(res.data as Messages);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+
+    handleFechedConversations();
+    handleFetchedMessages();
+  }, [selectedConversation]);
+
+  //send messsage
+
+  
 
   useEffect(() => {
     if (isDropdownOpen) {
@@ -58,7 +133,8 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
   // Send Message Handler
   const handleSendMessage = async () => {
     if (message.trim() && user?.user?.cognitoSub && currentUser?.cognitoSub) {
-      await sendMessage(user.user.cognitoSub, message); // Ensure senderId is set in the backend
+      const data = await sendMessage(user.user.cognitoSub, message); // Ensure senderId is set in the backend
+      console.log("message send success:::",data);
       setMessage(""); // Clear the input after sending
     }
   };
@@ -152,10 +228,11 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
                   width={40}
                   height={40}
                 />
-                <div>
+                <div >
                   <h2 className="text-lg font-semibold">
                     {user?.user?.userName ?? "Unknown"}
                   </h2>
+                  <p className="text-[12px] text-gray-600">Online</p>
                 </div>
               </div>
               <button
@@ -166,43 +243,8 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
               </button>
             </div>
             <div className="flex flex-col space-y-4 overflow-y-auto max-h-[300px]">
-              {user?.user?._id &&
-                messages[user.user._id]?.map((msg, index) => (
-                  <div
-                    key={index}
-                    className={`flex ${
-                      msg.senderId === currentUser?.userName
-                        ? "justify-start"
-                        : "justify-end"
-                    } items-center space-x-2`}
-                  >
-                    {msg.senderId === currentUser?._id && (
-                      <Image
-                        src={
-                          user?.user?.profile?.[
-                            user?.user?.profile.length - 1
-                          ] ?? "/images/default-profile.jpg"
-                        }
-                        alt="user"
-                        className="w-8 h-8 rounded-full"
-                        width={32}
-                        height={32}
-                      />
-                    )}
-                    <div
-                      className={`p-2 rounded-lg ${
-                        msg.senderId === currentUser?._id
-                          ? "bg-olive-drab text-white"
-                          : "bg-gray-100 text-black"
-                      }`}
-                    >
-                      {msg.message}{" "}
-                      <span className="text-xs text-gray-500">
-                        {msg.createdAt}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+              {/*message list*/}
+            <h1>Hello</h1>
             </div>
             <div className="mt-4 flex items-center">
               <input
