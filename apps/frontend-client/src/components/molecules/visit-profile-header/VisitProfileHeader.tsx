@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Banner from "@/components/molecules/banner/Banner";
 import VisitProfileNavigation from "../visit-profile-navigation/VisitProfileNavigation";
@@ -10,136 +10,147 @@ import { FaShareAlt } from "react-icons/fa";
 import { VisitProfileHeaderProps } from "@/libs/types/user-types/user";
 import { formatDate } from "@/libs/functions/formatDate";
 import SharesToSocial from "@/components/atoms/shares-social/SharesToSocial";
-import { useChatContext } from "@/hook/useChat";
 import { useAuth } from "@/context/user";
-import { ChatMessageList } from "@/components/organisms/chat/chat-message-list/ChatMessageList";
-import { Messages, User, UserConversation } from "@/libs/types/chat/user-conversation";
 import axiosInstance from "@/libs/axios";
 import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
-import { ConversationList } from "@/components/organisms/chat/conversation-list/ConversationList";
+import Loading from "@/components/atoms/loading/Loading";
+import { IoSend } from "react-icons/io5";
+import { useChatContext } from "@/hook/useChat";
+import { GrFormClose } from "react-icons/gr";
+import socket from "@/libs/const/socketClient";
+import { useSocketContext } from "@/context/socketContext";
+import { Message, UserConversation } from "@/libs/types/chat/user-conversation";
+
+//=================================================
 
 const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [message, setMessage] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [userConversation, setUserConversation] = useState<UserConversation>();
-  const { fetchMessages,messages,  sendMessage } = useChatContext();
   const { user: currentUser } = useAuth();
-  const [selectedConversation, setSelectedConversation] = useState<User | null>(null);
-  const [messagess , setMessages] = useState<Messages>();
-    const [showPropertyInfo, setShowPropertyInfo] = useState(false);
+  const { sendMessage } = useChatContext();
+  const context = useSocketContext();
+  const messageRef = useRef<HTMLDivElement>(null);
+
+  const [userConversation, setUserConversation] = useState<UserConversation>();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [messageInput, setMessageInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
+
   //=========================================
 
   // Toggle Dropdown
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
 
+  // Scroll to bottom
+  const scrollToBottom = useCallback(() => {
+    if (messageRef.current) {
+      messageRef.current.scrollTo({
+        top: messageRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, []);
+
+  // Scroll to top detection for fetching more messages
+  useEffect(() => {
+    const handleScroll = async () => {
+      if (!messageRef.current || loading || !hasMore) return;
+
+      if (messageRef.current.scrollTop === 0) {
+        const nextPage = page + 1;
+        try {
+          setLoading(true);
+          await fetchMessages(user.user?.cognitoSub || "", nextPage);
+          setPage(nextPage);
+        } catch (error) {
+          console.error("Error fetching more messages:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    const currentRef = messageRef.current;
+    if (currentRef) {
+      currentRef.addEventListener("scroll", handleScroll);
+      return () => currentRef.removeEventListener("scroll", handleScroll);
+    }
+  }, [loading, hasMore, page, user.user?.cognitoSub]);
+
   // Toggle Chat Popup
   const toggleChat = async () => {
     setIsChatOpen((prev) => !prev);
-    if (!isChatOpen && currentUser?._id) {
-    
-      
-    
+    if (!isChatOpen && user.user?._id) {
+      await fetchMessages(user.user.cognitoSub, 1);
     }
   };
 
-    const handleSelectConversation = (conversation: User) => {
-      setSelectedConversation(conversation);
-      setShowPropertyInfo(!!conversation.propertyDetails); // Show property info if it exists
-    };
+  // Fetch messages for the selected user
+  const fetchMessages = async (userCognitoSub: string, pageNum = 1) => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(
+        `${API_ENDPOINTS.GET_MESSAGES}/${userCognitoSub}?page=${pageNum}&limit=20`
+      );
+      const fetchedMessages = response.data.conversation.messages || [];
 
-  useEffect(() => {
-    const handleFechedConversations = async () => {
-      try {
-        const res = await axiosInstance.get(API_ENDPOINTS.CONVERSATION);
-        if (res.status === 200) {
-          setUserConversation(res.data);
-        }
-      } catch (error) {
-        console.log(error);
+      if (fetchedMessages.length === 0) {
+        setHasMore(false);
       }
-    };
 
-    const handleFetchedMessages = async () => {
-      if (selectedConversation) {
-        try {
-          const res = await axiosInstance.get(`${API_ENDPOINTS.GET_MESSAGES}/${selectedConversation.cognitoSub}`);
-          console.log("messages:", res.data);
-          setMessages(res.data as Messages);
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    };
-
-    handleFechedConversations();
-    handleFetchedMessages();
-  }, [selectedConversation]);
-
-  // Handle Outside Clicks for Dropdown
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target as Node)
-    ) {
-      setIsDropdownOpen(false);
+      setMessages((prevMessages) => [...fetchedMessages, ...prevMessages]);
+      if (pageNum === 1) setTimeout(scrollToBottom, 50);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    } finally {
+      setLoading(false);
     }
   };
-  useEffect(() => {
-    const handleFechedConversations = async () => {
-      try {
-        const res = await axiosInstance.get(API_ENDPOINTS.CONVERSATION);
-        if (res.status === 200) {
-          setUserConversation(res.data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+
+  // Send a message
+  const handleSendMessage = async () => {
+    if (!messageInput.trim()) return;
+
+    const optimisticMessage: Message = {
+      _id: Math.random().toString(36).substr(2, 9),
+      senderId: currentUser?.cognitoSub || "",
+      receiverId: user.user?.cognitoSub || "",
+      message: messageInput.trim(),
+      conversationId: user.user?._id || "",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
-    const handleFetchedMessages = async () => {
-      if (selectedConversation) {
-        try {
-          const res = await axiosInstance.get(`${API_ENDPOINTS.GET_MESSAGES}/${selectedConversation.cognitoSub}`);
-          console.log("messages:", res.data);
-          setMessages(res.data as Messages);
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    };
+    setMessages((prevMessages) => [...prevMessages, optimisticMessage]);
+    setMessageInput("");
+    setTimeout(scrollToBottom, 50);
 
-    handleFechedConversations();
-    handleFetchedMessages();
-  }, [selectedConversation]);
-
-  //send messsage
-
-  
-
-  useEffect(() => {
-    if (isDropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
+    try {
+      await sendMessage(user.user?.cognitoSub || "", optimisticMessage.message);
+      socket.emit("sendMessage", optimisticMessage);
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg._id !== optimisticMessage._id)
+      );
     }
+  };
+  // Real-time message listener
+  useEffect(() => {
+    socket.on("receiveMessage", (newMessage: Message) => {
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      scrollToBottom();
+    });
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      socket.off("receiveMessage");
     };
-  }, [isDropdownOpen]);
+  }, [scrollToBottom]);
 
-  // Send Message Handler
-  const handleSendMessage = async () => {
-    if (message.trim() && user?.user?.cognitoSub && currentUser?.cognitoSub) {
-      const data = await sendMessage(user.user.cognitoSub, message); // Ensure senderId is set in the backend
-      console.log("message send success:::",data);
-      setMessage(""); // Clear the input after sending
-    }
-  };
-
-  const cognitosub = user?.user?.cognitoSub;
+  const isCurrentUser = currentUser?.cognitoSub === user.user?.cognitoSub;
 
   return (
     <>
@@ -167,7 +178,9 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
             </div>
             <div className="absolute left-[170px] items-center text-helvetica-small font-helvetica text-olive-gray mt-[10px]">
               <span className="font-helvetica text-helvetica-h4 font-bold text-charcoal capitalize">
-                {user?.user?.userName ?? "Unknown"}
+                {isCurrentUser
+                  ? "My Profile"
+                  : user?.user?.userName ?? "Unknown"}
               </span>
               <span className="flex items-center mt-[10px]">
                 Joined
@@ -180,21 +193,26 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
           </div>
 
           <div className="flex absolute justify-end right-0 -bottom-[120px] space-x-[10px] items-center font-helvetica text-helvetica-paragraph text-charcoal pr-[10px] xl:pr-0">
-            <button
-              className="py-[5px] px-[24px] flex items-center justify-center rounded-[8px] bg-olive-drab text-white hover:bg-neutral hover:text-gray-600 transition-all duration-200 ease-in-out"
-              onClick={toggleChat}
-            >
-              <BiLogoMessenger className="w-5 h-5 mr-[8px]" />
-              Chat Now
-            </button>
-            <button
-              onClick={() => window.open(`tel:${user?.user?.phoneNumber ?? ""}`)}
-              className="py-[5px] px-[24px] flex items-center justify-center rounded-[8px] bg-olive-drab text-white hover:bg-neutral hover:text-gray-600 transition-all duration-200 ease-in-out"
-            >
-              <IoCall className="w-5 h-5 mr-[8px]" />
-              Call Now
-            </button>
-
+            {!isCurrentUser && (
+              <>
+                <button
+                  className="py-[5px] px-[24px] flex items-center justify-center rounded-[8px] bg-olive-drab text-white hover:bg-neutral hover:text-gray-600 transition-all duration-200 ease-in-out"
+                  onClick={toggleChat}
+                >
+                  <BiLogoMessenger className="w-5 h-5 mr-[8px]" />
+                  Chat Now
+                </button>
+                <button
+                  onClick={() =>
+                    window.open(`tel:${user?.user?.phoneNumber ?? ""}`)
+                  }
+                  className="py-[5px] px-[24px] flex items-center justify-center rounded-[8px] bg-olive-drab text-white hover:bg-neutral hover:text-gray-600 transition-all duration-200 ease-in-out"
+                >
+                  <IoCall className="w-5 h-5 mr-[8px]" />
+                  Call Now
+                </button>
+              </>
+            )}
             <div className="relative" ref={dropdownRef}>
               <button
                 className="py-[5px] px-[24px] flex items-center justify-center rounded-[8px] bg-olive-drab text-white hover:bg-neutral hover:text-gray-600 transition-all duration-200 ease-in-out"
@@ -211,13 +229,13 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
         </div>
       </div>
 
-      <VisitProfileNavigation cognitosub={cognitosub!} />
-
+      <VisitProfileNavigation cognitosub={user.user?.cognitoSub!} />
+      {/* Chat */}
       {isChatOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg shadow-lg w-[400px] p-4">
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex items-center">
+            <div className="flex justify-between items-center   shadow-md">
+              <div className="flex items-center ">
                 <Image
                   src={
                     user?.user?.profile?.[user?.user?.profile.length - 1] ??
@@ -228,37 +246,111 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
                   width={40}
                   height={40}
                 />
-                <div >
+                <div>
                   <h2 className="text-lg font-semibold">
-                    {user?.user?.userName ?? "Unknown"}
+                    {isCurrentUser
+                      ? "My Profile"
+                      : user?.user?.userName ?? "Unknown"}
                   </h2>
-                  <p className="text-[12px] text-gray-600">Online</p>
+                  <p
+                    className={`text-[12px] ${
+                      user.user?.cognitoSub &&
+                      user.user.cognitoSub in context.onlineUsers &&
+                      context.onlineUsers[user.user.cognitoSub]
+                        ? "text-green-500"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    {user.user?.cognitoSub &&
+                    user.user.cognitoSub in context.onlineUsers &&
+                    context.onlineUsers[user.user.cognitoSub]
+                      ? "online"
+                      : "offline"}
+                  </p>
                 </div>
               </div>
               <button
                 onClick={toggleChat}
                 className="text-gray-500 hover:text-gray-700"
               >
-                &times;
+                <GrFormClose className="text-[30px]" />
               </button>
             </div>
-            <div className="flex flex-col space-y-4 overflow-y-auto max-h-[300px]">
-              {/*message list*/}
-            <h1>Hello</h1>
+            <div
+              className="w-[100%] h-[320px] overflow-y-auto"
+              ref={messageRef}
+            >
+              {loading ? (
+                <div className="flex items-center justify-center mt-[130px]">
+                  <Loading />
+                </div>
+              ) : (
+                messages.map((message) => (
+                  <div
+                    key={message._id}
+                    className={`flex items-start ${
+                      message.senderId === currentUser?.cognitoSub
+                        ? "justify-end"
+                        : "justify-start"
+                    }`}
+                  >
+                    {message.senderId !== currentUser?.cognitoSub && (
+                      <Image
+                        src={
+                          user?.user?.profile?.[
+                            user?.user?.profile.length - 1
+                          ] ?? "/images/default-profile.jpg"
+                        }
+                        alt="user"
+                        className="w-8 h-8 rounded-full mr-3 mt-[10px]"
+                        width={40}
+                        height={40}
+                      />
+                    )}
+                    <div
+                      className={`max-w-[75%] p-3 mt-[10px] rounded-lg shadow-md ${
+                        message.senderId === currentUser?.cognitoSub
+                          ? "bg-blue-600 text-white"
+                          : "bg-white text-gray-700"
+                      }`}
+                    >
+                      <p className="text-sm">{message.message}</p>
+                      <p className="text-xs mt-1">
+                        {new Date(message.createdAt).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                    {message.senderId === currentUser?.cognitoSub && (
+                      <Image
+                        src={
+                          currentUser.profile[currentUser.profile.length - 1] ??
+                          "/images/default-profile.jpg"
+                        } // Replace with your user's profile image source
+                        alt="user"
+                        className="w-8 h-8 rounded-full ml-3 mt-[10px]"
+                        width={40}
+                        height={40}
+                      />
+                    )}
+                  </div>
+                ))
+              )}
             </div>
             <div className="mt-4 flex items-center">
               <input
                 type="text"
-                placeholder="Write your message here..."
-                className="w-full p-2 border border-gray-300 rounded mb-2"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Type your message..."
+                value={messageInput}
+                onChange={(e) => setMessageInput(e.target.value)}
+                className="flex-grow border border-gray-300 rounded-lg p-2 text-sm"
               />
               <button
                 onClick={handleSendMessage}
-                className="ml-2 bg-olive-drab text-white py-2 px-4 rounded hover:bg-neutral hover:text-gray-600 transition-all duration-200 ease-in-out"
+                className="ml-2 bg-olive-green text-white p-2 rounded-lg"
               >
-                Send
+                <IoSend className="w-5 h-5" />
               </button>
             </div>
           </div>

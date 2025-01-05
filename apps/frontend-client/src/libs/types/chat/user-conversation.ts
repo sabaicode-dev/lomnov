@@ -5,16 +5,24 @@ export interface User {
   profile: string[];
   email: string;
   role: string;
+  status : boolean;
+  phoneNumber: string;
+  address: string;
   message: string[];
-  propertyDetails?: {
+  propertys: propertyDetails;
+}
+
+export interface propertyDetails{
+ 
     image: string;
     type: string;
     bedroom: string;
     bathroom: string;
     spacious: string;
     parking: string;
-  };
+  
 }
+
 export interface UserConversation {
   conversationUser: {
     users: User[];

@@ -1,34 +1,25 @@
-// Import necessary modules
-/*
-import { Server, Socket } from "socket.io";// Import Server and Socket types from socket.io
-// Import axios for making HTTP requests
+import { Server, Socket } from "socket.io";
 import axios from "axios";
-// Import configuration settings
 import configs from "../config";
-// Import Message type or class from socket.message.ts
 import { Message } from "./socket.message";
-import { log } from "console";
+// import { log } from "console";
 // Create a map to store user socket connections
 const userSocketMap: { [key: string]: string } = {};
 
-// Setup socket.io connection Server
-// 1st arg is the socket.io server instance
 const setupSocketIO = (io: Server) => {
   const online = Object.keys(userSocketMap);
-  // Emit the event list of online users to all connected clients
   io.emit("getOnlineUsers", online);
   // Listen for event connections
   io.on("connection", (socket: Socket) => {
-    // console.log("user socket id:::", socket.id);
-    // Get cookies from the socket handshake headers
     const cookies = socket.handshake.headers["cookie"];
-    log("cookies:::", cookies);
+    // log("cookies:::", cookies);
     if (cookies) {
       const usernameCookie = cookies
         .split("; ")
-        .find((cookie) => cookie.startsWith("username="));// cognito sub
+        .find((cookie) => cookie.startsWith("username=")); // cognito sub
       if (usernameCookie) {
         const username = usernameCookie.split("=")[1];
+        console.log(username);
 
         socket.data.username = username;
         userSocketMap[username] = socket.id;
@@ -49,10 +40,14 @@ const setupSocketIO = (io: Server) => {
     }
 
     socket.on("sendMessage", async (data: Message) => {
-      const cookies = socket.handshake.headers["cookie"];
+      console.log("new message:", data);
+
+      // const cookies = socket.handshake.headers["cookie"];
       try {
         if (cookies) {
-          const response = await axios.post(`${configs.MessageUrl}/send/${data.receiverId}`,{message: data.message},
+          const response = await axios.post(
+            `${configs.MessageUrl}/send/${data.receiverId}`,
+            { message: data.message },
             {
               withCredentials: true,
               headers: {
@@ -61,12 +56,13 @@ const setupSocketIO = (io: Server) => {
               },
             }
           );
+       
 
           const savedMessage = response.data.data;
           const receiverSocketId = userSocketMap[data.receiverId];
+         
 
           if (savedMessage && receiverSocketId) {
-            console.log("Message delivered to:", receiverSocketId);
             io.to(receiverSocketId).emit("receiveMessage", savedMessage);
           }
         }
@@ -77,7 +73,8 @@ const setupSocketIO = (io: Server) => {
     });
 
     socket.on("disconnect", () => {
-      if (username) { // username/sub
+      if (username) {
+        // username/sub
         delete userSocketMap[username]; // username/sub
         const online = Object.keys(userSocketMap);
         console.log("after dis::", online);
@@ -89,69 +86,72 @@ const setupSocketIO = (io: Server) => {
   });
 };
 
-export default setupSocketIO;*/
-import { Server, Socket } from "socket.io";
-import axios from "axios";
-import configs from "../config";
-import { Message } from "./socket.message";
-import cookie from "cookie"; // Use this to parse cookies
-
-const userSocketMap: { [key: string]: string } = {};
-
-const setupSocketIO = (io: Server) => {
-  const broadcastOnlineUsers = () => {
-    io.emit("getOnlineUsers", Object.keys(userSocketMap));
-  };
-
-  io.on("connection", (socket: Socket) => {
-    try {
-      const cookies = cookie.parse(socket.handshake.headers.cookie || "");
-      const username = cookies["username"];
-
-      if (!username) throw new Error("Username cookie not found");
-
-      socket.data.username = username;
-      userSocketMap[username] = socket.id;
-
-      broadcastOnlineUsers();
-
-      socket.on("sendMessage", async (data: Message) => {
-        console.log("Sending message:", data.receiverId, data.message);
-        
-        try {
-          const response = await axios.post(
-            `${configs.MessageUrl}/send/${data.receiverId}`,
-            { message: data.message },
-            {
-              withCredentials: true,
-              headers: {
-                Cookie: socket.handshake.headers["cookie"] || "",
-              },
-            }
-          );
-
-          const savedMessage = response.data.data;
-          const receiverSocketId = userSocketMap[data.receiverId];
-
-          if (receiverSocketId) {
-            io.to(receiverSocketId).emit("receiveMessage", savedMessage);
-          }
-        } catch (err) {
-          socket.emit("error", "Failed to send message");
-          console.error(err);
-        }
-      });
-
-      socket.on("disconnect", () => {
-        if (socket.data.username) delete userSocketMap[socket.data.username];
-        broadcastOnlineUsers();
-      });
-    } catch (err: unknown | any) {
-      console.error(err.message);
-      socket.disconnect();
-    }
-  });
-};
-
 export default setupSocketIO;
 
+// import { Server, Socket } from "socket.io";
+// import axios from "axios";
+// import configs from "../config";
+// import { Message } from "./socket.message";
+// import cookie from "cookie"; // Use this to parse cookies
+
+// const userSocketMap: { [key: string]: string } = {};
+
+// const setupSocketIO = (io: Server) => {
+//   const broadcastOnlineUsers = () => {
+//     io.emit("getOnlineUsers", Object.keys(userSocketMap));
+//   };
+
+//   io.on("connection", (socket: Socket) => {
+//     try {
+//       const cookies = cookie.parse(socket.handshake.headers.cookie || "");
+//       const username = cookies["username"];
+//       console.log(username);
+//       console.log("cookies:::::", cookies);
+
+//       if (!username) throw new Error("Username cookie not found");
+
+//       socket.data.username = username;
+//       userSocketMap[username] = socket.id;
+
+//       broadcastOnlineUsers();
+
+//       socket.on("sendMessage", async (data: Message) => {
+//         console.log("Sending message:", data.receiverId, data.message);
+
+//         try {
+//           const response = await axios.post(
+//             `${configs.MessageUrl}/send/${data.receiverId}`,
+//             { message: data.message },
+//             {
+//               withCredentials: true,
+//               headers: {
+//                 Cookie: socket.handshake.headers["cookie"] || "",
+//               },
+//             }
+//           );
+
+//           const savedMessage = response.data.data;
+//           const receiverSocketId = userSocketMap[data.receiverId];
+//           console.log(userSocketMap);
+
+//           if (receiverSocketId) {
+//             io.to(receiverSocketId).emit("receiveMessage", savedMessage);
+//           }
+//         } catch (err) {
+//           socket.emit("error", "Failed to send message");
+//           console.error(err);
+//         }
+//       });
+
+//       socket.on("disconnect", () => {
+//         if (socket.data.username) delete userSocketMap[socket.data.username];
+//         broadcastOnlineUsers();
+//       });
+//     } catch (err: unknown | any) {
+//       console.error(err.message);
+//       socket.disconnect();
+//     }
+//   });
+// };
+
+// export default setupSocketIO;
