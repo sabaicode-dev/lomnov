@@ -10,12 +10,11 @@ import ComparisonBar from "../comparison-bar/ComparisionBar";
 
 // Move the async fetch function inside useEffect
 async function fetchProperties(): Promise<RealEstateItem[]> {
-  const page = 1;
-  const limit = 3;
-  const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}`, { params: { page: page, limit: limit } });
+  const res = await axiosInstance.get(`${API_ENDPOINTS.PROPERTIES}`, { params: { page: 1, limit: 3 } });
   if (res.status !== 200) {
     throw new Error("Failed to fetch");
   }
+  console.log(res.data)
   return res.data.properties;
 }
 

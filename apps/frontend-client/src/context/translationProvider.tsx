@@ -3,8 +3,8 @@
 import { createContext, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 interface TranslationContextType {
-  locale: "en" | "kh";
-  setLocaleState: (locale: "en" | "kh") => void;
+  locale: "en" | "km";
+  setLocaleState: (locale: "en" | "km") => void;
   t: (key: string) => string;
 }
 
@@ -12,11 +12,11 @@ export const TranslationContext = createContext<TranslationContextType | null>(n
 
 export const TranslationProvider = ({ children, dictionary }: { children: React.ReactNode; dictionary: Record<string, any> }) => {
   const pathname = usePathname();
-  const [locale, setLocaleState] = useState<"en" | "kh">("en");
+  const [locale, setLocaleState] = useState<"en" | "km">("en");
 
   useEffect(() => {
     const localeFromPath = pathname.split("/")[1];
-    if (localeFromPath === "en" || localeFromPath === "kh") {
+    if (localeFromPath === "en" || localeFromPath === "km") {
       setLocaleState(localeFromPath);
     }
   }, [pathname]);
