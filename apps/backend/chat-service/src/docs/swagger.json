@@ -206,6 +206,12 @@
 					"users": {
 						"items": {
 							"properties": {
+								"phoneNumber": {
+									"type": "string"
+								},
+								"address": {
+									"type": "string"
+								},
 								"role": {
 									"type": "string"
 								},
@@ -235,6 +241,8 @@
 								}
 							},
 							"required": [
+								"phoneNumber",
+								"address",
 								"role",
 								"email",
 								"profile",
