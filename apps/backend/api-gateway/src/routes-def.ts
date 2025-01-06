@@ -197,5 +197,4 @@ const ROUTE_PATHS: RoutesConfig = {
     ],
   },
 };
-
 export default ROUTE_PATHS;

@@ -13,7 +13,6 @@ type Config = {
   awsCognitoClientId: string;
   chatServiceUrl: string;
 };
-
 // Function to load and validate environment variables
 function loadConfig(): Config {
   // Determine the environment and set the appropriate .env file
