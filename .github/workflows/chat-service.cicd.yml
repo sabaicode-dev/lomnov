@@ -1,35 +1,34 @@
-name: CI/CD Pipeline for API Gateway Service
+name: CI/CD Pipeline for Chat Service
 
 on:
   pull_request:
     branches:
       - main
     paths:
-      - "apps/backend/api-gateway/**"
+      - "apps/backend/chat-service/**"
   push:
     branches:
       - main
     paths:
-      - "apps/backend/api-gateway/**"
+      - "apps/backend/chat-service/**"
 
 defaults:
   run:
-    working-directory: apps/backend/api-gateway
+    working-directory: apps/backend/chat-service
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Ensures all branches and tags are fetched
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20" # Use the version of Node.js that your project requires
+          node-version: "20"
 
       - name: Install dependencies
         run: yarn install --no-immutable
@@ -41,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: ./apps/backend/api-gateway/build
+          path: ./apps/backend/chat-service/build
 
   deploy:
     runs-on: ubuntu-latest
@@ -61,7 +60,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
-          path: ./apps/backend/api-gateway/build
+          path: ./apps/backend/chat-service/build
 
       - name: Prepare Deployment Directories
         uses: appleboy/ssh-action@master
@@ -71,8 +70,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            mkdir -p /home/ubuntu/apps/api-gateway/build
-            mkdir -p /home/ubuntu/apps/api-gateway/build/configs
+            mkdir -p /home/ubuntu/apps/chat-service/build
+            mkdir -p /home/ubuntu/apps/chat-service/build/configs
 
       - name: Copy files to EC2
         uses: appleboy/scp-action@master
@@ -81,9 +80,8 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: "./apps/backend/api-gateway/build/*"
-          target: "/home/ubuntu/apps/api-gateway/build"
-          strip_components: 4
+          source: "./apps/backend/chat-service/build/*"
+          target: "/home/ubuntu/apps/chat-service/build"
 
       - name: Create .env File
         uses: appleboy/ssh-action@master
@@ -93,15 +91,12 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> /home/ubuntu/apps/api-gateway/build/configs/.env.production
-            echo "PORT=${{ secrets.API_GATEWAY_PORT }}" >> /home/ubuntu/apps/api-gateway/build/configs/.env.production
-            echo "CLIENT_URL=${{ secrets.CLIENT_URL }}" >> /home/ubuntu/apps/api-gateway/build/configs/.env.production
-            echo "AUTH_SERVICE_URL=${{ secrets.AUTH_SERVICE_URL }}" >> /home/ubuntu/apps/api-gateway/build/configs/.env.production
-            echo "USER_SERVICE_URL=${{ secrets.USER_SERVICE_URL }}" >> /home/ubuntu/apps/api-gateway/build/configs/.env.production
-            echo "PROPERTY_SERVICE_URL=${{ secrets.PROPERTY_SERVICE_URL }}" >> /home/ubuntu/apps/api-gateway/build/configs/.env.production
-            echo "AWS_COGNITO_USER_POOL_ID=${{ secrets.AWS_COGNITO_USER_POOL_ID }}" >> /home/ubuntu/apps/api-gateway/build/configs/.env.production
-            echo "AWS_COGNITO_CLIENT_ID=${{ secrets.AWS_COGNITO_CLIENT_ID }}" >> /home/ubuntu/apps/api-gateway/build/configs/.env.production
-            echo "CHAT_SERVICE_URL=${{secrets.CHAT_SERVICE_URL}}">> /home/ubuntu/apps/chat-service/build/configs/.env.production
+            echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> /home/ubuntu/apps/chat-service/build/configs/.env.production
+            echo "PORT=${{ secrets.CHAT_SERVICE_PORT }}" >> /home/ubuntu/apps/chat-service/build/configs/.env.production
+            echo "CLIENT_URL=${{ secrets.CLIENT_URL }}" >> /home/ubuntu/apps/chat-service/build/configs/.env.production
+            echo "USER_SERVICE_URL=${{ secrets.USER_SERVICE_URL }}" >> /home/ubuntu/apps/chat-service/build/configs/.env.production
+            echo "SENDMESSAGE_API_ENDPOINT=${{ secrets.SENDMESSAGE_API_ENDPOINT }}" >> /home/ubuntu/apps/chat-service/build/configs/.env.production
+            echo "USERS_API_ENDPOINT=${{ secrets.USERS_API_ENDPOINT }}" >> /home/ubuntu/apps/chat-service/build/configs/.env.production
 
       - name: Install Dependencies and Restart PM2
         uses: appleboy/ssh-action@master
@@ -115,14 +110,14 @@ jobs:
             source /home/ubuntu/.nvm/nvm.sh
             source /home/ubuntu/.profile
 
-            cd /home/ubuntu/apps/api-gateway/build
+            cd /home/ubuntu/apps/chat-service/build
             yarn install --production
 
             # Check if the PM2 process is running
-            if pm2 show api-gateway-service > /dev/null; then
+            if pm2 show chat-service > /dev/null; then
               echo "Application is running. Restarting..."
-              yarn restart
+              pm2 restart chat-service
             else
               echo "Application is not running. Starting..."
-              yarn start:pm2-production
+              pm2 start ecosystem.config.js --only chat-service
             fi

@@ -14,8 +14,8 @@ async function fetchUserDetails(username: string): Promise<User | null> {
 
   try {
     const res = await axiosInstance.get(`${API_ENDPOINTS.USER}?userName=${username}`);
-    // console.log(res.data);
-
+   
+        
     return res.data.users[0] || null;
   } catch (error) {
     // console.error("Error fetching user details:", error);

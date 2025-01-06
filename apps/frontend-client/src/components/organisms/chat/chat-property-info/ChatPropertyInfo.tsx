@@ -4,22 +4,23 @@ import React, { useState } from "react";
 import { Mail, Phone, MapPin, Home, Bed, Bath, ParkingCircle } from "lucide-react";
 import { FaArrowsUpDownLeftRight } from "react-icons/fa6";
 import Image from "next/image";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 interface PropertyDetails {
-  image: string;
-  type: string;
-  bedroom: string;
-  bathroom: string;
-  spacious: string;
-  parking: string;
+  image: string | StaticImport;
+  type: string | undefined;
+  bedroom: string | undefined;
+  bathroom: string | undefined;
+  spacious: string | undefined;
+  parking: string | undefined;
 }
 
 interface UserDetails {
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  profileImage: string;
+  name: string | undefined;
+  email: string | undefined;
+  phone: string | undefined;
+  address: string | undefined;
+  profileImage: string | undefined;
 }
 
 interface ChatPropertyInfoProps {
@@ -34,7 +35,7 @@ export function ChatPropertyInfo({
   const [activeTab, setActiveTab] = useState<"user" | "property">("user");
 
   return (
-    <div className="w-full h-full bg-[#d9d9d9] p-4 border-l pt-24">
+    <div className="w-full h-full p-4 border-l pt-24">
       <div className="flex space-x-2 mb-4 pb-4 border-b border-gray-400">
         <button
           onClick={() => setActiveTab("user")}
@@ -60,11 +61,13 @@ export function ChatPropertyInfo({
                 <Image
                 src={userDetails.profileImage || "/images/default-profile.jpg"}
                 alt="User Profile"
+                width={50}
+                height={50}
                 className="w-20 h-20 rounded-full object-cover bg-black mb-2"
                 />
                 <div>
                 <h3 className="text-lg font-bold mt-2">{userDetails.name}</h3>
-                <p className="text-sm text-gray-500">@{userDetails.name.toLowerCase().replace(" ", "-")}</p>
+                <p className="text-sm text-gray-500">@{userDetails.name}</p>
                 </div>
             </div>
             <ul className="text-sm space-y-6">
@@ -83,6 +86,8 @@ export function ChatPropertyInfo({
         <div>
           <Image
             src={propertyDetails.image}
+            width={50}
+            height={50}
             alt="Property"
             className="w-full h-40 rounded-lg object-cover mb-4 bg-black"
           />

@@ -65,12 +65,11 @@ interface ConversationListItemProps {
   lastMessage?: string;
   unreadCount?: number;
   isSelected: boolean;
-  onClick: () => void;
+  onClick?: () => void;
   isOnline: boolean;
 }
 
 export function ConversationList({
-  id,
   name,
   profile,
   lastMessage,

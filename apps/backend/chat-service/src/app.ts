@@ -1,4 +1,4 @@
-import express from "express";
+import express, { RequestHandler } from "express";
 import swaggerUi from "swagger-ui-express";
 import { RegisterRoutes } from "@/src/routes/v1/routes";
 import fs from "fs";
@@ -27,7 +27,7 @@ const app = express();
 // ========================
 // Global Middleware
 // ========================
-app.use(cookieParser());
+app.use(cookieParser() as unknown as express.Handler);
 app.use(express.json()); // Help to get the json from request body
 
 // ========================
@@ -38,7 +38,7 @@ RegisterRoutes(app);
 // ========================
 // API Documentations
 // ========================
-app.use("/api/v1/chat/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/api/v1/chat/api-docs", swaggerUi.serve as unknown as RequestHandler, swaggerUi.setup(swaggerDocument) as unknown as RequestHandler)
 
 // ========================
 // ERROR Handler

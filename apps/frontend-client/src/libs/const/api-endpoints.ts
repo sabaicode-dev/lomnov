@@ -24,6 +24,7 @@ export const API_ENDPOINTS = {
   CATEGORIES: `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}/category`,
   NEARLY : `${process.env.NEXT_PUBLIC_PROPERTIES_ENDPOINT}/nearby`,
   //CHAT SERVICE
+  SENDMESSAGE: `${process.env.NEXT_PUBLIC_CHAT_ENDPOINT}/send`,
   CONVERSATION: `${process.env.NEXT_PUBLIC_CHAT_ENDPOINT}/conversation/me`,
   GET_MESSAGES: `${process.env.NEXT_PUBLIC_CHAT_ENDPOINT}/get-messages`,
 };

@@ -1,4 +1,3 @@
-
 import { createProxyMiddleware } from "http-proxy-middleware";
 import ROUTE_PATHS from "@/src/routes-def";
 import express from "express";
@@ -24,7 +23,11 @@ Object.keys(ROUTE_PATHS).forEach((key) => {
 
 const applyProxy = (app: express.Application) => {
   Object.keys(proxyConfigs).forEach((context: string) => {
-    app.use(context, createProxyMiddleware(proxyConfigs[context]));
+    if (context === ROUTE_PATHS.CHAT_SERVICE.path) {
+      app.use(createProxyMiddleware(proxyConfigs[context]));
+    } else {
+      app.use(context, createProxyMiddleware(proxyConfigs[context]));
+    }
   });
 };
 

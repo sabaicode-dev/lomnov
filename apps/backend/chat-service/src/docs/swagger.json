@@ -206,6 +206,15 @@
 					"users": {
 						"items": {
 							"properties": {
+<<<<<<< HEAD
+=======
+								"phoneNumber": {
+									"type": "string"
+								},
+								"address": {
+									"type": "string"
+								},
+>>>>>>> 272efc01249c1da29f3aaaba03626a83c4655954
 								"role": {
 									"type": "string"
 								},
@@ -235,6 +244,11 @@
 								}
 							},
 							"required": [
+<<<<<<< HEAD
+=======
+								"phoneNumber",
+								"address",
+>>>>>>> 272efc01249c1da29f3aaaba03626a83c4655954
 								"role",
 								"email",
 								"profile",

@@ -2,17 +2,29 @@ import mongoose from "mongoose";
 import ConversationModel from "../models/conversation.model";
 import MessageModel from "../models/message.model";
 import {
-  conversation, conversationRespond, createdMessage, query, messType, RespondGetConversationsPagination,
-  //GetConversation, RespondGetConversations, 
-  RequestgetUserConversations
+  conversation,
+  conversationRespond,
+  createdMessage,
+  query,
+  messType,
+  RespondGetConversationsPagination,
+  //GetConversation, RespondGetConversations,
+  RequestgetUserConversations,
 } from "./types/messages.repository.types";
 import axios from "axios";
 // import configs from "@/src/config";
 // import axios from "axios";
 export class MessageRepository {
-  public async sendMessage(makeMessage: { senderId: string; receiverId: string; message: string; participants: { participantType: string; participantId: string; }[]; roomId: string }): Promise<createdMessage> {
+  public async sendMessage(makeMessage: {
+    senderId: string;
+    receiverId: string;
+    message: string;
+    participants: { participantType: string; participantId: string }[];
+    roomId: string;
+  }): Promise<createdMessage> {
     try {
-      const { senderId, receiverId, message, participants, roomId } = makeMessage;
+      const { senderId, receiverId, message, participants, roomId } =
+        makeMessage;
       //find or create
       let conversation = await ConversationModel.findOneAndUpdate(
         { roomId },
@@ -44,7 +56,13 @@ export class MessageRepository {
     }
   }
   //todo: reduce / structure type
-  async getMessage(userToChatId: string, senderId: string, query: query, senderRole: "user" | "admin", receiverRole: "user" | "admin"): Promise<null | conversationRespond> {
+  async getMessage(
+    userToChatId: string,
+    senderId: string,
+    query: query,
+    senderRole: "user" | "admin",
+    receiverRole: "user" | "admin"
+  ): Promise<null | conversationRespond> {
     const { limit = 12, page = 1 } = query;
     const skip = (page - 1) * limit;
     try {
@@ -63,12 +81,16 @@ export class MessageRepository {
           sort: { createdAt: -1 },
         },
       });
-      console.log("1::::");
+      // console.log("1::::");
 
       if (!conversation) {
         // const endpoint = senderRole === "user" ? `${configs.userUrl}/` : `${configs.userUrl}/`;
         // get user profiles!
-        const dataUser = (await axios.get(`http://localhost:4000/api/v1/users/profile-info/${userToChatId}`)).data; //
+        const dataUser = (
+          await axios.get(
+            `http://localhost:4000/api/v1/users/profile-info/${userToChatId}`
+          )
+        ).data; //
         if (!dataUser) {
           return {
             conversation: [],
@@ -79,7 +101,7 @@ export class MessageRepository {
             skip: skip,
           };
         }
-        console.log("3::::");
+        // console.log("3::::");
         const roomId = [senderId, userToChatId].sort().join("_");
         const participants = [
           {
@@ -98,7 +120,7 @@ export class MessageRepository {
           { new: true, upsert: true }
         );
 
-        console.log("4::::");
+        // console.log("4::::");
         await Promise.all([conversation.save()]); //save new conversation to DB
         return {
           conversation: conversation as unknown as conversation,
@@ -109,7 +131,7 @@ export class MessageRepository {
           skip: skip,
         };
       }
-      console.log("5::::");
+      // console.log("5::::");
 
       conversation.messages = (
         conversation.messages as unknown as messType[]
@@ -118,13 +140,13 @@ export class MessageRepository {
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       ) as unknown as typeof conversation.messages;
 
-      console.log("6::::");
+      // console.log("6::::");
       // Step 2: Count total messages for the conversation separately
       const totalMessages = await MessageModel.countDocuments({
         conversationId: conversation._id,
       });
 
-      console.log("7::::");
+      // console.log("7::::");
       const totalPage = Math.ceil(totalMessages / limit);
 
       return {
@@ -157,11 +179,14 @@ export class MessageRepository {
             $elemMatch: {
               participantType: request.senderRole!,
               participantId: request.cognitoSub!,
-            }
-          }
-        ]
-      }
-    }).sort({ updatedAt: -1 }).limit(request.limit!).skip(request.skip!)
+            },
+          },
+        ],
+      },
+    })
+      .sort({ updatedAt: -1 })
+      .limit(request.limit!)
+      .skip(request.skip!);
     return conversation;
   }
   public async countConversation(request: RequestgetUserConversations) {
@@ -179,12 +204,18 @@ export class MessageRepository {
     });
     return count;
   }
-  public async getUserConversations(request: RequestgetUserConversations): Promise<RespondGetConversationsPagination | any> {
+  public async getUserConversations(
+    request: RequestgetUserConversations
+  ): Promise<RespondGetConversationsPagination | any> {
     try {
       //find conversation
       const { page = 1, limit = 10 } = request;
       const skip = (page - 1) * limit;
-      const conversation = await this.findConversation({ ...request, skip, limit });
+      const conversation = await this.findConversation({
+        ...request,
+        skip,
+        limit,
+      });
       // Count total conversations
       const totalConversation = await this.countConversation(request);
       const totalPages = Math.ceil(totalConversation / limit);
@@ -192,7 +223,7 @@ export class MessageRepository {
         conversations: conversation,
         totalConversation: totalConversation,
         currentPage: page,
-        totalPage: totalPages
+        totalPage: totalPages,
       };
     } catch (error) {
       throw error;

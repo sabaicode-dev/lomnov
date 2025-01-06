@@ -10,7 +10,7 @@ import SelectLang from "@/components/molecules/select-lang/SelectLang";
 import { Setting, SignOut, User } from "@/icons";
 import { useAuth } from "@/context/user";
 import Login from "@/components/atoms/login/Login";
-import { BsMessenger } from "react-icons/bs";
+import { MdOutlineChatBubbleOutline } from "react-icons/md";
 import { useRouter } from "next/navigation";
 
 interface IMenus {
@@ -28,7 +28,9 @@ function ContainerHeader({ menu }: MenuProp) {
   const { user, isAuthenticated, logout } = useAuth();
   const [isMenu, setIsMenu] = useState<boolean>(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  const [profileImage, setProfileImage] = useState<string>("/images/default-profile.jpg");
+  const [profileImage, setProfileImage] = useState<string>(
+    "/images/default-profile.jpg"
+  );
   const dropdownRef = useRef<HTMLDivElement>(null); // Reference for the dropdown
   const router = useRouter();
 
@@ -63,7 +65,10 @@ function ContainerHeader({ menu }: MenuProp) {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsDropdownOpen(false);
       }
     };
@@ -85,9 +90,18 @@ function ContainerHeader({ menu }: MenuProp) {
         </div>
 
         {/* Logo */}
-        <Link href={"/"} className="w-[50%] md:w-[30%] xl:w-[20%] flex gap-2 md:gap-3 items-center justify-start">
+        <Link
+          href={"/"}
+          className="w-[50%] md:w-[30%] xl:w-[20%] flex gap-2 md:gap-3 items-center justify-start"
+        >
           <div className="lg:w-[100px] lg:h-[60px] w-[100px] h-[70px] flex items-center">
-            <Image src={logo} alt="Logo" width="800" height="800" objectFit="cover" />
+            <Image
+              src={logo}
+              alt="Logo"
+              width="800"
+              height="800"
+              objectFit="cover"
+            />
           </div>
         </Link>
 
@@ -105,7 +119,7 @@ function ContainerHeader({ menu }: MenuProp) {
           </div>
         </div>
 
-          {/* Chat Icon */}
+        {/* Chat Icon */}
         {/* <div className="">
           <button className="py-2 px-4  text-white rounded-md flex items-center gap-2">
             <PiMessengerLogo size={20} />
@@ -113,79 +127,95 @@ function ContainerHeader({ menu }: MenuProp) {
         </div> */}
 
         {/* User Actions */}
-        <div className="w-[50%] md:w-[30%] xl:w-[20%] flex gap-3 items-center justify-end">
-          <button onClick={handleMessengerClick} className=" px-2  text-white rounded-md flex items-center gap-2">
-            <BsMessenger size={40} />
-          </button>
+        <div className="w-[50%] md:w-[30%] xl:w-[20%] flex gap-3 items-center justify-end ">
 
-          <div className="hidden md:flex w-[150px]">
+         <div>
+            {isAuthenticated ? (
+               <div className=" w-[50px] h-[50px] bg-white rounded-full flex items-center cursor-pointer justify-center relative">
+                <div className="absolute mb-[50px] ml-[30px] w-[20px] h-[20px] bg-pink-600 rounded-full flex justify-center items-center">
+                    <p className=" text-white text-[16px]">0</p>
+                </div>
+               <button onClick={handleMessengerClick}>
+                 <MdOutlineChatBubbleOutline className="text-olive-green text-[30px]" />
+               </button>
+             </div>
+            ):("")}
+         </div>
+
+          <div className="hidden md:flex ">
             <SelectLang />
           </div>
 
-          {isAuthenticated ? (
-            <div className="relative" ref={dropdownRef}>
-              {/* User Avatar */}
-              <div
-                className="w-[50px] h-[50px] rounded-full bg-black border flex justify-center items-center overflow-hidden relative cursor-pointer"
-                onClick={toggleDropdown}
-              >
-                <Image
-                  src={profileImage}
-                  alt="User Profile"
-                  width={50}
-                  height={50}
-                  className="w-full h-full object-cover"
-                  onError={handleImageError} // Handle image load error
-                />
-              </div>
-
-              {/* Dropdown Menu */}
-              {isDropdownOpen && (
-                <div className="w-[220px] bg-white absolute right-0 mt-2 rounded-md flex flex-col items-center px-3 py-2">
-                  {/* Profile Information */}
-                  <div className="w-full flex flex-row items-center justify-start gap-2">
-                    <div className="overflow-hidden w-[50px] h-[50px] rounded-full border-[1px] border-blue-400">
-                      <Image
-                        src={profileImage}
-                        alt="User Profile"
-                        width={50}
-                        height={50}
-                        onError={handleImageError} // Handle image load error
-                      />
-                    </div>
-                    <p className="text-[14px]">{user?.userName || "Unknown User"}</p>
-                  </div>
-
-                  {/* Links */}
-                  <div className="flex flex-col items-start justify-start mt-3 border-y-[1px] border-y-blue-500 w-full py-3">
-                    <Link
-                      href={`/profile/${user?.userName}`}
-                      className="hover:bg-blue-500 hover:text-white w-full rounded-[10px] p-2 flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform duration-150"
-                    >
-                      <User props="text-olive-green hover:text-white" /> Profile
-                    </Link>
-                    <Link
-                      href={`/setting/${user?.userName}`}
-                      className="hover:bg-blue-500 hover:text-white w-full rounded-[10px] p-2 flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform duration-150"
-                    >
-                      <Setting props="text-olive-green hover:text-white" /> Settings
-                    </Link>
-                  </div>
-
-                  {/* Logout Button */}
-                  <button
-                    className="mt-2 p-2 w-full rounded-[10px] font-[500] flex items-center hover:bg-red-500 hover:text-white"
-                    onClick={handleLogout}
-                  >
-                    <SignOut /> Logout
-                  </button>
+          <div>
+            {isAuthenticated ? (
+              <div className="relative" ref={dropdownRef}>
+                {/* User Avatar */}
+                <div
+                  className="w-[50px] h-[50px] rounded-full bg-black border flex justify-center items-center overflow-hidden relative cursor-pointer "
+                  onClick={toggleDropdown}
+                >
+                  <Image
+                    src={profileImage}
+                    alt="User Profile"
+                    width={50}
+                    height={50}
+                    className="w-full h-full object-cover"
+                    onError={handleImageError} // Handle image load error
+                  />
                 </div>
-              )}
-            </div>
-          ) : (
-            // Login Button
-            <Login />
-          )}
+
+                {/* Dropdown Menu */}
+                {isDropdownOpen && (
+                  <div className="w-[220px] bg-white absolute right-0 mt-2 rounded-md flex flex-col items-center px-3 py-2">
+                    {/* Profile Information */}
+                    <div className="w-full flex flex-row items-center justify-start gap-2">
+                      <div className="overflow-hidden w-[50px] h-[50px] rounded-full border-[1px] border-blue-400">
+                        <Image
+                          src={profileImage}
+                          alt="User Profile"
+                          width={50}
+                          height={50}
+                          onError={handleImageError} // Handle image load error
+                        />
+                      </div>
+                      <p className="text-[14px]">
+                        {user?.userName || "Unknown User"}
+                      </p>
+                    </div>
+
+                    {/* Links */}
+                    <div className="flex flex-col items-start justify-start mt-3 border-y-[1px] border-y-blue-500 w-full py-3">
+                      <Link
+                        href={`/profile/${user?.userName}`}
+                        className="hover:bg-blue-500 hover:text-white w-full rounded-[10px] p-2 flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform duration-150"
+                      >
+                        <User props="text-olive-green hover:text-white" />{" "}
+                        Profile
+                      </Link>
+                      <Link
+                        href={`/setting/${user?.userName}`}
+                        className="hover:bg-blue-500 hover:text-white w-full rounded-[10px] p-2 flex items-center gap-2 hover:scale-105 active:scale-95 transition-transform duration-150"
+                      >
+                        <Setting props="text-olive-green hover:text-white" />{" "}
+                        Settings
+                      </Link>
+                    </div>
+
+                    {/* Logout Button */}
+                    <button
+                      className="mt-2 p-2 w-full rounded-[10px] font-[500] flex items-center hover:bg-red-500 hover:text-white"
+                      onClick={handleLogout}
+                    >
+                      <SignOut /> Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              // Login Button
+              <Login />
+            )}
+          </div>
         </div>
       </div>
 
