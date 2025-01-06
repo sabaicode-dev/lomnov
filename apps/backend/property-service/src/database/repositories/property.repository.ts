@@ -1,7 +1,7 @@
 
 
 import { PropertyModel } from "@/src/database/models/property.model";
-import { IProperty } from "@/src/utils/types/indext";
+import { CommentResponse, IProperty } from "@/src/utils/types/indext";
 import uploadFileToS3Service from "@/src/services/uploadFileToS3.service";
 import deleteFileFromS3Service from "@/src/services/uploadFileToS3.service";
 import { NotFoundError, UnauthorizedError } from "@/src/utils/error/customErrors";
@@ -14,6 +14,7 @@ import {
   ResponsePropertyDTO,
   ResponseUpdatePropertyDTO,
 } from "@/src/utils/types/indext";
+import { Types } from "mongoose";
 
 export class PropertyRepository {
   /**
@@ -397,6 +398,138 @@ export class PropertyRepository {
       return await PropertyModel.find({}).select(["cognitoSub","_id"]).lean();
     } catch (error) {
       throw error;
+    }
+  }
+
+  // // Add a comment to a property
+  // public async addUserComment(
+  //   propertyId: string,
+  //   commentData: { comment: string; cognitoSub: string }
+  // ): Promise<CommentResponse> {
+  //   try {
+  //     const property = await PropertyModel.findById(propertyId);
+  //     if (!property) {
+  //       throw new NotFoundError("Property not found");
+  //     }
+
+  //     const newComment = {
+  //       _id: new Types.ObjectId, 
+  //       comment: commentData.comment,
+  //       cognitoSub: commentData.cognitoSub,
+  //       datetime: new Date().toISOString(),
+  //       profile: "default-profile.jpg", 
+  //       userName: "Anonymous", 
+  //       likes: 0, 
+  //     };
+
+  //     property.comments.push(newComment);
+  //     await property.save();
+
+  //     return newComment as CommentResponse;
+  //   } catch (error) {
+  //     console.error(`Error adding comment to property with ID ${propertyId}:`, error);
+  //     throw new Error("Failed to add comment to property");
+  //   }
+  // }
+
+  //   //get user comments 
+  // public async getUserComments(cognitoSub: string): Promise<CommentResponse[]> {
+  //   try {
+  //     const properties = await PropertyModel.find({
+  //       "comments.cognitoSub": cognitoSub,
+  //     });
+
+  //     const userComments: CommentResponse[] = [];
+  //     properties.forEach((property) => {
+  //       const comments = property.comments.filter(
+  //         (comment) => comment.cognitoSub === cognitoSub
+  //       );
+  //       userComments.push(...comments);
+  //     });
+
+  //     return userComments;
+  //   } catch (error) {
+  //     console.error(`Error fetching comments for cognitoSub: ${cognitoSub}`, error);
+  //     throw new Error("Could not retrieve comments");
+  //   }
+  // }
+  // property.repository.ts
+
+  public async addUserComment(
+    propertyId: string,
+    commentData: { comment: string; cognitoSub: string }
+  ): Promise<CommentResponse> {
+    try {
+      // Check if the property exists
+      const property = await PropertyModel.findById(propertyId);
+      if (!property) {
+        throw new NotFoundError("Property not found");
+      }
+  
+      // Create new comment object
+      const newComment = new Types.ObjectId();
+      const newCommentData = {
+        _id: newComment, // Generating new ObjectId for the comment
+        cognitoSub: commentData.cognitoSub, // Using the cognitoSub from the request
+        comment: commentData.comment,
+        datetime: new Date().toISOString(),
+        profile: "default-profile.jpg",
+        userName: "Anonymous",
+        likes: 0,
+      };
+  
+      // Add new comment to the property
+      property.comments.push(newCommentData);
+      await property.save(); // Save the property with the new comment
+  
+      // Return the added comment as a response
+      return {
+        cognitoSub: newCommentData.cognitoSub,
+        profile: newCommentData.profile,
+        userName: newCommentData.userName,
+        comment: newCommentData.comment,
+        datetime: newCommentData.datetime,
+        likes: newCommentData.likes,
+        _id: newCommentData._id, // Include the comment ID in the response
+      };
+    } catch (error) {
+      console.error(`Error adding comment to property with ID ${propertyId}:`, error);
+      throw new Error("Failed to add comment to property");
+    }
+  }
+  
+
+  public async getUserComments(cognitoSub: string): Promise<CommentResponse[]> {
+    try {
+      const properties = await PropertyModel.find({
+        "comments.cognitoSub": cognitoSub,
+      });
+
+      const userComments: CommentResponse[] = [];
+
+      properties.forEach((property) => {
+        const comments = property.comments.filter(
+          (comment) => comment.cognitoSub === cognitoSub
+        );
+
+        // Ensure each comment is mapped to CommentResponse type
+        comments.forEach((comment) => {
+          userComments.push({
+            _id: comment._id,  
+            cognitoSub: comment.cognitoSub,
+            profile: comment.profile,
+            userName: comment.userName,
+            comment: comment.comment,
+            datetime: comment.datetime,
+            likes: comment.likes,
+          });
+        });
+      });
+
+      return userComments;
+    } catch (error) {
+      console.error(`Error fetching comments for cognitoSub: ${cognitoSub}`, error);
+      throw new Error("Could not retrieve comments");
     }
   }
 }

@@ -189,5 +189,15 @@ export interface ResponsePropertyByIDP{
   statusAdmin?: boolean;
 }
 
+export interface CommentResponse {
+  _id: Types.ObjectId;
+  cognitoSub: string;
+  profile: string; 
+  userName: string;
+  comment: string; 
+  datetime: string; 
+  likes?: number; 
+}
+
 
 

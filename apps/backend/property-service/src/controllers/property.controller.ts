@@ -483,4 +483,78 @@ public async updateAdminstatus(
       throw error;
     }
   }
+
+  // // get comments by cognitoSub
+  // @Get("/properties/comment")
+  // public async getCommentByCognitoSub(@Query("cognitoSub") cognitoSub: string) {
+  //   if (!cognitoSub) {
+  //     throw new Error("cognitoSub query parameter is required");
+  //   }
+  //   try {
+  //     return await this.propertyService.getCommentByCognitoSub(cognitoSub);
+  //   } catch (error) {
+  //     console.error("Failed to fetch comments:", error);
+  //     throw new Error("Failed to fetch comments");
+  //   }
+  // }
+
+
+  // // post comment
+  // @Post("/properties/{propertyId}/comment")
+  // public async addComment(
+  //   @Path() propertyId: string,
+  //   @Body() body: { comment: string },
+  //   @Request() request?: Express.Request
+  // ) {
+  //   try {
+  //     const cognitoSub = request?.cookies?.username;
+  //     if (!cognitoSub) {
+  //       throw new UnauthorizedError("User not authorized");
+  //     }
+  //     const comment = await this.propertyService.addCommentToProperty(propertyId, {
+  //       comment: body.comment,
+  //       cognitoSub,
+  //     });
+  //     return comment;
+  //   } catch (error) {
+  //     console.error("Failed to add comment:", error);
+  //     throw new Error("Failed to add comment");
+  //   }
+  // }
+  // property.controller.ts
+  
+  @Post("/properties/{propertyId}/comment")
+  public async addComment(
+    @Path() propertyId: string,
+    @Body() body: { comment: string },
+    @Request() request?: Express.Request
+  ) {
+    try {
+      const cognitoSub = request?.cookies?.username;
+      if (!cognitoSub) {
+        throw new UnauthorizedError("User not authorized");
+      }
+      const comment = await this.propertyService.addCommentToProperty(propertyId, {
+        comment: body.comment,
+        cognitoSub,
+      });
+      return comment;
+    } catch (error) {
+      console.error("Failed to add comment:", error);
+      throw new Error("Failed to add comment");
+    }
+  }
+
+  @Get("/properties/comment")
+  public async getCommentByCognitoSub(@Query("cognitoSub") cognitoSub: string) {
+    if (!cognitoSub) {
+      throw new Error("cognitoSub query parameter is required");
+    }
+    try {
+      return await this.propertyService.getCommentByCognitoSub(cognitoSub);
+    } catch (error) {
+      console.error("Failed to fetch comments:", error);
+      throw new Error("Failed to fetch comments");
+    }
+  }
 }

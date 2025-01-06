@@ -14,6 +14,7 @@ import {
   ResponsePropertyDTO,
   ResponsePropertyByID,
   ResponseCategoriesDTO,
+  CommentResponse,
 } from "@/src/utils/types/indext";
 import { ResponsePropertyByIDP } from "@/src/utils/types/indext";
 import { PropertyRepository } from "../database/repositories/property.repository";
@@ -396,7 +397,7 @@ export class PropertyService {
     }
   }
 
-
+  //get property by user
   public async getPropertyUser(
     cognitoSub: string,
     queries: RequestQueryPropertyDTO
@@ -570,4 +571,57 @@ export class PropertyService {
       throw error;
     }
   } 
+
+  // //get user comments
+  // public async getCommentByCognitoSub(cognitoSub: string): Promise<CommentResponse[]> {
+  //   if (!cognitoSub) {
+  //     throw new Error("Invalid cognitoSub");
+  //   }
+  //   try {
+  //     return await this.propertyRepository.getUserComments(cognitoSub);
+  //   } catch (error) {
+  //     console.error(`Error fetching comments for cognitoSub: ${cognitoSub}`, error);
+  //     throw new Error("Could not retrieve comments");
+  //   }
+  // }
+  
+  // //add comment to property
+  // public async addCommentToProperty(
+  //   propertyId: string,
+  //   commentData: { comment: string; cognitoSub: string }
+  // ): Promise<CommentResponse> {
+  //   try {
+  //     return await this.propertyRepository.addUserComment(propertyId, commentData);
+  //   } catch (error) {
+  //     console.error(`Error adding comment to property with ID ${propertyId}:`, error);
+  //     throw new Error("Failed to add comment");
+  //   }
+  // } 
+  // property.service.ts
+  
+  public async addCommentToProperty(
+    propertyId: string,
+    commentData: { comment: string; cognitoSub: string }
+  ): Promise<CommentResponse> {
+    try {
+      const comment = await this.propertyRepository.addUserComment(propertyId, commentData);
+      return comment;
+    } catch (error) {
+      console.error(`Error adding comment to property with ID ${propertyId}:`, error);
+      throw new Error("Failed to add comment");
+    }
+  }
+    
+  public async getCommentByCognitoSub(cognitoSub: string): Promise<CommentResponse[]> {
+    if (!cognitoSub) {
+      throw new Error("Invalid cognitoSub");
+    }
+    try {
+      return await this.propertyRepository.getUserComments(cognitoSub);
+    } catch (error) {
+      console.error(`Error fetching comments for cognitoSub: ${cognitoSub}`, error);
+      throw new Error("Could not retrieve comments");
+    }
+  }
+
 }

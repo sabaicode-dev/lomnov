@@ -11,7 +11,7 @@ interface Option {
 
 const options: Option[] = [
   { imgSrc: englishFlage, locale: "en" },
-  { imgSrc: camboFlag, locale: "kh" },
+  { imgSrc: camboFlag, locale: "km" },
 ];
 
 const SelectLang: React.FC = () => {

@@ -144,3 +144,12 @@ export interface IUpdatePropertiesType {
     coordinates: [number, number]; // Longitude, Latitude array (corrected to a tuple of 2 numbers)
   };
 }
+
+export interface CommentResponseType {
+  id: string;
+  profile?: string;
+  userName: string;
+  datetime: string;
+  text: string;
+  likeCount?: number;
+}
