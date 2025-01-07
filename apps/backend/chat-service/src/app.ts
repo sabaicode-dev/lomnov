@@ -9,7 +9,6 @@ import cookieParser from "cookie-parser";
 const swaggerDocument = JSON.parse(
   fs.readFileSync(path.join(__dirname, "docs/swagger.json"), "utf8")
 );
-
 // ========================
 // Initialize App Express
 // ========================
@@ -21,7 +20,6 @@ const app = express();
 //   allowedHeaders: 'Content-Type,Authorization' ,// Specify allowed headers
 //   Credential:true
 // };
-
 // Apply the CORS middleware
 // app.use(cors(corsOptions))
 // ========================

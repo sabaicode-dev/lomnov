@@ -97,7 +97,7 @@ jobs:
             echo "USER_SERVICE_URL=${{ secrets.USER_SERVICE_URL }}" >> /home/ubuntu/apps/chat-service/build/configs/.env.production
             echo "SENDMESSAGE_API_ENDPOINT=${{ secrets.SENDMESSAGE_API_ENDPOINT }}" >> /home/ubuntu/apps/chat-service/build/configs/.env.production
             echo "USERS_API_ENDPOINT=${{ secrets.USERS_API_ENDPOINT }}" >> /home/ubuntu/apps/chat-service/build/configs/.env.production
-
+            echo "API_URL=${{secrets.NEXT_PUBLIC_API_URL}}"
       - name: Install Dependencies and Restart PM2
         uses: appleboy/ssh-action@master
         with:
