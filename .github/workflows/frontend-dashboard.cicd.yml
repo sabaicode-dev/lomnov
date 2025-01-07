@@ -54,11 +54,11 @@ jobs:
         with: 
           node-version: "20"
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: frontend-dashboard-build
-          path: apps/frontend-dashboard/.next
+      # - name: Download build artifacts
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: frontend-dashboard-build
+      #     path: apps/frontend-dashboard/.next
       
       - name: Install dependencies
         run: yarn install --no-immutable
