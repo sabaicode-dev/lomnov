@@ -1,10 +1,11 @@
 import axios from "axios";
 import { User } from "./types/messages.service.types";
-
+import configs from "../config";
+configs.apiUrl
 export class UserServiceClient {
     public async getUserRole(sub: string): Promise<{ role: string } | null> {
         try {
-            const res = await axios.get(`http://localhost:4000/api/v1/users/role/${sub}`);
+            const res = await axios.get(`${configs.apiUrl}/api/v1/users/role/${sub}`);
             return res.data;
         } catch (error) {
             console.log(error);
@@ -16,7 +17,7 @@ export class UserServiceClient {
     }
     public async getUsersAndFilter(participantIds: string[]): Promise<User[]> {
         try {
-            const responseUsers = (await axios.get(`http://localhost:4000/api/v1/users`)).data;
+            const responseUsers = (await axios.get(`${configs.apiUrl}/api/v1/users`)).data;
             if (responseUsers) {
                 const returnUsers = this.getUsersByParticipantIds(responseUsers.users, participantIds);
                 return returnUsers;
