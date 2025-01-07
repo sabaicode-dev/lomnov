@@ -19,6 +19,7 @@ defaults:
 jobs: 
   build:
     runs-on: ubuntu-latest
+
     steps: 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,9 +34,6 @@ jobs:
 
       - name: Build application
         run: yarn build
-
-      - name: "Debug: Check build artifacts"
-        run: ls -la apps/frontend-dashboard/.next
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
@@ -57,18 +55,10 @@ jobs:
         with: 
           node-version: "20"
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: frontend-dashboard-build
-          path: apps/frontend-dashboard/.next
-
-      - name: "Debug: Verify downloaded artifacts"
-        run: ls -la apps/frontend-dashboard/.next
-
       - name: Install dependencies
         run: yarn install --no-immutable
-
+        working-directory: apps/frontend-dashboard
+      
       - name: Set Environment Variables
         run: |
           echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> $GITHUB_ENV
@@ -85,3 +75,4 @@ jobs:
 
       - name: Deploy to AWS with SST
         run: npx sst deploy --stage prod
+        working-directory: apps/frontend-dashboard
