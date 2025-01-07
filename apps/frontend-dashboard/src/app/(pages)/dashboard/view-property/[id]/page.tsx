@@ -23,9 +23,9 @@ async function fetchProperty(id: string): Promise<IResponseComparePropertes> {
 
 //=================
 
-const page = async ({ params }: { params: { id: string } }) => {
+const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   // Fetch the property details
-  const property = await fetchProperty(params.id);
+  const property = await fetchProperty((await params).id);
 
   return (
     <div>
@@ -43,9 +43,9 @@ const page = async ({ params }: { params: { id: string } }) => {
           />
         </div>
         <div className="w-[30%]">
-        <StatusProperty 
-          item={property}
-        />
+          <StatusProperty
+            item={property}
+          />
         </div>
       </div>
 

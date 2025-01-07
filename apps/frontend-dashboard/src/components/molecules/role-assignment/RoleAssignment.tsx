@@ -1,10 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { TbPhoto } from "react-icons/tb";
-import { MdFormatListBulleted } from "react-icons/md";
-import { FaLink, FaStrikethrough } from "react-icons/fa6";
-import { FiItalic, FiBold,FiUnderline  } from "react-icons/fi";
 
 //=============================================
 const RoleAssignment = () => {

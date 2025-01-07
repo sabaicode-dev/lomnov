@@ -17,7 +17,7 @@ const useFetchPropertyDetails = (propertyId: string) => {
         const data = await fetchComparePropertyById(propertyId);
         setProperty(data);
       } catch (error) {
-        setError(error);
+        setError(error as string);
       } finally {
         setLoading(false);
       }

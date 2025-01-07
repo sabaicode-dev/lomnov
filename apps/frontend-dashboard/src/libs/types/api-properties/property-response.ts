@@ -47,6 +47,7 @@ export interface IResponseComparePropertes{
     _id: string;
     cognitoSub: string;
     title: { content: string; language: string }[];
+    slug: string;
     description: { content: string; language: string }[];
     thumbnail: string;
     images: string[];

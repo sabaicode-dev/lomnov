@@ -38,8 +38,8 @@ async function fetchCustomer(username: string): Promise<CustomerResponseType | n
 }
 
 
-const page = async ({ params }: { params: { username: string } }) => {
-  const customer = await fetchCustomer(params.username);
+const page = async ({ params }: { params: Promise<{ username: string }> }) => {
+  const customer = await fetchCustomer((await params).username);
 
   if (!customer) {
     return (

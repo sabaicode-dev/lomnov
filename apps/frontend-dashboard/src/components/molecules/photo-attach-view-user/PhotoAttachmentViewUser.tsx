@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { useState } from "react";
 
 //=====================
@@ -9,6 +10,7 @@ interface IPhotoAttachmentProps {
 }
 
 const PhotoAttachmentViewUser = ({ initialImages = [], defaultProfile }: IPhotoAttachmentProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [images, setImages] = useState<string[]>(initialImages);
 
   return (
@@ -24,8 +26,10 @@ const PhotoAttachmentViewUser = ({ initialImages = [], defaultProfile }: IPhotoA
                 key={index}
                 className="relative w-[200px] h-[200px] border rounded-lg overflow-hidden"
               >
-                <img
+                <Image
                   src={image}
+                  width={2999}
+                  height={2000}
                   alt={`Uploaded ${index}`}
                   className="object-cover w-full h-full"
                   onError={(e) => (e.currentTarget.src = defaultProfile)}

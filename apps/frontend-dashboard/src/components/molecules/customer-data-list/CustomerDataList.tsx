@@ -1,7 +1,7 @@
 import React from "react";
-import Link from "next/link";
+// import Link from "next/link";
 import Search from "@/components/organisms/search/Search";
-import { LuFilter } from "react-icons/lu";
+// import { LuFilter } from "react-icons/lu";
 interface ICustomerDataList {
     liveSearch: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void

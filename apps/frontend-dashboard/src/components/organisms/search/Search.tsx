@@ -2,7 +2,7 @@ import React from "react";
 import { IoSearch } from "react-icons/io5";
 type SearchProps = {
   liveSearch: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 const Search = ({liveSearch,onChange}:Readonly<SearchProps>) => {
 

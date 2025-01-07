@@ -1,6 +1,6 @@
 "use client";
 import Image from 'next/image';
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent } from 'react'
 import { TiDeleteOutline } from "react-icons/ti";
 interface IPhotoAttachmentProps {
   OnImageChange?: (e: ChangeEvent<HTMLInputElement>) => void;

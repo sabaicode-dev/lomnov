@@ -38,8 +38,8 @@ async function fetchAgents(username: string): Promise<AgentResponseType | null> 
 }
 
 
-const page = async ({ params }: { params: { username: string } }) => {
-  const agent = await fetchAgents(params.username);
+const page = async ({ params }: { params: Promise<{ username: string }> }) => {
+  const agent = await fetchAgents((await params).username);
 
   if (!agent) {
     return (

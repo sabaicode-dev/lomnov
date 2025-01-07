@@ -9,7 +9,7 @@ import { User } from "@/libs/types/auth/auth.type";
 import { PiLockKeyLight } from "react-icons/pi";
 
 //====================
-const page = () => {
+const Page = () => {
   const { user } = useAuth();
       const [users, setUsers] = useState<User | null>(null);
       // const [loading, setLoading] = useState<boolean>(false)
@@ -85,4 +85,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

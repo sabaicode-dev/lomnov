@@ -1,4 +1,5 @@
 "use client";
+import Image from 'next/image';
 import React,{ useState, ChangeEvent } from 'react'
 import { TiDeleteOutline } from "react-icons/ti";
 
@@ -49,7 +50,9 @@ const UploadProfile = () => {
                     key={index}
                     className="relative border rounded-md overflow-hidden"
                   >
-                    <img
+                    <Image
+                      height={2000}
+                      width={20000}
                       src={image}
                       alt={`Uploaded ${index}`}
                       className="object-cover w-[80px] h-[80px] rounded-xls"

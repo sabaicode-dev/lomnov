@@ -39,9 +39,9 @@ const OverviewProperty = ({ item }: ItemProps) => {
                 <InputField
                   label="Property Title*"
                   placeholder="Property title"
-                  value={formData.title?.[0]?.content || ""}
-                  onChange={(e) => handleChange(e, "title")}
-                  readOnly
+                  value={formData.title?.[0]?.content ?? ""}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, "title")}
+                  
                 />
 
                 {/* */}
@@ -49,8 +49,8 @@ const OverviewProperty = ({ item }: ItemProps) => {
                   label="Slug*"
                   placeholder="Property slug"
 
-                  value={formData.slug || ""}
-                  onChange={(e) => handleChange(e, "slug")}
+                  value={formData.slug ?? ""}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, "slug")}
                 />
               </div>
 
@@ -82,15 +82,15 @@ const OverviewProperty = ({ item }: ItemProps) => {
 
                 <InputField
                   label="Category*"
-                  value={formData.category?.[0]?.content || ""}
-                  readOnly
-                  onChange={(e) => handleChange(e, "category")}
+                  value={formData.category?.[0]?.content ?? ""}
+                  
+                  onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, "category")}
                 />
                 <InputField
                   label="Transition*"
-                  value={formData.transition?.[0]?.content || ""}
-                  readOnly
-                  onChange={(e) => handleChange(e, "transition")}
+                  value={formData.transition?.[0]?.content ?? ""}
+                  
+                  onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, "transition")}
                 />
               </div>
 
@@ -99,15 +99,15 @@ const OverviewProperty = ({ item }: ItemProps) => {
                 <InputField
                   label="Price*"
                   placeholder="Your price"
-                  value={formData.price || ""}
-                  readOnly
-                  onChange={(e) => handleChange(e, "price")}
+                  value={formData.price ?? ""}
+                  
+                  onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, "price")}
                 />
                 <InputField
                   label="Location*"
-                  value={formData.location?.[0]?.content || ""}
-                  readOnly
-                  onChange={(e) => handleChange(e, "location")}
+                  value={formData.location?.[0]?.content ?? ""}
+                  
+                  onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, "location")}
                 />
               </div>
             </form>
@@ -123,29 +123,29 @@ const OverviewProperty = ({ item }: ItemProps) => {
                     label="Bedrooms"
                     placeholder="Bedrooms"
                     value={formData.detail?.[0]?.bedrooms || "empty"}
-                    onChange={(e) => handleChange(e, "detail.bedrooms")}
-                    readOnly
+                    onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, "detail.bedrooms")}
+                    
                   />
                   <InputField
                     label="Bathrooms"
                     placeholder="Bathrooms"
                     value={formData.detail?.[0]?.bathrooms || "empty"}
-                    onChange={(e) => handleChange(e, "detail.bathrooms")}
-                    readOnly
+                    onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, "detail.bathrooms")}
+                    
                   />
                   <InputField
                     label="Spacious life (m2)"
                     placeholder="Spacious life"
                     value={formData.detail?.[0]?.land_size || "empty"}
-                    onChange={(e) => handleChange(e, "detail.land_size")}
-                    readOnly
+                    onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, "detail.land_size")}
+                    
                   />
                   <InputField
                     label="Parking available"
                     placeholder="Parking available"
                     value={formData.detail?.[0]?.parking || "empty"}
-                    onChange={(e) => handleChange(e, "detail.parking")}
-                    readOnly
+                    onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleChange(e, "detail.parking")}
+                    
                   />
                 </div>
               </form>
@@ -158,7 +158,7 @@ const OverviewProperty = ({ item }: ItemProps) => {
 };
 
 // Reusable InputField Component
-const InputField = ({ label, placeholder, value, onChange }: any) => (
+const InputField = ({ label, placeholder, value, onChange }: { label?: string, placeholder?: string, value?: string| undefined | number | string[], onChange: (e: React.ChangeEvent<HTMLInputElement>) => void}) => (
   <div className="w-full">
     <label className="block text-sm font-medium">{label}</label>
     <input
