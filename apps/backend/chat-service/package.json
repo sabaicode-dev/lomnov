@@ -9,7 +9,8 @@
     "build": "node build-script.js",
     "start:local": "pm2 start ecosystem.local.config.js",
     "start": "pm2 start ecosystem.config.js",
-    "restart": "pm2 reload ecosystem.config.js"
+    "restart": "pm2 reload ecosystem.config.js",
+    "start:pm2-production": "pm2 start ecosystem.config.js --env production"
   },
   "dependencies": {
     "@types/express": "^5.0.0",
