@@ -30,10 +30,12 @@ jobs:
       
       - name: Install dependencies
         run: yarn install --no-immutable
-        
+
       - name: Build application
         run: yarn build
-        working-directory: apps/frontend-dashboard
+
+      - name: "Debug: Check build artifacts"
+        run: ls -la apps/frontend-dashboard/.next
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
@@ -60,11 +62,13 @@ jobs:
         with:
           name: frontend-dashboard-build
           path: apps/frontend-dashboard/.next
-      
+
+      - name: "Debug: Verify downloaded artifacts"
+        run: ls -la apps/frontend-dashboard/.next
+
       - name: Install dependencies
         run: yarn install --no-immutable
-        working-directory: apps/frontend-dashboard
-      
+
       - name: Set Environment Variables
         run: |
           echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> $GITHUB_ENV
@@ -81,4 +85,3 @@ jobs:
 
       - name: Deploy to AWS with SST
         run: npx sst deploy --stage prod
-        working-directory: apps/frontend-dashboard
