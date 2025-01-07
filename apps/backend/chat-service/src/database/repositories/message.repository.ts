@@ -186,7 +186,7 @@ export class MessageRepository {
     })
       .sort({ updatedAt: -1 })
       .limit(request.limit!)
-      .skip(request.skip!);
+      .skip(request.skip!).populate({ path: "messages", model: "Message", select: "senderId receiverId message createdAt" })
     return conversation;
   }
   public async countConversation(request: RequestgetUserConversations) {
@@ -216,7 +216,7 @@ export class MessageRepository {
         skip,
         limit,
       });
-      console.log("")
+      console.log("Message Repository:::: ", conversation)
       // Count total conversations
       const totalConversation = await this.countConversation(request);
       const totalPages = Math.ceil(totalConversation / limit);
