@@ -82,7 +82,7 @@ jobs:
           port: 22
           source: "./apps/backend/chat-service/build/*"
           target: "/home/ubuntu/apps/chat-service/build"
-
+          strip_components: 4
       - name: Create .env File
         uses: appleboy/ssh-action@master
         with:
@@ -116,8 +116,8 @@ jobs:
             # Check if the PM2 process is running
             if pm2 show chat-service > /dev/null; then
               echo "Application is running. Restarting..."
-              pm2 restart chat-service
+              yarn restart
             else
               echo "Application is not running. Starting..."
-              pm2 start ecosystem.config.js --only chat-service
+              yarn start:pm2-production
             fi

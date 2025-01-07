@@ -36,10 +36,10 @@ export class MessageController extends Controller {
 
       const cookieHeader = request.headers.cookie!;
     
-
+      console.log("Request Header:::::: ", request.headers.currentuser)
       // sender
       const currentUser = JSON.parse(
-        request.headers.currentuser! as string
+        request?.headers?.currentuser! as string
       ) as {
         username?: string; //
         roles?: string[];
@@ -55,7 +55,7 @@ export class MessageController extends Controller {
       return await this.MessageService.sendMessaage(requestData);
     } catch (error) {
       console.error("error:::", error);
-      throw error;
+     // throw error;
     }
   }
   /**
