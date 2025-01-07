@@ -17,13 +17,12 @@ import {
   UserConversation,
 } from "@/libs/types/chat/user-conversation";
 import { useAuth } from "@/context/user";
-import { useChatContext } from "@/hook/useChat";
 import socket from "@/libs/const/socketClient";
 //==============================
 
 const ChatPage: React.FC = () => {
   const { user } = useAuth();
-  const { sendMessage } = useChatContext();
+  
 
   const messageRef = useRef<HTMLDivElement>(null);
   const context = useSocketContext();
@@ -37,6 +36,11 @@ const ChatPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [showPropertyInfo, setShowPropertyInfo] = useState(false);
+  // const [userOnline , setUserOnline] = useState<User[]>([]);
+
+const UserThatOnline = context.onlineUsers;
+console.log("User online :::::" , UserThatOnline);
+
 
   // Fetch conversations
   useEffect(() => {
@@ -54,92 +58,173 @@ const ChatPage: React.FC = () => {
     fetchConversations();
   }, []);
 
-  // Scroll to the bottom of the chat
-  const scrollToBottom = useCallback((behavior: "smooth" | "auto" = "auto") => {
-    if (messageRef.current) {
-      messageRef.current.scrollTo({
-        top: messageRef.current.scrollHeight,
-        behavior: behavior,
-      });
+// Scroll to the bottom of the chat
+const scrollToBottom = useCallback((behavior: "smooth" | "auto" = "auto") => {
+  if (messageRef.current) {
+    messageRef.current.scrollTo({
+      top: messageRef.current.scrollHeight,
+      behavior: behavior,
+    });
+  }
+}, []);
+
+ // Fetch messages for selected conversation
+const fetchMessages = async (userToChatId: string, pageNum: number) => {
+  try {
+    setLoading(true);
+
+    const response = await axiosInstance.get(
+      `${API_ENDPOINTS.GET_MESSAGES}/${userToChatId}?page=${pageNum}&limit=10`
+    );
+
+    const newMessages = response.data.conversation.messages || [];
+    const sortedMessages = newMessages.sort(
+      (a: Message, b: Message) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+
+    setMessages((prevMessages) => [...sortedMessages, ...prevMessages]);
+    setHasMore(newMessages.length > 0);
+
+    if (pageNum === 1) {
+      // Scroll to the bottom only when loading the first page of messages
+      setTimeout(() => scrollToBottom("smooth"), 100);
     }
-  }, []);
-
-  // Fetch messages for selected conversation
-  const fetchMessages = async (userToChatId: string, pageNum: number) => {
-    try {
-      setLoading(true);
-
-      const response = await axiosInstance.get(
-        `${API_ENDPOINTS.GET_MESSAGES}/${userToChatId}?page=${pageNum}&limit=9`
-      );
-
-      const newMessages = response.data.conversation.messages || [];
-      const sortedMessages = newMessages.sort(
-        (a: Message, b: Message) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      );
-
-      setMessages((prevMessages) => [...sortedMessages, ...prevMessages]);
-      setHasMore(newMessages.length > 0);
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Select a conversation
-  const handleSelectConversation = async (conversation: User) => {
-    if (selectedConversation?._id === conversation._id) return;
+const handleSelectConversation = async (conversation: User) => {
+  if (selectedConversation?._id === conversation._id) return;
 
-    setSelectedConversation(conversation);
-    setMessages([]);
-    setPage(1);
-    setHasMore(true);
-    await fetchMessages(conversation.cognitoSub, 1);
-    scrollToBottom();
+  setSelectedConversation(conversation);
+  setMessages([]);
+  setPage(1);
+  setHasMore(true);
+  await fetchMessages(conversation.cognitoSub, 1);
+  setTimeout(() => scrollToBottom("smooth"), 100); // Ensure smooth scrolling after fetching messages
+};
+
+ // Send a message
+// const handleSendMessage = async () => {
+//   if (!selectedConversation || !messageInput.trim()) return;
+
+//   const optimisticMessage: Message = {
+//     _id: Math.random().toString(36).substr(2, 9),
+//     senderId: user?.cognitoSub || "",
+//     receiverId: selectedConversation.cognitoSub,
+//     message: messageInput.trim(),
+//     conversationId: selectedConversation._id,
+//     createdAt: new Date().toISOString(),
+//     updatedAt: new Date().toISOString(),
+//   };
+
+//   setMessages((prevMessages) => [...prevMessages, optimisticMessage]);
+//   console.log("Message Sent:", optimisticMessage);
+//   setMessageInput("");
+//   setTimeout(() => scrollToBottom("smooth"), 100);
+
+//   try {
+//     socket.emit("sendMessage", optimisticMessage);
+//   } catch (error) {
+//     console.error("Error sending message:", error);
+//     setMessages((prevMessages) =>
+//       prevMessages.filter((msg) => msg._id !== optimisticMessage._id)
+//     );
+//   }
+// };
+
+// // Real-time message listener
+// useEffect(() => {
+//   socket.on("receiveMessage", (newMessage: Message) => {
+//     // Add the new message to the chat and scroll to the bottom
+//     setMessages((prevMessages) => [...prevMessages, newMessage]);
+//     console.log("New Message Received:", newMessage);
+//     setTimeout(() => scrollToBottom("smooth"), 100);
+//   });
+
+//   return () => {
+//     socket.off("receiveMessage");
+//   };
+// }, [scrollToBottom]);
+
+//====================
+ // Send a message
+ const handleSendMessage = async () => {
+  if (!selectedConversation || !messageInput.trim()) return;
+
+  const optimisticMessage: Message = {
+    _id: Math.random().toString(36).substr(2, 9),
+    senderId: user?.cognitoSub || "",
+    receiverId: selectedConversation.cognitoSub,
+    message: messageInput.trim(),
+    conversationId: selectedConversation._id,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   };
 
-  // Send a message
-  const handleSendMessage = async () => {
-    if (!selectedConversation || !messageInput.trim()) return;
+  setMessages((prevMessages) => [...prevMessages, optimisticMessage]);
+  setMessageInput("");
+  setTimeout(() => scrollToBottom("smooth"), 100);
 
-    const optimisticMessage: Message = {
-      _id: Math.random().toString(36).substr(2, 9),
-      senderId: user?.cognitoSub || "",
-      receiverId: selectedConversation.cognitoSub,
-      message: messageInput.trim(),
-      conversationId: selectedConversation._id,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+  try {
+    socket.emit("sendMessage", optimisticMessage);
 
-    setMessages((prevMessages) => [...prevMessages, optimisticMessage]);
-    setMessageInput("");
-    setTimeout(scrollToBottom, 50);
-
-    try {
-      await sendMessage(selectedConversation.cognitoSub, messageInput.trim());
-      socket.emit("sendMessage", optimisticMessage);
-    } catch (error) {
-      console.error("Error sending message:", error);
-      setMessages((prevMessages) =>
-        prevMessages.filter((msg) => msg._id !== optimisticMessage._id)
-      );
-    }
-  };
-
-  // Real-time message listener
-  useEffect(() => {
-    socket.on("receiveMessage", (newMessage: Message) => {
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-      scrollToBottom();
+    // Update the lastMessage in the conversation list
+    setUserConversation((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        conversationUser: {
+          users: prev.conversationUser.users.map((user) =>
+            user.cognitoSub === selectedConversation.cognitoSub
+              ? { ...user, lastMessage: optimisticMessage.message }
+              : user
+          ),
+        },
+      };
     });
+  } catch (error) {
+    console.error("Error sending message:", error);
+    setMessages((prevMessages) =>
+      prevMessages.filter((msg) => msg._id !== optimisticMessage._id)
+    );
+  }
+};
 
-    return () => {
-      socket.off("receiveMessage");
-    };
-  }, [scrollToBottom]);
+// Real-time message listener
+useEffect(() => {
+  socket.on("receiveMessage", (newMessage: Message) => {
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setTimeout(() => scrollToBottom("smooth"), 100);
+
+    // Update the lastMessage in the conversation list
+    setUserConversation((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        conversationUser: {
+          users: prev.conversationUser.users.map((user) =>
+            user.cognitoSub === newMessage.senderId
+              ? { ...user, lastMessage: newMessage.message }
+              : user
+          ),
+        },
+      };
+    });
+  });
+
+  return () => {
+    socket.off("receiveMessage");
+  };
+}, [scrollToBottom]);
+//====================
+
+  
 
   // Fetch older messages when scrolling
   useEffect(() => {
@@ -179,20 +264,12 @@ const ChatPage: React.FC = () => {
   const userDetail = {
     name: selectedConversation?.userName || "Unknown",
     email: selectedConversation?.email || "No email",
-    profileImage: selectedConversation?.profile?.[1] || "/default-profile.png",
+    profileImage: selectedConversation?.profile?.[0] || "https://th.bing.com/th?id=OIP.HHVUf3TYqncgpJXyCMmxyAHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2",
     address: selectedConversation?.address || "No address available",
     phone: selectedConversation?.phoneNumber || "No phone number available",
   };
 
-  const propertyDetail = {
-    image:
-      "https://th.bing.com/th/id/OIP.nmY2o1MdUEMRBhFkRVxkyAHaGF?w=281&h=182&c=7&r=0&o=5&pid=1.7",
-    type: user?.address,
-    bedroom: user?.address,
-    bathroom: user?.address,
-    spacious: user?.address,
-    parking: user?.address,
-  };
+ 
 
   return (
     <div className="h-screen">
@@ -221,9 +298,11 @@ const ChatPage: React.FC = () => {
                 name={user.userName}
                 profile={user.profile[0]}
                 isSelected={selectedConversation?._id === user._id}
+                lastMessage={user.lastMessage}
+                unreadCount={2}
                 isOnline={
-                  selectedConversation?.cognitoSub
-                    ? context.onlineUsers[selectedConversation.cognitoSub] ===
+                  user.cognitoSub
+                    ? context.onlineUsers[user.cognitoSub] ===
                       true
                     : false
                 }
@@ -243,7 +322,9 @@ const ChatPage: React.FC = () => {
             <div className="flex justify-between">
               <div className="w-[100%]">
                 <div
-                  className="flex-1 p-4 space-y-4 overflow-y-auto chat-container h-[700px]"
+                  // className="flex-1 p-4 space-y-4 scroll-smooth scrollbar-thin scrollbar-thum-green-300 scrollbar-track-gray-300 overflow-y-auto chat-container h-[700px]"
+                  className="flex-1 p-6 space-y-4 scroll-smooth overflow-y-auto h-[700px] chat-container rounded-lg mb-[8px] scrollbar-thin scrollbar-thumb-olive-green  scrollbar-track-gray-200"
+
                   ref={messageRef}
                 >
                   {loading && (
@@ -262,7 +343,7 @@ const ChatPage: React.FC = () => {
                     >
                       {message.senderId !== user?.cognitoSub && (
                         <Image
-                          src={selectedConversation.profile[1]} // Replace with the selected conversation's profile image
+                          src={selectedConversation.profile[0] || "https://th.bing.com/th?id=OIP.HHVUf3TYqncgpJXyCMmxyAHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2"} // Replace with the selected conversation's profile image
                           alt="user"
                           className="w-10 h-10 rounded-full mr-3"
                           width={40}
@@ -286,7 +367,7 @@ const ChatPage: React.FC = () => {
                       </div>
                       {message.senderId === user?.cognitoSub && (
                         <Image
-                          src={user.profile[1]} // Replace with your user's profile image source
+                          src={user.profile[0] || "https://th.bing.com/th?id=OIP.HHVUf3TYqncgpJXyCMmxyAHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2"} // Replace with your user's profile image source
                           alt="user"
                           className="w-10 h-10 rounded-full ml-3"
                           width={40}
@@ -297,17 +378,22 @@ const ChatPage: React.FC = () => {
                   ))}
                 </div>
 
-                <div className="flex items-center mx-4 border-2 rounded-[20px] border-olive-drab relative">
+                <div className="flex justify-between items-center mx-4 border-2 rounded-[20px] border-olive-drab mt-[2px]">
                   <input
                     type="text"
                     placeholder="Write your message here..."
-                    className="w-full p-2 border-none bg-[#e0e0dc] rounded-[25px] text-[12px]"
+                    className="w-full p-2 border-none  bg-[#e0e0dc] rounded-[25px] text-black text-[12px] focus:outline-none focus:ring-0"
                     value={messageInput}
                     onChange={(e) => setMessageInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleSendMessage(); // Call the send message function when Enter is pressed
+                      }
+                    }}
                   />
                   <button
                     onClick={handleSendMessage}
-                    className="py-2 px-4 rounded transition-all duration-200 bg-[#e0e0dc] absolute ml-[970px]"
+                    className="py-2 px-4 rounded transition-all duration-200 bg-[#e0e0dc] mr-[5px]"
                   >
                     <IoSend className="text-olive-drab" />
                   </button>
@@ -317,7 +403,7 @@ const ChatPage: React.FC = () => {
               <div className="w-[30%] border-l-2 border-olive-green/50 h-[100%]">
                 <ChatPropertyInfo
                   userDetails={userDetail}
-                  propertyDetails={propertyDetail}
+                
                 />
               </div>
             </div>
