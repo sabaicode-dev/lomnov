@@ -40,7 +40,10 @@ jobs:
         with:
           name: frontend-dashboard-build
           path: apps/frontend-dashboard/.next
-
+      
+      - name: Transpile next.config.ts to next.config.js
+        run: npx ts-node apps/frontend-dashboard/next.config.ts > apps/frontend-dashboard/next.config.js
+    
   deploy:
     runs-on: ubuntu-latest
     needs: build
