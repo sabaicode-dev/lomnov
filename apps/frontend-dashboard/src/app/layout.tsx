@@ -4,9 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/context/useAuth";
 import { cookies } from "next/headers";
 // import { PropertyProvider } from "@/context/property";
-
 const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
   title: "Dashboard | Lomnov",
   description: "This is Dashboard",
