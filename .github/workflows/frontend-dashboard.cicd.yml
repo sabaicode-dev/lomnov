@@ -30,7 +30,9 @@ jobs:
       
       - name: Install dependencies
         run: yarn install --no-immutable
-
+      - name: Transpile next.config.ts
+        run: npx ts-node apps/frontend-dashboard/next.config.ts > apps/frontend-dashboard/next.config.js
+      
       - name: Build application
         run: yarn build
 
