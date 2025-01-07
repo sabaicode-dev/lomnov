@@ -7,6 +7,7 @@ export interface User {
   role: string;
   status : boolean;
   phoneNumber: string;
+  lastMessage: string;
   address: string;
   message: string[];
   propertys: propertyDetails;

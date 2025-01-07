@@ -56,6 +56,7 @@
     "react-rte": "^0.16.5",
     "resend": "^4.0.1-alpha.0",
     "swiper": "^11.1.8",
+    "tailwind-scrollbar": "^4.0.0-beta.0",
     "typescript": "^5.7.2",
     "yup": "^1.4.0"
   },

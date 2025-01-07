@@ -28,7 +28,6 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { user: currentUser } = useAuth();
-  const { sendMessage } = useChatContext();
   const context = useSocketContext();
   const messageRef = useRef<HTMLDivElement>(null);
 
@@ -44,12 +43,12 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
   // Toggle Dropdown
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
 
-  // Scroll to bottom
-  const scrollToBottom = useCallback(() => {
+  // Scroll to the bottom of the chat
+  const scrollToBottom = useCallback((behavior: "smooth" | "auto" = "auto") => {
     if (messageRef.current) {
       messageRef.current.scrollTo({
         top: messageRef.current.scrollHeight,
-        behavior: "smooth",
+        behavior: behavior,
       });
     }
   }, []);
@@ -85,24 +84,32 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
     setIsChatOpen((prev) => !prev);
     if (!isChatOpen && user.user?._id) {
       await fetchMessages(user.user.cognitoSub, 1);
+      setTimeout(() => scrollToBottom("smooth"), 100); // Ensure smooth scrolling after fetching messages
     }
   };
 
-  // Fetch messages for the selected user
-  const fetchMessages = async (userCognitoSub: string, pageNum = 1) => {
+  // Fetch messages for selected conversation
+  const fetchMessages = async (userToChatId: string, pageNum: number) => {
     try {
       setLoading(true);
+
       const response = await axiosInstance.get(
-        `${API_ENDPOINTS.GET_MESSAGES}/${userCognitoSub}?page=${pageNum}&limit=20`
+        `${API_ENDPOINTS.GET_MESSAGES}/${userToChatId}?page=${pageNum}&limit=8`
       );
-      const fetchedMessages = response.data.conversation.messages || [];
 
-      if (fetchedMessages.length === 0) {
-        setHasMore(false);
+      const newMessages = response.data.conversation.messages || [];
+      const sortedMessages = newMessages.sort(
+        (a: Message, b: Message) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+
+      setMessages((prevMessages) => [...sortedMessages, ...prevMessages]);
+      setHasMore(newMessages.length > 0);
+
+      if (pageNum === 1) {
+        // Scroll to the bottom only when loading the first page of messages
+        setTimeout(() => scrollToBottom("smooth"), 100);
       }
-
-      setMessages((prevMessages) => [...fetchedMessages, ...prevMessages]);
-      if (pageNum === 1) setTimeout(scrollToBottom, 50);
     } catch (error) {
       console.error("Error fetching messages:", error);
     } finally {
@@ -125,11 +132,11 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
     };
 
     setMessages((prevMessages) => [...prevMessages, optimisticMessage]);
+    console.log("Message Sent:", optimisticMessage);
     setMessageInput("");
-    setTimeout(scrollToBottom, 50);
+    setTimeout(() => scrollToBottom("smooth"), 100);
 
     try {
-      await sendMessage(user.user?.cognitoSub || "", optimisticMessage.message);
       socket.emit("sendMessage", optimisticMessage);
     } catch (error) {
       console.error("Error sending message:", error);
@@ -138,11 +145,14 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
       );
     }
   };
+
   // Real-time message listener
   useEffect(() => {
     socket.on("receiveMessage", (newMessage: Message) => {
+      // Add the new message to the chat and scroll to the bottom
       setMessages((prevMessages) => [...prevMessages, newMessage]);
-      scrollToBottom();
+      console.log("New Message Received:", newMessage);
+      setTimeout(() => scrollToBottom("smooth"), 100);
     });
 
     return () => {
@@ -277,7 +287,7 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
               </button>
             </div>
             <div
-              className="w-[100%] h-[320px] overflow-y-auto"
+              className="w-[100%] h-[320px] overflow-y-auto scroll-smooth p-2 chat-container rounded-lg mb-[8px] scrollbar-thin scrollbar-thumb-olive-green  scrollbar-track-gray-200"
               ref={messageRef}
             >
               {loading ? (
@@ -302,7 +312,7 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
                           ] ?? "/images/default-profile.jpg"
                         }
                         alt="user"
-                        className="w-8 h-8 rounded-full mr-3 mt-[10px]"
+                        className="w-8 h-8 rounded-full mr-3 mt-[10px] "
                         width={40}
                         height={40}
                       />
@@ -310,8 +320,8 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
                     <div
                       className={`max-w-[75%] p-3 mt-[10px] rounded-lg shadow-md ${
                         message.senderId === currentUser?.cognitoSub
-                          ? "bg-blue-600 text-white"
-                          : "bg-white text-gray-700"
+                          ? "bg-blue-600 text-white mb-[2px]"
+                          : "bg-white text-gray-700 mb-[2px]"
                       }`}
                     >
                       <p className="text-sm">{message.message}</p>
@@ -338,19 +348,25 @@ const VisitProfileHeader = ({ user }: { user: VisitProfileHeaderProps }) => {
                 ))
               )}
             </div>
-            <div className="mt-4 flex items-center">
+            
+            <div className="flex justify-between w-full items-center  border-2 rounded-[20px] border-olive-drab mt-[2px]">
               <input
                 type="text"
-                placeholder="Type your message..."
+                placeholder="Write your message here..."
+                className="w-full p-1 border-none  rounded-[25px] px-[10px] text-black text-[10px] focus:outline-none focus:ring-0"
                 value={messageInput}
                 onChange={(e) => setMessageInput(e.target.value)}
-                className="flex-grow border border-gray-300 rounded-lg p-2 text-sm"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSendMessage(); // Call the send message function when Enter is pressed
+                  }
+                }}
               />
               <button
                 onClick={handleSendMessage}
-                className="ml-2 bg-olive-green text-white p-2 rounded-lg"
+                className="py-1 px-2 rounded transition-all duration-200  mr-[5px]"
               >
-                <IoSend className="w-5 h-5" />
+                <IoSend className="text-olive-drab" />
               </button>
             </div>
           </div>
