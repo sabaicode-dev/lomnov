@@ -51,7 +51,7 @@ export interface Message {
   senderId: string;
   receiverId: string;
   message: string;
-  isRead: boolean;
+  isRead?: boolean;
   conversationId: string;
   createdAt: string;
   updatedAt: string;
