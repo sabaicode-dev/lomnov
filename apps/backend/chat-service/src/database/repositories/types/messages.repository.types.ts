@@ -8,13 +8,14 @@ export interface createdMessage {
   createdAt?: Date;
   updatedAt?: Date;
   conversationId: mongoose.Types.ObjectId;
-  // conversationId: mongoose.Types.ObjectId;
+  isRead: boolean;
 }
 export interface messType {
   _id: string;
   senderId: mongoose.Types.ObjectId;
   receiverId: mongoose.Types.ObjectId;
   message: string;
+  isRead: boolean;
   createdAt: Date;
   updatedAt: Date;
   conversationId: mongoose.Types.ObjectId;
@@ -29,6 +30,7 @@ export interface conversation {
     receiverId: mongoose.Types.ObjectId;
     message: string;
     createdAt: Date;
+    isRead: boolean;
     updatedAt: Date;
     conversationId: mongoose.Types.ObjectId;
   }[];

@@ -217,6 +217,26 @@ export class MessageService {
       throw error;
     }
   }
+  //notification
+  public async getUnreadNotifications(userId: string): Promise<{ unreadCount: number }> {
+    try {
+      const unreadCount = await this.MessageRepository.getUnreadNotification(userId);
+      return { unreadCount };
+    } catch (error) {
+      console.error("Error in getUnreadNotifications:", error);
+      throw new Error("Failed to fetch unread notifications.");
+    }
+  }
+  //Mark notificatuon
+  public async markMessagesAsRead(userId: string, conversationId: string): Promise<{ message: string }> {
+    try {
+      await this.MessageRepository.markMessageRead(userId, conversationId);
+      return { message: "Messages marked as read." };
+    } catch (error) {
+      console.error("Error in markMessagesAsRead:", error);
+      throw new Error("Failed to mark messages as read.");
+    }
+  }
 }
 const deCookies = (cookies: express.Request["headers"]["cookie"]) => {
   const decodedCookie = cookies

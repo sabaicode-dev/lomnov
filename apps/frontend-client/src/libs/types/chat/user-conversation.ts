@@ -1,15 +1,15 @@
 export interface User {
   _id: string;
-  cognitoSub: string;
-  userName: string;
-  profile: string[];
-  email: string;
-  role: string;
-  status : boolean;
-  phoneNumber: string;
-  address: string;
-  message: string[];
-  propertys: propertyDetails;
+    cognitoSub: string;
+    userName: string;
+    message: Message[]; // last message 
+    profile: string[];
+    email: string;
+    role: string;
+    isRead: boolean;
+    address: string,
+    phoneNumber: string,
+    lastmessage: string
 }
 
 export interface propertyDetails{
@@ -23,10 +23,25 @@ export interface propertyDetails{
   
 }
 
+export interface UserConversition {
+  users: {
+    _id: string;
+    cognitoSub: string;
+    userName: string;
+    message: Message[]; // last message 
+    profile: string[];
+    email: string;
+    isRead: boolean;
+    unreadCount: number;
+    role: string;
+    address: string,
+    phoneNumber: string,
+    lastmessage: string
+  }[],
+}
+
 export interface UserConversation {
-  conversationUser: {
-    users: User[];
-  };
+  conversationUser: UserConversition,
   currentPage: number;
   totalPages: number;
   totalConversation: number;
@@ -36,6 +51,7 @@ export interface Message {
   senderId: string;
   receiverId: string;
   message: string;
+  isRead: boolean;
   conversationId: string;
   createdAt: string;
   updatedAt: string;
@@ -54,3 +70,4 @@ export interface Messages{
   limit: number;
   skip: number;
 }
+

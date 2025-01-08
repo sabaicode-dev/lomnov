@@ -7,6 +7,7 @@ import {
   Queries,
   Request,
   Route,
+  Put
 } from "tsoa";
 import express from "express";
 import { MessageService } from "../services/message.service";
@@ -129,4 +130,51 @@ export class MessageController extends Controller {
       throw error;
     }
   }
+
+  //get notification
+  @Get("/")
+  public async getUnreadNotifications(@Request() request: express.Request) {
+    try {
+      const currentUser = JSON.parse(request.headers.currentuser as string);
+      if (!currentUser || !currentUser.username) {
+        this.setStatus(401); // Unauthorized
+        throw new Error("Unauthorized user.");
+      }
+
+      const result = await this.MessageService.getUnreadNotifications(currentUser.username);
+      return result;
+    } catch (error) {
+      console.error("Error in getUnreadNotifications:", error);
+      this.setStatus(500); // Internal Server Error
+      throw new Error("Failed to fetch unread notifications.");
+    }
+  }
+
+   /**
+   * Mark messages in a conversation as read for the current user.
+   */
+   @Put("/mark-as-read/{conversationId}")
+   public async markMessagesAsRead(
+     @Path() conversationId: string,
+     @Request() request: express.Request
+   ) {
+     try {
+       const currentUser = JSON.parse(request.headers.currentuser as string);
+       if (!currentUser || !currentUser.username) {
+         this.setStatus(401); // Unauthorized
+         throw new Error("Unauthorized user.");
+       }
+ 
+       const result = await this.MessageService.markMessagesAsRead(
+         currentUser.username,
+         conversationId
+       );
+       return result;
+     } catch (error) {
+       console.error("Error in markMessagesAsRead:", error);
+       this.setStatus(500); // Internal Server Error
+       throw new Error("Failed to mark messages as read.");
+     }
+   }
+  
 }

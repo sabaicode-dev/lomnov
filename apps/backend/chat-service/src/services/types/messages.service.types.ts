@@ -14,6 +14,7 @@ export interface conversation {
     createdAt?: Date;
     updatedAt?: Date;
     conversationId: mongoose.Types.ObjectId;
+    isRead: boolean;
   }[];
   createdAt: Date;
   updatedAt: Date;
@@ -25,6 +26,7 @@ export interface messages {
   senderId: mongoose.Types.ObjectId;
   receiverId: mongoose.Types.ObjectId;
   message: string;
+  isRead: boolean;
   createdAt?: Date;
   updatedAt?: Date;
   conversationId: mongoose.Types.ObjectId;

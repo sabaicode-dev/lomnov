@@ -94,6 +94,8 @@ const config: Config = {
     },
   },
 
-  plugins: [require("@tailwindcss/typography"), require("@tailwindcss/forms")],
+  plugins: [require("@tailwindcss/typography"), require("@tailwindcss/forms"),require('tailwind-scrollbar'),],
+  
+
 };
 export default config;

@@ -24,6 +24,9 @@
 					"message": {
 						"type": "string"
 					},
+					"isRead": {
+						"type": "boolean"
+					},
 					"createdAt": {
 						"type": "string",
 						"format": "date-time"
@@ -41,6 +44,7 @@
 					"senderId",
 					"receiverId",
 					"message",
+					"isRead",
 					"conversationId"
 				],
 				"type": "object",
@@ -92,6 +96,9 @@
 					"messages": {
 						"items": {
 							"properties": {
+								"isRead": {
+									"type": "boolean"
+								},
 								"conversationId": {
 									"$ref": "#/components/schemas/mongoose.Types.ObjectId"
 								},
@@ -117,6 +124,7 @@
 								}
 							},
 							"required": [
+								"isRead",
 								"conversationId",
 								"message",
 								"receiverId",
@@ -439,6 +447,71 @@
 						"schema": {
 							"format": "double",
 							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/chat": {
+			"get": {
+				"operationId": "GetUnreadNotifications",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"unreadCount": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"unreadCount"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/api/v1/chat/mark-as-read/{conversationId}": {
+			"put": {
+				"operationId": "MarkMessagesAsRead",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Mark messages in a conversation as read for the current user.",
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "conversationId",
+						"required": true,
+						"schema": {
+							"type": "string"
 						}
 					}
 				]

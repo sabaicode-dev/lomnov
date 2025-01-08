@@ -1,3 +1,4 @@
+
 import mongoose, { Document } from "mongoose";
 interface Conversation extends Document {
   participants: { participantId: string; participantType: string; }[];
@@ -13,7 +14,7 @@ const conversationSchema = new mongoose.Schema<Conversation>(
       participantId: { type: String, required: true, refPath: "participants.user" }, // Dynamically reference User or Company based on participantType
       _id: false,
     }],
-    messages: [{ type: mongoose.Schema.ObjectId, ref: "Message", default: [], }],
+    messages: [{ type: mongoose.Schema.ObjectId, ref: "Message" , default: [], }],
     roomId: { type: String, unique: true, required: true },
   },
   {
