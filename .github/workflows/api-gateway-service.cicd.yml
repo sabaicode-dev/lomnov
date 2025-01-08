@@ -102,6 +102,7 @@ jobs:
             echo "AWS_COGNITO_USER_POOL_ID=${{ secrets.AWS_COGNITO_USER_POOL_ID }}" >> /home/ubuntu/apps/api-gateway/build/configs/.env.production
             echo "AWS_COGNITO_CLIENT_ID=${{ secrets.AWS_COGNITO_CLIENT_ID }}" >> /home/ubuntu/apps/api-gateway/build/configs/.env.production
             echo "CHAT_SERVICE_URL=${{secrets.CHAT_SERVICE_URL}}">> /home/ubuntu/apps/api-gateway/build/configs/.env.production
+            echo "CLIENT_DASHBOARD_URL=${{secrets.CLIENT_DASHBOARD_URL}}">> /home/ubuntu/apps/api-gateway/build/configs/.env.production
 
       - name: Install Dependencies and Restart PM2
         uses: appleboy/ssh-action@master

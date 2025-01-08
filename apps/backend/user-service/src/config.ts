@@ -14,6 +14,7 @@ type Config = {
   clientUrl:string;
   apiGateWayUrl:string;
   propertyServiceEndPiont:string;
+  CLIENT_DASHBOARD_URL: string;
 };
 
 // Function to load and validate environment variables
@@ -35,7 +36,8 @@ function loadConfig(): Config {
     AWS_COGNITO_CLIENT_ID: Joi.string().required(),
     CLIENT_URL:Joi.string().required(),
     API_GATEWAY_URL:Joi.string().required(),
-    PROPERTY_SERVICE_ENDPIONT:Joi.string().required()
+    PROPERTY_SERVICE_ENDPIONT:Joi.string().required(),
+    CLIENT_DASHBOARD_URL: Joi.string().required()
   }).unknown().required();
 
   // Validate the environment variables
@@ -55,7 +57,8 @@ function loadConfig(): Config {
     awsCognitoClientId: envVars.AWS_COGNITO_CLIENT_ID,
     clientUrl:envVars.CLIENT_URL,
     apiGateWayUrl:envVars.API_GATEWAY_URL,
-    propertyServiceEndPiont:envVars.PROPERTY_SERVICE_ENDPIONT
+    propertyServiceEndPiont:envVars.PROPERTY_SERVICE_ENDPIONT,
+    CLIENT_DASHBOARD_URL: envVars.CLIENT_DASHBOARD_URL
   };
 }
 

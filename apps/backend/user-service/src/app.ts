@@ -7,6 +7,7 @@ import path from 'path'
 import { loggingMiddleware } from './utils/request-response-logger/logger';
 import { errorHandler } from './utils/error/errorHanler';
 import cors from "cors"
+import configs from './config';
 
 // Dynamically load swagger.json
 const swaggerDocument = JSON.parse(fs.readFileSync(path.join(__dirname, 'docs/swagger.json'), 'utf8'));
@@ -18,7 +19,7 @@ const app = express();
 
 app.use(cookieParser()as unknown as express.Handler);
 app.use(cors({
-  origin: ['http://localhost:3000','http://localhost:3001'], // Your frontend URL
+  origin: [configs.clientUrl,configs.CLIENT_DASHBOARD_URL], // Your frontend URL
   credentials: true, // Allow credentials (cookies)
 }));
 // ========================

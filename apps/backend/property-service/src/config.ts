@@ -11,6 +11,7 @@ type Config = {
   awsS3BucketName: string;
   clientUrl: string;
   userServiceUrl:string;
+  CLIENT_DASHBOARD_URL: string;
 };
 
 // Function to load and validate environment variables
@@ -29,7 +30,8 @@ function loadConfig(): Config {
     AWS_S3_REGION: Joi.string().required(),
     AWS_S3_BUCKET_NAME: Joi.string().required(),
     CLIENT_URL: Joi.string().required(),
-    USER_SERVICE_URL:Joi.string().required()
+    USER_SERVICE_URL:Joi.string().required(),
+    CLIENT_DASHBOARD_URL: Joi.string().required(),
   }).unknown().required();
 
   // Validate the environment variables
@@ -46,7 +48,8 @@ function loadConfig(): Config {
     awsRegion: envVars.AWS_S3_REGION,
     awsS3BucketName: envVars.AWS_S3_BUCKET_NAME,
     clientUrl: envVars.CLIENT_URL,
-    userServiceUrl: envVars.USER_SERVICE_URL
+    userServiceUrl: envVars.USER_SERVICE_URL,
+    CLIENT_DASHBOARD_URL: envVars.CLIENT_DASHBOARD_URL
   };
 }
 

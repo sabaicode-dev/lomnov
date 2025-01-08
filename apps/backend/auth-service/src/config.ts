@@ -14,6 +14,7 @@ type Config = {
   awsSecretAccessKey: string;
   clientUrl: string;
   userServiceUrl: string;
+  CLIENT_DASHBOARD_URL: string
 };
 
 // Function to load and validate environment variables
@@ -36,6 +37,7 @@ function loadConfig(): Config {
     AWS_SECRET_ACCESS_KEY: Joi.string().required(),
     CLIENT_URL: Joi.string().required(),
     USER_SERVICE_URL: Joi.string().required(),
+    CLIENT_DASHBOARD_URL: Joi.string().required()
   })
     .unknown()
     .required();
@@ -57,7 +59,8 @@ function loadConfig(): Config {
     clientUrl: envVars.CLIENT_URL,
     userServiceUrl: envVars.USER_SERVICE_URL,
     awsAccessKeyId: envVars.AWS_ACCESS_KEY_ID,
-    awsSecretAccessKey: envVars.AWS_SECRET_ACCESS_KEY
+    awsSecretAccessKey: envVars.AWS_SECRET_ACCESS_KEY,
+    CLIENT_DASHBOARD_URL:envVars.CLIENT_DASHBOARD_URL
   };
 }
 
