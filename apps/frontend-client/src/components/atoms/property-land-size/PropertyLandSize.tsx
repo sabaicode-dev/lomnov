@@ -12,7 +12,7 @@ function PropertyLandSize({property}:{property:RealEstateItem}) {
                 spacious life
             </div>
             <div className="font-helvetica text-helvetica-paragraph2 font-black lg:text-helvetica-h3 uppercase text-charcoal">
-                {property.detail[0]?.content?.land_size || 0}
+                {property?.detail[0]?.content?.land_size || 0}
             </div>
         </div>
     )

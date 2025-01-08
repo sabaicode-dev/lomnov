@@ -47,7 +47,7 @@ const SavedPropertiesPage = async ({params,}: {params: { cognitosub: string };})
                   <Email props="w-[23px] h-[20px] text-olive-green" />
                   <label className="font-bold text-base">Email</label>
                   <span className="text-sm sm:text-base font-medium text-gray-800">
-                    {user.user.email}
+                    {user?.user?.email ?? ''}
                   </span>
                 </div>
 
@@ -56,7 +56,7 @@ const SavedPropertiesPage = async ({params,}: {params: { cognitosub: string };})
                   <Phone props="w-[23px] h-[20px] text-olive-green" />
                   <label className="font-bold text-base">Phone number</label>
                   <span className="text-sm sm:text-base font-medium text-gray-800">
-                    {user.user.phoneNumber}
+                    {user?.user?.phoneNumber??''}
                   </span>
                 </div>
 
@@ -65,7 +65,7 @@ const SavedPropertiesPage = async ({params,}: {params: { cognitosub: string };})
                   <Location className="w-[23px] h-[20px] text-olive-green" />
                   <label className="font-bold text-base">Location</label>
                   <span className="text-sm sm:text-base font-medium text-gray-800">
-                    {user.user.location}
+                    {user?.user?.location??''}
                   </span>
                 </div>
 
@@ -74,7 +74,7 @@ const SavedPropertiesPage = async ({params,}: {params: { cognitosub: string };})
                   <Address props="w-[23px] h-[20px] text-olive-green" />
                   <label className="font-bold text-base">Address</label>
                   <span className="text-sm sm:text-base font-medium text-gray-800">
-                    {user.user.address}
+                    {user?.user?.address??''}
                   </span>
                 </div>
               </div>

@@ -45,22 +45,17 @@ const page = async ({ params }: { params: { id: string } }) => {
           {/* IMAGE THUMBNAIL */}
           <Image
             className="top-0 left-0 w-full h-full object-cover"
-            src={property.thumbnail}
-            alt={property.title?.[0].content}
+            src={property?.thumbnail??''}
+            alt={property.title?.[0]?.content??''}
             objectFit="cover"
             layout="fill"
+            width={2900}
+            height={2900}
           />
         </div>
         <div className="absolute top-[290px] sm:top-[385px] md:top-[435px] lg:top-[575px] xl:top-[628px] 2xl:top-[778px] w-full flex justify-center items-center">
           <div className="relative w-full xl:w-[1300px]">
-            {/* VECTOR SVG LEFT */}
-            <Image
-              className="absolute hidden xl:block -left-5 bottom-[75px] transform translate-y-1/2 w-5 h-5"
-              alt="vector5"
-              src="/vector-5.svg"
-              width={5}
-              height={5}
-            />
+           
             <div className="rounded-[10px] sm:rounded-[15px] md:rounded-xl lg:rounded-[25px] bg-grayish-white overflow-hidden flex flex-col items-start justify-start py-[10px] px-[10px] box-border">
               <div className="self-stretch rounded-[10px] sm:rounded-[15px] md:rounded-xl lg:rounded-[25px] bg-neutral overflow-hidden flex flex-col items-center justify-center py-[10px] px-[10px]">
                 <div className="flex justify-evenly w-full mx-auto">
@@ -72,14 +67,7 @@ const page = async ({ params }: { params: { id: string } }) => {
                 </div>
               </div>
             </div>
-            {/* VECTOR SVG RIGHT */}
-            <Image
-              className="absolute hidden xl:block -right-5 bottom-[75px] transform translate-y-1/2 w-5 h-5"
-              alt="vector4"
-              src="/vector-4.svg"
-              width={5}
-              height={5}
-            />
+         
           </div>
         </div>
 
@@ -109,14 +97,6 @@ const page = async ({ params }: { params: { id: string } }) => {
       </div>
   );
 };
-
-// // Generate paths at build time for the dynamic `[id]` route
-// export async function generateStaticParams() {
-//   // Example IDs, this should be dynamically fetched if possible
-//   const ids = await fetchDynamicId();
-//   const paths = ids.map((id) => {id})
-//   return paths;
-// }
 
 
 export default page;
