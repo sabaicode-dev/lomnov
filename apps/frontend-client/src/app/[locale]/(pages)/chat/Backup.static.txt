@@ -1,501 +1,387 @@
 
-//mocked code
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { MessageCircle, Search } from "lucide-react";
-import { ChatInput } from "@/components/organisms/chat/chat-input/ChatInput";
-import { ChatHeader } from "@/components/organisms/chat/chat-header/ChatHeader";
 import { ConversationList } from "@/components/organisms/chat/conversation-list/ConversationList";
-import { ChatMessageList } from "@/components/organisms/chat/chat-message-list/ChatMessageList";
 import { ChatPropertyInfo } from "@/components/organisms/chat/chat-property-info/ChatPropertyInfo";
-import { Input } from "@/components/atoms/input/Input";
-
-const mockConversations = [
-  {
-    _id: "1",
-    receiver: "user1",
-    messages: ["Hi there!", "How much is the property?"],
-    updatedAt: "2023-12-25T10:43:00.000Z",
-    role: "buyer",
-    profile: "/images/profile1.jpg",
-    name: "Chann Sopheak",
-    propertyDetails: {
-      image: "/images/property1.jpg",
-      type: "Villa",
-      bedroom: "3 Rooms",
-      bathroom: "2 Rooms",
-      spacious: "1800 Sq",
-      parking: "1 Parking",
-    },
-  },
-  {
-    _id: "2",
-    receiver: "user2",
-    messages: ["Thank you!"],
-    updatedAt: "2023-12-24T15:00:00.000Z",
-    role: "buyer",
-    profile: "/images/profile2.jpg",
-    name: "Sok Sovann",
-    propertyDetails: {
-      image: "/images/property2.jpg",
-      type: "Apartment",
-      bedroom: "2 Rooms",
-      bathroom: "1 Room",
-      spacious: "1200 Sq",
-      parking: "No Parking",
-    },
-  },
-];
-
-const mockMessages = [
-  {
-    _id: "msg1",
-    senderId: "user1",
-    receiverId: "user2",
-    message: "Hello bong, how much?",
-    conversationId: "1",
-    createdAt: "2023-12-25T10:43:00.000Z",
-    updatedAt: "2023-12-25T10:43:00.000Z",
-  },
-];
+import axiosInstance from "@/libs/axios";
+import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
+import Loading from "@/components/atoms/loading/Loading";
+import Image from "next/image";
+import { IoSend } from "react-icons/io5";
+import { useSocketContext } from "@/context/socketContext";
+import {
+  Message,
+  User,
+  UserConversation,
+} from "@/libs/types/chat/user-conversation";
+import { useAuth } from "@/context/user";
+import socket from "@/libs/const/socketClient";
+//==============================
 
 const ChatPage: React.FC = () => {
-  const [conversations, setConversations] = useState(mockConversations);
-  const [selectedConversation, setSelectedConversation] =
-    useState<typeof mockConversations[0] | null>(null);
-  const [messages, setMessages] = useState(mockMessages);
-  const [messageInput, setMessageInput] = useState("");
-  const [showPropertyInfo, setShowPropertyInfo] = useState(false);
+  const { user } = useAuth();
+  
+
   const messageRef = useRef<HTMLDivElement>(null);
+  const context = useSocketContext();
+  const [userConversation, setUserConversation] = useState<UserConversation>();
+  const [selectedConversation, setSelectedConversation] = useState<User | null>(
+    null
+  );
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [messageInput, setMessageInput] = useState("");
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [showPropertyInfo, setShowPropertyInfo] = useState(false);
+  // const [userOnline , setUserOnline] = useState<User[]>([]);
 
-  const handleSelectConversation = (conversation: typeof mockConversations[0]) => {
-    setSelectedConversation(conversation);
-    setMessages(mockMessages);
-    setShowPropertyInfo(!!conversation.propertyDetails); // Show property info if it exists
-  };
+const UserThatOnline = context.onlineUsers;
+console.log("User online :::::" , UserThatOnline);
 
-  const handleSendMessage = () => {
-    if (!messageInput.trim()) return;
 
-    const newMessage = {
-      _id: Date.now().toString(),
-      senderId: "user1",
-      receiverId: selectedConversation?.receiver || "",
-      message: messageInput,
-      conversationId: selectedConversation?._id || "",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+  // Fetch conversations
+  useEffect(() => {
+    const fetchConversations = async () => {
+      try {
+        const res = await axiosInstance.get(API_ENDPOINTS.CONVERSATION);
+        if (res.status === 200) {
+          setUserConversation(res.data);
+        }
+      } catch (error) {
+        console.error("Error fetching conversations:", error);
+      }
     };
 
-    setMessages((prev) => [...prev, newMessage]);
-    setMessageInput("");
-    setTimeout(() => {
-      messageRef.current?.scrollTo({
-        top: messageRef.current.scrollHeight,
-        behavior: "smooth",
-      });
-    }, 100);
+    fetchConversations();
+  }, []);
+
+// Scroll to the bottom of the chat
+const scrollToBottom = useCallback((behavior: "smooth" | "auto" = "auto") => {
+  if (messageRef.current) {
+    messageRef.current.scrollTo({
+      top: messageRef.current.scrollHeight,
+      behavior: behavior,
+    });
+  }
+}, []);
+
+ // Fetch messages for selected conversation
+const fetchMessages = async (userToChatId: string, pageNum: number) => {
+  try {
+    setLoading(true);
+
+    const response = await axiosInstance.get(
+      `${API_ENDPOINTS.GET_MESSAGES}/${userToChatId}?page=${pageNum}&limit=10`
+    );
+
+    const newMessages = response.data.conversation.messages || [];
+    const sortedMessages = newMessages.sort(
+      (a: Message, b: Message) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+
+    setMessages((prevMessages) => [...sortedMessages, ...prevMessages]);
+    setHasMore(newMessages.length > 0);
+
+    if (pageNum === 1) {
+      // Scroll to the bottom only when loading the first page of messages
+      setTimeout(() => scrollToBottom("smooth"), 100);
+    }
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+  // Select a conversation
+const handleSelectConversation = async (conversation: User) => {
+  if (selectedConversation?._id === conversation._id) return;
+
+  setSelectedConversation(conversation);
+  setMessages([]);
+  setPage(1);
+  setHasMore(true);
+  await fetchMessages(conversation.cognitoSub, 1);
+  setTimeout(() => scrollToBottom("smooth"), 100); // Ensure smooth scrolling after fetching messages
+};
+//====================
+ // Send a message
+ const handleSendMessage = async () => {
+  if (!selectedConversation || !messageInput.trim()) return;
+
+  const optimisticMessage: Message = {
+    _id: Math.random().toString(36).substr(2, 9),
+    senderId: user?.cognitoSub || "",
+    receiverId: selectedConversation.cognitoSub,
+    message: messageInput.trim(),
+    conversationId: selectedConversation._id,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   };
 
+  setMessages((prevMessages) => [...prevMessages, optimisticMessage]);
+  setMessageInput("");
+  setTimeout(() => scrollToBottom("smooth"), 100);
+
+  try {
+    socket.emit("sendMessage", optimisticMessage);
+
+    // Update the lastMessage in the conversation list
+    setUserConversation((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        conversationUser: {
+          users: prev.conversationUser.users.map((user) =>
+            user.cognitoSub === selectedConversation.cognitoSub
+              ? { ...user, lastMessage: optimisticMessage.message }
+              : user
+          ),
+        },
+      };
+    });
+  } catch (error) {
+    console.error("Error sending message:", error);
+    setMessages((prevMessages) =>
+      prevMessages.filter((msg) => msg._id !== optimisticMessage._id)
+    );
+  }
+};
+
+// Real-time message listener
+useEffect(() => {
+  socket.on("receiveMessage", (newMessage: Message) => {
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setTimeout(() => scrollToBottom("smooth"), 100);
+
+    // Update the lastMessage in the conversation list
+    setUserConversation((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        conversationUser: {
+          users: prev.conversationUser.users.map((user) =>
+            user.cognitoSub === newMessage.senderId
+              ? { ...user, lastMessage: newMessage.message }
+              : user
+          ),
+        },
+      };
+    });
+  });
+
+  return () => {
+    socket.off("receiveMessage");
+  };
+}, [scrollToBottom]);
+//====================
+
+  
+
+  // Fetch older messages when scrolling
+  useEffect(() => {
+    const messageContainer = messageRef.current;
+
+    const handleScroll = async () => {
+      if (!messageContainer) return;
+
+      const isNearTop = messageContainer.scrollTop === 0;
+
+      if (isNearTop && !loading && hasMore && selectedConversation) {
+        const nextPage = page + 1;
+        try {
+          const previousScrollHeight = messageContainer.scrollHeight;
+
+          await fetchMessages(selectedConversation.cognitoSub, nextPage);
+
+          const newScrollHeight = messageContainer.scrollHeight;
+          const scrollHeightDifference = newScrollHeight - previousScrollHeight;
+
+          messageContainer.scrollTop = scrollHeightDifference;
+          setPage(nextPage);
+        } catch (error) {
+          console.error("Error fetching older messages:", error);
+        }
+      }
+    };
+
+    if (messageContainer) {
+      messageContainer.addEventListener("scroll", handleScroll);
+      return () => {
+        messageContainer.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [selectedConversation, page, loading, hasMore, fetchMessages]);
+
+  const userDetail = {
+    name: selectedConversation?.userName || "Unknown",
+    email: selectedConversation?.email || "No email",
+    profileImage: selectedConversation?.profile?.[0] || "https://th.bing.com/th?id=OIP.HHVUf3TYqncgpJXyCMmxyAHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2",
+    address: selectedConversation?.address || "No address available",
+    phone: selectedConversation?.phoneNumber || "No phone number available",
+  };
+
+ 
+
   return (
-    <div className="flex h-screen bg-[#D9D9D9]">
-      {/* Conversations Sidebar */}
-      <div className="h-full bg-[#D9D9D9] w-[20%] p-4 border-r-[1px] border-gray-400">
-        <div className="mb-4 mt-20">
-          <h2 className="text-xl font-bold">Chats</h2>
-          <div className="mt-4 relative">
-            <input
-              type="text"
-              placeholder="Search chat"
-              className="w-full bg-[#d9d9d9] rounded-md py-2 pl-10 pr-4 focus:outline-none" 
-            />
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"> 
-              <Search className="text-gray-400" size={20} />
+    <div className="h-screen">
+      <div className="w-[100%] bg-[#79826A] h-[90px]"></div>
+      <div className="flex justify-between h-screen">
+        {/* Conversations Sidebar */}
+        <div className="h-[90%] w-[20%] p-4 border-r-2 border-olive-green/50 z-[1]">
+          <div className="mb-4">
+            <h2 className="text-xl font-bold">Chats</h2>
+            <div className="mt-4 relative">
+              <input
+                type="text"
+                placeholder="Search chat"
+                className="w-full border-none rounded-[12px] py-2 pl-10 pr-4 focus:outline-none"
+              />
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <Search className="text-gray-400" size={20} />
+              </div>
             </div>
           </div>
+          <div className="overflow-y-auto">
+            {userConversation?.conversationUser.users.map((user, index) => (
+              
+              <ConversationList
+                key={index}
+                id={user._id}
+                name={user.userName}
+                profile={user.profile[0]}
+                isSelected={selectedConversation?._id === user._id}
+                lastMessage={ user.lastMessage}
+                unreadCount={2}
+                isOnline={
+                  user.cognitoSub
+                    ? context.onlineUsers[user.cognitoSub] ===
+                      true
+                    : false
+                }
+                onClick={() => handleSelectConversation(user)}
+              />
+            ))}
+          </div>
         </div>
-        <div className="overflow-y-auto h-[calc(100%-100px)]">
-          {conversations.map((conversation) => (
-            <ConversationList
-              key={conversation._id}
-              id={conversation._id}
-              name={conversation.name}
-              profile={conversation.profile}
-              isSelected={selectedConversation?._id === conversation._id}
-              isOnline={true} // Mock online status
-              onClick={() => handleSelectConversation(conversation)}
-            />
-          ))}
-        </div>
-      </div>
 
-      {/* Chat Window */}
-      <div className={`flex flex-col ${showPropertyInfo ? "w-[55%]" : "w-[80%]"}`}>
-        {selectedConversation ? (
-          <>
-            <ChatHeader
-              name={selectedConversation.name}
-              profile={selectedConversation.profile}
-              onBack={() => setSelectedConversation(null)}
-              isOnline={true} // Mock online status
-            />
-            <div
-              className="flex-1 h-full p-4 space-y-4 overflow-y-auto chat-container"
-              ref={messageRef}
-            >
-              {messages.map((message) => (
-                <ChatMessageList
-                  key={message._id}
-                  message={message.message}
-                  timestamp={message.createdAt}
-                  isCurrentUser={message.senderId === "user1"} // Mock current user
-                  profile={selectedConversation.profile}
+        {/* Chat Window */}
+        <div
+          className={`flex flex-col h-[85%] ${
+            showPropertyInfo ? "w-[55%]" : "w-[80%]"
+          }`}
+        >
+          {selectedConversation ? (
+            <div className="flex justify-between">
+              <div className="w-[100%]">
+                <div
+                  // className="flex-1 p-4 space-y-4 scroll-smooth scrollbar-thin scrollbar-thum-green-300 scrollbar-track-gray-300 overflow-y-auto chat-container h-[700px]"
+                  className="flex-1 p-6 space-y-4 scroll-smooth overflow-y-auto h-[700px] chat-container rounded-lg mb-[8px] scrollbar-thin scrollbar-thumb-olive-green  scrollbar-track-gray-200"
+
+                  ref={messageRef}
+                >
+                  {loading && (
+                    <div className="flex justify-center">
+                      <Loading />
+                    </div>
+                  )}
+                  {messages.map((message) => (
+                    <div
+                      key={message._id}
+                      className={`flex items-start ${
+                        message.senderId === user?.cognitoSub
+                          ? "justify-end"
+                          : "justify-start"
+                      }`}
+                    >
+                      {message.senderId !== user?.cognitoSub && (
+                        <Image
+                          src={selectedConversation.profile[0] || "https://th.bing.com/th?id=OIP.HHVUf3TYqncgpJXyCMmxyAHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2"} // Replace with the selected conversation's profile image
+                          alt="user"
+                          className="w-10 h-10 rounded-full mr-3"
+                          width={40}
+                          height={40}
+                        />
+                      )}
+                      <div
+                        className={`max-w-[75%] p-3 rounded-lg shadow-md ${
+                          message.senderId === user?.cognitoSub
+                            ? "bg-blue-600 text-white"
+                            : "bg-white text-gray-700"
+                        }`}
+                      >
+                        <p className="text-sm">{message.message}</p>
+                        <p className="text-xs mt-1">
+                          {new Date(message.createdAt).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                      </div>
+                      {message.senderId === user?.cognitoSub && (
+                        <Image
+                          src={user.profile[0] || "https://th.bing.com/th?id=OIP.HHVUf3TYqncgpJXyCMmxyAHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2"} // Replace with your user's profile image source
+                          alt="user"
+                          className="w-10 h-10 rounded-full ml-3"
+                          width={40}
+                          height={40}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex justify-between items-center mx-4 border-2 rounded-[20px] border-olive-drab mt-[2px]">
+                  <input
+                    type="text"
+                    placeholder="Write your message here..."
+                    className="w-full p-2 border-none  bg-[#e0e0dc] rounded-[25px] text-black text-[12px] focus:outline-none focus:ring-0"
+                    value={messageInput}
+                    onChange={(e) => setMessageInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleSendMessage(); // Call the send message function when Enter is pressed
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={handleSendMessage}
+                    className="py-2 px-4 rounded transition-all duration-200 bg-[#e0e0dc] mr-[5px]"
+                  >
+                    <IoSend className="text-olive-drab" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="w-[30%] border-l-2 border-olive-green/50 h-[100%]">
+                <ChatPropertyInfo
+                  userDetails={userDetail}
+                
                 />
-              ))}
+              </div>
             </div>
-            <ChatInput
-              value={messageInput}
-              onChange={setMessageInput}
-              onSend={handleSendMessage}
-            />
-          </>
-        ) : (
-          <div className="flex items-center justify-center flex-grow text-gray-500">
-            <div className="text-center">
-              <MessageCircle size={64} className="mx-auto mb-4 text-[#b8a852]" />
-              <h2 className="text-xl font-semibold">Welcome to Messages</h2>
-              <p className="mt-2 text-gray-400">
-                Select a conversation to start chatting
-              </p>
+          ) : (
+            <div className="flex items-center justify-center flex-grow text-gray-500">
+              <div className="text-center">
+                <MessageCircle
+                  size={64}
+                  className="mx-auto mb-4 text-gray-400"
+                />
+                <h2 className="text-xl font-semibold">Welcome to Messages</h2>
+                <p className="mt-2 text-gray-400">
+                  Select a conversation to start chatting
+                </p>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-
-      {/* Property Sidebar */}
-      {showPropertyInfo && selectedConversation?.propertyDetails && (
-        <div className="w-[25%] border-l-[1px] border-gray-400">
-          <ChatPropertyInfo
-            propertyDetails={selectedConversation.propertyDetails}
-            userDetails={{
-              name: selectedConversation.name,
-              email: "example@example.com",
-              phone: "012-345-678",
-              address: "Phnom Penh, Cambodia",
-              profileImage: selectedConversation.profile,
-            }}
-          />
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };
 
 export default ChatPage;
-
-
-
-
-// "use client";
-
-// import React, { useState, useEffect, useCallback, useRef } from "react";
-// import { MessageCircle, Search } from "lucide-react";
-// import axiosInstance from "@/libs/axios";
-// import { API_ENDPOINTS } from "@/libs/const/api-endpoints";
-// import { ChatInput } from "@/components/organisms/chat/chat-input/ChatInput";
-// import { ChatHeader } from "@/components/organisms/chat/chat-header/ChatHeader";
-// import { ConversationList } from "@/components/organisms/chat/conversation-list/ConversationList";
-// import { ChatMessageList } from "@/components/organisms/chat/chat-message-list/ChatMessageList";
-// import { ChatPropertyInfo } from "@/components/organisms/chat/chat-property-info/ChatPropertyInfo";
-// import { useAuth } from "@/context/user";
-// import { Input } from "@/components/atoms/input/Input";
-// import Spinner from "@/components/atoms/spinner/Spinner";
-// import { useSocketContext } from "@/context/socketContext";
-// import socket from "@/libs/const/socketClient";
-
-// interface Conversation {
-//   _id: string;
-//   receiver: string;
-//   messages: string[];
-//   updatedAt: string;
-//   phoneNumber: string;
-//   role: string;
-//   email: string;
-//   profile: string;
-//   name: string;
-//   address: string;
-//   details?: {
-//     image: string;
-//     type: string;
-//     bedroom: string;
-//     bathroom: string;
-//     spacious: string;
-//     parking: string;
-//   };
-// }
-
-// interface Message {
-//   _id: string;
-//   senderId: string;
-//   receiverId: string;
-//   message: string;
-//   conversationId: string;
-//   createdAt: string;
-//   updatedAt: string;
-// }
-
-// const ChatPage: React.FC = () => {
-//   const { user } = useAuth();
-//   const socketContext = useSocketContext();
-//   const onlineUsers = socketContext?.onlineUsers || [];
-//   const messageRef = useRef<HTMLDivElement>(null);
-//   const [conversations, setConversations] = useState<Conversation[]>([]);
-//   const [selectedConversation, setSelectedConversation] =
-//     useState<Conversation | null>(null);
-//   const [messages, setMessages] = useState<Message[]>([]);
-//   const [messageInput, setMessageInput] = useState("");
-//   const [page, setPage] = useState(1);
-//   const [loading, setLoading] = useState(false);
-//   const [hasMore, setHasMore] = useState(true);
-//   const [showPropertyInfo, setShowPropertyInfo] = useState(false);
-
-//   const sortMessages = (msgs: Message[]): Message[] => {
-//     return [...msgs].sort(
-//       (a, b) =>
-//         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-//     );
-//   };
-
-//   const fetchConversations = useCallback(async () => {
-//     try {
-//       const response = await axiosInstance.get(`${API_ENDPOINTS.CONVERSATION}`
-//         // `${process.env.NEXT_PUBLIC_API_URL}/v1/messages/get/conversations`
-//       );
-//       setConversations(response.data.conversations);
-//     } catch (error) {
-//       console.error("Failed to fetch conversations:", error);
-//     }
-//   }, []);
-
-//   const scrollToBottom = useCallback((behavior: "smooth" | "auto" = "auto") => {
-//     if (messageRef.current) {
-//       messageRef.current.scrollTo({
-//         top: messageRef.current.scrollHeight,
-//         behavior: behavior,
-//       });
-//     }
-//   }, []);
-
-//   const fetchMessages = async (
-//     userToChatId: string,
-//     pageNum: number,
-//     isNewConversation: boolean = false
-//   ) => {
-//     try {
-//       setLoading(true);
-//       const response = await axiosInstance.get(
-//         `${API_ENDPOINTS.GET_MESSAGES}/${userToChatId}?page=${pageNum}&limit=14`
-//         // `${process.env.NEXT_PUBLIC_API_URL}/v1/messages/${conversationId}?page=${pageNum}&limit=14`
-//       );
-//       const newMessages = response.data.conversation.messages;
-
-//       setMessages((prevMessages) => {
-//         if (isNewConversation) {
-//           return sortMessages(newMessages);
-//         }
-
-//         const combinedMessages = [
-//           ...newMessages.filter(
-//             (msg: { _id: string }) =>
-//               !prevMessages.some((existingMsg) => existingMsg._id === msg._id)
-//           ),
-//           ...prevMessages,
-//         ];
-
-//         return sortMessages(combinedMessages);
-//       });
-
-//       setHasMore(newMessages.length > 0);
-//       setPage(pageNum);
-
-//       if (isNewConversation) {
-//         setTimeout(() => scrollToBottom("smooth"), 100);
-//       }
-//     } catch (error) {
-//       console.error("Failed to fetch messages:", error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const handleSelectConversation = async (conversation: Conversation) => {
-//     if (selectedConversation && selectedConversation?._id === conversation._id)
-//       return;
-//     setSelectedConversation(conversation);
-//     setMessages([]);
-//     setPage(1);
-//     setHasMore(true);
-//     setShowPropertyInfo(false); // Reset property info visibility
-//     await fetchMessages(conversation.receiver, 1, true);
-//   };
-
-//   const handleSelectMessage = () => {
-//     setShowPropertyInfo(true); // Show property info when a message is clicked
-//   };
-
-//   const handleSendMessage = async () => {
-//     if (!selectedConversation || messageInput.trim() === "") return;
-
-//     const optimisticMessage: Message = {
-//       _id: Date.now().toString(),
-//       senderId: user?._id || "",
-//       receiverId: selectedConversation.receiver,
-//       message: messageInput,
-//       conversationId: selectedConversation._id,
-//       createdAt: new Date().toISOString(),
-//       updatedAt: new Date().toISOString(),
-//     };
-
-//     try {
-//       setMessages((prevMessages) =>
-//         sortMessages([...prevMessages, optimisticMessage])
-//       );
-//       setMessageInput("");
-//       setTimeout(() => scrollToBottom("smooth"), 100);
-//       socket.emit("sendMessage", optimisticMessage);
-//     } catch (error) {
-//       console.error("Failed to send message:", error);
-//       setMessages((prevMessages) =>
-//         prevMessages.filter((msg) => msg._id !== optimisticMessage._id)
-//       );
-//       setMessageInput(optimisticMessage.message);
-//     }
-//   };
-
-//   useEffect(() => {
-//     socket.on("receiveMessage", (newMessage: Message) => {
-//       setMessages((prevMessages) => sortMessages([...prevMessages, newMessage]));
-//       scrollToBottom();
-//     });
-
-//     return () => {
-//       socket.off("receiveMessage");
-//     };
-//   }, [scrollToBottom]);
-
-//   useEffect(() => {
-//     fetchConversations();
-//   }, [fetchConversations]);
-
-//   return (
-//     <div className="flex h-screen bg-[#D9D9D9]">
-//       {/* Conversations Sidebar */}
-//       <div className="h-full bg-[#D9D9D9] w-[20%] p-4 border-r-[1px] border-gray-400">
-//         <div className="mb-4 mt-20">
-//           <h2 className="text-lg font-bold">Chats</h2>
-//             <div className="mt-4 relative">
-//                 <input
-//                   type="text"
-//                   placeholder="Search chat"
-//                   className="w-full bg-[#d9d9d9] rounded-md py-2 pl-10 pr-4 focus:outline-none" 
-//                 />
-//                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"> 
-//                   <Search className="text-gray-400" size={20} />
-//                 </div>
-//             </div>
-//         </div>
-//         <div className="overflow-y-auto h-[calc(100%-100px)]">
-//           {conversations.map((conversation) => (
-//             <ConversationList
-//               key={conversation._id}
-//               id={conversation._id}
-//               name={conversation.name}
-//               profile={conversation.profile}
-//               isSelected={selectedConversation?._id === conversation._id}
-//               isOnline={onlineUsers.includes(conversation.receiver)}
-//               onClick={() => handleSelectConversation(conversation)}
-//             />
-//           ))}
-//         </div>
-//       </div>
-
-//       {/* Chat Window */}
-//       <div className={`flex flex-col ${showPropertyInfo ? "w-[55%]" : "w-[80%]"}`}>
-//         {selectedConversation ? (
-//           <>
-//             <ChatHeader
-//               name={selectedConversation.name}
-//               profile={selectedConversation.profile}
-//               onBack={() => setSelectedConversation(null)}
-//               isOnline={onlineUsers.includes(selectedConversation.receiver)}
-//             />
-//             <div
-//               className="flex-1 h-full p-4 space-y-4 overflow-y-auto chat-container"
-//               ref={messageRef}
-//             >
-//               {loading && page > 1 && (
-//                 <Spinner className="text-[#b5b49e]">
-//                   <span className="text-sm text-[#b5b49e]">
-//                     Loading messages...
-//                   </span>
-//                 </Spinner>
-//               )}
-//               {!hasMore && (
-//                 <div className="py-4 text-center text-gray-500">
-//                   No more messages
-//                 </div>
-//               )}
-//               {messages.map((message) => (
-//                 <ChatMessageList
-//                   key={message._id}
-//                   message={message.message}
-//                   timestamp={message.createdAt}
-//                   isCurrentUser={message.senderId === user?._id}
-//                   profile={selectedConversation.profile}
-//                   onClick={handleSelectMessage} // Add click handler to show property info
-//                 />
-//               ))}
-//             </div>
-
-//             <ChatInput
-//               value={messageInput}
-//               onChange={setMessageInput}
-//               onSend={handleSendMessage}
-//             />
-//           </>
-//         ) : (
-//           <div className="flex items-center justify-center flex-grow text-gray-500">
-//             <div className="text-center">
-//               <MessageCircle size={64} className="mx-auto mb-4 text-[#7d7757]" />
-//               <h2 className="text-xl font-semibold">Welcome to Messages</h2>
-//               <p className="mt-2 text-gray-400">
-//                 Select a conversation to start chatting
-//               </p>
-//             </div>
-//           </div>
-//         )}
-//       </div>
-
-//       {/* Property Sidebar */}
-//       {showPropertyInfo && selectedConversation?.details && (
-//         <div className="w-[25%] border-l-[1px] border-gray-400">
-//           <ChatPropertyInfo
-//             propertyDetails={selectedConversation.details}
-//             userDetails={{
-//               name: selectedConversation.name,
-//               email: selectedConversation.email, // Replace with dynamic data
-//               phone: selectedConversation.phoneNumber, // Replace with dynamic data
-//               address: selectedConversation.address, // Replace with dynamic data
-//               profileImage: selectedConversation.profile,
-//             }}
-//           />
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default ChatPage;
-
-//mocked code
