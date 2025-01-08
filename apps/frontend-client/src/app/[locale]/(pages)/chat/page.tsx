@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
@@ -22,7 +21,6 @@ import socket from "@/libs/const/socketClient";
 
 const ChatPage: React.FC = () => {
   const { user } = useAuth();
-  
 
   const messageRef = useRef<HTMLDivElement>(null);
   const context = useSocketContext();
@@ -38,156 +36,120 @@ const ChatPage: React.FC = () => {
   const [showPropertyInfo, setShowPropertyInfo] = useState(false);
   // const [userOnline , setUserOnline] = useState<User[]>([]);
 
+  // Fetch conversations and extract lastMessage
+  useEffect(() => {
+    const fetchConversations = async () => {
+      try {
+        const res = await axiosInstance.get(API_ENDPOINTS.CONVERSATION);
 
+        if (res.status === 200) {
+          // Map through the users to extract the last message
+          const conversations = res.data.conversationUser.users.map(
+            (user: User) => {
+              const lastMessage =
+                user.message && user.message.length > 0
+                  ? user.message[user.message.length - 1] // Get the last message text
+                  : "No messages yet"; // Fallback for no messages
 
+              return {
+                ...user,
+                lastMessage, // Add lastMessage dynamically
+              };
+            }
+          );
 
- // Fetch conversations and extract lastMessage
-useEffect(() => {
-  const fetchConversations = async () => {
+          // Update the state with formatted conversation data
+          setUserConversation({
+            conversationUser: {
+              users: conversations,
+            },
+            currentPage: res.data.currentPage || 1,
+            totalPages: res.data.totalPages || 1,
+            totalConversation:
+              res.data.totalConversation || conversations.length,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching conversations:", error);
+      }
+    };
+
+    fetchConversations();
+  }, []);
+
+  const LastMessage =
+    userConversation?.conversationUser.users[0].message[0].message;
+  console.log("Last message nna :::", LastMessage);
+
+  // Scroll to the bottom of the chat
+  const scrollToBottom = useCallback((behavior: "smooth" | "auto" = "auto") => {
+    if (messageRef.current) {
+      messageRef.current.scrollTo({
+        top: messageRef.current.scrollHeight,
+        behavior: behavior,
+      });
+    }
+  }, []);
+
+  // Fetch messages for selected conversation
+  const fetchMessages = async (userToChatId: string, pageNum: number) => {
     try {
-      const res = await axiosInstance.get(API_ENDPOINTS.CONVERSATION);
+      setLoading(true);
 
-      if (res.status === 200) {
-        // Map through the users to extract the last message
-        const conversations = res.data.conversationUser.users.map((user: User) => {
-          const lastMessage =
-            user.message && user.message.length > 0
-              ? user.message[user.message.length - 1] // Get the last message text
-              : "No messages yet"; // Fallback for no messages
+      const response = await axiosInstance.get(
+        `${API_ENDPOINTS.GET_MESSAGES}/${userToChatId}?page=${pageNum}&limit=10`
+      );
 
-          return {
-            ...user,
-            lastMessage, // Add lastMessage dynamically
-          };
-        });
+      const newMessages = response.data.conversation.messages || [];
+      const sortedMessages = newMessages.sort(
+        (a: Message, b: Message) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
 
-        // Update the state with formatted conversation data
-        setUserConversation({
-          conversationUser: {
-            users: conversations,
-          },
-          currentPage: res.data.currentPage || 1,
-          totalPages: res.data.totalPages || 1,
-          totalConversation: res.data.totalConversation || conversations.length,
-        });
+      setMessages((prevMessages) => [...sortedMessages, ...prevMessages]);
+      setHasMore(newMessages.length > 0);
+
+      if (pageNum === 1) {
+        // Scroll to the bottom only when loading the first page of messages
+        setTimeout(() => scrollToBottom("smooth"), 100);
       }
     } catch (error) {
-      console.error("Error fetching conversations:", error);
+      console.error("Error fetching messages:", error);
+    } finally {
+      setLoading(false);
     }
   };
-
-  fetchConversations();
-}, []);
-
-
-  const LastMessage = userConversation?.conversationUser.users[0].message[0].message;
-  console.log("Last message nna :::" , LastMessage);
-
-// Scroll to the bottom of the chat
-const scrollToBottom = useCallback((behavior: "smooth" | "auto" = "auto") => {
-  if (messageRef.current) {
-    messageRef.current.scrollTo({
-      top: messageRef.current.scrollHeight,
-      behavior: behavior,
-    });
-  }
-}, []);
-
- // Fetch messages for selected conversation
-const fetchMessages = async (userToChatId: string, pageNum: number) => {
-  try {
-    setLoading(true);
-
-    const response = await axiosInstance.get(
-      `${API_ENDPOINTS.GET_MESSAGES}/${userToChatId}?page=${pageNum}&limit=10`
-    );
-
-    const newMessages = response.data.conversation.messages || [];
-    const sortedMessages = newMessages.sort(
-      (a: Message, b: Message) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    );
-
-    setMessages((prevMessages) => [...sortedMessages, ...prevMessages]);
-    setHasMore(newMessages.length > 0);
-
-    if (pageNum === 1) {
-      // Scroll to the bottom only when loading the first page of messages
-      setTimeout(() => scrollToBottom("smooth"), 100);
-    }
-  } catch (error) {
-    console.error("Error fetching messages:", error);
-  } finally {
-    setLoading(false);
-  }
-};
 
   // Select a conversation
-const handleSelectConversation = async (conversation: User) => {
-  if (selectedConversation?._id === conversation._id) return;
+  const handleSelectConversation = async (conversation: User) => {
+    if (selectedConversation?._id === conversation._id) return;
 
-  setSelectedConversation(conversation);
-  setMessages([]);
-  setPage(1);
-  setHasMore(true);
-  await fetchMessages(conversation.cognitoSub, 1);
-  setTimeout(() => scrollToBottom("smooth"), 100); // Ensure smooth scrolling after fetching messages
-};
-//====================
- // Send a message
- const handleSendMessage = async () => {
-  if (!selectedConversation || !messageInput.trim()) return;
-
-  const optimisticMessage: Message = {
-    _id: Math.random().toString(36).substr(2, 9), // Generate a temporary ID
-    senderId: user?.cognitoSub || "",
-    receiverId: selectedConversation.cognitoSub,
-    message: messageInput.trim(),
-    conversationId: selectedConversation._id,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    setSelectedConversation(conversation);
+    setMessages([]);
+    setPage(1);
+    setHasMore(true);
+    await fetchMessages(conversation.cognitoSub, 1);
+    setTimeout(() => scrollToBottom("smooth"), 100); // Ensure smooth scrolling after fetching messages
   };
+  //====================
+  // Send a message
+  const handleSendMessage = async () => {
+    if (!selectedConversation || !messageInput.trim()) return;
 
-  // Optimistically update messages in the chat window
-  setMessages((prevMessages) => [...prevMessages, optimisticMessage]);
-
-  // Optimistically update the lastMessage and user.message in the conversation list
-  setUserConversation((prev) => {
-    if (!prev) return prev;
-
-    return {
-      ...prev,
-      conversationUser: {
-        users: prev.conversationUser.users.map((user) => {
-          if (user.cognitoSub === selectedConversation.cognitoSub) {
-            return {
-              ...user,
-              message: [...(user.message || []), optimisticMessage], // Add the message to the user's message array
-              lastMessage: optimisticMessage.message, // Update lastMessage
-            };
-          }
-          return user;
-        }),
-      },
+    const optimisticMessage: Message = {
+      _id: Math.random().toString(36).substr(2, 9), // Generate a temporary ID
+      senderId: user?.cognitoSub || "",
+      receiverId: selectedConversation.cognitoSub,
+      message: messageInput.trim(),
+      conversationId: selectedConversation._id,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
-  });
 
-  setMessageInput(""); // Clear the input field
-  setTimeout(() => scrollToBottom("smooth"), 100); // Scroll to the bottom
+    // Optimistically update messages in the chat window
+    setMessages((prevMessages) => [...prevMessages, optimisticMessage]);
 
-  try {
-    // Emit the message via socket
-    socket.emit("sendMessage", optimisticMessage);
-
-    // Optionally, sync with the backend (use the real message ID from the server if needed)
-  } catch (error) {
-    console.error("Error sending message:", error);
-
-    // Revert the optimistic update in case of error
-    setMessages((prevMessages) =>
-      prevMessages.filter((msg) => msg._id !== optimisticMessage._id)
-    );
-
+    // Optimistically update the lastMessage and user.message in the conversation list
     setUserConversation((prev) => {
       if (!prev) return prev;
 
@@ -198,40 +160,8 @@ const handleSelectConversation = async (conversation: User) => {
             if (user.cognitoSub === selectedConversation.cognitoSub) {
               return {
                 ...user,
-                message: (user.message || []).filter(
-                  (msg) => msg._id !== optimisticMessage._id
-                ), // Remove the failed message
-              };
-            }
-            return user;
-          }),
-        },
-      };
-    });
-  }
-};
-
-
-useEffect(() => {
-  socket.on("receiveMessage", (newMessage: Message) => {
-    // Append the new message to the chat window if it's the selected conversation
-    if (selectedConversation?.cognitoSub === newMessage.senderId) {
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    }
-
-    // Update the userConversation state to include the new message and update lastMessage
-    setUserConversation((prev) => {
-      if (!prev) return prev;
-
-      return {
-        ...prev,
-        conversationUser: {
-          users: prev.conversationUser.users.map((user) => {
-            if (user.cognitoSub === newMessage.senderId) {
-              return {
-                ...user,
-                message: [...(user.message || []), newMessage], // Append newMessage to user's message array
-                lastMessage: newMessage.message, // Update lastMessage
+                message: [...(user.message || []), optimisticMessage], // Add the message to the user's message array
+                lastMessage: optimisticMessage.message, // Update lastMessage
               };
             }
             return user;
@@ -240,21 +170,85 @@ useEffect(() => {
       };
     });
 
-    // Scroll to the bottom if the message is for the selected conversation
-    if (selectedConversation?.cognitoSub === newMessage.senderId) {
-      setTimeout(() => scrollToBottom("smooth"), 100);
-    }
-  });
+    setMessageInput(""); // Clear the input field
+    setTimeout(() => scrollToBottom("smooth"), 100); // Scroll to the bottom
 
-  return () => {
-    socket.off("receiveMessage");
+    try {
+      // Emit the message via socket
+      socket.emit("sendMessage", optimisticMessage);
+
+      // Optionally, sync with the backend (use the real message ID from the server if needed)
+    } catch (error) {
+      console.error("Error sending message:", error);
+
+      // Revert the optimistic update in case of error
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg._id !== optimisticMessage._id)
+      );
+
+      setUserConversation((prev) => {
+        if (!prev) return prev;
+
+        return {
+          ...prev,
+          conversationUser: {
+            users: prev.conversationUser.users.map((user) => {
+              if (user.cognitoSub === selectedConversation.cognitoSub) {
+                return {
+                  ...user,
+                  message: (user.message || []).filter(
+                    (msg) => msg._id !== optimisticMessage._id
+                  ), // Remove the failed message
+                };
+              }
+              return user;
+            }),
+          },
+        };
+      });
+    }
   };
-}, [scrollToBottom, selectedConversation]);
 
+  useEffect(() => {
+    socket.on("receiveMessage", (newMessage: Message) => {
+      // Append the new message to the chat window if it's the selected conversation
+      if (selectedConversation?.cognitoSub === newMessage.senderId) {
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+      }
 
-//====================
+      // Update the userConversation state to include the new message and update lastMessage
+      setUserConversation((prev) => {
+        if (!prev) return prev;
 
-  
+        return {
+          ...prev,
+          conversationUser: {
+            users: prev.conversationUser.users.map((user) => {
+              if (user.cognitoSub === newMessage.senderId) {
+                return {
+                  ...user,
+                  message: [...(user.message || []), newMessage], // Append newMessage to user's message array
+                  lastMessage: newMessage.message, // Update lastMessage
+                };
+              }
+              return user;
+            }),
+          },
+        };
+      });
+
+      // Scroll to the bottom if the message is for the selected conversation
+      if (selectedConversation?.cognitoSub === newMessage.senderId) {
+        setTimeout(() => scrollToBottom("smooth"), 100);
+      }
+    });
+
+    return () => {
+      socket.off("receiveMessage");
+    };
+  }, [scrollToBottom, selectedConversation]);
+
+  //====================
 
   // Fetch older messages when scrolling
   useEffect(() => {
@@ -294,12 +288,12 @@ useEffect(() => {
   const userDetail = {
     name: selectedConversation?.userName || "Unknown",
     email: selectedConversation?.email || "No email",
-    profileImage: selectedConversation?.profile?.[0] || "https://th.bing.com/th?id=OIP.HHVUf3TYqncgpJXyCMmxyAHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2",
+    profileImage:
+      selectedConversation?.profile?.[0] ||
+      "https://th.bing.com/th?id=OIP.HHVUf3TYqncgpJXyCMmxyAHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2",
     address: selectedConversation?.address || "No address available",
     phone: selectedConversation?.phoneNumber || "No phone number available",
   };
-
- 
 
   return (
     <div className="h-screen">
@@ -321,27 +315,52 @@ useEffect(() => {
             </div>
           </div>
           <div className="overflow-y-auto">
-            {userConversation?.conversationUser.users.map((user, index) => (
-              
-              <ConversationList
-                key={index}
-                id={user._id}
-                name={user.userName}
-                profile={user.profile[0]}
-                isSelected={selectedConversation?._id === user._id}
-                lastMessage={  user.message && user.message.length > 0
-                  ? user.message[user.message.length - 1].message
-                  : "No messages yet"}
-                unreadCount={2}
-                isOnline={
-                  user.cognitoSub
-                    ? context.onlineUsers[user.cognitoSub] ===
-                      true
-                    : false
-                }
-                onClick={() => handleSelectConversation(user)}
-              />
-            ))}
+            {userConversation?.conversationUser.users.map((user, index) => {
+              // Helper function to truncate a message
+              const truncateMessage = (
+                message: string | undefined,
+                maxLength = 25
+              ): string => {
+                if (!message) return "No messages yet"; // Fallback for no message
+                return message.length > maxLength
+                  ? message.slice(0, maxLength) + "..."
+                  : message;
+              };
+
+              // Last message
+              const lastMessage =
+                user.message && user.message.length > 0
+                  ? truncateMessage(
+                      user.message[user.message.length - 1].message
+                    )
+                  : "No messages yet";
+
+              // Determine personChat
+              const personChat =
+                user?.cognitoSub ===
+                user.message?.[user.message.length - 1]?.receiverId
+                  ? "you"
+                  : user?.userName;
+
+              return (
+                <ConversationList
+                  key={index}
+                  id={user._id}
+                  name={user.userName}
+                  profile={user.profile[0]}
+                  isSelected={selectedConversation?._id === user._id}
+                  lastMessage={lastMessage} // Truncated message
+                  unreadCount={2}
+                  isOnline={
+                    user.cognitoSub
+                      ? context.onlineUsers[user.cognitoSub] === true
+                      : false
+                  }
+                  onClick={() => handleSelectConversation(user)}
+                  personChat={personChat} // Updated personChat logic
+                />
+              );
+            })}
           </div>
         </div>
 
@@ -357,7 +376,6 @@ useEffect(() => {
                 <div
                   // className="flex-1 p-4 space-y-4 scroll-smooth scrollbar-thin scrollbar-thum-green-300 scrollbar-track-gray-300 overflow-y-auto chat-container h-[700px]"
                   className="flex-1 p-6 space-y-4 scroll-smooth overflow-y-auto h-[700px] chat-container rounded-lg mb-[8px] scrollbar-thin scrollbar-thumb-olive-green  scrollbar-track-gray-200"
-
                   ref={messageRef}
                 >
                   {loading && (
@@ -376,7 +394,10 @@ useEffect(() => {
                     >
                       {message.senderId !== user?.cognitoSub && (
                         <Image
-                          src={selectedConversation.profile[0] || "https://th.bing.com/th?id=OIP.HHVUf3TYqncgpJXyCMmxyAHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2"} // Replace with the selected conversation's profile image
+                          src={
+                            selectedConversation.profile[0] ||
+                            "https://th.bing.com/th?id=OIP.HHVUf3TYqncgpJXyCMmxyAHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2"
+                          } // Replace with the selected conversation's profile image
                           alt="user"
                           className="w-10 h-10 rounded-full mr-3"
                           width={40}
@@ -400,7 +421,10 @@ useEffect(() => {
                       </div>
                       {message.senderId === user?.cognitoSub && (
                         <Image
-                          src={user.profile[0] || "https://th.bing.com/th?id=OIP.HHVUf3TYqncgpJXyCMmxyAHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2"} // Replace with your user's profile image source
+                          src={
+                            user.profile[0] ||
+                            "https://th.bing.com/th?id=OIP.HHVUf3TYqncgpJXyCMmxyAHaHa&w=250&h=250&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2"
+                          } // Replace with your user's profile image source
                           alt="user"
                           className="w-10 h-10 rounded-full ml-3"
                           width={40}
@@ -434,10 +458,7 @@ useEffect(() => {
               </div>
 
               <div className="w-[30%] border-l-2 border-olive-green/50 h-[100%]">
-                <ChatPropertyInfo
-                  userDetails={userDetail}
-                
-                />
+                <ChatPropertyInfo userDetails={userDetail} />
               </div>
             </div>
           ) : (
