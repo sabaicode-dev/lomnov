@@ -35,10 +35,7 @@ const SavedPropertiesPage = async ({params,}: {params: { cognitosub: string };})
       <ChatContextProvider>
          <VisitProfileHeader user={user} />
       </ChatContextProvider>
-     
-
       <div className="max-w-[1500px] mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 rounded-lg">
-        
             <div className="bg-white w-[80%] h-auto sm:h-[257px] mt-5 p-5 rounded-lg ">
               <h3 className="font-bold text-lg mb-5">Contact info</h3>
               <div className="space-y-4">
@@ -83,6 +80,4 @@ const SavedPropertiesPage = async ({params,}: {params: { cognitosub: string };})
     </Layout>
   );
 };
-
-
 export default SavedPropertiesPage;
