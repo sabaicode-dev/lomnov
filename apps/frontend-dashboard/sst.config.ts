@@ -5,7 +5,7 @@ export default {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   config(_input) {
     return {
-      name: "U-Plan",
+      name: "Dashboard",
       region: "ap-southeast-2",
     };
   },
