@@ -119,22 +119,14 @@ function ContainerHeader({ menu }: MenuProp) {
           </div>
         </div>
 
-        {/* Chat Icon */}
-        {/* <div className="">
-          <button className="py-2 px-4  text-white rounded-md flex items-center gap-2">
-            <PiMessengerLogo size={20} />
-          </button>
-        </div> */}
-
+  
         {/* User Actions */}
         <div className="w-[50%] md:w-[30%] xl:w-[20%] flex gap-3 items-center justify-end ">
 
          <div>
             {isAuthenticated ? (
                <div className=" w-[50px] h-[50px] bg-white rounded-full flex items-center cursor-pointer justify-center relative">
-                <div className="absolute mb-[50px] ml-[30px] w-[20px] h-[20px] bg-pink-600 rounded-full flex justify-center items-center">
-                    <p className=" text-white text-[16px]">0</p>
-                </div>
+               
                <button onClick={handleMessengerClick}>
                  <MdOutlineChatBubbleOutline className="text-olive-green text-[30px]" />
                </button>
