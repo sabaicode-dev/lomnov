@@ -12,6 +12,7 @@ interface ConversationListItemProps {
   onClick?: () => void;
   isOnline: boolean;
   personChat: string;
+  timeChat: string;
 }
 
 export function ConversationList({
@@ -22,7 +23,8 @@ export function ConversationList({
   isSelected,
   onClick,
   isOnline,
-  personChat
+  personChat,
+  timeChat
 }: ConversationListItemProps) {
   return (
     <div
@@ -51,17 +53,17 @@ export function ConversationList({
       <div className="flex-grow">
         <div className="flex justify-between items-center">
           <h3 className="font-semibold truncate text-[14px]">{name}</h3>
-          <p className="text-[12px] text-gray-500 truncate">12:34 PM</p>
+          <p className="text-[12px] text-gray-500 truncate">{timeChat}</p>
         </div>
         <div   className="flex justify-between items-center">
           <p className="text-[12px] text-gray-500 truncate">
             {personChat + " : "}{lastMessage || "not send message"}
           </p>
-          {unreadCount && unreadCount > 0 && (
+          {unreadCount && unreadCount > 0 ? (
             <span className="bg-blue-500 text-white text-[10px] px-1 py-0 rounded-full">
               {unreadCount}
             </span>
-          )}
+          ):""}
         </div>
       </div>
     </div>

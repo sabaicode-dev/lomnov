@@ -7,6 +7,7 @@ export interface conversation {
     _id: string;
     senderId: mongoose.Types.ObjectId;
     receiverId: mongoose.Types.ObjectId;
+    isRead: boolean;
     message: string;
     createdAt: Date;
     updatedAt: Date;

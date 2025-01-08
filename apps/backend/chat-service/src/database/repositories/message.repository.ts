@@ -186,7 +186,12 @@ export class MessageRepository {
     })
       .sort({ updatedAt: -1 })
       .limit(request.limit!)
-      .skip(request.skip!).populate({ path: "messages", model: "Message", select: "senderId receiverId message createdAt" })
+      .skip(request.skip!)
+      .populate({
+        path: "messages",
+        model: "Message",
+        select: "senderId receiverId message createdAt",
+      });
     return conversation;
   }
   public async countConversation(request: RequestgetUserConversations) {
@@ -216,7 +221,7 @@ export class MessageRepository {
         skip,
         limit,
       });
-      console.log("Message Repository:::: ", conversation)
+      console.log("Message Repository:::: ", conversation);
       // Count total conversations
       const totalConversation = await this.countConversation(request);
       const totalPages = Math.ceil(totalConversation / limit);
@@ -228,6 +233,36 @@ export class MessageRepository {
       };
     } catch (error) {
       throw error;
+    }
+  }
+
+  //notification
+  public async getUnreadNotification(userId: string): Promise<number> {
+    try {
+      const unreadCound = await MessageModel.countDocuments({
+        receiverId: userId,
+        isRead: false,
+      });
+      return unreadCound;
+    } catch (error) {
+      console.error("Error in getUnreadNotification::", error);
+      throw new Error("Failed to fetch unread notification");
+    }
+  }
+
+  //mark message that read
+  public async markMessageRead(
+    userId: string,
+    conversationId: string
+  ): Promise<void> {
+    try {
+      await MessageModel.updateMany(
+        { receiverId: userId, conversationId, isRead: false },
+        { $set: { isRead: true } }
+      );
+    } catch (error) {
+      console.error("Error in markMessagesAsRead:", error);
+      throw new Error("Failed to mark messages as read.");
     }
   }
 }

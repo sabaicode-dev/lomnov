@@ -34,7 +34,7 @@ const ChatPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [showPropertyInfo, setShowPropertyInfo] = useState(false);
-  // const [userOnline , setUserOnline] = useState<User[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Fetch conversations and extract lastMessage
   useEffect(() => {
@@ -77,9 +77,36 @@ const ChatPage: React.FC = () => {
     fetchConversations();
   }, []);
 
-  const LastMessage =
-    userConversation?.conversationUser.users[0].message[0].message;
-  console.log("Last message nna :::", LastMessage);
+  // Filter conversations based on search query
+  const filteredConversations = userConversation?.conversationUser.users.filter(
+    (user) => user.userName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Additional helper function to mark messages as read
+  const markMessagesAsRead = (conversationId: string) => {
+    setUserConversation((prev) => {
+      if (!prev) return prev;
+
+      return {
+        ...prev,
+        conversationUser: {
+          users: prev.conversationUser.users.map((user) => {
+            if (user._id === conversationId) {
+              return {
+                ...user,
+                unreadCount: 0, // Reset unread count
+                message: (user.message || []).map((msg) => ({
+                  ...msg,
+                  isRead: true, // Mark all messages as read
+                })),
+              };
+            }
+            return user;
+          }),
+        },
+      };
+    });
+  };
 
   // Scroll to the bottom of the chat
   const scrollToBottom = useCallback((behavior: "smooth" | "auto" = "auto") => {
@@ -121,6 +148,8 @@ const ChatPage: React.FC = () => {
   };
 
   // Select a conversation
+
+  // Updated handleSelectConversation to mark messages as read
   const handleSelectConversation = async (conversation: User) => {
     if (selectedConversation?._id === conversation._id) return;
 
@@ -128,10 +157,49 @@ const ChatPage: React.FC = () => {
     setMessages([]);
     setPage(1);
     setHasMore(true);
+
+    // Mark messages as read
+    markMessagesAsRead(conversation._id);
+
     await fetchMessages(conversation.cognitoSub, 1);
     setTimeout(() => scrollToBottom("smooth"), 100); // Ensure smooth scrolling after fetching messages
   };
-  //====================
+
+  // Update the real-time message listener to increment unreadCount if necessary
+  useEffect(() => {
+    socket.on("receiveMessage", (newMessage) => {
+      if (selectedConversation?.cognitoSub === newMessage.senderId) {
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+      } else {
+        // Increment unreadCount for the appropriate conversation
+        setUserConversation((prev) => {
+          if (!prev) return prev;
+
+          return {
+            ...prev,
+            conversationUser: {
+              users: prev.conversationUser.users.map((user) => {
+                if (user.cognitoSub === newMessage.senderId) {
+                  return {
+                    ...user,
+                    unreadCount: (user.unreadCount || 0) + 1, // Increment unread count
+                    message: [...(user.message || []), newMessage], // Add new message
+                    lastMessage: newMessage.message, // Update lastMessage
+                  };
+                }
+                return user;
+              }),
+            },
+          };
+        });
+      }
+    });
+
+    return () => {
+      socket.off("receiveMessage");
+    };
+  }, [scrollToBottom, selectedConversation]);
+
   // Send a message
   const handleSendMessage = async () => {
     if (!selectedConversation || !messageInput.trim()) return;
@@ -142,6 +210,7 @@ const ChatPage: React.FC = () => {
       receiverId: selectedConversation.cognitoSub,
       message: messageInput.trim(),
       conversationId: selectedConversation._id,
+      isRead: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -208,6 +277,8 @@ const ChatPage: React.FC = () => {
       });
     }
   };
+
+  //fetch real time chat
 
   useEffect(() => {
     socket.on("receiveMessage", (newMessage: Message) => {
@@ -303,11 +374,14 @@ const ChatPage: React.FC = () => {
         <div className="h-[90%] w-[20%] p-4 border-r-2 border-olive-green/50 z-[1]">
           <div className="mb-4">
             <h2 className="text-xl font-bold">Chats</h2>
+            {/*chat search */}
             <div className="mt-4 relative">
               <input
                 type="text"
                 placeholder="Search chat"
                 className="w-full border-none rounded-[12px] py-2 pl-10 pr-4 focus:outline-none"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <Search className="text-gray-400" size={20} />
@@ -315,7 +389,7 @@ const ChatPage: React.FC = () => {
             </div>
           </div>
           <div className="overflow-y-auto">
-            {userConversation?.conversationUser.users.map((user, index) => {
+            {filteredConversations?.map((user, index) => {
               // Helper function to truncate a message
               const truncateMessage = (
                 message: string | undefined,
@@ -335,6 +409,17 @@ const ChatPage: React.FC = () => {
                     )
                   : "No messages yet";
 
+              //time last time
+              const chatlasttime =
+                user.message && user.message.length > 0
+                  ? new Date(
+                      user.message[user.message.length - 1].createdAt
+                    ).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : "No messages yet";
+
               // Determine personChat
               const personChat =
                 user?.cognitoSub ===
@@ -350,12 +435,13 @@ const ChatPage: React.FC = () => {
                   profile={user.profile[0]}
                   isSelected={selectedConversation?._id === user._id}
                   lastMessage={lastMessage} // Truncated message
-                  unreadCount={2}
+                  unreadCount={user.unreadCount}
                   isOnline={
                     user.cognitoSub
                       ? context.onlineUsers[user.cognitoSub] === true
                       : false
                   }
+                  timeChat={chatlasttime}
                   onClick={() => handleSelectConversation(user)}
                   personChat={personChat} // Updated personChat logic
                 />

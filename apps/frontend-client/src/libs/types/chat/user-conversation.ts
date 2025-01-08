@@ -6,6 +6,7 @@ export interface User {
     profile: string[];
     email: string;
     role: string;
+    isRead: boolean;
     address: string,
     phoneNumber: string,
     lastmessage: string
@@ -30,6 +31,8 @@ export interface UserConversition {
     message: Message[]; // last message 
     profile: string[];
     email: string;
+    isRead: boolean;
+    unreadCount: number;
     role: string;
     address: string,
     phoneNumber: string,
@@ -48,6 +51,7 @@ export interface Message {
   senderId: string;
   receiverId: string;
   message: string;
+  isRead: boolean;
   conversationId: string;
   createdAt: string;
   updatedAt: string;
