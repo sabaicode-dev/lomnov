@@ -48,7 +48,6 @@ const page = async ({ params }: { params: { id: string } }) => {
             src={property?.thumbnail??''}
             alt={property.title?.[0]?.content??''}
             objectFit="cover"
-            layout="fill"
             width={2900}
             height={2900}
           />
@@ -84,7 +83,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
         {/* Comment Section */}
         <div className="w-full mt-[50px] max-w-[1300px] mx-auto">
-          <CommentPanel />
+          <CommentPanel propertyId={property._id} />
         </div>
 
         {/* Recommend Properties */}
