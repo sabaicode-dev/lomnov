@@ -6,6 +6,7 @@ interface IMessage {
   createdAt?: Date;
   updatedAt?: Date;
   conversationId: mongoose.Schema.Types.ObjectId;
+  isRead: boolean;
 }
 
 const messageSchema = new mongoose.Schema<IMessage>(
@@ -14,6 +15,7 @@ const messageSchema = new mongoose.Schema<IMessage>(
     receiverId: {type: String,ref: "users",require: true,unique: false},
     message: {type: String,require: true,},
     conversationId: {type: mongoose.Schema.Types.ObjectId,ref: "Conversation"},
+    isRead: {type: Boolean, default: false}
   },
   //createAt,updateAt
   {
