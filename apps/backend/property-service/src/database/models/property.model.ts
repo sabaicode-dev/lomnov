@@ -1,10 +1,7 @@
 import { Schema, model } from "mongoose";
 import { Property, LocalizedContent } from "@/src/utils/types/indext";
 
-// ==================================================================
-
-
-// Extend Property to include views and coordinates
+// Extend Property to include views, coordinates, and comments
 interface PropertyWithViews extends Property {
   views: number; // Tracks the total number of views
   coordinate: { type: string; coordinates: number[] }; // GeoJSON format for location
@@ -14,7 +11,6 @@ const LocalizedContentSchema = new Schema<LocalizedContent>({
   content: { type: String },
   language: { type: String },
 });
-
 
 const DetailSchema = new Schema({
   language: { type: String, required: true },
@@ -36,10 +32,8 @@ const PropertySchema = new Schema<PropertyWithViews>(
     transition: { type: [LocalizedContentSchema], required: true },
     detail: { type: [DetailSchema], required: true }, // Array of detail objects with flexible content
     status: { type: Boolean, default: true },
-    statusAdmin : { type: Boolean, default: true },
+    statusAdmin: { type: Boolean, default: true },
     views: { type: Number, default: 0 }, // Initialize views to 0
-
-    // Add the new coordinate field for GeoJSON
     coordinate: {
       type: { type: String, enum: ["Point"], required: true }, // Specify type as "Point"
       coordinates: { type: [Number], required: true }, // Longitude, Latitude array

@@ -26,6 +26,7 @@ export interface IProperty {
   category?: LocalizedContent[];
   transition?: LocalizedContent[];
   detail?: Record<string, any>;
+  comments?: Record<string, any>;
   status?: boolean;
   statusAdmin? : boolean;
   
@@ -47,6 +48,7 @@ export interface Property {
   category: LocalizedContent[],
   transition: LocalizedContent[],
   detail?: Record<string, any>;  // Flexible key-value pairs
+  comments?: Record<string, any>; 
   status?: boolean;
   sortBy?: string;       // Add sortBy
   sortOrder?: 'asc' | 'desc'; // Add sortOrder

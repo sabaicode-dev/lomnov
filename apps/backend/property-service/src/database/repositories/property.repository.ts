@@ -1,7 +1,7 @@
 
 
 import { PropertyModel } from "@/src/database/models/property.model";
-import { IProperty } from "@/src/utils/types/indext";
+import { CommentResponse, IProperty } from "@/src/utils/types/indext";
 import uploadFileToS3Service from "@/src/services/uploadFileToS3.service";
 import deleteFileFromS3Service from "@/src/services/uploadFileToS3.service";
 import { NotFoundError, UnauthorizedError } from "@/src/utils/error/customErrors";
@@ -14,6 +14,8 @@ import {
   ResponsePropertyDTO,
   ResponseUpdatePropertyDTO,
 } from "@/src/utils/types/indext";
+import { Types } from "mongoose";
+import { CommentModel } from "../models/comment.model";
 
 export class PropertyRepository {
   /**
@@ -399,4 +401,65 @@ export class PropertyRepository {
       throw error;
     }
   }
+
+  ///////comment/////
+
+  public async addUserComment(
+    propertyId: string,
+    commentData: { comment: string; cognitoSub: string }
+  ): Promise<CommentResponse> {
+    try {
+      const newComment = await CommentModel.create({
+        propertyId: new Types.ObjectId(propertyId),
+        cognitoSub: commentData.cognitoSub,
+        comment: commentData.comment,
+        datetime: new Date().toISOString(),
+        profile: "/images/default-profile.jpg",
+        userName: "Unknown",
+        likes: 0,
+      });
+  
+      return {
+        _id: newComment._id,
+        cognitoSub: newComment.cognitoSub,
+        profile: newComment.profile,
+        userName: newComment.userName,
+        comment: newComment.comment,
+        datetime: newComment.datetime,
+        likes: newComment.likes,
+        likedBy: newComment.likedBy,
+      };
+    } catch (error) {
+      console.error(`Error adding comment to property with ID ${propertyId}:`, error);
+      throw new Error("Failed to add comment to property");
+    }
+  }
+  
+  public async getCommentsByPropertyId(propertyId: string): Promise<CommentResponse[]> {
+    try {
+      const comments = await CommentModel.find({ propertyId }).sort({ createdAt: -1 });
+      return comments.map((comment) => ({
+        _id: comment._id,
+        cognitoSub: comment.cognitoSub,
+        profile: comment.profile,
+        userName: comment.userName,
+        comment: comment.comment,
+        datetime: comment.datetime,
+        likes: comment.likes,
+        likedBy: comment.likedBy,
+      }));
+    } catch (error) {
+      console.error(`Error fetching comments for propertyId: ${propertyId}`, error);
+      throw new Error("Could not retrieve comments");
+    }
+  }  
+
+  public async findCommentById(commentId: string): Promise<Comment | null> {
+    try {
+      return await CommentModel.findById(commentId);
+    } catch (error) {
+      console.error(`Error fetching comment with ID ${commentId}:`, error);
+      throw new Error("Failed to find comment");
+    }
+  }  
 }
