@@ -14,12 +14,14 @@ import {
   ResponsePropertyDTO,
   ResponsePropertyByID,
   ResponseCategoriesDTO,
+  CommentResponse,
 } from "@/src/utils/types/indext";
 import { ResponsePropertyByIDP } from "@/src/utils/types/indext";
 import { PropertyRepository } from "../database/repositories/property.repository";
 import { NotFoundError, UnauthorizedError } from "../utils/error/customErrors";
 import { UserServiceClient } from "./userServiceClient";
 import { IProperty } from "@/src/utils/types/indext";
+import { CommentModel } from "../database/models/comment.model";
 // ===============================================================================
 
 export class PropertyService {
@@ -396,7 +398,7 @@ export class PropertyService {
     }
   }
 
-
+  //get property by user
   public async getPropertyUser(
     cognitoSub: string,
     queries: RequestQueryPropertyDTO
@@ -570,4 +572,98 @@ export class PropertyService {
       throw error;
     }
   } 
+
+  ///////comment//////
+  
+  public async addCommentToProperty(
+    propertyId: string,
+    commentData: { comment: string; cognitoSub: string }
+  ): Promise<CommentResponse> {
+    try {
+      const comment = await this.propertyRepository.addUserComment(propertyId, commentData);
+      return comment;
+    } catch (error) {
+      console.error(`Error adding comment to property with ID ${propertyId}:`, error);
+      throw new Error("Failed to add comment");
+    }
+  }
+  
+  public async getCommentsByPropertyId(propertyId: string): Promise<CommentResponse[]> {
+    try {
+      return await this.propertyRepository.getCommentsByPropertyId(propertyId);
+    } catch (error) {
+      console.error(`Error fetching comments for propertyId: ${propertyId}`, error);
+      throw new Error("Could not retrieve comments");
+    }
+  }  
+
+  public async likeComment(commentId: string, cognitoSub: string): Promise<CommentResponse> {
+    try {
+      // Fetch the comment to check if the user has already liked it
+      const comment = await CommentModel.findById(commentId);
+  
+      if (!comment) {
+        throw new Error("Comment not found");
+      }
+  
+      if (comment.likedBy.includes(cognitoSub)) {
+        throw new Error("User has already liked this comment");
+      }
+  
+      // Update the comment to increment likes and add the user to likedBy
+      comment.likedBy.push(cognitoSub);
+      comment.likes += 1;
+  
+      const updatedComment = await comment.save();
+  
+      return {
+        _id: updatedComment._id,
+        cognitoSub: updatedComment.cognitoSub,
+        profile: updatedComment.profile,
+        userName: updatedComment.userName,
+        comment: updatedComment.comment,
+        datetime: updatedComment.datetime,
+        likes: updatedComment.likes,
+        likedBy: comment.likedBy,
+      };
+    } catch (error) {
+      console.error(`Error liking comment with ID ${commentId}:`, error);
+      throw new Error("Failed to like comment");
+    }
+  }
+  
+  public async unlikeComment(commentId: string, cognitoSub: string): Promise<CommentResponse> {
+    try {
+      const comment = await CommentModel.findById(commentId);
+  
+      if (!comment) {
+        throw new Error("Comment not found");
+      }
+  
+      if (!comment.likedBy.includes(cognitoSub)) {
+        throw new Error("User has not liked this comment");
+      }
+  
+      // Remove the user from likedBy and decrement likes
+      comment.likedBy = comment.likedBy.filter((id) => id !== cognitoSub);
+      comment.likes = Math.max(0, comment.likes - 1); // Ensure likes do not go below 0
+  
+      const updatedComment = await comment.save();
+  
+      return {
+        _id: updatedComment._id,
+        cognitoSub: updatedComment.cognitoSub,
+        profile: updatedComment.profile,
+        userName: updatedComment.userName,
+        comment: updatedComment.comment,
+        datetime: updatedComment.datetime,
+        likes: updatedComment.likes,
+        likedBy: updatedComment.likedBy, // Include likedBy
+      };
+    } catch (error) {
+      console.error("Error unliking comment:", error);
+      throw new Error("Failed to unlike comment");
+    }
+  }  
+
 }
