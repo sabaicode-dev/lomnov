@@ -196,7 +196,8 @@ export interface CommentResponse {
   userName: string;
   comment: string; 
   datetime: string; 
-  likes?: number; 
+  likes: number; 
+  likedBy: string[];
 }
 
 

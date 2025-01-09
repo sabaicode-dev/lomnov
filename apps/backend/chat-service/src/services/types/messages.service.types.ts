@@ -83,6 +83,8 @@ export type UserConversations = {
     profile: string[];
     email: string;
     role: string;
+    address: string,
+    phoneNumber: string,
   }[],
 }
 export type ResponseConversationMe = {
@@ -91,6 +93,8 @@ export type ResponseConversationMe = {
   totalPage: number;
   totalConversation: number;
 }
+
+
 export type User = {
   _id: string;
   cognitoSub: string;

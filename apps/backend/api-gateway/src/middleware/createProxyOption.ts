@@ -4,15 +4,14 @@ import { IncomingMessage, ServerResponse, ClientRequest } from "http";
 import { loggingMiddleware } from "@/src/utils/logger";
 import { RouteConfig } from "@/src/utils/types/interface";
 
-const createProxyOptions = (
-  routeConfig: RouteConfig,
-) => ({
+const createProxyOptions = (routeConfig: RouteConfig) => ({
   target: routeConfig.target,
+  ws: routeConfig.path === "/socket.io",
   changeOrigin: true,
   pathRewrite: (path: any, _req: any) => {
     // Extract the dynamic part of the path
     const dynamicPath = path.replace(routeConfig.path, ""); // Remove the base path
-    console.log(dynamicPath);
+
     return `${routeConfig.path}${dynamicPath}`; // Return the full path
   },
   on: {
@@ -22,21 +21,25 @@ const createProxyOptions = (
         user?: {
           username: string;
           roles?: string[];
-        }
+        };
       },
-      res: ServerResponse,
+      res: ServerResponse
     ) => {
       const nestedPath = `${routeConfig.target}${req.url}`;
-      console.log("create Proxy Option:: ", req.user);
-      if (req.user) {
-        proxyReq.setHeader("currentUser", JSON.stringify(req.user)); // Another header as specified
+      //
+  
+      const { user } = req;
+      if (user) {
+
+        // Add headers to proxyReq for forwarding to the target service
+        proxyReq.setHeader("currentUser", JSON.stringify(user)); // Another header as specified
       }
       loggingMiddleware(req, res, nestedPath, "Proxy Request");
     },
     proxyRes: (
       _proxyRes: IncomingMessage,
       req: IncomingMessage,
-      res: ServerResponse,
+      res: ServerResponse
     ) => {
       const nestedPath = `${routeConfig.target}${req.url}`;
       loggingMiddleware(req, res, nestedPath, "Proxy Responsed");
@@ -44,7 +47,7 @@ const createProxyOptions = (
     error: (
       _err: Error,
       _req: IncomingMessage,
-      res: ServerResponse | Socket,
+      res: ServerResponse | Socket
     ) => {
       if (res instanceof ServerResponse) {
         res.statusCode = 500;

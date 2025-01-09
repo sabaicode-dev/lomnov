@@ -50,6 +50,7 @@ const models: TsoaRoute.Models = {
             "category": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"}},
             "transition": {"dataType":"array","array":{"dataType":"refObject","ref":"LocalizedContent"}},
             "detail": {"ref":"Record_string.any_"},
+            "comments": {"ref":"Record_string.any_"},
             "status": {"dataType":"boolean"},
             "statusAdmin": {"dataType":"boolean"},
         },
@@ -172,12 +173,14 @@ const models: TsoaRoute.Models = {
     "CommentResponse": {
         "dataType": "refObject",
         "properties": {
+            "_id": {"ref":"mongoose.Types.ObjectId","required":true},
             "cognitoSub": {"dataType":"string","required":true},
             "profile": {"dataType":"string","required":true},
             "userName": {"dataType":"string","required":true},
             "comment": {"dataType":"string","required":true},
             "datetime": {"dataType":"string","required":true},
-            "likes": {"dataType":"double"},
+            "likes": {"dataType":"double","required":true},
+            "likedBy": {"dataType":"array","array":{"dataType":"string"},"required":true},
         },
         "additionalProperties": false,
     },
@@ -755,36 +758,6 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/api/v1/properties/comment',
-            ...(fetchMiddlewares<RequestHandler>(PropertyController)),
-            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.getCommentByCognitoSub)),
-
-            async function PropertyController_getCommentByCognitoSub(request: ExRequest, response: ExResponse, next: any) {
-            const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    cognitoSub: {"in":"query","name":"cognitoSub","required":true,"dataType":"string"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args, request, response });
-
-                const controller = new PropertyController();
-
-              await templateService.apiHandler({
-                methodName: 'getCommentByCognitoSub',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/api/v1/properties/:propertyId/comment',
             ...(fetchMiddlewares<RequestHandler>(PropertyController)),
             ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.addComment)),
@@ -806,6 +779,98 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
               await templateService.apiHandler({
                 methodName: 'addComment',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/api/v1/properties/:propertyId/get/comment',
+            ...(fetchMiddlewares<RequestHandler>(PropertyController)),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.getCommentsByPropertyId)),
+
+            async function PropertyController_getCommentsByPropertyId(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    propertyId: {"in":"path","name":"propertyId","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new PropertyController();
+
+              await templateService.apiHandler({
+                methodName: 'getCommentsByPropertyId',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.post('/api/v1/properties/:propertyId/comment/:commentId/like',
+            ...(fetchMiddlewares<RequestHandler>(PropertyController)),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.likeComment)),
+
+            async function PropertyController_likeComment(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    commentId: {"in":"path","name":"commentId","required":true,"dataType":"string"},
+                    request: {"in":"request","name":"request","dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new PropertyController();
+
+              await templateService.apiHandler({
+                methodName: 'likeComment',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.delete('/api/v1/properties/:propertyId/comment/:commentId/like',
+            ...(fetchMiddlewares<RequestHandler>(PropertyController)),
+            ...(fetchMiddlewares<RequestHandler>(PropertyController.prototype.unlikeComment)),
+
+            async function PropertyController_unlikeComment(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    commentId: {"in":"path","name":"commentId","required":true,"dataType":"string"},
+                    request: {"in":"request","name":"request","dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new PropertyController();
+
+              await templateService.apiHandler({
+                methodName: 'unlikeComment',
                 controller,
                 response,
                 next,

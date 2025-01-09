@@ -96,7 +96,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
         {/* Comment Section */}
         <div className="w-full mt-[50px] max-w-[1300px] mx-auto">
-          <CommentPanel />
+          <CommentPanel propertyId={property._id} />
         </div>
 
         {/* Recommend Properties */}

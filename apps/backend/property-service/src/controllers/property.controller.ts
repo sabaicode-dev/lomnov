@@ -421,7 +421,7 @@ public async updateAdminstatus(
     @Query() lat: number = 0,
     @Query() lng: number = 0,
     @Query() maxDistance: number = 1000, // Default 1km
-    @Query() limit: number = 10 // Default limit
+    @Query() limit: number = 10 // Default limit ResponsePropertyDTO
   ): Promise<ResponsePropertyDTO[]> {
     try {
       if (lat === 0 || lng === 0) {
@@ -450,6 +450,7 @@ public async updateAdminstatus(
         category: property.category || [],
         transition: property.transition || [],
         detail: property.detail || {},
+        comments: property.comments || {},
         status: property.status,
 
       }));
@@ -483,44 +484,7 @@ public async updateAdminstatus(
       throw error;
     }
   }
-
-  // // get comments by cognitoSub
-  // @Get("/properties/comment")
-  // public async getCommentByCognitoSub(@Query("cognitoSub") cognitoSub: string) {
-  //   if (!cognitoSub) {
-  //     throw new Error("cognitoSub query parameter is required");
-  //   }
-  //   try {
-  //     return await this.propertyService.getCommentByCognitoSub(cognitoSub);
-  //   } catch (error) {
-  //     console.error("Failed to fetch comments:", error);
-  //     throw new Error("Failed to fetch comments");
-  //   }
-  // }
-
-
-  // // post comment
-  // @Post("/properties/{propertyId}/comment")
-  // public async addComment(
-  //   @Path() propertyId: string,
-  //   @Body() body: { comment: string },
-  //   @Request() request?: Express.Request
-  // ) {
-  //   try {
-  //     const cognitoSub = request?.cookies?.username;
-  //     if (!cognitoSub) {
-  //       throw new UnauthorizedError("User not authorized");
-  //     }
-  //     const comment = await this.propertyService.addCommentToProperty(propertyId, {
-  //       comment: body.comment,
-  //       cognitoSub,
-  //     });
-  //     return comment;
-  //   } catch (error) {
-  //     console.error("Failed to add comment:", error);
-  //     throw new Error("Failed to add comment");
-  //   }
-  // }
+////////comment///////
   // property.controller.ts
   
   @Post("/properties/{propertyId}/comment")
@@ -534,27 +498,69 @@ public async updateAdminstatus(
       if (!cognitoSub) {
         throw new UnauthorizedError("User not authorized");
       }
+  
+      if (!body.comment || typeof body.comment !== "string") {
+        throw new Error("Invalid comment content");
+      }
+  
       const comment = await this.propertyService.addCommentToProperty(propertyId, {
         comment: body.comment,
         cognitoSub,
       });
+  
       return comment;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to add comment:", error);
-      throw new Error("Failed to add comment");
+      throw new Error(`Failed to add comment: ${error.message}`);
     }
   }
-
-  @Get("/properties/comment")
-  public async getCommentByCognitoSub(@Query("cognitoSub") cognitoSub: string) {
-    if (!cognitoSub) {
-      throw new Error("cognitoSub query parameter is required");
-    }
+  
+  @Get("/properties/{propertyId}/get/comment")
+  public async getCommentsByPropertyId(@Path() propertyId: string) {
     try {
-      return await this.propertyService.getCommentByCognitoSub(cognitoSub);
+      return await this.propertyService.getCommentsByPropertyId(propertyId);
     } catch (error) {
       console.error("Failed to fetch comments:", error);
       throw new Error("Failed to fetch comments");
     }
   }
+
+  @Post("/properties/{propertyId}/comment/{commentId}/like")
+  public async likeComment(
+    @Path() commentId: string,
+    @Request() request?: Express.Request
+  ) {
+    try {
+      const cognitoSub = request?.cookies?.username;
+      if (!cognitoSub) {
+        throw new UnauthorizedError("User not authorized");
+      }
+
+      const updatedComment = await this.propertyService.likeComment(commentId, cognitoSub);
+      return updatedComment;
+    } catch (error: any) {
+      console.error("Failed to like comment:", error);
+      throw new Error(`Failed to like comment: ${error.message}`);
+    }
+  }
+
+  @Delete("/properties/{propertyId}/comment/{commentId}/like")
+  public async unlikeComment(
+    @Path() commentId: string,
+    @Request() request?: Express.Request
+  ) {
+    try {
+      const cognitoSub = request?.cookies?.username;
+      if (!cognitoSub) {
+        throw new UnauthorizedError("User not authorized");
+      }
+
+      const updatedComment = await this.propertyService.unlikeComment(commentId, cognitoSub);
+      return updatedComment;
+    } catch (error: any) {
+      console.error("Failed to unlike comment:", error);
+      throw new Error(`Failed to unlike comment: ${error.message}`);
+    }
+  }
+
 }

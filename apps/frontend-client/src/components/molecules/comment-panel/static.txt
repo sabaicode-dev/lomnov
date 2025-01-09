@@ -8,18 +8,18 @@
 
 // const CommentPanel = () => {
 //   const [comments, setComments] = useState([
-//     { id: 1, text: "This property looks amazing! and the great location as well. You have another property that have the price like this property?",profile: Profile, userName: "Teang Smith", datetime: "3 days ago" },
-//     { id: 2, text: "Is the price negotiable?",profile: Profile, userName: "Smith", datetime: "3 days ago" },
-//     { id: 3, text: "Great location.",profile: Profile, userName: "sokphol", datetime: "3 days ago" },
-//     { id: 4, text: "Great price.",profile: Profile, userName: "Sarah Kim", datetime: "3 days ago" },
-//     { id: 5, text: "I love the design.",profile: Profile, userName: "Emily Carter", datetime: "3 days ago" },
-//     { id: 6, text: "I'm interested in this property.",profile: Profile, userName: "sokphol", datetime: "3 days ago" },
-//     { id: 7, text: "This property looks amazing",profile: Profile, userName: "Teang Smith", datetime: "3 days ago" },
-//     { id: 8, text: "Is the price negotiable?",profile: Profile, userName: "Jane", datetime: "3 days ago" },
-//     { id: 9, text: "Great location.",profile: Profile, userName: "Michael", datetime: "3 days ago" },
-//     { id: 10, text: "Great price.",profile: Profile, userName: "Sarah", datetime: "3 days ago" },
-//     { id: 11, text: "I love the design.",profile: Profile, userName: "Emily", datetime: "3 days ago" },
-//     { id: 12, text: "I'm interested in this property.",profile: Profile, userName: "Michael", datetime: "3 days ago" },
+//     { _id: 1, comment: "This property looks amazing! and the great location as well. You have another property that have the price like this property?",profile: Profile, userName: "Teang Smith", datetime: "3 days ago" },
+//     { _id: 2, comment: "Is the price negotiable?",profile: Profile, userName: "Smith", datetime: "3 days ago" },
+//     { _id: 3, comment: "Great location.",profile: Profile, userName: "sokphol", datetime: "3 days ago" },
+//     { _id: 4, comment: "Great price.",profile: Profile, userName: "Sarah Kim", datetime: "3 days ago" },
+//     { _id: 5, comment: "I love the design.",profile: Profile, userName: "Emily Carter", datetime: "3 days ago" },
+//     { _id: 6, comment: "I'm interested in this property.",profile: Profile, userName: "sokphol", datetime: "3 days ago" },
+//     { _id: 7, comment: "This property looks amazing",profile: Profile, userName: "Teang Smith", datetime: "3 days ago" },
+//     { _id: 8, comment: "Is the price negotiable?",profile: Profile, userName: "Jane", datetime: "3 days ago" },
+//     { _id: 9, comment: "Great location.",profile: Profile, userName: "Michael", datetime: "3 days ago" },
+//     { _id: 10, comment: "Great price.",profile: Profile, userName: "Sarah", datetime: "3 days ago" },
+//     { _id: 11, comment: "I love the design.",profile: Profile, userName: "Emily", datetime: "3 days ago" },
+//     { _id: 12, comment: "I'm interested in this property.",profile: Profile, userName: "Michael", datetime: "3 days ago" },
 //   ]);
 //   const [newComment, setNewComment] = useState("");
 //   const [visibleCount, setVisibleCount] = useState(5);
