@@ -40,13 +40,12 @@ const setupSocketIO = (io: Server) => {
     }
 
     socket.on("sendMessage", async (data: Message) => {
-      console.log("new message:", data);
-
       // const cookies = socket.handshake.headers["cookie"];
       try {
         if (cookies) {
+         // console.log("Preparing mesage to send http::")
           const response = await axios.post(
-            `${configs.MessageUrl}/send/${data.receiverId}`,
+            `${configs.apiUrl}/${configs.MessageUrl}/send/${data.receiverId}`,
             { message: data.message },
             {
               withCredentials: true,
@@ -56,7 +55,8 @@ const setupSocketIO = (io: Server) => {
               },
             }
           );
-       
+        //  console.log("Response:: ",response.status);
+        //  console.log("Response:: ",response.data);
 
           const savedMessage = response.data.data;
           const receiverSocketId = userSocketMap[data.receiverId];

@@ -36,8 +36,9 @@ export class MessageController extends Controller {
       // console.log("request.headers", request.headers);
 
       const cookieHeader = request.headers.cookie!;
-    
-      console.log("Request Header:::::: ", request.headers.currentuser)
+     // console.log("cookieHeader::: ", cookieHeader);
+      
+     // console.log("Request Header:::::: ", request.headers.currentuser)
       // sender
       const currentUser = JSON.parse(
         request?.headers?.currentuser! as string
@@ -115,7 +116,7 @@ export class MessageController extends Controller {
       const currentUser = JSON.parse(
         request.headers.currentuser as string
       ) as UserRequestChat;
-      console.log(currentUser);
+      console.log("ABC:: ",currentUser);
       const cognitoSub = currentUser.username;
       if (!cognitoSub) {
         throw new Error("Authurize User!!");

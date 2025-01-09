@@ -245,7 +245,8 @@ const ChatPage: React.FC = () => {
     try {
       // Emit the message via socket
       socket.emit("sendMessage", optimisticMessage);
-
+      console.log("new message:: ", optimisticMessage);
+      
       // Optionally, sync with the backend (use the real message ID from the server if needed)
     } catch (error) {
       console.error("Error sending message:", error);
