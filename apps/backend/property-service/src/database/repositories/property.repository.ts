@@ -403,7 +403,6 @@ export class PropertyRepository {
   }
 
   ///////comment/////
-  // property.repository.ts
 
   public async addUserComment(
     propertyId: string,

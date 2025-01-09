@@ -485,7 +485,6 @@ public async updateAdminstatus(
     }
   }
 ////////comment///////
-  // property.controller.ts
   
   @Post("/properties/{propertyId}/comment")
   public async addComment(

@@ -574,7 +574,6 @@ export class PropertyService {
   } 
 
   ///////comment//////
-  // property.service.ts
   
   public async addCommentToProperty(
     propertyId: string,
