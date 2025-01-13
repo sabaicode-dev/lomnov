@@ -31,7 +31,113 @@ export const poppularLocationList: ProvinceTypes[] = [
     name: "Kep",
     img: "https://www.gocambodia.tours/wp-content/uploads/2019/06/KEP-Beach.jpg",
   },
+  {
+    id: 5,
+    name: "Battambang",
+    img: "https://th.bing.com/th/id/R.13433a36f716fe588e6745f32f5d78b0?rik=VGxLQi%2fpmZoNBQ&riu=http%3a%2f%2f4.bp.blogspot.com%2f-JO7g0r_Hccw%2fUQ_7eE3cf4I%2fAAAAAAAAAro%2fC330vXF0bXM%2fs1600%2fBattambang-Statue_1032012_84050.jpg&ehk=9zAKBGf6LS6JSwfBs3bxdPuAn7dxU4tJJl3dpuq4YsI%3d&risl=&pid=ImgRaw&r=0",
+  },
+  {
+    id: 6,
+    name: "Kampot",
+    img: "https://img.freepik.com/premium-photo/seahorse-kampot-cambodia-new-iconic-province-amazing-cambodia_720542-139.jpg",
+  },
+  {
+    id: 7,
+    name: "Kracheh",
+    img: "https://preview.redd.it/alternatively-spelled-kracheh-or-kraches-is-a-province-of-v0-doo0a95ua2n81.jpg?auto=webp&s=19dfcdb43f16a247a4fd903685b0afb9a926405a",
+  },
+  {
+    id: 8,
+    name: "Ratanakiri",
+    img: "https://th.bing.com/th/id/OIP.QdfO3EHW8jUx86kj_g1cLgHaFX?rs=1&pid=ImgDetMain",
+  },
+  {
+    id: 9,
+    name: "Mondulkiri",
+    img: "https://i.pinimg.com/originals/bf/04/5d/bf045dbd9f06ac060943f8c54da8efab.jpg",
+  },
+  {
+    id: 10,
+    name: "Takeo",
+    img: "https://tourismcambodia.org/storage/uploads/contents/entryform/ministry-of-tourism-cambodia-2020-05-17-04-47-35am1589690857-3922.jpg",
+  },
+  {
+    id: 11,
+    name: "Kampong Cham",
+    img: "https://th.bing.com/th/id/OIP.XdnimBSxbrsLh22J0lE8yQHaHa?rs=1&pid=ImgDetMain",
+  },
+  {
+    id: 12,
+    name: "Koh Kong",
+    img: "https://th.bing.com/th/id/OIP.pkMsgbk8ClIkB3pnlB_pZgHaFj?rs=1&pid=ImgDetMain",
+  },
+  {
+    id: 13,
+    name: "Pailin",
+    img: "https://th.bing.com/th/id/OIP.zTGREmwOuDUHrG30Pkz5AgHaHa?rs=1&pid=ImgDetMain",
+  },
+  {
+    id: 14,
+    name: "Preah Vihear",
+    img: "https://th.bing.com/th/id/R.2ee621a782c7e2d14441420cb9960b5f?rik=ELlv3BU42mGi1w&pid=ImgRaw&r=0",
+  },
+  {
+    id: 15,
+    name: "Stung Treng",
+    img: "https://th.bing.com/th/id/OIP.95tkr_B6RFRLlCFN_beAEQHaEo?rs=1&pid=ImgDetMain",
+  },
+  {
+    id: 16,
+    name: "Kampong Thom",
+    img: "https://th.bing.com/th/id/OIP.kgeyaSv8RXARAoKdULM-6AHaE8?rs=1&pid=ImgDetMain",
+  },
+  {
+    id: 17,
+    name: "Banteay Meanchey",
+    img: "https://www.passionindochinatravel.com/uploads/attraction-What%20to%20See%20In%20Banteay%20Meanchey%20Serei%20Saophoan.jpg",
+  },
+  {
+    id: 18,
+    name: "Kampong Speu",
+    img: "https://dnf06fpg9xipc.cloudfront.net/geocambodia/province-landmark/05.jpg",
+  },
+  {
+    id: 19,
+    name: "Kandal",
+    img: "https://th.bing.com/th/id/OIP.UL4FAQzVvaQDAYoVhG8DFAHaDt?rs=1&pid=ImgDetMain",
+  },
+  {
+    id: 20,
+    name: "Oddar Meanchey",
+    img: "https://www.worldtravelphotos.net/cambodia/oddar-meanchey/images/oddar-meanchey-temple.jpg",
+  },
+  {
+    id: 21,
+    name: "Tbong Khmum",
+    img: "https://asset.cambodia.gov.kh/provincial/sites/15/2019/08/Kizuna-Copy.jpg",
+  },
+  {
+    id: 22,
+    name: "Pursat",
+    img: "https://th.bing.com/th/id/OIP.3u8jjYHTSup6sbHBq7QUzgHaEK?rs=1&pid=ImgDetMain",
+  },
+  {
+    id: 23,
+    name: "Svay Rieng",
+    img: "https://www.aboutcambodiatravel.com/uploads/images/content_image/Svay%20Rieng/Svay%20Rieng-ACT%20Cambodia%20Tours.jpg",
+  },
+  {
+    id: 24,
+    name: "Prey Veng",
+    img: "https://www.khmerplaces.com/storage/provinces/September2020/lmzE2dxJ1I7ORLaA0AWM.jpg",
+  },
+  {
+    id: 25,
+    name: "Kampong Chhnang",
+    img: "https://th.bing.com/th/id/R.3035f8c048ca1e607ee311970657e881?rik=gLdbRvR9Q9D9hw&pid=ImgRaw&r=0",
+  },
 ];
+
 
 const ItemCardPopularLocationList = () => {
   const {t} = useTranslation();
