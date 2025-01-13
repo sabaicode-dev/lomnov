@@ -245,6 +245,7 @@ const ChatPage: React.FC = () => {
     try {
       // Emit the message via socket
       socket.emit("sendMessage", optimisticMessage);
+      console.log("new message ::", optimisticMessage);
 
       // Optionally, sync with the backend (use the real message ID from the server if needed)
     } catch (error) {
@@ -278,54 +279,48 @@ const ChatPage: React.FC = () => {
     }
   };
 
-useEffect(() => {
-  const handleReceiveMessage = (newMessage: Message) => {
-    // If the message belongs to the selected conversation
-    if (selectedConversation?.cognitoSub === newMessage.senderId) {
-      setMessages((prevMessages) => {
-        // Avoid duplicate messages
-        if (prevMessages.some((msg) => msg._id === newMessage._id)) return prevMessages;
-        return [...prevMessages, newMessage];
-      });
+  // Add proper socket.on with cleanup
+  useEffect(() => {
+    // Define the message handler function
+    const handleReceiveMessage = (newMessage: Message) => {
+      if (selectedConversation?.cognitoSub === newMessage.senderId) {
+        // If the message belongs to the selected conversation, append to the chat
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+        // Scroll to bottom after adding the new message
+        setTimeout(() => scrollToBottom("smooth"), 100);
+      } else {
+        // Update conversation list if the message belongs to another conversation
+        setUserConversation((prev) => {
+          if (!prev) return prev;
 
-      // Automatically scroll to the bottom when a new message is received
-      setTimeout(() => scrollToBottom("smooth"), 100);
-    } else {
-      // Update the conversation list with the new message
-      setUserConversation((prev) => {
-        if (!prev) return prev;
+          return {
+            ...prev,
+            conversationUser: {
+              users: prev.conversationUser.users.map((user) => {
+                if (user.cognitoSub === newMessage.senderId) {
+                  return {
+                    ...user,
+                    unreadCount: (user.unreadCount || 0) + 1,
+                    message: [...(user.message || []), newMessage],
+                    lastMessage: newMessage.message,
+                  };
+                }
+                return user;
+              }),
+            },
+          };
+        });
+      }
+    };
 
-        return {
-          ...prev,
-          conversationUser: {
-            users: prev.conversationUser.users.map((user) => {
-              if (user.cognitoSub === newMessage.senderId) {
-                return {
-                  ...user,
-                  unreadCount: (user.unreadCount || 0) + 1, // Increment unread count
-                  message: [...(user.message || []), newMessage], // Append the new message
-                  lastMessage: newMessage.message, // Update the last message preview
-                };
-              }
-              return user;
-            }),
-          },
-        };
-      });
-    }
-  };
+    // Register socket event listener
+    socket.on("receiveMessage", handleReceiveMessage);
 
-  // Attach the socket listener
-  socket.off("receiveMessage"); // Ensure no duplicate listener is registered
-  socket.on("receiveMessage", handleReceiveMessage);
-
-  // Cleanup the listener when the component unmounts
-  return () => {
-    socket.off("receiveMessage", handleReceiveMessage);
-  };
-}, [selectedConversation, scrollToBottom]);
-
-
+    // Cleanup to prevent duplicate listeners
+    return () => {
+      socket.off("receiveMessage", handleReceiveMessage);
+    };
+  }, [selectedConversation, scrollToBottom]);
 
   //====================
 
