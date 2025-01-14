@@ -110,6 +110,12 @@ const InputField: React.FC<InputFieldProps> = ({
 }) => {
   return (
     <div className="relative mb-12  mx-[45px]">
+      <label
+        className={` left-3 top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-in-out
+          ${isFocused || error ? "-translate-y-[47px] font-helvetica text-l  font-bold text-olive-green" : "font-helvetica text-xl text-charcoal"} ${error ? "font-helvetica text-helvetica-h5 text-red-500" : "font-helvetica text-helvetica-h5 text-charcoal"}`}
+      >
+        {label}
+      </label>
       <input
         type={type}
         {...register}
@@ -119,12 +125,7 @@ const InputField: React.FC<InputFieldProps> = ({
         placeholder=" "
         aria-label={label}
       />
-      <label
-        className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-300 ease-in-out
-          ${isFocused || error ? "-translate-y-[47px] font-helvetica text-l  font-bold text-olive-green" : "font-helvetica text-xl text-charcoal"} ${error ? "font-helvetica text-helvetica-h5 text-red-500" : "font-helvetica text-helvetica-h5 text-charcoal"}`}
-      >
-        {label}
-      </label>
+      
       {error && (
         <div className="absolute font-helvetica text-helvetica-small -bottom-5 text-red-500 ">
           {error}
@@ -134,7 +135,7 @@ const InputField: React.FC<InputFieldProps> = ({
         <button
           type="button"
           onClick={toggleVisibility}
-          className="absolute top-1/2 right-3 transform -translate-y-1/2 p-1 text-gray-500"
+          className="absolute top-1/2 right-3 transform -translate-y p-1 text-gray-500"
         >
           {visible ? <FaEyeSlash /> : <FaEye />}
         </button>
