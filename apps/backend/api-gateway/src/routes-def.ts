@@ -90,7 +90,7 @@ const ROUTE_PATHS: RoutesConfig = {
       },
       {
         path: "/favorite",
-        methods: { PUT: { authRequired: true, roles: ["user"] } },
+        methods: { PUT: { authRequired: true, roles: ["user",'admin'] } },
       },
       {
         path: "/me/favorites",
