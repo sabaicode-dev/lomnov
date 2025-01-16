@@ -177,7 +177,6 @@ export class MessageRepository {
         $all: [
           {
             $elemMatch: {
-              participantType: request.senderRole!,
               participantId: request.cognitoSub!,
             },
           },

@@ -26,11 +26,12 @@ export class MessageService {
     try {
       const { message, receiverId, currentUser, cookieHeader } = request;
       const cookies = deCookies(cookieHeader);
-      const senderId = cookies.username;
+      const senderId = cookies.username;//sub
 
       const senderRole = currentUser.roles![0] === "user" ? "user" : "admin";
       // get reciever role
       const responseRole = await this.userServiceClient.getUserRole(receiverId); // receiverId = sub
+
       // console.log("userServiceClient:: ", responseRole);
       const receiverRole = responseRole!.role === "user" ? "user" : "admin";
 
@@ -68,12 +69,15 @@ export class MessageService {
       const senderName = cookies.username;
       // console.log("senderName", senderName);
 
-      const senderRole =
-        currentUser.roles && currentUser.roles[0] === "user" ? "user" : "admin";
+      const senderRole = currentUser.roles && currentUser.roles[0] === "user" ? "user" : "admin";
+      console.log("Get Message Sender :: Role:: ", senderRole);
+      
       // get receiverole
       const getReiverRole = await this.userServiceClient.getUserRole(
         userToChatId
       );
+      console.log("Receiver Messsage Role::: ",getReiverRole);
+      
       const result = await this.MessageRepository.getMessage(
         userToChatId,
         senderName,
@@ -112,7 +116,8 @@ export class MessageService {
   ): ResponseConversationMe {
     // Create a map of users based on cognitoSub for quick lookup
     const userMap = new Map(users.map((user) => [user.cognitoSub, user]));
-
+    console.log("Build Filter Conversation::: ", conversations);
+    
     // Transform conversations into the desired structure
     const conversationUsers = conversations
       .map((conversation) => {
@@ -166,6 +171,7 @@ export class MessageService {
     try {
       // const senderRole = currentUser.roles?.includes("user") ? "user" : "admin";
       const senderRole = this.checkUserRole(currentUser.roles as string[]);
+      
       // build object to get conversation from repository
       const request: RequestgetUserConversations = {
         cognitoSub,
@@ -206,6 +212,8 @@ export class MessageService {
         conversations.conversations
       );
       const { conversationUser } = response;
+      console.log("Conversation User:: ",conversationUser);
+      
       return {
         conversationUser,
         currentPage: currentPage,
