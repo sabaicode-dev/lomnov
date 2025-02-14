@@ -350,28 +350,44 @@ Our project is organized into several key directories:
 
 #### Setup and Development
 
-## Getting Started
+# Getting Started
 
-To set up the project locally, follow these steps:
+Before starting the services, make sure to set up the necessary environment variables. **Go to [Link](https://docs.google.com/spreadsheets/d/1o7DnviMjOyH5QuX2fmfkFewxplx3xGmmHtlI5r1o5Ys/edit?usp=sharing) to get the required `.env` files**.
 
-1. Clone the repository
+To start the various services in the project, run the following commands in separate terminal windows:
 
-```bash
-git clone [repository-url]
-```
+### Frontend Apps
 
-2. Install dependencies
+- **Admin Dashboard**
+  ```bash
+  yarn start:dashboard
+  ```
+- **Client User**
+  ```bash
+  yarn start:client
+  ```
 
-```bash
-yarn install
-```
+### Backend Services
 
-3. Start All Server
+- **User Service**
+  ```bash
+  yarn start:user-service
+  ```
+- **Authentication Service**
+  ```bash
+  yarn start:auth-service
+  ```
+- **Property Service**
+  ```bash
+  yarn start:property-service
+  ```
+- **Chat Service**
+  ```bash
+  yarn start:chat-service
+  ```
+- **API Gateway**
+  ```bash
+  yarn start:api-gateway
+  ```
 
-```bash
-yarn start
-```
-
-#### Contributing
-
-Please read our contributing guidelines carefully before making a pull request. Contributions should be made in a separate branch and submitted via pull requests to the main branch for review.
+Make sure you have all dependencies installed by running `yarn install` in the root directory before starting the services.
